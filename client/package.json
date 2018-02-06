@@ -1,10 +1,10 @@
 {
-	"name": "Warpscript",
+	"name": "warpscript",
 	"description": "VSCode part of a language server",
 	"author": "Xavier MARIN",
 	"license": "MIT",
 	"version": "0.0.1",
-	"publisher": "vscode",
+	"publisher": "xavmarin",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Giwi/VSCode-WarpScriptLangage"
@@ -18,19 +18,19 @@
 	"activationEvents": [
 		"onLanguage:plaintext"
 	],
-	"main": "./out/src/extension",
+	"main": "./out/src/extension.js",
 	"contributes": {
 		"configuration": {
 			"type": "object",
 			"title": "Configuration",
 			"properties": {
-				"lspSample.maxNumberOfProblems": {
+				"warpscript.maxNumberOfProblems": {
 					"scope": "resource",
 					"type": "number",
 					"default": 100,
 					"description": "Controls the maximum number of problems produced by the server."
 				},
-				"lspSample.trace.server": {
+				"warpscript.trace.server": {
 					"scope": "window",
 					"type": "string",
 					"enum": [
@@ -38,7 +38,7 @@
 						"messages",
 						"verbose"
 					],
-					"default": "off",
+					"default": "verbose",
 					"description": "Traces the communication between VSCode and the language server."
 				}
 			}

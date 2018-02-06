@@ -1,8 +1,14 @@
 {
 	"name": "vscode-warpscriptlangage",
-	"version": "1.0.0",
-	"description": "VSCode Langage Server for WarpScript",
-	"main": "index.js",
+	"description": "A language server example",
+	"author": "Xavier MARIN",
+	"license": "MIT",
+	"version": "0.0.1",
+	"publisher": "xavmarin",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Giwi/VSCode-WarpScriptLangage"
+	},
 	"scripts": {
 		"postinstall": "cd server && npm install && cd ../client && npm install && cd ..",
 		"compile": "tsc -p client/tsconfig.json && cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
@@ -10,12 +16,6 @@
 		"watch:client": "tsc -w -p client/tsconfig.json",
 		"compile:server": "cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
 		"watch:server": "cd server && npm run installServer && cd .. && tsc -w -p server/tsconfig.json"
-	},
-	"author": "Xavier MARIN",
-	"license": "ISC",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Giwi/VSCode-WarpScriptLangage"
 	},
 	"devDependencies": {
 		"@types/mocha": "^2.2.42",
