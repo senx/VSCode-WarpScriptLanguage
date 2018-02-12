@@ -27,7 +27,7 @@ export function activate(context: ExtensionContext) {
 	// Options to control the language client
 	let clientOptions: LanguageClientOptions = {
 		// Register the server for warpscript text documents
-		documentSelector: [{scheme: 'file', language: 'plaintext' }],
+		documentSelector: [{scheme: 'file', language: 'warpscript' }],
 		synchronize: {
 			// Synchronize the setting section 'Warpscript' to the server
 			configurationSection: 'warpscript',

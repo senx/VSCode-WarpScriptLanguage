@@ -16,10 +16,28 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onLanguage:plaintext"
+		"onLanguage:warpscript"
 	],
 	"main": "./out/src/extension.js",
 	"contributes": {
+		"languages": [
+			{
+				"id": "warpscript",
+				"aliases": [
+					"WarpScript",
+					"warpscript"
+				],
+				"extensions": [
+					"mc2"
+				],
+				"configuration": "./syntaxes/language-configuration.json"
+			}
+		],
+		"grammars": [{
+            "language": "warpscript",
+            "scopeName": "warpscript",
+            "path": "./syntaxes/warpscript.tmLanguage.json"
+        }],
 		"configuration": {
 			"type": "object",
 			"title": "Configuration",
