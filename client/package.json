@@ -35,7 +35,7 @@
 		],
 		"grammars": [{
             "language": "warpscript",
-            "scopeName": "warpscript",
+            "scopeName": "source.warpscript",
             "path": "./syntaxes/warpscript.tmLanguage.json"
         }],
 		"configuration": {
