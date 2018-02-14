@@ -101,7 +101,6 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
 	// The pass parameter contains the position of the text document in
 	// which code complete got requested. For the example we ignore this
 	// info and always provide the same completion items.
-	connection.console.log(_textDocumentPosition.textDocument.uri)
 	return [{label:'DOUBLEEXPONENTIALSMOOTHING',
 	kind:CompletionItemKind.Text,
 	data:1},
@@ -183,1848 +182,1779 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
 	{label:'ULP',
 	kind:CompletionItemKind.Text,
 	data:27},
-	{label:'max.tick.sliding.window',
+	{label:'max\\\\.tick\\\\.sliding\\\\.window',
 	kind:CompletionItemKind.Text,
 	data:28},
-	{label:'max.time.sliding.window',
+	{label:'max\\\\.time\\\\.sliding\\\\.window',
 	kind:CompletionItemKind.Text,
 	data:29},
-	{label:'op.and.ignore-nulls',
+	{label:'op\\\\.and\\\\.ignore-nulls',
 	kind:CompletionItemKind.Text,
 	data:30},
-	{label:'op.or.ignore-nulls',
+	{label:'op\\\\.or\\\\.ignore-nulls',
 	kind:CompletionItemKind.Text,
 	data:31},
-	{label:'reducer.percentile',
+	{label:'reducer\\\\.percentile',
 	kind:CompletionItemKind.Text,
 	data:32},
-	{label:'reducer.sd.forbid-nulls',
+	{label:'reducer\\\\.sd\\\\.forbid-nulls',
 	kind:CompletionItemKind.Text,
 	data:33},
-	{label:'reducer.var.forbid-nulls',
+	{label:'reducer\\\\.var\\\\.forbid-nulls',
 	kind:CompletionItemKind.Text,
 	data:34},
 	{label:'Macros',
 	kind:CompletionItemKind.Text,
 	data:35},
-	{label:'Multiline strings',
+	{label:'SENSISION\\\\.EVENT',
 	kind:CompletionItemKind.Text,
 	data:36},
-	{label:'Secured Scripts',
+	{label:'SENSISION\\\\.GET',
 	kind:CompletionItemKind.Text,
 	data:37},
-	{label:'SENSISION.EVENT',
+	{label:'SENSISION\\\\.SET',
 	kind:CompletionItemKind.Text,
 	data:38},
-	{label:'SENSISION.GET',
+	{label:'SENSISION\\\\.UPDATE',
 	kind:CompletionItemKind.Text,
 	data:39},
-	{label:'SENSISION.SET',
-	kind:CompletionItemKind.Text,
-	data:40},
-	{label:'SENSISION.UPDATE',
-	kind:CompletionItemKind.Text,
-	data:41},
 	{label:'CEVAL',
 	kind:CompletionItemKind.Text,
-	data:42},
+	data:40},
 	{label:'SYNC',
 	kind:CompletionItemKind.Text,
-	data:43},
+	data:41},
 	{label:'JSON->',
 	kind:CompletionItemKind.Text,
-	data:44},
+	data:42},
 	{label:'PICKLE->',
 	kind:CompletionItemKind.Text,
-	data:45},
+	data:43},
 	{label:'TOBIN',
 	kind:CompletionItemKind.Text,
-	data:46},
+	data:44},
 	{label:'TOBOOLEAN',
 	kind:CompletionItemKind.Text,
-	data:47},
+	data:45},
 	{label:'TODOUBLE',
 	kind:CompletionItemKind.Text,
-	data:48},
+	data:46},
 	{label:'TOLONG',
 	kind:CompletionItemKind.Text,
-	data:49},
+	data:47},
 	{label:'TOSTRING',
 	kind:CompletionItemKind.Text,
-	data:50},
+	data:48},
 	{label:'TOTIMESTAMP',
 	kind:CompletionItemKind.Text,
-	data:51},
+	data:49},
 	{label:'CALL',
 	kind:CompletionItemKind.Text,
-	data:52},
+	data:50},
 	{label:'CUDF',
 	kind:CompletionItemKind.Text,
-	data:53},
+	data:51},
 	{label:'UDF',
 	kind:CompletionItemKind.Text,
-	data:54},
+	data:52},
 	{label:'->BIN',
 	kind:CompletionItemKind.Text,
-	data:55},
+	data:53},
 	{label:'->HEX',
 	kind:CompletionItemKind.Text,
-	data:56},
+	data:54},
 	{label:'B64->',
 	kind:CompletionItemKind.Text,
-	data:57},
+	data:55},
 	{label:'B64TOHEX',
 	kind:CompletionItemKind.Text,
-	data:58},
+	data:56},
 	{label:'B64URL->',
 	kind:CompletionItemKind.Text,
-	data:59},
+	data:57},
 	{label:'BIN->',
 	kind:CompletionItemKind.Text,
-	data:60},
+	data:58},
 	{label:'BINTOHEX',
 	kind:CompletionItemKind.Text,
-	data:61},
+	data:59},
 	{label:'BYTES->',
 	kind:CompletionItemKind.Text,
-	data:62},
+	data:60},
 	{label:'FROMBIN',
 	kind:CompletionItemKind.Text,
-	data:63},
+	data:61},
 	{label:'FROMHEX',
 	kind:CompletionItemKind.Text,
-	data:64},
+	data:62},
 	{label:'HASH',
 	kind:CompletionItemKind.Text,
-	data:65},
+	data:63},
 	{label:'HEX->',
 	kind:CompletionItemKind.Text,
-	data:66},
+	data:64},
 	{label:'HEXTOB64',
 	kind:CompletionItemKind.Text,
-	data:67},
+	data:65},
 	{label:'HEXTOBIN',
 	kind:CompletionItemKind.Text,
-	data:68},
+	data:66},
 	{label:'JOIN',
 	kind:CompletionItemKind.Text,
-	data:69},
+	data:67},
 	{label:'MATCH',
 	kind:CompletionItemKind.Text,
-	data:70},
+	data:68},
 	{label:'MATCHER',
 	kind:CompletionItemKind.Text,
-	data:71},
+	data:69},
 	{label:'OBP64->',
 	kind:CompletionItemKind.Text,
-	data:72},
+	data:70},
 	{label:'OPB64TOHEX',
 	kind:CompletionItemKind.Text,
-	data:73},
+	data:71},
 	{label:'REPLACE',
 	kind:CompletionItemKind.Text,
-	data:74},
+	data:72},
 	{label:'REPLACEALL',
 	kind:CompletionItemKind.Text,
-	data:75},
+	data:73},
 	{label:'SPLIT',
 	kind:CompletionItemKind.Text,
-	data:76},
+	data:74},
 	{label:'SUBSTRING',
 	kind:CompletionItemKind.Text,
-	data:77},
+	data:75},
 	{label:'TEMPLATE',
 	kind:CompletionItemKind.Text,
-	data:78},
+	data:76},
 	{label:'->B64',
 	kind:CompletionItemKind.Text,
-	data:79},
+	data:77},
 	{label:'->B64URL',
 	kind:CompletionItemKind.Text,
-	data:80},
+	data:78},
 	{label:'->BYTES',
 	kind:CompletionItemKind.Text,
-	data:81},
+	data:79},
 	{label:'TOHEX',
 	kind:CompletionItemKind.Text,
-	data:82},
+	data:80},
 	{label:'TOLOWER',
 	kind:CompletionItemKind.Text,
-	data:83},
+	data:81},
 	{label:'->OPB64',
 	kind:CompletionItemKind.Text,
-	data:84},
+	data:82},
 	{label:'TOUPPER',
 	kind:CompletionItemKind.Text,
-	data:85},
+	data:83},
 	{label:'TRIM',
 	kind:CompletionItemKind.Text,
-	data:86},
+	data:84},
 	{label:'URLDECODE',
 	kind:CompletionItemKind.Text,
-	data:87},
+	data:85},
 	{label:'URLENCODE',
 	kind:CompletionItemKind.Text,
-	data:88},
+	data:86},
 	{label:'UUID',
 	kind:CompletionItemKind.Text,
-	data:89},
+	data:87},
 	{label:'ADDDAYS',
 	kind:CompletionItemKind.Text,
-	data:90},
+	data:88},
 	{label:'ADDMONTHS',
 	kind:CompletionItemKind.Text,
-	data:91},
+	data:89},
 	{label:'ADDYEARS',
 	kind:CompletionItemKind.Text,
-	data:92},
+	data:90},
 	{label:'AGO',
 	kind:CompletionItemKind.Text,
-	data:93},
+	data:91},
 	{label:'DURATION',
 	kind:CompletionItemKind.Text,
-	data:94},
+	data:92},
 	{label:'HUMANDURATION',
 	kind:CompletionItemKind.Text,
-	data:95},
+	data:93},
 	{label:'ISO8601',
 	kind:CompletionItemKind.Text,
-	data:96},
+	data:94},
 	{label:'ISODURATION',
 	kind:CompletionItemKind.Text,
-	data:97},
+	data:95},
 	{label:'MSTU',
 	kind:CompletionItemKind.Text,
-	data:98},
+	data:96},
 	{label:'NOTAFTER',
 	kind:CompletionItemKind.Text,
-	data:99},
+	data:97},
 	{label:'NOTBEFORE',
 	kind:CompletionItemKind.Text,
-	data:100},
+	data:98},
 	{label:'NOW',
 	kind:CompletionItemKind.Text,
-	data:101},
+	data:99},
 	{label:'STU',
 	kind:CompletionItemKind.Text,
-	data:102},
+	data:100},
 	{label:'->TSELEMENTS',
 	kind:CompletionItemKind.Text,
-	data:103},
+	data:101},
 	{label:'TSELEMENTS',
 	kind:CompletionItemKind.Text,
-	data:104},
+	data:102},
 	{label:'TSELEMENTS->',
 	kind:CompletionItemKind.Text,
-	data:105},
+	data:103},
 	{label:'AESUNWRAP',
 	kind:CompletionItemKind.Text,
-	data:106},
+	data:104},
 	{label:'AESWRAP',
 	kind:CompletionItemKind.Text,
-	data:107},
+	data:105},
 	{label:'MD5',
 	kind:CompletionItemKind.Text,
-	data:108},
+	data:106},
 	{label:'RSADECRYPT',
 	kind:CompletionItemKind.Text,
-	data:109},
+	data:107},
 	{label:'RSAENCRYPT',
 	kind:CompletionItemKind.Text,
-	data:110},
+	data:108},
 	{label:'RSAGEN',
 	kind:CompletionItemKind.Text,
-	data:111},
+	data:109},
 	{label:'RSAPRIVATE',
 	kind:CompletionItemKind.Text,
-	data:112},
+	data:110},
 	{label:'RSAPUBLIC',
 	kind:CompletionItemKind.Text,
-	data:113},
+	data:111},
 	{label:'RSASIGN',
 	kind:CompletionItemKind.Text,
-	data:114},
+	data:112},
 	{label:'RSAVERIFY',
 	kind:CompletionItemKind.Text,
-	data:115},
+	data:113},
 	{label:'SHA1',
 	kind:CompletionItemKind.Text,
-	data:116},
+	data:114},
 	{label:'SHA1HMAC',
 	kind:CompletionItemKind.Text,
-	data:117},
+	data:115},
 	{label:'SHA256',
 	kind:CompletionItemKind.Text,
-	data:118},
+	data:116},
 	{label:'SHA256HMAC',
 	kind:CompletionItemKind.Text,
-	data:119},
+	data:117},
 	{label:'GZIP',
 	kind:CompletionItemKind.Text,
-	data:120},
+	data:118},
 	{label:'->Z',
 	kind:CompletionItemKind.Text,
-	data:121},
+	data:119},
 	{label:'UNGZIP',
 	kind:CompletionItemKind.Text,
-	data:122},
+	data:120},
 	{label:'Z->',
 	kind:CompletionItemKind.Text,
-	data:123},
+	data:121},
 	{label:'AUTHENTICATE',
 	kind:CompletionItemKind.Text,
-	data:124},
+	data:122},
 	{label:'BOOTSTRAP',
 	kind:CompletionItemKind.Text,
-	data:125},
+	data:123},
 	{label:'CLEAR',
 	kind:CompletionItemKind.Text,
-	data:126},
+	data:124},
 	{label:'CLEARDEFS',
 	kind:CompletionItemKind.Text,
-	data:127},
+	data:125},
 	{label:'CLEARSYMBOLS',
 	kind:CompletionItemKind.Text,
-	data:128},
+	data:126},
 	{label:'CLEARTOMARK',
 	kind:CompletionItemKind.Text,
-	data:129},
-	{label:']',
-	kind:CompletionItemKind.Text,
-	data:130},
-	{label:'}',
-	kind:CompletionItemKind.Text,
-	data:131},
+	data:127},
 	{label:'COUNTTOMARK',
 	kind:CompletionItemKind.Text,
-	data:132},
+	data:128},
 	{label:'CSTORE',
 	kind:CompletionItemKind.Text,
-	data:133},
+	data:129},
 	{label:'DEBUGOFF',
 	kind:CompletionItemKind.Text,
-	data:134},
+	data:130},
 	{label:'DEBUGON',
 	kind:CompletionItemKind.Text,
-	data:135},
+	data:131},
 	{label:'DEF',
 	kind:CompletionItemKind.Text,
-	data:136},
+	data:132},
 	{label:'DEPTH',
 	kind:CompletionItemKind.Text,
-	data:137},
+	data:133},
 	{label:'DOC',
 	kind:CompletionItemKind.Text,
-	data:138},
+	data:134},
 	{label:'DOCMODE',
 	kind:CompletionItemKind.Text,
-	data:139},
+	data:135},
 	{label:'DROP',
 	kind:CompletionItemKind.Text,
-	data:140},
+	data:136},
 	{label:'DROPN',
 	kind:CompletionItemKind.Text,
-	data:141},
+	data:137},
 	{label:'DUP',
 	kind:CompletionItemKind.Text,
-	data:142},
+	data:138},
 	{label:'DUPN',
 	kind:CompletionItemKind.Text,
-	data:143},
+	data:139},
 	{label:'ELAPSED',
 	kind:CompletionItemKind.Text,
-	data:144},
+	data:140},
 	{label:'EXPORT',
 	kind:CompletionItemKind.Text,
-	data:145},
+	data:141},
 	{label:'LOAD',
 	kind:CompletionItemKind.Text,
-	data:146},
+	data:142},
 	{label:'MARK',
 	kind:CompletionItemKind.Text,
-	data:147},
+	data:143},
 	{label:'NDEBUGON',
 	kind:CompletionItemKind.Text,
-	data:148},
+	data:144},
 	{label:'NOTIMINGS',
 	kind:CompletionItemKind.Text,
-	data:149},
-	{label:'[',
-	kind:CompletionItemKind.Text,
-	data:150},
-	{label:'{',
-	kind:CompletionItemKind.Text,
-	data:151},
+	data:145},
 	{label:'PICK',
 	kind:CompletionItemKind.Text,
-	data:152},
+	data:146},
 	{label:'RESET',
 	kind:CompletionItemKind.Text,
-	data:153},
+	data:147},
 	{label:'REXEC',
 	kind:CompletionItemKind.Text,
-	data:154},
+	data:148},
 	{label:'ROLL',
 	kind:CompletionItemKind.Text,
-	data:155},
+	data:149},
 	{label:'ROLLD',
 	kind:CompletionItemKind.Text,
-	data:156},
+	data:150},
 	{label:'ROT',
 	kind:CompletionItemKind.Text,
-	data:157},
+	data:151},
 	{label:'RUN',
 	kind:CompletionItemKind.Text,
-	data:158},
+	data:152},
 	{label:'SNAPSHOT',
 	kind:CompletionItemKind.Text,
-	data:159},
+	data:153},
 	{label:'SNAPSHOTALL',
 	kind:CompletionItemKind.Text,
-	data:160},
+	data:154},
 	{label:'SNAPSHOTALLTOMARK',
 	kind:CompletionItemKind.Text,
-	data:161},
+	data:155},
 	{label:'SNAPSHOTTOMARK',
 	kind:CompletionItemKind.Text,
-	data:162},
+	data:156},
 	{label:'STACKATTRIBUTE',
 	kind:CompletionItemKind.Text,
-	data:163},
+	data:157},
 	{label:'STACKTOLIST',
 	kind:CompletionItemKind.Text,
-	data:164},
+	data:158},
 	{label:'STORE',
 	kind:CompletionItemKind.Text,
-	data:165},
+	data:159},
 	{label:'SWAP',
 	kind:CompletionItemKind.Text,
-	data:166},
+	data:160},
 	{label:'TIMINGS',
 	kind:CompletionItemKind.Text,
-	data:167},
+	data:161},
 	{label:'TYPEOF',
 	kind:CompletionItemKind.Text,
-	data:168},
+	data:162},
 	{label:'EVALSECURE',
 	kind:CompletionItemKind.Text,
-	data:169},
+	data:163},
 	{label:'HEADER',
 	kind:CompletionItemKind.Text,
-	data:170},
+	data:164},
 	{label:'IDENT',
 	kind:CompletionItemKind.Text,
-	data:171},
+	data:165},
 	{label:'JSONLOOSE',
 	kind:CompletionItemKind.Text,
-	data:172},
+	data:166},
 	{label:'JSONSTRICT',
 	kind:CompletionItemKind.Text,
-	data:173},
+	data:167},
 	{label:'LIMIT',
 	kind:CompletionItemKind.Text,
-	data:174},
+	data:168},
 	{label:'MAXBUCKETS',
 	kind:CompletionItemKind.Text,
-	data:175},
+	data:169},
 	{label:'MAXDEPTH',
 	kind:CompletionItemKind.Text,
-	data:176},
+	data:170},
 	{label:'MAXGTS',
 	kind:CompletionItemKind.Text,
-	data:177},
+	data:171},
 	{label:'MAXLOOP',
 	kind:CompletionItemKind.Text,
-	data:178},
+	data:172},
 	{label:'MAXOPS',
 	kind:CompletionItemKind.Text,
-	data:179},
+	data:173},
 	{label:'MAXSYMBOLS',
 	kind:CompletionItemKind.Text,
-	data:180},
+	data:174},
 	{label:'NOOP',
 	kind:CompletionItemKind.Text,
-	data:181},
+	data:175},
 	{label:'OPS',
 	kind:CompletionItemKind.Text,
-	data:182},
+	data:176},
 	{label:'RESTORE',
 	kind:CompletionItemKind.Text,
-	data:183},
+	data:177},
 	{label:'REV',
 	kind:CompletionItemKind.Text,
-	data:184},
+	data:178},
 	{label:'RTFM',
 	kind:CompletionItemKind.Text,
-	data:185},
+	data:179},
 	{label:'SAVE',
 	kind:CompletionItemKind.Text,
-	data:186},
+	data:180},
 	{label:'SECUREKEY',
 	kind:CompletionItemKind.Text,
-	data:187},
+	data:181},
 	{label:'TOKENINFO',
 	kind:CompletionItemKind.Text,
-	data:188},
+	data:182},
 	{label:'UNSECURE',
 	kind:CompletionItemKind.Text,
-	data:189},
+	data:183},
 	{label:'URLFETCH',
 	kind:CompletionItemKind.Text,
-	data:190},
+	data:184},
 	{label:'WEBCALL',
 	kind:CompletionItemKind.Text,
-	data:191},
+	data:185},
 	{label:'ABS',
 	kind:CompletionItemKind.Text,
-	data:192},
-	{label:'+',
-	kind:CompletionItemKind.Text,
-	data:193},
-	{label:'~=',
-	kind:CompletionItemKind.Text,
-	data:194},
+	data:186},
 	{label:'AND',
 	kind:CompletionItemKind.Text,
-	data:195},
-	{label:'&',
-	kind:CompletionItemKind.Text,
-	data:196},
-	{label:'~',
-	kind:CompletionItemKind.Text,
-	data:197},
-	{label:'|',
-	kind:CompletionItemKind.Text,
-	data:198},
+	data:187},
 	{label:'^',
 	kind:CompletionItemKind.Text,
-	data:199},
+	data:188},
 	{label:'CBRT',
 	kind:CompletionItemKind.Text,
-	data:200},
+	data:189},
 	{label:'CEIL',
 	kind:CompletionItemKind.Text,
-	data:201},
-	{label:'&&',
-	kind:CompletionItemKind.Text,
-	data:202},
-	{label:'||',
-	kind:CompletionItemKind.Text,
-	data:203},
+	data:190},
 	{label:'COPYSIGN',
 	kind:CompletionItemKind.Text,
-	data:204},
-	{label:'/',
-	kind:CompletionItemKind.Text,
-	data:205},
+	data:191},
 	{label:'DOUBLEBITS->',
 	kind:CompletionItemKind.Text,
-	data:206},
-	{label:'==',
-	kind:CompletionItemKind.Text,
-	data:207},
+	data:192},
 	{label:'EXP',
 	kind:CompletionItemKind.Text,
-	data:208},
+	data:193},
 	{label:'FLOATBITS->',
 	kind:CompletionItemKind.Text,
-	data:209},
+	data:194},
 	{label:'FLOOR',
 	kind:CompletionItemKind.Text,
-	data:210},
-	{label:'>=',
-	kind:CompletionItemKind.Text,
-	data:211},
+	data:195},
 	{label:'>',
 	kind:CompletionItemKind.Text,
-	data:212},
+	data:196},
 	{label:'IEEEREMAINDER',
 	kind:CompletionItemKind.Text,
-	data:213},
-	{label:'+!',
-	kind:CompletionItemKind.Text,
-	data:214},
+	data:197},
 	{label:'ISNULL',
 	kind:CompletionItemKind.Text,
-	data:215},
+	data:198},
 	{label:'ISNaN',
 	kind:CompletionItemKind.Text,
-	data:216},
+	data:199},
 	{label:'LBOUNDS',
 	kind:CompletionItemKind.Text,
-	data:217},
-	{label:'<=',
-	kind:CompletionItemKind.Text,
-	data:218},
+	data:200},
 	{label:'<<',
 	kind:CompletionItemKind.Text,
-	data:219},
+	data:201},
 	{label:'LOG',
 	kind:CompletionItemKind.Text,
-	data:220},
+	data:202},
 	{label:'LOG10',
 	kind:CompletionItemKind.Text,
-	data:221},
+	data:203},
 	{label:'<',
 	kind:CompletionItemKind.Text,
-	data:222},
+	data:204},
 	{label:'MAX',
 	kind:CompletionItemKind.Text,
-	data:223},
+	data:205},
 	{label:'MIN',
 	kind:CompletionItemKind.Text,
-	data:224},
+	data:206},
 	{label:'%',
 	kind:CompletionItemKind.Text,
-	data:225},
-	{label:'*',
-	kind:CompletionItemKind.Text,
-	data:226},
+	data:207},
 	{label:'NBOUNDS',
 	kind:CompletionItemKind.Text,
-	data:227},
-	{label:'!=',
-	kind:CompletionItemKind.Text,
-	data:228},
+	data:208},
 	{label:'NEXTAFTER',
 	kind:CompletionItemKind.Text,
-	data:229},
+	data:209},
 	{label:'NEXTUP',
 	kind:CompletionItemKind.Text,
-	data:230},
+	data:210},
 	{label:'!',
 	kind:CompletionItemKind.Text,
-	data:231},
+	data:211},
 	{label:'NOT',
 	kind:CompletionItemKind.Text,
-	data:232},
+	data:212},
 	{label:'NPDF',
 	kind:CompletionItemKind.Text,
-	data:233},
+	data:213},
 	{label:'OR',
 	kind:CompletionItemKind.Text,
-	data:234},
-	{label:'**',
-	kind:CompletionItemKind.Text,
-	data:235},
+	data:214},
 	{label:'PROBABILITY',
 	kind:CompletionItemKind.Text,
-	data:236},
+	data:215},
 	{label:'RAND',
 	kind:CompletionItemKind.Text,
-	data:237},
+	data:216},
 	{label:'RANDPDF',
 	kind:CompletionItemKind.Text,
-	data:238},
+	data:217},
 	{label:'REVBITS',
 	kind:CompletionItemKind.Text,
-	data:239},
+	data:218},
 	{label:'>>',
 	kind:CompletionItemKind.Text,
-	data:240},
+	data:219},
 	{label:'RINT',
 	kind:CompletionItemKind.Text,
-	data:241},
+	data:220},
 	{label:'ROUND',
 	kind:CompletionItemKind.Text,
-	data:242},
+	data:221},
 	{label:'SIGNUM',
 	kind:CompletionItemKind.Text,
-	data:243},
+	data:222},
 	{label:'SQRT',
 	kind:CompletionItemKind.Text,
-	data:244},
+	data:223},
 	{label:'-',
 	kind:CompletionItemKind.Text,
-	data:245},
+	data:224},
 	{label:'->DOUBLEBITS',
 	kind:CompletionItemKind.Text,
-	data:246},
+	data:225},
 	{label:'->FLOATBITS',
 	kind:CompletionItemKind.Text,
-	data:247},
+	data:226},
 	{label:'>>>',
 	kind:CompletionItemKind.Text,
-	data:248},
+	data:227},
 	{label:'->PICKLE',
 	kind:CompletionItemKind.Text,
-	data:249},
+	data:228},
 	{label:'ACOS',
 	kind:CompletionItemKind.Text,
-	data:250},
+	data:229},
 	{label:'ASIN',
 	kind:CompletionItemKind.Text,
-	data:251},
+	data:230},
 	{label:'ATAN',
 	kind:CompletionItemKind.Text,
-	data:252},
+	data:231},
 	{label:'COS',
 	kind:CompletionItemKind.Text,
-	data:253},
+	data:232},
 	{label:'COSH',
 	kind:CompletionItemKind.Text,
-	data:254},
+	data:233},
 	{label:'SIN',
 	kind:CompletionItemKind.Text,
-	data:255},
+	data:234},
 	{label:'SINH',
 	kind:CompletionItemKind.Text,
-	data:256},
+	data:235},
 	{label:'TAN',
 	kind:CompletionItemKind.Text,
-	data:257},
+	data:236},
 	{label:'TANH',
 	kind:CompletionItemKind.Text,
-	data:258},
+	data:237},
 	{label:'TODEGREES',
 	kind:CompletionItemKind.Text,
-	data:259},
+	data:238},
 	{label:'TORADIANS',
 	kind:CompletionItemKind.Text,
-	data:260},
+	data:239},
 	{label:'d',
 	kind:CompletionItemKind.Text,
-	data:261},
+	data:240},
 	{label:'h',
 	kind:CompletionItemKind.Text,
-	data:262},
+	data:241},
 	{label:'m',
 	kind:CompletionItemKind.Text,
-	data:263},
+	data:242},
 	{label:'ms',
 	kind:CompletionItemKind.Text,
-	data:264},
+	data:243},
 	{label:'ns',
 	kind:CompletionItemKind.Text,
-	data:265},
+	data:244},
 	{label:'ps',
 	kind:CompletionItemKind.Text,
-	data:266},
+	data:245},
 	{label:'s',
 	kind:CompletionItemKind.Text,
-	data:267},
+	data:246},
 	{label:'us',
 	kind:CompletionItemKind.Text,
-	data:268},
+	data:247},
 	{label:'w',
 	kind:CompletionItemKind.Text,
-	data:269},
+	data:248},
 	{label:'COUNTER',
 	kind:CompletionItemKind.Text,
-	data:270},
+	data:249},
 	{label:'COUNTERDELTA',
 	kind:CompletionItemKind.Text,
-	data:271},
+	data:250},
 	{label:'COUNTERVALUE',
 	kind:CompletionItemKind.Text,
-	data:272},
+	data:251},
 	{label:'RANGE',
 	kind:CompletionItemKind.Text,
-	data:273},
+	data:252},
 	{label:'QCONJUGATE',
 	kind:CompletionItemKind.Text,
-	data:274},
+	data:253},
 	{label:'QDIVIDE',
 	kind:CompletionItemKind.Text,
-	data:275},
+	data:254},
 	{label:'QMULTIPLY',
 	kind:CompletionItemKind.Text,
-	data:276},
+	data:255},
 	{label:'QROTATE',
 	kind:CompletionItemKind.Text,
-	data:277},
+	data:256},
 	{label:'QROTATION',
 	kind:CompletionItemKind.Text,
-	data:278},
+	data:257},
 	{label:'Q->',
 	kind:CompletionItemKind.Text,
-	data:279},
+	data:258},
 	{label:'ROTATIONQ',
 	kind:CompletionItemKind.Text,
-	data:280},
+	data:259},
 	{label:'->Q',
 	kind:CompletionItemKind.Text,
-	data:281},
+	data:260},
 	{label:'BITCOUNT',
 	kind:CompletionItemKind.Text,
-	data:282},
+	data:261},
 	{label:'BITGET',
 	kind:CompletionItemKind.Text,
-	data:283},
+	data:262},
 	{label:'BITSTOBYTES',
 	kind:CompletionItemKind.Text,
-	data:284},
+	data:263},
 	{label:'BYTESTOBITS',
 	kind:CompletionItemKind.Text,
-	data:285},
+	data:264},
 	{label:'ASSERT',
 	kind:CompletionItemKind.Text,
-	data:286},
+	data:265},
 	{label:'BREAK',
 	kind:CompletionItemKind.Text,
-	data:287},
+	data:266},
 	{label:'CONTINUE',
 	kind:CompletionItemKind.Text,
-	data:288},
+	data:267},
 	{label:'DEFINED',
 	kind:CompletionItemKind.Text,
-	data:289},
+	data:268},
 	{label:'DEFINEDMACRO',
 	kind:CompletionItemKind.Text,
-	data:290},
+	data:269},
 	{label:'EVAL',
 	kind:CompletionItemKind.Text,
-	data:291},
+	data:270},
 	{label:'FAIL',
 	kind:CompletionItemKind.Text,
-	data:292},
+	data:271},
 	{label:'FOR',
 	kind:CompletionItemKind.Text,
-	data:293},
+	data:272},
 	{label:'FOREACH',
 	kind:CompletionItemKind.Text,
-	data:294},
+	data:273},
 	{label:'FORSTEP',
 	kind:CompletionItemKind.Text,
-	data:295},
+	data:274},
 	{label:'IFT',
 	kind:CompletionItemKind.Text,
-	data:296},
+	data:275},
 	{label:'IFTE',
 	kind:CompletionItemKind.Text,
-	data:297},
+	data:276},
 	{label:'MSGFAIL',
 	kind:CompletionItemKind.Text,
-	data:298},
+	data:277},
 	{label:'NRETURN',
 	kind:CompletionItemKind.Text,
-	data:299},
+	data:278},
 	{label:'RETURN',
 	kind:CompletionItemKind.Text,
-	data:300},
+	data:279},
 	{label:'STOP',
 	kind:CompletionItemKind.Text,
-	data:301},
+	data:280},
 	{label:'SWITCH',
 	kind:CompletionItemKind.Text,
-	data:302},
+	data:281},
 	{label:'UNTIL',
 	kind:CompletionItemKind.Text,
-	data:303},
+	data:282},
 	{label:'WHILE',
 	kind:CompletionItemKind.Text,
-	data:304},
+	data:283},
 	{label:'CLONEREVERSE',
 	kind:CompletionItemKind.Text,
-	data:305},
+	data:284},
 	{label:'CONTAINS',
 	kind:CompletionItemKind.Text,
-	data:306},
+	data:285},
 	{label:'CONTAINSKEY',
 	kind:CompletionItemKind.Text,
-	data:307},
+	data:286},
 	{label:'CONTAINSVALUE',
 	kind:CompletionItemKind.Text,
-	data:308},
-	{label:'[]',
-	kind:CompletionItemKind.Text,
-	data:309},
-	{label:'{}',
-	kind:CompletionItemKind.Text,
-	data:310},
+	data:287},
 	{label:'FLATTEN',
 	kind:CompletionItemKind.Text,
-	data:311},
+	data:288},
 	{label:'GET',
 	kind:CompletionItemKind.Text,
-	data:312},
+	data:289},
 	{label:'KEYLIST',
 	kind:CompletionItemKind.Text,
-	data:313},
+	data:290},
 	{label:'LFLATMAP',
 	kind:CompletionItemKind.Text,
-	data:314},
+	data:291},
 	{label:'LIST->',
 	kind:CompletionItemKind.Text,
-	data:315},
+	data:292},
 	{label:'LMAP',
 	kind:CompletionItemKind.Text,
-	data:316},
+	data:293},
 	{label:'MAPID',
 	kind:CompletionItemKind.Text,
-	data:317},
+	data:294},
 	{label:'MAT->',
 	kind:CompletionItemKind.Text,
-	data:318},
+	data:295},
 	{label:'MSORT',
 	kind:CompletionItemKind.Text,
-	data:319},
+	data:296},
 	{label:'PACK',
 	kind:CompletionItemKind.Text,
-	data:320},
+	data:297},
 	{label:'SIZE',
 	kind:CompletionItemKind.Text,
-	data:321},
+	data:298},
 	{label:'SUBLIST',
 	kind:CompletionItemKind.Text,
-	data:322},
+	data:299},
 	{label:'SUBMAP',
 	kind:CompletionItemKind.Text,
-	data:323},
+	data:300},
 	{label:'->LIST',
 	kind:CompletionItemKind.Text,
-	data:324},
+	data:301},
 	{label:'->MAP',
 	kind:CompletionItemKind.Text,
-	data:325},
+	data:302},
 	{label:'->MAT',
 	kind:CompletionItemKind.Text,
-	data:326},
+	data:303},
 	{label:'->V',
 	kind:CompletionItemKind.Text,
-	data:327},
+	data:304},
 	{label:'->VEC',
 	kind:CompletionItemKind.Text,
-	data:328},
+	data:305},
 	{label:'UNIQUE',
 	kind:CompletionItemKind.Text,
-	data:329},
+	data:306},
 	{label:'UNLIST',
 	kind:CompletionItemKind.Text,
-	data:330},
+	data:307},
 	{label:'UNMAP',
 	kind:CompletionItemKind.Text,
-	data:331},
+	data:308},
 	{label:'UNPACK',
 	kind:CompletionItemKind.Text,
-	data:332},
+	data:309},
 	{label:'VALUELIST',
 	kind:CompletionItemKind.Text,
-	data:333},
+	data:310},
 	{label:'VEC->',
 	kind:CompletionItemKind.Text,
-	data:334},
+	data:311},
 	{label:'V->',
 	kind:CompletionItemKind.Text,
-	data:335},
+	data:312},
 	{label:'ZIP',
 	kind:CompletionItemKind.Text,
-	data:336},
+	data:313},
 	{label:'DIFFERENCE',
 	kind:CompletionItemKind.Text,
-	data:337},
+	data:314},
 	{label:'INTERSECTION',
 	kind:CompletionItemKind.Text,
-	data:338},
+	data:315},
 	{label:'SET',
 	kind:CompletionItemKind.Text,
-	data:339},
+	data:316},
 	{label:'SET->',
 	kind:CompletionItemKind.Text,
-	data:340},
+	data:317},
 	{label:'->SET',
 	kind:CompletionItemKind.Text,
-	data:341},
+	data:318},
 	{label:'UNION',
 	kind:CompletionItemKind.Text,
-	data:342},
+	data:319},
 	{label:'APPEND',
 	kind:CompletionItemKind.Text,
-	data:343},
+	data:320},
 	{label:'LSORT',
 	kind:CompletionItemKind.Text,
-	data:344},
+	data:321},
 	{label:'PUT',
 	kind:CompletionItemKind.Text,
-	data:345},
+	data:322},
 	{label:'REMOVE',
 	kind:CompletionItemKind.Text,
-	data:346},
+	data:323},
 	{label:'REVERSE',
 	kind:CompletionItemKind.Text,
-	data:347},
+	data:324},
 	{label:'GEOHASH->',
 	kind:CompletionItemKind.Text,
-	data:348},
+	data:325},
 	{label:'GEOPACK',
 	kind:CompletionItemKind.Text,
-	data:349},
+	data:326},
 	{label:'GEOREGEXP',
 	kind:CompletionItemKind.Text,
-	data:350},
+	data:327},
 	{label:'GEOUNPACK',
 	kind:CompletionItemKind.Text,
-	data:351},
-	{label:'GEO.DIFFERENCE',
+	data:328},
+	{label:'GEO\\\\.DIFFERENCE',
 	kind:CompletionItemKind.Text,
-	data:352},
-	{label:'GEO.INTERSECTION',
+	data:329},
+	{label:'GEO\\\\.INTERSECTION',
 	kind:CompletionItemKind.Text,
-	data:353},
-	{label:'GEO.INTERSECTS',
+	data:330},
+	{label:'GEO\\\\.INTERSECTS',
 	kind:CompletionItemKind.Text,
-	data:354},
-	{label:'GEO.JSON',
+	data:331},
+	{label:'GEO\\\\.JSON',
 	kind:CompletionItemKind.Text,
-	data:355},
-	{label:'GEO.UNION',
+	data:332},
+	{label:'GEO\\\\.UNION',
 	kind:CompletionItemKind.Text,
-	data:356},
-	{label:'GEO.WITHIN',
+	data:333},
+	{label:'GEO\\\\.WITHIN',
 	kind:CompletionItemKind.Text,
-	data:357},
-	{label:'GEO.WKT',
+	data:334},
+	{label:'GEO\\\\.WKT',
 	kind:CompletionItemKind.Text,
-	data:358},
+	data:335},
 	{label:'HAVERSINE',
 	kind:CompletionItemKind.Text,
-	data:359},
+	data:336},
 	{label:'HHCODE->',
 	kind:CompletionItemKind.Text,
-	data:360},
+	data:337},
 	{label:'->GEOHASH',
 	kind:CompletionItemKind.Text,
-	data:361},
+	data:338},
 	{label:'->HHCODE',
 	kind:CompletionItemKind.Text,
-	data:362},
+	data:339},
 	{label:'CHUNK',
 	kind:CompletionItemKind.Text,
-	data:363},
+	data:340},
 	{label:'CLIP',
 	kind:CompletionItemKind.Text,
-	data:364},
+	data:341},
 	{label:'SHRINK',
 	kind:CompletionItemKind.Text,
-	data:365},
+	data:342},
 	{label:'TIMECLIP',
 	kind:CompletionItemKind.Text,
-	data:366},
+	data:343},
 	{label:'TIMEMODULO',
 	kind:CompletionItemKind.Text,
-	data:367},
+	data:344},
 	{label:'TIMESCALE',
 	kind:CompletionItemKind.Text,
-	data:368},
+	data:345},
 	{label:'TIMESHIFT',
 	kind:CompletionItemKind.Text,
-	data:369},
+	data:346},
 	{label:'TIMESPLIT',
 	kind:CompletionItemKind.Text,
-	data:370},
+	data:347},
 	{label:'CORRELATE',
 	kind:CompletionItemKind.Text,
-	data:371},
+	data:348},
 	{label:'CPROB',
 	kind:CompletionItemKind.Text,
-	data:372},
+	data:349},
 	{label:'ISONORMALIZE',
 	kind:CompletionItemKind.Text,
-	data:373},
+	data:350},
 	{label:'LOWESS',
 	kind:CompletionItemKind.Text,
-	data:374},
+	data:351},
 	{label:'LTTB',
 	kind:CompletionItemKind.Text,
-	data:375},
+	data:352},
 	{label:'MODE',
 	kind:CompletionItemKind.Text,
-	data:376},
+	data:353},
 	{label:'MONOTONIC',
 	kind:CompletionItemKind.Text,
-	data:377},
+	data:354},
 	{label:'MUSIGMA',
 	kind:CompletionItemKind.Text,
-	data:378},
+	data:355},
 	{label:'NORMALIZE',
 	kind:CompletionItemKind.Text,
-	data:379},
+	data:356},
 	{label:'NSUMSUMSQ',
 	kind:CompletionItemKind.Text,
-	data:380},
+	data:357},
 	{label:'PROB',
 	kind:CompletionItemKind.Text,
-	data:381},
+	data:358},
 	{label:'RLOWESS',
 	kind:CompletionItemKind.Text,
-	data:382},
+	data:359},
 	{label:'SINGLEEXPONENTIALSMOOTHING',
 	kind:CompletionItemKind.Text,
-	data:383},
+	data:360},
 	{label:'STANDARDIZE',
 	kind:CompletionItemKind.Text,
-	data:384},
+	data:361},
 	{label:'TLTTB',
 	kind:CompletionItemKind.Text,
-	data:385},
+	data:362},
 	{label:'VALUEHISTOGRAM',
 	kind:CompletionItemKind.Text,
-	data:386},
+	data:363},
 	{label:'DWTSPLIT',
 	kind:CompletionItemKind.Text,
-	data:387},
+	data:364},
 	{label:'FDWT',
 	kind:CompletionItemKind.Text,
-	data:388},
+	data:365},
 	{label:'FFT',
 	kind:CompletionItemKind.Text,
-	data:389},
+	data:366},
 	{label:'FFTAP',
 	kind:CompletionItemKind.Text,
-	data:390},
+	data:367},
 	{label:'IDWT',
 	kind:CompletionItemKind.Text,
-	data:391},
+	data:368},
 	{label:'IFFT',
 	kind:CompletionItemKind.Text,
-	data:392},
+	data:369},
 	{label:'CLONE',
 	kind:CompletionItemKind.Text,
-	data:393},
+	data:370},
 	{label:'CLONEEMPTY',
 	kind:CompletionItemKind.Text,
-	data:394},
+	data:371},
 	{label:'COMMONTICKS',
 	kind:CompletionItemKind.Text,
-	data:395},
+	data:372},
 	{label:'COMPACT',
 	kind:CompletionItemKind.Text,
-	data:396},
+	data:373},
 	{label:'DEDUP',
 	kind:CompletionItemKind.Text,
-	data:397},
+	data:374},
 	{label:'FILLTICKS',
 	kind:CompletionItemKind.Text,
-	data:398},
+	data:375},
 	{label:'INTEGRATE',
 	kind:CompletionItemKind.Text,
-	data:399},
+	data:376},
 	{label:'LASTSORT',
 	kind:CompletionItemKind.Text,
-	data:400},
+	data:377},
 	{label:'MERGE',
 	kind:CompletionItemKind.Text,
-	data:401},
+	data:378},
 	{label:'NONEMPTY',
 	kind:CompletionItemKind.Text,
-	data:402},
+	data:379},
 	{label:'PARTITION',
 	kind:CompletionItemKind.Text,
-	data:403},
+	data:380},
 	{label:'QUANTIZE',
 	kind:CompletionItemKind.Text,
-	data:404},
+	data:381},
 	{label:'RANGECOMPACT',
 	kind:CompletionItemKind.Text,
-	data:405},
+	data:382},
 	{label:'RESETS',
 	kind:CompletionItemKind.Text,
-	data:406},
+	data:383},
 	{label:'RSORT',
 	kind:CompletionItemKind.Text,
-	data:407},
+	data:384},
 	{label:'RVALUESORT',
 	kind:CompletionItemKind.Text,
-	data:408},
+	data:385},
 	{label:'SORT',
 	kind:CompletionItemKind.Text,
-	data:409},
+	data:386},
 	{label:'SORTBY',
 	kind:CompletionItemKind.Text,
-	data:410},
+	data:387},
 	{label:'UNWRAP',
 	kind:CompletionItemKind.Text,
-	data:411},
+	data:388},
 	{label:'VALUEDEDUP',
 	kind:CompletionItemKind.Text,
-	data:412},
+	data:389},
 	{label:'VALUESORT',
 	kind:CompletionItemKind.Text,
-	data:413},
+	data:390},
 	{label:'VALUESPLIT',
 	kind:CompletionItemKind.Text,
-	data:414},
+	data:391},
 	{label:'WRAP',
 	kind:CompletionItemKind.Text,
-	data:415},
+	data:392},
 	{label:'WRAPRAW',
 	kind:CompletionItemKind.Text,
-	data:416},
+	data:393},
 	{label:'MAKEGTS',
 	kind:CompletionItemKind.Text,
-	data:417},
+	data:394},
 	{label:'NEWGTS',
 	kind:CompletionItemKind.Text,
-	data:418},
+	data:395},
 	{label:'PARSE',
 	kind:CompletionItemKind.Text,
-	data:419},
+	data:396},
 	{label:'DELETE',
 	kind:CompletionItemKind.Text,
-	data:420},
+	data:397},
 	{label:'FETCH',
 	kind:CompletionItemKind.Text,
-	data:421},
+	data:398},
 	{label:'FETCHBOOLEAN',
 	kind:CompletionItemKind.Text,
-	data:422},
+	data:399},
 	{label:'FETCHDOUBLE',
 	kind:CompletionItemKind.Text,
-	data:423},
+	data:400},
 	{label:'FETCHLONG',
 	kind:CompletionItemKind.Text,
-	data:424},
+	data:401},
 	{label:'FETCHSTRING',
 	kind:CompletionItemKind.Text,
-	data:425},
+	data:402},
 	{label:'FIND',
 	kind:CompletionItemKind.Text,
-	data:426},
+	data:403},
 	{label:'FINDSTATS',
 	kind:CompletionItemKind.Text,
-	data:427},
+	data:404},
 	{label:'UPDATE',
 	kind:CompletionItemKind.Text,
-	data:428},
+	data:405},
 	{label:'DISCORDS',
 	kind:CompletionItemKind.Text,
-	data:429},
+	data:406},
 	{label:'DTW',
 	kind:CompletionItemKind.Text,
-	data:430},
+	data:407},
 	{label:'OPTDTW',
 	kind:CompletionItemKind.Text,
-	data:431},
+	data:408},
 	{label:'PATTERNDETECTION',
 	kind:CompletionItemKind.Text,
-	data:432},
+	data:409},
 	{label:'PATTERNS',
 	kind:CompletionItemKind.Text,
-	data:433},
+	data:410},
 	{label:'ZDISCORDS',
 	kind:CompletionItemKind.Text,
-	data:434},
+	data:411},
 	{label:'ZPATTERNDETECTION',
 	kind:CompletionItemKind.Text,
-	data:435},
+	data:412},
 	{label:'ZPATTERNS',
 	kind:CompletionItemKind.Text,
-	data:436},
+	data:413},
 	{label:'ZSCORE',
 	kind:CompletionItemKind.Text,
-	data:437},
+	data:414},
 	{label:'ESDTEST',
 	kind:CompletionItemKind.Text,
-	data:438},
+	data:415},
 	{label:'GRUBBSTEST',
 	kind:CompletionItemKind.Text,
-	data:439},
+	data:416},
 	{label:'HYBRIDTEST',
 	kind:CompletionItemKind.Text,
-	data:440},
+	data:417},
 	{label:'HYBRIDTEST2',
 	kind:CompletionItemKind.Text,
-	data:441},
+	data:418},
 	{label:'STLESDTEST',
 	kind:CompletionItemKind.Text,
-	data:442},
+	data:419},
 	{label:'THRESHOLDTEST',
 	kind:CompletionItemKind.Text,
-	data:443},
+	data:420},
 	{label:'ZSCORETEST',
 	kind:CompletionItemKind.Text,
-	data:444},
+	data:421},
 	{label:'BBOX',
 	kind:CompletionItemKind.Text,
-	data:445},
+	data:422},
 	{label:'COPYGEO',
 	kind:CompletionItemKind.Text,
-	data:446},
+	data:423},
 	{label:'ELEVATIONS',
 	kind:CompletionItemKind.Text,
-	data:447},
+	data:424},
 	{label:'LOCATIONOFFSET',
 	kind:CompletionItemKind.Text,
-	data:448},
+	data:425},
 	{label:'LOCATIONS',
 	kind:CompletionItemKind.Text,
-	data:449},
+	data:426},
 	{label:'LOCSTRINGS',
 	kind:CompletionItemKind.Text,
-	data:450},
+	data:427},
 	{label:'ATTRIBUTES',
 	kind:CompletionItemKind.Text,
-	data:451},
+	data:428},
 	{label:'LABELS',
 	kind:CompletionItemKind.Text,
-	data:452},
+	data:429},
 	{label:'META',
 	kind:CompletionItemKind.Text,
-	data:453},
+	data:430},
 	{label:'METASORT',
 	kind:CompletionItemKind.Text,
-	data:454},
+	data:431},
 	{label:'NAME',
 	kind:CompletionItemKind.Text,
-	data:455},
+	data:432},
 	{label:'PARSESELECTOR',
 	kind:CompletionItemKind.Text,
-	data:456},
+	data:433},
 	{label:'RELABEL',
 	kind:CompletionItemKind.Text,
-	data:457},
+	data:434},
 	{label:'RENAME',
 	kind:CompletionItemKind.Text,
-	data:458},
+	data:435},
 	{label:'SETATTRIBUTES',
 	kind:CompletionItemKind.Text,
-	data:459},
+	data:436},
 	{label:'TOSELECTOR',
 	kind:CompletionItemKind.Text,
-	data:460},
+	data:437},
 	{label:'ADDVALUE',
 	kind:CompletionItemKind.Text,
-	data:461},
+	data:438},
 	{label:'ATINDEX',
 	kind:CompletionItemKind.Text,
-	data:462},
+	data:439},
 	{label:'ATTICK',
 	kind:CompletionItemKind.Text,
-	data:463},
+	data:440},
 	{label:'FIRSTTICK',
 	kind:CompletionItemKind.Text,
-	data:464},
+	data:441},
 	{label:'LASTTICK',
 	kind:CompletionItemKind.Text,
-	data:465},
+	data:442},
 	{label:'SETVALUE',
 	kind:CompletionItemKind.Text,
-	data:466},
+	data:443},
 	{label:'TICKINDEX',
 	kind:CompletionItemKind.Text,
-	data:467},
+	data:444},
 	{label:'TICKLIST',
 	kind:CompletionItemKind.Text,
-	data:468},
+	data:445},
 	{label:'TICKS',
 	kind:CompletionItemKind.Text,
-	data:469},
+	data:446},
 	{label:'VALUES',
 	kind:CompletionItemKind.Text,
-	data:470},
+	data:447},
 	{label:'ATBUCKET',
 	kind:CompletionItemKind.Text,
-	data:471},
+	data:448},
 	{label:'BUCKETCOUNT',
 	kind:CompletionItemKind.Text,
-	data:472},
+	data:449},
 	{label:'BUCKETSPAN',
 	kind:CompletionItemKind.Text,
-	data:473},
+	data:450},
 	{label:'CROP',
 	kind:CompletionItemKind.Text,
-	data:474},
+	data:451},
 	{label:'FILLNEXT',
 	kind:CompletionItemKind.Text,
-	data:475},
+	data:452},
 	{label:'FILLPREVIOUS',
 	kind:CompletionItemKind.Text,
-	data:476},
+	data:453},
 	{label:'FILLVALUE',
 	kind:CompletionItemKind.Text,
-	data:477},
+	data:454},
 	{label:'INTERPOLATE',
 	kind:CompletionItemKind.Text,
-	data:478},
+	data:455},
 	{label:'LASTBUCKET',
 	kind:CompletionItemKind.Text,
-	data:479},
+	data:456},
 	{label:'STL',
 	kind:CompletionItemKind.Text,
-	data:480},
+	data:457},
 	{label:'UNBUCKETIZE',
 	kind:CompletionItemKind.Text,
-	data:481},
+	data:458},
 	{label:'REDUCE',
 	kind:CompletionItemKind.Text,
-	data:482},
+	data:459},
 	{label:'MACROREDUCER',
 	kind:CompletionItemKind.Text,
-	data:483},
-	{label:'reducer.and',
+	data:460},
+	{label:'reducer\\\\.and',
 	kind:CompletionItemKind.Text,
-	data:484},
-	{label:'reducer.and.exclude-nulls',
+	data:461},
+	{label:'reducer\\\\.and\\\\.exclude-nulls',
 	kind:CompletionItemKind.Text,
-	data:485},
-	{label:'reducer.argmax',
+	data:462},
+	{label:'reducer\\\\.argmax',
 	kind:CompletionItemKind.Text,
-	data:486},
-	{label:'reducer.argmin',
+	data:463},
+	{label:'reducer\\\\.argmin',
 	kind:CompletionItemKind.Text,
-	data:487},
-	{label:'reducer.count',
+	data:464},
+	{label:'reducer\\\\.count',
 	kind:CompletionItemKind.Text,
-	data:488},
-	{label:'reducer.join',
+	data:465},
+	{label:'reducer\\\\.join',
 	kind:CompletionItemKind.Text,
-	data:489},
-	{label:'reducer.join.forbid-nulls',
+	data:466},
+	{label:'reducer\\\\.join\\\\.forbid-nulls',
 	kind:CompletionItemKind.Text,
-	data:490},
-	{label:'reducer.max',
+	data:467},
+	{label:'reducer\\\\.max',
 	kind:CompletionItemKind.Text,
-	data:491},
-	{label:'reducer.max.forbid-nulls',
+	data:468},
+	{label:'reducer\\\\.max\\\\.forbid-nulls',
 	kind:CompletionItemKind.Text,
-	data:492},
-	{label:'reducer.mean',
+	data:469},
+	{label:'reducer\\\\.mean',
 	kind:CompletionItemKind.Text,
-	data:493},
-	{label:'reducer.mean.exclude-nulls',
+	data:470},
+	{label:'reducer\\\\.mean\\\\.exclude-nulls',
 	kind:CompletionItemKind.Text,
-	data:494},
-	{label:'reducer.median',
+	data:471},
+	{label:'reducer\\\\.median',
 	kind:CompletionItemKind.Text,
-	data:495},
-	{label:'reducer.min',
+	data:472},
+	{label:'reducer\\\\.min',
 	kind:CompletionItemKind.Text,
-	data:496},
-	{label:'reducer.min.forbid-nulls',
+	data:473},
+	{label:'reducer\\\\.min\\\\.forbid-nulls',
 	kind:CompletionItemKind.Text,
-	data:497},
-	{label:'reducer.or',
+	data:474},
+	{label:'reducer\\\\.or',
 	kind:CompletionItemKind.Text,
-	data:498},
-	{label:'reducer.or.exclude-nulls',
+	data:475},
+	{label:'reducer\\\\.or\\\\.exclude-nulls',
 	kind:CompletionItemKind.Text,
-	data:499},
-	{label:'reducer.sd',
+	data:476},
+	{label:'reducer\\\\.sd',
 	kind:CompletionItemKind.Text,
-	data:500},
-	{label:'reducer.shannonentropy.0',
+	data:477},
+	{label:'reducer\\\\.shannonentropy\\\\.0',
 	kind:CompletionItemKind.Text,
-	data:501},
-	{label:'reducer.shannonentropy.1',
+	data:478},
+	{label:'reducer\\\\.shannonentropy\\\\.1',
 	kind:CompletionItemKind.Text,
-	data:502},
-	{label:'reducer.sum',
+	data:479},
+	{label:'reducer\\\\.sum',
 	kind:CompletionItemKind.Text,
-	data:503},
-	{label:'reducer.sum.forbid-nulls',
+	data:480},
+	{label:'reducer\\\\.sum\\\\.forbid-nulls',
 	kind:CompletionItemKind.Text,
-	data:504},
-	{label:'reducer.var',
+	data:481},
+	{label:'reducer\\\\.var',
 	kind:CompletionItemKind.Text,
-	data:505},
+	data:482},
 	{label:'MAP',
 	kind:CompletionItemKind.Text,
-	data:506},
+	data:483},
 	{label:'MACROMAPPER',
 	kind:CompletionItemKind.Text,
-	data:507},
+	data:484},
 	{label:'STRICTMAPPER',
 	kind:CompletionItemKind.Text,
+	data:485},
+	{label:'mapper\\\\.join',
+	kind:CompletionItemKind.Text,
+	data:486},
+	{label:'mapper\\\\.npdf',
+	kind:CompletionItemKind.Text,
+	data:487},
+	{label:'mapper\\\\.percentile',
+	kind:CompletionItemKind.Text,
+	data:488},
+	{label:'mapper\\\\.truecourse',
+	kind:CompletionItemKind.Text,
+	data:489},
+	{label:'mapper\\\\.and',
+	kind:CompletionItemKind.Text,
+	data:490},
+	{label:'mapper\\\\.count',
+	kind:CompletionItemKind.Text,
+	data:491},
+	{label:'mapper\\\\.delta',
+	kind:CompletionItemKind.Text,
+	data:492},
+	{label:'mapper\\\\.dotproduct',
+	kind:CompletionItemKind.Text,
+	data:493},
+	{label:'mapper\\\\.dotproduct\\\\.positive',
+	kind:CompletionItemKind.Text,
+	data:494},
+	{label:'mapper\\\\.dotproduct\\\\.sigmoid',
+	kind:CompletionItemKind.Text,
+	data:495},
+	{label:'mapper\\\\.dotproduct\\\\.tanh',
+	kind:CompletionItemKind.Text,
+	data:496},
+	{label:'mapper\\\\.eq',
+	kind:CompletionItemKind.Text,
+	data:497},
+	{label:'mapper\\\\.first',
+	kind:CompletionItemKind.Text,
+	data:498},
+	{label:'mapper\\\\.ge',
+	kind:CompletionItemKind.Text,
+	data:499},
+	{label:'mapper\\\\.gt',
+	kind:CompletionItemKind.Text,
+	data:500},
+	{label:'mapper\\\\.hdist',
+	kind:CompletionItemKind.Text,
+	data:501},
+	{label:'mapper\\\\.highest',
+	kind:CompletionItemKind.Text,
+	data:502},
+	{label:'mapper\\\\.hspeed',
+	kind:CompletionItemKind.Text,
+	data:503},
+	{label:'mapper\\\\.last',
+	kind:CompletionItemKind.Text,
+	data:504},
+	{label:'mapper\\\\.le',
+	kind:CompletionItemKind.Text,
+	data:505},
+	{label:'mapper\\\\.lowest',
+	kind:CompletionItemKind.Text,
+	data:506},
+	{label:'mapper\\\\.lt',
+	kind:CompletionItemKind.Text,
+	data:507},
+	{label:'mapper\\\\.max\\\\.x',
+	kind:CompletionItemKind.Text,
 	data:508},
-	{label:'mapper.join',
+	{label:'mapper\\\\.mean',
 	kind:CompletionItemKind.Text,
 	data:509},
-	{label:'mapper.npdf',
+	{label:'mapper\\\\.mean\\\\.circular',
 	kind:CompletionItemKind.Text,
 	data:510},
-	{label:'mapper.percentile',
+	{label:'mapper\\\\.median',
 	kind:CompletionItemKind.Text,
 	data:511},
-	{label:'mapper.truecourse',
+	{label:'mapper\\\\.min',
 	kind:CompletionItemKind.Text,
 	data:512},
-	{label:'mapper.and',
+	{label:'mapper\\\\.min\\\\.x',
 	kind:CompletionItemKind.Text,
 	data:513},
-	{label:'mapper.count',
+	{label:'mapper\\\\.ne',
 	kind:CompletionItemKind.Text,
 	data:514},
-	{label:'mapper.delta',
+	{label:'mapper\\\\.or',
 	kind:CompletionItemKind.Text,
 	data:515},
-	{label:'mapper.dotproduct',
+	{label:'mapper\\\\.product',
 	kind:CompletionItemKind.Text,
 	data:516},
-	{label:'mapper.dotproduct.positive',
+	{label:'mapper\\\\.rate',
 	kind:CompletionItemKind.Text,
 	data:517},
-	{label:'mapper.dotproduct.sigmoid',
+	{label:'mapper\\\\.replace',
 	kind:CompletionItemKind.Text,
 	data:518},
-	{label:'mapper.dotproduct.tanh',
+	{label:'mapper\\\\.sd',
 	kind:CompletionItemKind.Text,
 	data:519},
-	{label:'mapper.eq',
+	{label:'mapper\\\\.sum',
 	kind:CompletionItemKind.Text,
 	data:520},
-	{label:'mapper.first',
+	{label:'mapper\\\\.var',
 	kind:CompletionItemKind.Text,
 	data:521},
-	{label:'mapper.ge',
+	{label:'mapper\\\\.vdist',
 	kind:CompletionItemKind.Text,
 	data:522},
-	{label:'mapper.gt',
+	{label:'mapper\\\\.vspeed',
 	kind:CompletionItemKind.Text,
 	data:523},
-	{label:'mapper.hdist',
+	{label:'mapper\\\\.abs',
 	kind:CompletionItemKind.Text,
 	data:524},
-	{label:'mapper.highest',
+	{label:'mapper\\\\.add',
 	kind:CompletionItemKind.Text,
 	data:525},
-	{label:'mapper.hspeed',
+	{label:'mapper\\\\.ceil',
 	kind:CompletionItemKind.Text,
 	data:526},
-	{label:'mapper.last',
+	{label:'mapper\\\\.day',
 	kind:CompletionItemKind.Text,
 	data:527},
-	{label:'mapper.le',
+	{label:'mapper\\\\.exp',
 	kind:CompletionItemKind.Text,
 	data:528},
-	{label:'mapper.lowest',
+	{label:'mapper\\\\.floor',
 	kind:CompletionItemKind.Text,
 	data:529},
-	{label:'mapper.lt',
+	{label:'mapper\\\\.hour',
 	kind:CompletionItemKind.Text,
 	data:530},
-	{label:'mapper.max.x',
+	{label:'mapper\\\\.log',
 	kind:CompletionItemKind.Text,
 	data:531},
-	{label:'mapper.mean',
+	{label:'mapper\\\\.minute',
 	kind:CompletionItemKind.Text,
 	data:532},
-	{label:'mapper.mean.circular',
+	{label:'mapper\\\\.month',
 	kind:CompletionItemKind.Text,
 	data:533},
-	{label:'mapper.median',
+	{label:'mapper\\\\.mul',
 	kind:CompletionItemKind.Text,
 	data:534},
-	{label:'mapper.min',
+	{label:'mapper\\\\.todouble',
 	kind:CompletionItemKind.Text,
 	data:535},
-	{label:'mapper.min.x',
+	{label:'mapper\\\\.pow',
 	kind:CompletionItemKind.Text,
 	data:536},
-	{label:'mapper.ne',
+	{label:'mapper\\\\.round',
 	kind:CompletionItemKind.Text,
 	data:537},
-	{label:'mapper.or',
+	{label:'mapper\\\\.second',
 	kind:CompletionItemKind.Text,
 	data:538},
-	{label:'mapper.product',
+	{label:'mapper\\\\.sigmoid',
 	kind:CompletionItemKind.Text,
 	data:539},
-	{label:'mapper.rate',
+	{label:'mapper\\\\.tanh',
 	kind:CompletionItemKind.Text,
 	data:540},
-	{label:'mapper.replace',
+	{label:'mapper\\\\.tick',
 	kind:CompletionItemKind.Text,
 	data:541},
-	{label:'mapper.sd',
+	{label:'mapper\\\\.toboolean',
 	kind:CompletionItemKind.Text,
 	data:542},
-	{label:'mapper.sum',
+	{label:'mapper\\\\.todouble',
 	kind:CompletionItemKind.Text,
 	data:543},
-	{label:'mapper.var',
+	{label:'mapper\\\\.tolong',
 	kind:CompletionItemKind.Text,
 	data:544},
-	{label:'mapper.vdist',
+	{label:'mapper\\\\.tostring',
 	kind:CompletionItemKind.Text,
 	data:545},
-	{label:'mapper.vspeed',
+	{label:'mapper\\\\.weekday',
 	kind:CompletionItemKind.Text,
 	data:546},
-	{label:'mapper.abs',
+	{label:'mapper\\\\.year',
 	kind:CompletionItemKind.Text,
 	data:547},
-	{label:'mapper.add',
+	{label:'mapper\\\\.kernel\\\\.cosine',
 	kind:CompletionItemKind.Text,
 	data:548},
-	{label:'mapper.ceil',
+	{label:'mapper\\\\.kernel\\\\.epanechnikov',
 	kind:CompletionItemKind.Text,
 	data:549},
-	{label:'mapper.day',
+	{label:'mapper\\\\.kernel\\\\.gaussian',
 	kind:CompletionItemKind.Text,
 	data:550},
-	{label:'mapper.exp',
+	{label:'mapper\\\\.kernel\\\\.logistic',
 	kind:CompletionItemKind.Text,
 	data:551},
-	{label:'mapper.floor',
+	{label:'mapper\\\\.kernel\\\\.quartic',
 	kind:CompletionItemKind.Text,
 	data:552},
-	{label:'mapper.hour',
+	{label:'mapper\\\\.kernel\\\\.silverman',
 	kind:CompletionItemKind.Text,
 	data:553},
-	{label:'mapper.log',
+	{label:'mapper\\\\.kernel\\\\.triangular',
 	kind:CompletionItemKind.Text,
 	data:554},
-	{label:'mapper.minute',
+	{label:'mapper\\\\.kernel\\\\.tricube',
 	kind:CompletionItemKind.Text,
 	data:555},
-	{label:'mapper.month',
+	{label:'mapper\\\\.kernel\\\\.triweight',
 	kind:CompletionItemKind.Text,
 	data:556},
-	{label:'mapper.mul',
+	{label:'mapper\\\\.kernel\\\\.uniform',
 	kind:CompletionItemKind.Text,
 	data:557},
-	{label:'mapper.todouble',
+	{label:'mapper\\\\.kernel\\\\.cosine',
 	kind:CompletionItemKind.Text,
 	data:558},
-	{label:'mapper.pow',
+	{label:'mapper\\\\.kernel\\\\.epanechnikov',
 	kind:CompletionItemKind.Text,
 	data:559},
-	{label:'mapper.round',
+	{label:'mapper\\\\.kernel\\\\.gaussian',
 	kind:CompletionItemKind.Text,
 	data:560},
-	{label:'mapper.second',
+	{label:'mapper\\\\.kernel\\\\.logistic',
 	kind:CompletionItemKind.Text,
 	data:561},
-	{label:'mapper.sigmoid',
+	{label:'mapper\\\\.kernel\\\\.quartic',
 	kind:CompletionItemKind.Text,
 	data:562},
-	{label:'mapper.tanh',
+	{label:'mapper\\\\.kernel\\\\.silverman',
 	kind:CompletionItemKind.Text,
 	data:563},
-	{label:'mapper.tick',
+	{label:'mapper\\\\.kernel\\\\.triangular',
 	kind:CompletionItemKind.Text,
 	data:564},
-	{label:'mapper.toboolean',
+	{label:'mapper\\\\.kernel\\\\.tricube',
 	kind:CompletionItemKind.Text,
 	data:565},
-	{label:'mapper.todouble',
+	{label:'mapper\\\\.kernel\\\\.triweight',
 	kind:CompletionItemKind.Text,
 	data:566},
-	{label:'mapper.tolong',
+	{label:'mapper\\\\.kernel\\\\.uniform',
 	kind:CompletionItemKind.Text,
 	data:567},
-	{label:'mapper.tostring',
+	{label:'mapper\\\\.geo\\\\.approximate',
 	kind:CompletionItemKind.Text,
 	data:568},
-	{label:'mapper.weekday',
+	{label:'mapper\\\\.geo\\\\.clear',
 	kind:CompletionItemKind.Text,
 	data:569},
-	{label:'mapper.year',
+	{label:'mapper\\\\.geo\\\\.outside',
 	kind:CompletionItemKind.Text,
 	data:570},
-	{label:'mapper.kernel.cosine',
+	{label:'mapper\\\\.geo\\\\.within',
 	kind:CompletionItemKind.Text,
 	data:571},
-	{label:'mapper.kernel.epanechnikov',
+	{label:'MACROFILTER',
 	kind:CompletionItemKind.Text,
 	data:572},
-	{label:'mapper.kernel.gaussian',
+	{label:'filter\\\\.byclass',
 	kind:CompletionItemKind.Text,
 	data:573},
-	{label:'mapper.kernel.logistic',
+	{label:'filter\\\\.bylabels',
 	kind:CompletionItemKind.Text,
 	data:574},
-	{label:'mapper.kernel.quartic',
+	{label:'filter\\\\.last\\\\.eq',
 	kind:CompletionItemKind.Text,
 	data:575},
-	{label:'mapper.kernel.silverman',
+	{label:'filter\\\\.last\\\\.ge',
 	kind:CompletionItemKind.Text,
 	data:576},
-	{label:'mapper.kernel.triangular',
+	{label:'filter\\\\.last\\\\.gt',
 	kind:CompletionItemKind.Text,
 	data:577},
-	{label:'mapper.kernel.tricube',
+	{label:'filter\\\\.last\\\\.le',
 	kind:CompletionItemKind.Text,
 	data:578},
-	{label:'mapper.kernel.triweight',
+	{label:'filter\\\\.last\\\\.lt',
 	kind:CompletionItemKind.Text,
 	data:579},
-	{label:'mapper.kernel.uniform',
+	{label:'filter\\\\.last\\\\.ne',
 	kind:CompletionItemKind.Text,
 	data:580},
-	{label:'mapper.kernel.cosine',
+	{label:'MACROFILTER',
 	kind:CompletionItemKind.Text,
 	data:581},
-	{label:'mapper.kernel.epanechnikov',
-	kind:CompletionItemKind.Text,
-	data:582},
-	{label:'mapper.kernel.gaussian',
-	kind:CompletionItemKind.Text,
-	data:583},
-	{label:'mapper.kernel.logistic',
-	kind:CompletionItemKind.Text,
-	data:584},
-	{label:'mapper.kernel.quartic',
-	kind:CompletionItemKind.Text,
-	data:585},
-	{label:'mapper.kernel.silverman',
-	kind:CompletionItemKind.Text,
-	data:586},
-	{label:'mapper.kernel.triangular',
-	kind:CompletionItemKind.Text,
-	data:587},
-	{label:'mapper.kernel.tricube',
-	kind:CompletionItemKind.Text,
-	data:588},
-	{label:'mapper.kernel.triweight',
-	kind:CompletionItemKind.Text,
-	data:589},
-	{label:'mapper.kernel.uniform',
-	kind:CompletionItemKind.Text,
-	data:590},
-	{label:'mapper.geo.approximate',
-	kind:CompletionItemKind.Text,
-	data:591},
-	{label:'mapper.geo.clear',
-	kind:CompletionItemKind.Text,
-	data:592},
-	{label:'mapper.geo.outside',
-	kind:CompletionItemKind.Text,
-	data:593},
-	{label:'mapper.geo.within',
-	kind:CompletionItemKind.Text,
-	data:594},
-	{label:'MACROFILTER',
-	kind:CompletionItemKind.Text,
-	data:595},
-	{label:'filter.byclass',
-	kind:CompletionItemKind.Text,
-	data:596},
-	{label:'filter.bylabels',
-	kind:CompletionItemKind.Text,
-	data:597},
-	{label:'filter.last.eq',
-	kind:CompletionItemKind.Text,
-	data:598},
-	{label:'filter.last.ge',
-	kind:CompletionItemKind.Text,
-	data:599},
-	{label:'filter.last.gt',
-	kind:CompletionItemKind.Text,
-	data:600},
-	{label:'filter.last.le',
-	kind:CompletionItemKind.Text,
-	data:601},
-	{label:'filter.last.lt',
-	kind:CompletionItemKind.Text,
-	data:602},
-	{label:'filter.last.ne',
-	kind:CompletionItemKind.Text,
-	data:603},
-	{label:'MACROFILTER',
-	kind:CompletionItemKind.Text,
-	data:604},
 	{label:'FILTER',
 	kind:CompletionItemKind.Text,
-	data:605},
-	{label:'bucketizer.percentile',
+	data:582},
+	{label:'bucketizer\\\\.percentile',
 	kind:CompletionItemKind.Text,
-	data:606},
+	data:583},
 	{label:'MACROBUCKETIZER',
 	kind:CompletionItemKind.Text,
-	data:607},
-	{label:'bucketizer.and',
+	data:584},
+	{label:'bucketizer\\\\.and',
 	kind:CompletionItemKind.Text,
-	data:608},
-	{label:'bucketizer.count',
+	data:585},
+	{label:'bucketizer\\\\.count',
 	kind:CompletionItemKind.Text,
-	data:609},
-	{label:'bucketizer.first',
+	data:586},
+	{label:'bucketizer\\\\.first',
 	kind:CompletionItemKind.Text,
-	data:610},
-	{label:'bucketizer.join',
+	data:587},
+	{label:'bucketizer\\\\.join',
 	kind:CompletionItemKind.Text,
-	data:611},
-	{label:'bucketizer.last',
+	data:588},
+	{label:'bucketizer\\\\.last',
 	kind:CompletionItemKind.Text,
-	data:612},
-	{label:'bucketizer.max',
+	data:589},
+	{label:'bucketizer\\\\.max',
 	kind:CompletionItemKind.Text,
-	data:613},
-	{label:'bucketizer.mean',
+	data:590},
+	{label:'bucketizer\\\\.mean',
 	kind:CompletionItemKind.Text,
-	data:614},
-	{label:'bucketizer.median',
+	data:591},
+	{label:'bucketizer\\\\.median',
 	kind:CompletionItemKind.Text,
-	data:615},
-	{label:'bucketizer.min',
+	data:592},
+	{label:'bucketizer\\\\.min',
 	kind:CompletionItemKind.Text,
-	data:616},
-	{label:'bucketizer.or',
+	data:593},
+	{label:'bucketizer\\\\.or',
 	kind:CompletionItemKind.Text,
-	data:617},
-	{label:'bucketizer.sum',
+	data:594},
+	{label:'bucketizer\\\\.sum',
 	kind:CompletionItemKind.Text,
-	data:618},
+	data:595},
 	{label:'BUCKETIZE',
 	kind:CompletionItemKind.Text,
-	data:619},
+	data:596},
 	{label:'APPLY',
 	kind:CompletionItemKind.Text,
-	data:620},
-	{label:'op.add',
+	data:597},
+	{label:'op\\\\.add',
 	kind:CompletionItemKind.Text,
-	data:621},
-	{label:'op.and',
+	data:598},
+	{label:'op\\\\.and',
 	kind:CompletionItemKind.Text,
-	data:622},
-	{label:'op.div',
+	data:599},
+	{label:'op\\\\.div',
 	kind:CompletionItemKind.Text,
-	data:623},
-	{label:'op.eq',
+	data:600},
+	{label:'op\\\\.eq',
 	kind:CompletionItemKind.Text,
-	data:624},
-	{label:'op.ge',
+	data:601},
+	{label:'op\\\\.ge',
 	kind:CompletionItemKind.Text,
-	data:625},
-	{label:'op.gt',
+	data:602},
+	{label:'op\\\\.gt',
 	kind:CompletionItemKind.Text,
-	data:626},
-	{label:'op.le',
+	data:603},
+	{label:'op\\\\.le',
 	kind:CompletionItemKind.Text,
-	data:627},
-	{label:'op.lt',
+	data:604},
+	{label:'op\\\\.lt',
 	kind:CompletionItemKind.Text,
-	data:628},
-	{label:'op.mask',
+	data:605},
+	{label:'op\\\\.mask',
 	kind:CompletionItemKind.Text,
-	data:629},
-	{label:'op.mul',
+	data:606},
+	{label:'op\\\\.mul',
 	kind:CompletionItemKind.Text,
-	data:630},
-	{label:'op.ne',
+	data:607},
+	{label:'op\\\\.ne',
 	kind:CompletionItemKind.Text,
-	data:631},
-	{label:'op.negmask',
+	data:608},
+	{label:'op\\\\.negmask',
 	kind:CompletionItemKind.Text,
-	data:632},
-	{label:'op.or',
+	data:609},
+	{label:'op\\\\.or',
 	kind:CompletionItemKind.Text,
-	data:633},
-	{label:'op.sub',
+	data:610},
+	{label:'op\\\\.sub',
 	kind:CompletionItemKind.Text,
-	data:634},
+	data:611},
 	{label:'MAXLONG',
 	kind:CompletionItemKind.Text,
-	data:635},
+	data:612},
 	{label:'MINLONG',
 	kind:CompletionItemKind.Text,
-	data:636},
+	data:613},
 	{label:'NULL',
 	kind:CompletionItemKind.Text,
-	data:637},
+	data:614},
 	{label:'NaN',
 	kind:CompletionItemKind.Text,
-	data:638},
+	data:615},
 	{label:'PI',
 	kind:CompletionItemKind.Text,
-	data:639},
+	data:616},
 	{label:'e',
 	kind:CompletionItemKind.Text,
-	data:640},
+	data:617},
 	{label:'pi',
 	kind:CompletionItemKind.Text,
-	data:641}]
+	data:618}]
 });
 
 // This handler resolve additional information for the item selected in
@@ -2112,1845 +2042,1776 @@ connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
 		item.detail = 'ULP',
 		  item.documentation = 'Returns the size of an Units in the Last Place of the top of the stack.'
 	  } else if (item.data === 28) {
-		item.detail = 'max.tick.sliding.window',
+		item.detail = 'max\\.tick\\.sliding\\.window',
 		  item.documentation = 'Max tick value in a sliding window.'
 	  } else if (item.data === 29) {
-		item.detail = 'max.time.sliding.window',
+		item.detail = 'max\\.time\\.sliding\\.window',
 		  item.documentation = 'Max time of a sliding window.'
 	  } else if (item.data === 30) {
-		item.detail = 'op.and.ignore-nulls',
+		item.detail = 'op\\.and\\.ignore-nulls',
 		  item.documentation = 'Pushes onto the stack an operator to perform a logical and between values of multiple GTS. Null values will be ignored.'
 	  } else if (item.data === 31) {
-		item.detail = 'op.or.ignore-nulls',
+		item.detail = 'op\\.or\\.ignore-nulls',
 		  item.documentation = 'Pushes onto the stack an operator to perform a logical or between values of multiple GTS. Null values will be ignored.'
 	  } else if (item.data === 32) {
-		item.detail = 'reducer.percentile',
+		item.detail = 'reducer\\.percentile',
 		  item.documentation = 'Push onto the stack a reducer to return the Nth percentile of the values for each tick.'
 	  } else if (item.data === 33) {
-		item.detail = 'reducer.sd.forbid-nulls',
+		item.detail = 'reducer\\.sd\\.forbid-nulls',
 		  item.documentation = 'Push onto the stack a reducer to compute the standard deviation (with or without Bessel\'s correction) of the values for each tick, null values lead to a null result.'
 	  } else if (item.data === 34) {
-		item.detail = 'reducer.var.forbid-nulls',
+		item.detail = 'reducer\\.var\\.forbid-nulls',
 		  item.documentation = 'Push onto the stack a reducer to compute the variance (with or without Bessel\'s correction) of the values for each tick. Missing (null) values lead to a null result.'
 	  } else if (item.data === 35) {
 		item.detail = 'Macros',
 		  item.documentation = 'Macros allow users to define new functions combining existing WarpScript functions and operations'
 	  } else if (item.data === 36) {
-		item.detail = 'Multiline strings',
-		  item.documentation = 'Define strings spanning multiple lines.'
-	  } else if (item.data === 37) {
-		item.detail = 'Secured Scripts',
-		  item.documentation = 'Secured scripts allow users to protect a given WarpScript'
-	  } else if (item.data === 38) {
-		item.detail = 'SENSISION.EVENT',
+		item.detail = 'SENSISION\\.EVENT',
 		  item.documentation = 'Emits a Sensision event.'
+	  } else if (item.data === 37) {
+		item.detail = 'SENSISION\\.GET',
+		  item.documentation = 'Set a value for a Sensision metric.'
+	  } else if (item.data === 38) {
+		item.detail = 'SENSISION\\.SET',
+		  item.documentation = 'Set a value for a Sensision metric.'
 	  } else if (item.data === 39) {
-		item.detail = 'SENSISION.GET',
-		  item.documentation = 'Set a value for a Sensision metric.'
-	  } else if (item.data === 40) {
-		item.detail = 'SENSISION.SET',
-		  item.documentation = 'Set a value for a Sensision metric.'
-	  } else if (item.data === 41) {
-		item.detail = 'SENSISION.UPDATE',
+		item.detail = 'SENSISION\\.UPDATE',
 		  item.documentation = 'Update a value for a numerical Sensision metric.'
-	  } else if (item.data === 42) {
+	  } else if (item.data === 40) {
 		item.detail = 'CEVAL',
 		  item.documentation = 'Execute macros concurrently.'
-	  } else if (item.data === 43) {
+	  } else if (item.data === 41) {
 		item.detail = 'SYNC',
 		  item.documentation = 'Execute a macro in a synchronized manner inside of a CEVAL call.'
-	  } else if (item.data === 44) {
+	  } else if (item.data === 42) {
 		item.detail = 'JSON->',
 		  item.documentation = 'Parses a string as JSON and pushes the result onto the stack.'
-	  } else if (item.data === 45) {
+	  } else if (item.data === 43) {
 		item.detail = 'PICKLE->',
 		  item.documentation = 'Decodes Pickle content.'
-	  } else if (item.data === 46) {
+	  } else if (item.data === 44) {
 		item.detail = 'TOBIN',
 		  item.documentation = 'Converts a long to its binary representation.'
-	  } else if (item.data === 47) {
+	  } else if (item.data === 45) {
 		item.detail = 'TOBOOLEAN',
 		  item.documentation = 'Converts number or string to boolean'
-	  } else if (item.data === 48) {
+	  } else if (item.data === 46) {
 		item.detail = 'TODOUBLE',
 		  item.documentation = 'Convert a number to double'
-	  } else if (item.data === 49) {
+	  } else if (item.data === 47) {
 		item.detail = 'TOLONG',
 		  item.documentation = 'Convert a number to long'
-	  } else if (item.data === 50) {
+	  } else if (item.data === 48) {
 		item.detail = 'TOSTRING',
 		  item.documentation = 'Convert the argument to string'
-	  } else if (item.data === 51) {
+	  } else if (item.data === 49) {
 		item.detail = 'TOTIMESTAMP',
 		  item.documentation = 'Converts an ISO8601 date/time string into a number of time units.'
-	  } else if (item.data === 52) {
+	  } else if (item.data === 50) {
 		item.detail = 'CALL',
 		  item.documentation = 'Invoke an external program.'
-	  } else if (item.data === 53) {
+	  } else if (item.data === 51) {
 		item.detail = 'CUDF',
 		  item.documentation = 'Invoke a possibly cached version of a UDF.'
-	  } else if (item.data === 54) {
+	  } else if (item.data === 52) {
 		item.detail = 'UDF',
 		  item.documentation = 'Invoke a UDF.'
-	  } else if (item.data === 55) {
+	  } else if (item.data === 53) {
 		item.detail = '->BIN',
 		  item.documentation = 'Converts a string to its binary representation.'
-	  } else if (item.data === 56) {
+	  } else if (item.data === 54) {
 		item.detail = '->HEX',
 		  item.documentation = 'Converts a string to the hexadecimal representation of its UTF-8 encoding.'
-	  } else if (item.data === 57) {
+	  } else if (item.data === 55) {
 		item.detail = 'B64->',
 		  item.documentation = 'Decodes a base64 encoded string.'
-	  } else if (item.data === 58) {
+	  } else if (item.data === 56) {
 		item.detail = 'B64TOHEX',
 		  item.documentation = 'Decodes a base64 encoded string and immediately re-encode it in hex.'
-	  } else if (item.data === 59) {
+	  } else if (item.data === 57) {
 		item.detail = 'B64URL->',
 		  item.documentation = 'Decodes a base64url encoded string.'
-	  } else if (item.data === 60) {
+	  } else if (item.data === 58) {
 		item.detail = 'BIN->',
 		  item.documentation = 'Decode a String in binary.'
-	  } else if (item.data === 61) {
+	  } else if (item.data === 59) {
 		item.detail = 'BINTOHEX',
 		  item.documentation = 'Decodes a binary encoded string and immediately re-encode it in hex.'
-	  } else if (item.data === 62) {
+	  } else if (item.data === 60) {
 		item.detail = 'BYTES->',
 		  item.documentation = 'Converts a bytes array into a string'
-	  } else if (item.data === 63) {
+	  } else if (item.data === 61) {
 		item.detail = 'FROMBIN',
 		  item.documentation = 'Converts a binary representation of a long into a long.'
-	  } else if (item.data === 64) {
+	  } else if (item.data === 62) {
 		item.detail = 'FROMHEX',
 		  item.documentation = 'Converts an hexadecimal representation into a long.'
-	  } else if (item.data === 65) {
+	  } else if (item.data === 63) {
 		item.detail = 'HASH',
 		  item.documentation = 'Computes a 64 bits hash of the string on top of the stack.'
-	  } else if (item.data === 66) {
+	  } else if (item.data === 64) {
 		item.detail = 'HEX->',
 		  item.documentation = 'Decodes an hex encoded string.'
-	  } else if (item.data === 67) {
+	  } else if (item.data === 65) {
 		item.detail = 'HEXTOB64',
 		  item.documentation = 'Decodes a hex encoded string and immediately re-encode it in base64.'
-	  } else if (item.data === 68) {
+	  } else if (item.data === 66) {
 		item.detail = 'HEXTOBIN',
 		  item.documentation = 'Decodes a hex encoded string and immediately re-encode it in binary.'
-	  } else if (item.data === 69) {
+	  } else if (item.data === 67) {
 		item.detail = 'JOIN',
 		  item.documentation = 'Join N strings with the given separator'
-	  } else if (item.data === 70) {
+	  } else if (item.data === 68) {
 		item.detail = 'MATCH',
 		  item.documentation = 'Apply a regular expression to a string'
-	  } else if (item.data === 71) {
+	  } else if (item.data === 69) {
 		item.detail = 'MATCHER',
 		  item.documentation = 'Builds a compiled object form a regular expression.'
-	  } else if (item.data === 72) {
+	  } else if (item.data === 70) {
 		item.detail = 'OBP64->',
 		  item.documentation = 'Decodes an order preserving base64 encoded string.'
-	  } else if (item.data === 73) {
+	  } else if (item.data === 71) {
 		item.detail = 'OPB64TOHEX',
 		  item.documentation = 'Decodes an order preserving base64 encoded string and immediately re-encode it in hex.'
-	  } else if (item.data === 74) {
+	  } else if (item.data === 72) {
 		item.detail = 'REPLACE',
 		  item.documentation = 'Replaces the first substring of the input string that matches the given regular expression with the given replacement.'
-	  } else if (item.data === 75) {
+	  } else if (item.data === 73) {
 		item.detail = 'REPLACEALL',
 		  item.documentation = 'Replaces all substrings of the input string that matches the given regular expression with the given replacement.'
-	  } else if (item.data === 76) {
+	  } else if (item.data === 74) {
 		item.detail = 'SPLIT',
 		  item.documentation = 'Split a string in segments'
-	  } else if (item.data === 77) {
+	  } else if (item.data === 75) {
 		item.detail = 'SUBSTRING',
 		  item.documentation = 'Extracts a substring from a string.'
-	  } else if (item.data === 78) {
+	  } else if (item.data === 76) {
 		item.detail = 'TEMPLATE',
 		  item.documentation = 'Fills a template with values contained in a map.'
-	  } else if (item.data === 79) {
+	  } else if (item.data === 77) {
 		item.detail = '->B64',
 		  item.documentation = 'Encodes a string in base64.'
-	  } else if (item.data === 80) {
+	  } else if (item.data === 78) {
 		item.detail = '->B64URL',
 		  item.documentation = 'Encodes a string in base64url.'
-	  } else if (item.data === 81) {
+	  } else if (item.data === 79) {
 		item.detail = '->BYTES',
 		  item.documentation = 'Converts a string into its bytes given a charset'
-	  } else if (item.data === 82) {
+	  } else if (item.data === 80) {
 		item.detail = 'TOHEX',
 		  item.documentation = 'Converts a long to its 64 bits hexadecimal representaiton.'
-	  } else if (item.data === 83) {
+	  } else if (item.data === 81) {
 		item.detail = 'TOLOWER',
 		  item.documentation = 'Converts the string on top of the stack to lower case.'
-	  } else if (item.data === 84) {
+	  } else if (item.data === 82) {
 		item.detail = '->OPB64',
 		  item.documentation = 'Encodes a string in order preserving base64.'
-	  } else if (item.data === 85) {
+	  } else if (item.data === 83) {
 		item.detail = 'TOUPPER',
 		  item.documentation = 'Converts the string on top of the stack to upper case.'
-	  } else if (item.data === 86) {
+	  } else if (item.data === 84) {
 		item.detail = 'TRIM',
 		  item.documentation = 'Trims whitespaces from both ends of the string on top of the stack.'
-	  } else if (item.data === 87) {
+	  } else if (item.data === 85) {
 		item.detail = 'URLDECODE',
 		  item.documentation = 'Decode an URL encoded string'
-	  } else if (item.data === 88) {
+	  } else if (item.data === 86) {
 		item.detail = 'URLENCODE',
 		  item.documentation = 'URL Encode a string'
-	  } else if (item.data === 89) {
+	  } else if (item.data === 87) {
 		item.detail = 'UUID',
 		  item.documentation = 'Generates a UUID and pushes it on top of the stack.'
-	  } else if (item.data === 90) {
+	  } else if (item.data === 88) {
 		item.detail = 'ADDDAYS',
 		  item.documentation = 'Adds a certain number of days to a timestamp.'
-	  } else if (item.data === 91) {
+	  } else if (item.data === 89) {
 		item.detail = 'ADDMONTHS',
 		  item.documentation = 'Adds a certain number of months to a timestamp.'
-	  } else if (item.data === 92) {
+	  } else if (item.data === 90) {
 		item.detail = 'ADDYEARS',
 		  item.documentation = 'Adds a certain number of years to a timestamp.'
-	  } else if (item.data === 93) {
+	  } else if (item.data === 91) {
 		item.detail = 'AGO',
 		  item.documentation = 'Computes a timestamp from an offset in time units.'
-	  } else if (item.data === 94) {
+	  } else if (item.data === 92) {
 		item.detail = 'DURATION',
 		  item.documentation = 'Transform an ISO8601 duration into microsecondes'
-	  } else if (item.data === 95) {
+	  } else if (item.data === 93) {
 		item.detail = 'HUMANDURATION',
 		  item.documentation = 'Convert a number of time units into a human readable duration.'
-	  } else if (item.data === 96) {
+	  } else if (item.data === 94) {
 		item.detail = 'ISO8601',
 		  item.documentation = 'Transform a timestamp into a date in ISO 8601 format'
-	  } else if (item.data === 97) {
+	  } else if (item.data === 95) {
 		item.detail = 'ISODURATION',
 		  item.documentation = 'Convert a number of time units into an ISO8601 duration string.'
-	  } else if (item.data === 98) {
+	  } else if (item.data === 96) {
 		item.detail = 'MSTU',
 		  item.documentation = 'Push onto the stack a the number of time units in a millisecond'
-	  } else if (item.data === 99) {
+	  } else if (item.data === 97) {
 		item.detail = 'NOTAFTER',
 		  item.documentation = 'Checks that the current time is not after the provided timestamp. Fails otherwise.'
-	  } else if (item.data === 100) {
+	  } else if (item.data === 98) {
 		item.detail = 'NOTBEFORE',
 		  item.documentation = 'Checks that the current time is not before the provided timestamp. Fails otherwise.'
-	  } else if (item.data === 101) {
+	  } else if (item.data === 99) {
 		item.detail = 'NOW',
 		  item.documentation = 'Push on the stack the current time in microseconds since the Unix Epoch'
-	  } else if (item.data === 102) {
+	  } else if (item.data === 100) {
 		item.detail = 'STU',
 		  item.documentation = 'Push onto the stack a the number of time units in a second'
-	  } else if (item.data === 103) {
+	  } else if (item.data === 101) {
 		item.detail = '->TSELEMENTS',
 		  item.documentation = 'Replaces the timestamp with an array of its elements'
-	  } else if (item.data === 104) {
+	  } else if (item.data === 102) {
 		item.detail = 'TSELEMENTS',
 		  item.documentation = 'Replaces the timestamp with an array of its elements'
-	  } else if (item.data === 105) {
+	  } else if (item.data === 103) {
 		item.detail = 'TSELEMENTS->',
 		  item.documentation = 'Converts various timestamp\'s elements into a timestamp for a given timezone'
-	  } else if (item.data === 106) {
+	  } else if (item.data === 104) {
 		item.detail = 'AESUNWRAP',
 		  item.documentation = 'Unwrap wrapped byte array '
-	  } else if (item.data === 107) {
+	  } else if (item.data === 105) {
 		item.detail = 'AESWRAP',
 		  item.documentation = 'Wrap a byte array or String with AES cypher'
-	  } else if (item.data === 108) {
+	  } else if (item.data === 106) {
 		item.detail = 'MD5',
 		  item.documentation = 'Message Digest of a byte array with the cryptographic hash function MD5.'
-	  } else if (item.data === 109) {
+	  } else if (item.data === 107) {
 		item.detail = 'RSADECRYPT',
 		  item.documentation = 'Decrypt encoded data using RSA'
-	  } else if (item.data === 110) {
+	  } else if (item.data === 108) {
 		item.detail = 'RSAENCRYPT',
 		  item.documentation = 'Encrypt data using RSA keys'
-	  } else if (item.data === 111) {
+	  } else if (item.data === 109) {
 		item.detail = 'RSAGEN',
 		  item.documentation = 'Generates a RSA key pair.'
-	  } else if (item.data === 112) {
+	  } else if (item.data === 110) {
 		item.detail = 'RSAPRIVATE',
 		  item.documentation = 'Produce a RSA private key from a parameter map.'
-	  } else if (item.data === 113) {
+	  } else if (item.data === 111) {
 		item.detail = 'RSAPUBLIC',
 		  item.documentation = 'Produce a RSA public key from a parameter map.'
-	  } else if (item.data === 114) {
+	  } else if (item.data === 112) {
 		item.detail = 'RSASIGN',
 		  item.documentation = 'Sign data using RSA and a hash algorithm.'
-	  } else if (item.data === 115) {
+	  } else if (item.data === 113) {
 		item.detail = 'RSAVERIFY',
 		  item.documentation = 'Sign data using RSA and a hash algorithm.'
-	  } else if (item.data === 116) {
+	  } else if (item.data === 114) {
 		item.detail = 'SHA1',
 		  item.documentation = 'Message Digest of a byte array with the cryptographic hash function SHA1.'
-	  } else if (item.data === 117) {
+	  } else if (item.data === 115) {
 		item.detail = 'SHA1HMAC',
 		  item.documentation = 'Computes a Hash-based Message Authentication Code (HMAC) that uses a key in conjunction with a SHA-1 cryptographic hash function.'
-	  } else if (item.data === 118) {
+	  } else if (item.data === 116) {
 		item.detail = 'SHA256',
 		  item.documentation = 'Message Digest of a byte array with the cryptographic hash function SHA256.'
-	  } else if (item.data === 119) {
+	  } else if (item.data === 117) {
 		item.detail = 'SHA256HMAC',
 		  item.documentation = 'Computes a Hash-based Message Authentication Code (HMAC) that uses a key in conjunction with a SHA-256 cryptographic hash function.'
-	  } else if (item.data === 120) {
+	  } else if (item.data === 118) {
 		item.detail = 'GZIP',
 		  item.documentation = 'Compresses a byte array or String'
-	  } else if (item.data === 121) {
+	  } else if (item.data === 119) {
 		item.detail = '->Z',
 		  item.documentation = 'Builds a z-value.'
-	  } else if (item.data === 122) {
+	  } else if (item.data === 120) {
 		item.detail = 'UNGZIP',
 		  item.documentation = 'Decompresses a compressed byte array.'
-	  } else if (item.data === 123) {
+	  } else if (item.data === 121) {
 		item.detail = 'Z->',
 		  item.documentation = 'Decomposes a Z-Value.'
-	  } else if (item.data === 124) {
+	  } else if (item.data === 122) {
 		item.detail = 'AUTHENTICATE',
 		  item.documentation = 'Authenticates the current stack.'
-	  } else if (item.data === 125) {
+	  } else if (item.data === 123) {
 		item.detail = 'BOOTSTRAP',
 		  item.documentation = 'Function executed before the WarpScript stack becomes available.'
-	  } else if (item.data === 126) {
+	  } else if (item.data === 124) {
 		item.detail = 'CLEAR',
 		  item.documentation = 'Remove all elements from the stack'
-	  } else if (item.data === 127) {
+	  } else if (item.data === 125) {
 		item.detail = 'CLEARDEFS',
 		  item.documentation = 'Clear redefined WarpScript functions.'
-	  } else if (item.data === 128) {
+	  } else if (item.data === 126) {
 		item.detail = 'CLEARSYMBOLS',
 		  item.documentation = 'Clear all symbols name of the stack.'
-	  } else if (item.data === 129) {
+	  } else if (item.data === 127) {
 		item.detail = 'CLEARTOMARK',
 		  item.documentation = 'Removes elements from the stack up to and including the first mark encountered.'
-	  } else if (item.data === 130) {
-		item.detail = ']',
-		  item.documentation = 'Closes an open list.'
-	  } else if (item.data === 131) {
-		item.detail = '}',
-		  item.documentation = 'Closes an open list.'
-	  } else if (item.data === 132) {
+	  } else if (item.data === 128) {
 		item.detail = 'COUNTTOMARK',
 		  item.documentation = 'Counts the number of elements on the stack up to but excluding the first mark encountered.'
-	  } else if (item.data === 133) {
+	  } else if (item.data === 129) {
 		item.detail = 'CSTORE',
 		  item.documentation = 'Conditionnaly store the element below the top of the stack under the symbol name on top of the stack'
-	  } else if (item.data === 134) {
+	  } else if (item.data === 130) {
 		item.detail = 'DEBUGOFF',
 		  item.documentation = 'Turns off stack debugging.'
-	  } else if (item.data === 135) {
+	  } else if (item.data === 131) {
 		item.detail = 'DEBUGON',
 		  item.documentation = 'Turns on stack debugging.'
-	  } else if (item.data === 136) {
+	  } else if (item.data === 132) {
 		item.detail = 'DEF',
 		  item.documentation = 'Define or redefine a WarpScript function.'
-	  } else if (item.data === 137) {
+	  } else if (item.data === 133) {
 		item.detail = 'DEPTH',
 		  item.documentation = 'Push on the stack the depth of the stack'
-	  } else if (item.data === 138) {
+	  } else if (item.data === 134) {
 		item.detail = 'DOC',
 		  item.documentation = 'Defines the documentation string for a macro.'
-	  } else if (item.data === 139) {
+	  } else if (item.data === 135) {
 		item.detail = 'DOCMODE',
 		  item.documentation = 'Turns on documentation mode.'
-	  } else if (item.data === 140) {
+	  } else if (item.data === 136) {
 		item.detail = 'DROP',
 		  item.documentation = 'Remove the top element from the stack'
-	  } else if (item.data === 141) {
+	  } else if (item.data === 137) {
 		item.detail = 'DROPN',
 		  item.documentation = 'Remove the N top elements from the stack'
-	  } else if (item.data === 142) {
+	  } else if (item.data === 138) {
 		item.detail = 'DUP',
 		  item.documentation = 'Duplicates the top of the stack'
-	  } else if (item.data === 143) {
+	  } else if (item.data === 139) {
 		item.detail = 'DUPN',
 		  item.documentation = 'Duplicates the N top of the stack'
-	  } else if (item.data === 144) {
+	  } else if (item.data === 140) {
 		item.detail = 'ELAPSED',
 		  item.documentation = 'Pushes on the stack the collected timing informations.'
-	  } else if (item.data === 145) {
+	  } else if (item.data === 141) {
 		item.detail = 'EXPORT',
 		  item.documentation = 'Sets or updates the list of exported symbols'
-	  } else if (item.data === 146) {
+	  } else if (item.data === 142) {
 		item.detail = 'LOAD',
 		  item.documentation = 'Pushes onto the stack the value of the symbol whose name is on the stack.'
-	  } else if (item.data === 147) {
+	  } else if (item.data === 143) {
 		item.detail = 'MARK',
 		  item.documentation = 'Pushes a mark onto the stack.'
-	  } else if (item.data === 148) {
+	  } else if (item.data === 144) {
 		item.detail = 'NDEBUGON',
 		  item.documentation = 'Turns on stack debugging, specifying the number of stack levels to return in case of error.'
-	  } else if (item.data === 149) {
+	  } else if (item.data === 145) {
 		item.detail = 'NOTIMINGS',
 		  item.documentation = 'Turns off timing collection.'
-	  } else if (item.data === 150) {
-		item.detail = '[',
-		  item.documentation = 'Starts a list by pushing a mark onto the stack.'
-	  } else if (item.data === 151) {
-		item.detail = '{',
-		  item.documentation = 'Starts a map by pushing a mark onto the stack.'
-	  } else if (item.data === 152) {
+	  } else if (item.data === 146) {
 		item.detail = 'PICK',
 		  item.documentation = 'Copies onto the top of the stack the n-th element of the stack'
-	  } else if (item.data === 153) {
+	  } else if (item.data === 147) {
 		item.detail = 'RESET',
 		  item.documentation = 'Reset the stack to a specific depth.'
-	  } else if (item.data === 154) {
+	  } else if (item.data === 148) {
 		item.detail = 'REXEC',
 		  item.documentation = 'Executes some WarpScript on a remote Warp 10.'
-	  } else if (item.data === 155) {
+	  } else if (item.data === 149) {
 		item.detail = 'ROLL',
 		  item.documentation = 'Moves the N-th element of the stack onto the top'
-	  } else if (item.data === 156) {
+	  } else if (item.data === 150) {
 		item.detail = 'ROLLD',
 		  item.documentation = 'Moves the element on top of the stack to the N-th position'
-	  } else if (item.data === 157) {
+	  } else if (item.data === 151) {
 		item.detail = 'ROT',
 		  item.documentation = 'Move the third element of the stack onto the top'
-	  } else if (item.data === 158) {
+	  } else if (item.data === 152) {
 		item.detail = 'RUN',
 		  item.documentation = 'Executes the macro whose name is on the stack.'
-	  } else if (item.data === 159) {
+	  } else if (item.data === 153) {
 		item.detail = 'SNAPSHOT',
 		  item.documentation = 'Converts the content of the stack into WarpScript code.'
-	  } else if (item.data === 160) {
+	  } else if (item.data === 154) {
 		item.detail = 'SNAPSHOTALL',
 		  item.documentation = 'Converts the content of the stack and current symbols into WarpScript code.'
-	  } else if (item.data === 161) {
+	  } else if (item.data === 155) {
 		item.detail = 'SNAPSHOTALLTOMARK',
 		  item.documentation = 'Converts the content of the stack above a MARK and current symbols into WarpScript code.'
-	  } else if (item.data === 162) {
+	  } else if (item.data === 156) {
 		item.detail = 'SNAPSHOTTOMARK',
 		  item.documentation = 'Converts part of the stack into WarpScript code.'
-	  } else if (item.data === 163) {
+	  } else if (item.data === 157) {
 		item.detail = 'STACKATTRIBUTE',
 		  item.documentation = 'Extract the stack attributes and push them on top of the stack'
-	  } else if (item.data === 164) {
+	  } else if (item.data === 158) {
 		item.detail = 'STACKTOLIST',
 		  item.documentation = 'Convert the whole stack into a list and push this list on the top of the stack.'
-	  } else if (item.data === 165) {
+	  } else if (item.data === 159) {
 		item.detail = 'STORE',
 		  item.documentation = 'Store the element below the top of the stack under the symbol name on top of the stack'
-	  } else if (item.data === 166) {
+	  } else if (item.data === 160) {
 		item.detail = 'SWAP',
 		  item.documentation = 'Swap the two two elements of the stack'
-	  } else if (item.data === 167) {
+	  } else if (item.data === 161) {
 		item.detail = 'TIMINGS',
 		  item.documentation = 'Turns on timing collection.'
-	  } else if (item.data === 168) {
+	  } else if (item.data === 162) {
 		item.detail = 'TYPEOF',
 		  item.documentation = 'Pushes onto the stack the type of the element on top of the stack.'
-	  } else if (item.data === 169) {
+	  } else if (item.data === 163) {
 		item.detail = 'EVALSECURE',
 		  item.documentation = 'Evaluates the secured script on top of the stack'
-	  } else if (item.data === 170) {
+	  } else if (item.data === 164) {
 		item.detail = 'HEADER',
 		  item.documentation = 'Set a header which will be returned with the HTTP response.'
-	  } else if (item.data === 171) {
+	  } else if (item.data === 165) {
 		item.detail = 'IDENT',
 		  item.documentation = 'Pushes on the stack the ident string of the running platform.'
-	  } else if (item.data === 172) {
+	  } else if (item.data === 166) {
 		item.detail = 'JSONLOOSE',
 		  item.documentation = 'Generate a loose JSON version (with NaN and Infinite values allowed) of the stack'
-	  } else if (item.data === 173) {
+	  } else if (item.data === 167) {
 		item.detail = 'JSONSTRICT',
 		  item.documentation = 'Generate a JSON version of the stack'
-	  } else if (item.data === 174) {
+	  } else if (item.data === 168) {
 		item.detail = 'LIMIT',
 		  item.documentation = 'Modifies the maximum number of datapoints which can be fetched during a script execution.'
-	  } else if (item.data === 175) {
+	  } else if (item.data === 169) {
 		item.detail = 'MAXBUCKETS',
 		  item.documentation = 'Modifies the maximum number of buckets which can be created by a call to BUCKETIZE.'
-	  } else if (item.data === 176) {
+	  } else if (item.data === 170) {
 		item.detail = 'MAXDEPTH',
 		  item.documentation = 'Modifies the maximum depth of the stack.'
-	  } else if (item.data === 177) {
+	  } else if (item.data === 171) {
 		item.detail = 'MAXGTS',
 		  item.documentation = 'Modifies the maximum number of Geo Time Series which can be retrieved.'
-	  } else if (item.data === 178) {
+	  } else if (item.data === 172) {
 		item.detail = 'MAXLOOP',
 		  item.documentation = 'Modifies the upper limit of time which can be spent in a loop.'
-	  } else if (item.data === 179) {
+	  } else if (item.data === 173) {
 		item.detail = 'MAXOPS',
 		  item.documentation = 'Modifies the maximum number of WarpScript operations which can be performed during a single execution.'
-	  } else if (item.data === 180) {
+	  } else if (item.data === 174) {
 		item.detail = 'MAXSYMBOLS',
 		  item.documentation = 'Modifies the maximum number of symbols which can be created during a single WarpScript execution.'
-	  } else if (item.data === 181) {
+	  } else if (item.data === 175) {
 		item.detail = 'NOOP',
 		  item.documentation = 'Does absolutely nothing, but does it well!'
-	  } else if (item.data === 182) {
+	  } else if (item.data === 176) {
 		item.detail = 'OPS',
 		  item.documentation = 'Pushes onto the stack the current number of operations which were performed by the WarpScript code execution.'
-	  } else if (item.data === 183) {
+	  } else if (item.data === 177) {
 		item.detail = 'RESTORE',
 		  item.documentation = 'Restores the stack context.'
-	  } else if (item.data === 184) {
+	  } else if (item.data === 178) {
 		item.detail = 'REV',
 		  item.documentation = 'Pushes on the stack the revision string of the running platform.'
-	  } else if (item.data === 185) {
+	  } else if (item.data === 179) {
 		item.detail = 'RTFM',
 		  item.documentation = 'There is always a documentation for your function'
-	  } else if (item.data === 186) {
+	  } else if (item.data === 180) {
 		item.detail = 'SAVE',
 		  item.documentation = 'Pushes on the stack its current context.'
-	  } else if (item.data === 187) {
+	  } else if (item.data === 181) {
 		item.detail = 'SECUREKEY',
 		  item.documentation = 'Set the secure key for creating secure scripts.'
-	  } else if (item.data === 188) {
+	  } else if (item.data === 182) {
 		item.detail = 'TOKENINFO',
 		  item.documentation = 'Extracts information on the token on top of the stack'
-	  } else if (item.data === 189) {
+	  } else if (item.data === 183) {
 		item.detail = 'UNSECURE',
 		  item.documentation = 'Retrieve the original script from a secure script.'
-	  } else if (item.data === 190) {
+	  } else if (item.data === 184) {
 		item.detail = 'URLFETCH',
 		  item.documentation = 'Retrieves the content of a URL.'
-	  } else if (item.data === 191) {
+	  } else if (item.data === 185) {
 		item.detail = 'WEBCALL',
 		  item.documentation = 'Makes an outbound HTTP call.'
-	  } else if (item.data === 192) {
+	  } else if (item.data === 186) {
 		item.detail = 'ABS',
 		  item.documentation = 'Calculates the absolute value of a number'
-	  } else if (item.data === 193) {
-		item.detail = '+',
-		  item.documentation = 'Add two parameters'
-	  } else if (item.data === 194) {
-		item.detail = '~=',
-		  item.documentation = 'Verify if the difference between two numbers is lesser than a third argument'
-	  } else if (item.data === 195) {
+	  } else if (item.data === 187) {
 		item.detail = 'AND',
 		  item.documentation = 'This is synonymous for &&.'
-	  } else if (item.data === 196) {
-		item.detail = '&',
-		  item.documentation = 'Computes the bitwise AND of the two arguments'
-	  } else if (item.data === 197) {
-		item.detail = '~',
-		  item.documentation = 'Computes the unary bitwise complement of the long value on top of the stack.'
-	  } else if (item.data === 198) {
-		item.detail = '|',
-		  item.documentation = 'Computes the bitwise OR of the two arguments'
-	  } else if (item.data === 199) {
+	  } else if (item.data === 188) {
 		item.detail = '^',
 		  item.documentation = 'Computes the bitwise XOR of the two arguments'
-	  } else if (item.data === 200) {
+	  } else if (item.data === 189) {
 		item.detail = 'CBRT',
 		  item.documentation = 'Calculate the cubic root'
-	  } else if (item.data === 201) {
+	  } else if (item.data === 190) {
 		item.detail = 'CEIL',
 		  item.documentation = 'Round a number to the nearest bigger long'
-	  } else if (item.data === 202) {
-		item.detail = '&&',
-		  item.documentation = 'Computes the conditional AND of the two arguments'
-	  } else if (item.data === 203) {
-		item.detail = '||',
-		  item.documentation = 'Computes the conditional OR of the two arguments'
-	  } else if (item.data === 204) {
+	  } else if (item.data === 191) {
 		item.detail = 'COPYSIGN',
 		  item.documentation = 'Copies the sign of a number on another one.'
-	  } else if (item.data === 205) {
-		item.detail = '/',
-		  item.documentation = 'Divide a number by another'
-	  } else if (item.data === 206) {
+	  } else if (item.data === 192) {
 		item.detail = 'DOUBLEBITS->',
 		  item.documentation = 'Converts the long on top of the stack to a double by considering the long value as the raw bits of the double.'
-	  } else if (item.data === 207) {
-		item.detail = '==',
-		  item.documentation = 'Verify the equality of two parameters'
-	  } else if (item.data === 208) {
+	  } else if (item.data === 193) {
 		item.detail = 'EXP',
 		  item.documentation = 'Return e raised to the power of the argument'
-	  } else if (item.data === 209) {
+	  } else if (item.data === 194) {
 		item.detail = 'FLOATBITS->',
 		  item.documentation = 'Converts the long on top of the stack to a double by considering the long value as the raw bits of a float.'
-	  } else if (item.data === 210) {
+	  } else if (item.data === 195) {
 		item.detail = 'FLOOR',
 		  item.documentation = 'Round a number to the nearest smaller long'
-	  } else if (item.data === 211) {
-		item.detail = '>=',
-		  item.documentation = 'Verify if the first parameter is greater or equal than the second'
-	  } else if (item.data === 212) {
+	  } else if (item.data === 196) {
 		item.detail = '>',
 		  item.documentation = 'Verify if the first parameter is greater than the second'
-	  } else if (item.data === 213) {
+	  } else if (item.data === 197) {
 		item.detail = 'IEEEREMAINDER',
 		  item.documentation = 'For parameters \'f1\' and \'f2\', it calculates the remainder when \'f1\' is divided by \'f2'
-	  } else if (item.data === 214) {
-		item.detail = '+!',
-		  item.documentation = 'Adds an element to an existing list or set'
-	  } else if (item.data === 215) {
+	  } else if (item.data === 198) {
 		item.detail = 'ISNULL',
 		  item.documentation = 'Checks whether the top of the stack is null.'
-	  } else if (item.data === 216) {
+	  } else if (item.data === 199) {
 		item.detail = 'ISNaN',
 		  item.documentation = 'Checks whether a double is NaN.'
-	  } else if (item.data === 217) {
+	  } else if (item.data === 200) {
 		item.detail = 'LBOUNDS',
 		  item.documentation = 'Pushes onto the stack a list of M+1 bounds defining M intervals between a and b plus the intervals before a and after b.'
-	  } else if (item.data === 218) {
-		item.detail = '<=',
-		  item.documentation = 'Verify than the first parameter is lesser or equal to the second'
-	  } else if (item.data === 219) {
+	  } else if (item.data === 201) {
 		item.detail = '<<',
 		  item.documentation = 'Left shifting of bit pattern.'
-	  } else if (item.data === 220) {
+	  } else if (item.data === 202) {
 		item.detail = 'LOG',
 		  item.documentation = 'Calculate the natural logarithm'
-	  } else if (item.data === 221) {
+	  } else if (item.data === 203) {
 		item.detail = 'LOG10',
 		  item.documentation = 'Calculate the common logarithm'
-	  } else if (item.data === 222) {
+	  } else if (item.data === 204) {
 		item.detail = '<',
 		  item.documentation = 'Verify if the first parameter is lesser than the second'
-	  } else if (item.data === 223) {
+	  } else if (item.data === 205) {
 		item.detail = 'MAX',
 		  item.documentation = 'Calculates the maximum of two numbers'
-	  } else if (item.data === 224) {
+	  } else if (item.data === 206) {
 		item.detail = 'MIN',
 		  item.documentation = 'Calculates the minimum of two numbers'
-	  } else if (item.data === 225) {
+	  } else if (item.data === 207) {
 		item.detail = '%',
 		  item.documentation = 'Calculates the remainder of the division of two numbers'
-	  } else if (item.data === 226) {
-		item.detail = '*',
-		  item.documentation = 'Multiply two numbers'
-	  } else if (item.data === 227) {
+	  } else if (item.data === 208) {
 		item.detail = 'NBOUNDS',
 		  item.documentation = 'Pushes a list of n-1 bounds defining n intervals with equal area under the bell cureve N(mu,sigma).'
-	  } else if (item.data === 228) {
-		item.detail = '!=',
-		  item.documentation = 'Verify if two parameters aren\'t equal'
-	  } else if (item.data === 229) {
+	  } else if (item.data === 209) {
 		item.detail = 'NEXTAFTER',
 		  item.documentation = 'Returns the DOUBLE adjacent to the first argument in the direction of the second argument'
-	  } else if (item.data === 230) {
+	  } else if (item.data === 210) {
 		item.detail = 'NEXTUP',
 		  item.documentation = 'Returns the DOUBLE  adjacent to the argument in the direction of positive infinity'
-	  } else if (item.data === 231) {
+	  } else if (item.data === 211) {
 		item.detail = '!',
 		  item.documentation = 'Apply the logical function NOT'
-	  } else if (item.data === 232) {
+	  } else if (item.data === 212) {
 		item.detail = 'NOT',
 		  item.documentation = 'Negates the boolean on the stack.'
-	  } else if (item.data === 233) {
+	  } else if (item.data === 213) {
 		item.detail = 'NPDF',
 		  item.documentation = 'Parametrable function to create NDPF (Normal Distribution Probability Density Functions)'
-	  } else if (item.data === 234) {
+	  } else if (item.data === 214) {
 		item.detail = 'OR',
 		  item.documentation = 'Do a boolean OR between booleans on the stack.'
-	  } else if (item.data === 235) {
-		item.detail = '**',
-		  item.documentation = 'For parameters a\' and \'b\', it calculates \'a\' raised to the power \'b'
-	  } else if (item.data === 236) {
+	  } else if (item.data === 215) {
 		item.detail = 'PROBABILITY',
 		  item.documentation = 'Pushes on the stack a function which computes probabilities according to a provided value histogram.'
-	  } else if (item.data === 237) {
+	  } else if (item.data === 216) {
 		item.detail = 'RAND',
 		  item.documentation = 'Push on the stack a random number between 0 and 1'
-	  } else if (item.data === 238) {
+	  } else if (item.data === 217) {
 		item.detail = 'RANDPDF',
 		  item.documentation = 'Pushes on the stack a function which emits values according to a provided value histogram.'
-	  } else if (item.data === 239) {
+	  } else if (item.data === 218) {
 		item.detail = 'REVBITS',
 		  item.documentation = 'Reverse the bits of the long on top of the stack.'
-	  } else if (item.data === 240) {
+	  } else if (item.data === 219) {
 		item.detail = '>>',
 		  item.documentation = 'Signed right bit shift.'
-	  } else if (item.data === 241) {
+	  } else if (item.data === 220) {
 		item.detail = 'RINT',
 		  item.documentation = 'Return the DOUBLE closest to the value and equal to a mathematical integer'
-	  } else if (item.data === 242) {
+	  } else if (item.data === 221) {
 		item.detail = 'ROUND',
 		  item.documentation = 'Round a number to the closest long'
-	  } else if (item.data === 243) {
+	  } else if (item.data === 222) {
 		item.detail = 'SIGNUM',
 		  item.documentation = 'Return the signum of a number'
-	  } else if (item.data === 244) {
+	  } else if (item.data === 223) {
 		item.detail = 'SQRT',
 		  item.documentation = 'Calculate the square root'
-	  } else if (item.data === 245) {
+	  } else if (item.data === 224) {
 		item.detail = '-',
 		  item.documentation = 'Substract two numbers'
-	  } else if (item.data === 246) {
+	  } else if (item.data === 225) {
 		item.detail = '->DOUBLEBITS',
 		  item.documentation = 'Converts a double to a long value of the raw bits of its representation.'
-	  } else if (item.data === 247) {
+	  } else if (item.data === 226) {
 		item.detail = '->FLOATBITS',
 		  item.documentation = 'Converts a double to a long value of the raw bits of its float representation.'
-	  } else if (item.data === 248) {
+	  } else if (item.data === 227) {
 		item.detail = '>>>',
 		  item.documentation = 'Unsigned right bit shift, setting the most significant bit to 0.'
-	  } else if (item.data === 249) {
+	  } else if (item.data === 228) {
 		item.detail = '->PICKLE',
 		  item.documentation = 'Converts the object on top of the stack to its PICKLE representation.'
-	  } else if (item.data === 250) {
+	  } else if (item.data === 229) {
 		item.detail = 'ACOS',
 		  item.documentation = 'Calculate the arccosine'
-	  } else if (item.data === 251) {
+	  } else if (item.data === 230) {
 		item.detail = 'ASIN',
 		  item.documentation = 'Calculate the arcsine'
-	  } else if (item.data === 252) {
+	  } else if (item.data === 231) {
 		item.detail = 'ATAN',
 		  item.documentation = 'Calculate the arctangent'
-	  } else if (item.data === 253) {
+	  } else if (item.data === 232) {
 		item.detail = 'COS',
 		  item.documentation = 'Calculate the cosine'
-	  } else if (item.data === 254) {
+	  } else if (item.data === 233) {
 		item.detail = 'COSH',
 		  item.documentation = 'Calculate the hyperbolic cosine'
-	  } else if (item.data === 255) {
+	  } else if (item.data === 234) {
 		item.detail = 'SIN',
 		  item.documentation = 'Calculate the sine'
-	  } else if (item.data === 256) {
+	  } else if (item.data === 235) {
 		item.detail = 'SINH',
 		  item.documentation = 'Calculate hyperbolic sine'
-	  } else if (item.data === 257) {
+	  } else if (item.data === 236) {
 		item.detail = 'TAN',
 		  item.documentation = 'Calculate the tangent'
-	  } else if (item.data === 258) {
+	  } else if (item.data === 237) {
 		item.detail = 'TANH',
 		  item.documentation = 'Calculate the hyperbolic tangent'
-	  } else if (item.data === 259) {
+	  } else if (item.data === 238) {
 		item.detail = 'TODEGREES',
 		  item.documentation = 'Convert from radians to degrees'
-	  } else if (item.data === 260) {
+	  } else if (item.data === 239) {
 		item.detail = 'TORADIANS',
 		  item.documentation = 'Convert from degrees to radians'
-	  } else if (item.data === 261) {
+	  } else if (item.data === 240) {
 		item.detail = 'd',
 		  item.documentation = 'Convert a timestamp expressed in days to the time unit used by the platform'
-	  } else if (item.data === 262) {
+	  } else if (item.data === 241) {
 		item.detail = 'h',
 		  item.documentation = 'Convert a timestamp expressed in hours to the time unit used by the platform'
-	  } else if (item.data === 263) {
+	  } else if (item.data === 242) {
 		item.detail = 'm',
 		  item.documentation = 'Convert a timestamp expressed in minutes to the time unit used by the platform'
-	  } else if (item.data === 264) {
+	  } else if (item.data === 243) {
 		item.detail = 'ms',
 		  item.documentation = 'Convert a timestamp expressed in milliseconds to the time unit used by the platform'
-	  } else if (item.data === 265) {
+	  } else if (item.data === 244) {
 		item.detail = 'ns',
 		  item.documentation = 'Convert a timestamp expressed in nanoseconds to the time unit used by the platform'
-	  } else if (item.data === 266) {
+	  } else if (item.data === 245) {
 		item.detail = 'ps',
 		  item.documentation = 'Convert a timestamp expressed in picoseconds to the time unit used by the platform'
-	  } else if (item.data === 267) {
+	  } else if (item.data === 246) {
 		item.detail = 's',
 		  item.documentation = 'Convert a timestamp expressed in seconds to the time unit used by the platform'
-	  } else if (item.data === 268) {
+	  } else if (item.data === 247) {
 		item.detail = 'us',
 		  item.documentation = 'Convert a timestamp expressed in microseconds to the time unit used by the platform'
-	  } else if (item.data === 269) {
+	  } else if (item.data === 248) {
 		item.detail = 'w',
 		  item.documentation = 'Convert a timestamp expressed in weeks to the time unit used by the platform'
-	  } else if (item.data === 270) {
+	  } else if (item.data === 249) {
 		item.detail = 'COUNTER',
 		  item.documentation = 'Push a counter (AtomicLong) onto the stack.'
-	  } else if (item.data === 271) {
+	  } else if (item.data === 250) {
 		item.detail = 'COUNTERDELTA',
 		  item.documentation = 'Increment a counter.'
-	  } else if (item.data === 272) {
+	  } else if (item.data === 251) {
 		item.detail = 'COUNTERVALUE',
 		  item.documentation = 'Retrieve the value of a counter.'
-	  } else if (item.data === 273) {
+	  } else if (item.data === 252) {
 		item.detail = 'RANGE',
 		  item.documentation = 'Pushes onto the stack a list of integers in the given range.'
-	  } else if (item.data === 274) {
+	  } else if (item.data === 253) {
 		item.detail = 'QCONJUGATE',
 		  item.documentation = 'Compute the conjugate of a quaternion.'
-	  } else if (item.data === 275) {
+	  } else if (item.data === 254) {
 		item.detail = 'QDIVIDE',
 		  item.documentation = 'Divide a quaternion q by a quaternion r'
-	  } else if (item.data === 276) {
+	  } else if (item.data === 255) {
 		item.detail = 'QMULTIPLY',
 		  item.documentation = 'Multiply a quaternion q by a quaternion r'
-	  } else if (item.data === 277) {
+	  } else if (item.data === 256) {
 		item.detail = 'QROTATE',
 		  item.documentation = 'Rotate a vector by a quaternion'
-	  } else if (item.data === 278) {
+	  } else if (item.data === 257) {
 		item.detail = 'QROTATION',
 		  item.documentation = 'Extract the axis and angle of the rotation represented by the quaternion on the stack.'
-	  } else if (item.data === 279) {
+	  } else if (item.data === 258) {
 		item.detail = 'Q->',
 		  item.documentation = 'Converts 4 double to a unit quaternion.'
-	  } else if (item.data === 280) {
+	  } else if (item.data === 259) {
 		item.detail = 'ROTATIONQ',
 		  item.documentation = 'Create a quaternion from an axis and rotation angle (in degrees)'
-	  } else if (item.data === 281) {
+	  } else if (item.data === 260) {
 		item.detail = '->Q',
 		  item.documentation = 'Converts 4 double to a unit quaternion.'
-	  } else if (item.data === 282) {
+	  } else if (item.data === 261) {
 		item.detail = 'BITCOUNT',
 		  item.documentation = 'Computes the length of a bitset and the number of bits set.'
-	  } else if (item.data === 283) {
+	  } else if (item.data === 262) {
 		item.detail = 'BITGET',
 		  item.documentation = 'Gets a bit in a bits set.'
-	  } else if (item.data === 284) {
+	  } else if (item.data === 263) {
 		item.detail = 'BITSTOBYTES',
 		  item.documentation = 'Converts a bitset into a byte array.'
-	  } else if (item.data === 285) {
+	  } else if (item.data === 264) {
 		item.detail = 'BYTESTOBITS',
 		  item.documentation = 'Converts a byte array into a bitset.'
-	  } else if (item.data === 286) {
+	  } else if (item.data === 265) {
 		item.detail = 'ASSERT',
 		  item.documentation = 'Halt execution of the script if the top of the stack is not the BOOLEAN true'
-	  } else if (item.data === 287) {
+	  } else if (item.data === 266) {
 		item.detail = 'BREAK',
 		  item.documentation = 'Break out of the current loop'
-	  } else if (item.data === 288) {
+	  } else if (item.data === 267) {
 		item.detail = 'CONTINUE',
 		  item.documentation = 'Immediately start a new iteration in a running loop.'
-	  } else if (item.data === 289) {
+	  } else if (item.data === 268) {
 		item.detail = 'DEFINED',
 		  item.documentation = 'Check whether or not a symbol is defined'
-	  } else if (item.data === 290) {
+	  } else if (item.data === 269) {
 		item.detail = 'DEFINEDMACRO',
 		  item.documentation = 'Checks if a macro is defined and pushes true or false on the stack accordingly.'
-	  } else if (item.data === 291) {
+	  } else if (item.data === 270) {
 		item.detail = 'EVAL',
 		  item.documentation = 'Evaluates the string on top of the stack'
-	  } else if (item.data === 292) {
+	  } else if (item.data === 271) {
 		item.detail = 'FAIL',
 		  item.documentation = 'Halt execution of the script'
-	  } else if (item.data === 293) {
+	  } else if (item.data === 272) {
 		item.detail = 'FOR',
 		  item.documentation = 'Implement a for loop'
-	  } else if (item.data === 294) {
+	  } else if (item.data === 273) {
 		item.detail = 'FOREACH',
 		  item.documentation = 'Implement a foreach loop on a list or map'
-	  } else if (item.data === 295) {
+	  } else if (item.data === 274) {
 		item.detail = 'FORSTEP',
 		  item.documentation = 'Implement a for loop with an index step'
-	  } else if (item.data === 296) {
+	  } else if (item.data === 275) {
 		item.detail = 'IFT',
 		  item.documentation = 'Implement the if-then conditional'
-	  } else if (item.data === 297) {
+	  } else if (item.data === 276) {
 		item.detail = 'IFTE',
 		  item.documentation = 'Implement the if-then-else conditional'
-	  } else if (item.data === 298) {
+	  } else if (item.data === 277) {
 		item.detail = 'MSGFAIL',
 		  item.documentation = 'Halt execution of the script, returning the message on top of the stack.'
-	  } else if (item.data === 299) {
+	  } else if (item.data === 278) {
 		item.detail = 'NRETURN',
 		  item.documentation = 'Immediately exit N macros being executed.'
-	  } else if (item.data === 300) {
+	  } else if (item.data === 279) {
 		item.detail = 'RETURN',
 		  item.documentation = 'Immediately exit the macro being executed.'
-	  } else if (item.data === 301) {
+	  } else if (item.data === 280) {
 		item.detail = 'STOP',
 		  item.documentation = 'Immediately stop executing WarpScript.'
-	  } else if (item.data === 302) {
+	  } else if (item.data === 281) {
 		item.detail = 'SWITCH',
 		  item.documentation = 'Implement a switch-like conditional'
-	  } else if (item.data === 303) {
+	  } else if (item.data === 282) {
 		item.detail = 'UNTIL',
 		  item.documentation = 'Implement an until loop'
-	  } else if (item.data === 304) {
+	  } else if (item.data === 283) {
 		item.detail = 'WHILE',
 		  item.documentation = 'Implement a while loop'
-	  } else if (item.data === 305) {
+	  } else if (item.data === 284) {
 		item.detail = 'CLONEREVERSE',
 		  item.documentation = 'Clone a LIST and reverse its order'
-	  } else if (item.data === 306) {
+	  } else if (item.data === 285) {
 		item.detail = 'CONTAINS',
 		  item.documentation = 'Check if an element is in a LIST'
-	  } else if (item.data === 307) {
+	  } else if (item.data === 286) {
 		item.detail = 'CONTAINSKEY',
 		  item.documentation = 'Check if an element is one of the keys of a MAP'
-	  } else if (item.data === 308) {
+	  } else if (item.data === 287) {
 		item.detail = 'CONTAINSVALUE',
 		  item.documentation = 'Check if an element is one of the values of a MAP'
-	  } else if (item.data === 309) {
-		item.detail = '[]',
-		  item.documentation = 'Push an empty LIST on top of the stack'
-	  } else if (item.data === 310) {
-		item.detail = '{}',
-		  item.documentation = 'Push an empty MAP on top of the stack'
-	  } else if (item.data === 311) {
+	  } else if (item.data === 288) {
 		item.detail = 'FLATTEN',
 		  item.documentation = 'Flatten a LIST'
-	  } else if (item.data === 312) {
+	  } else if (item.data === 289) {
 		item.detail = 'GET',
 		  item.documentation = 'Retrieve a value in a MAP or in a LIST'
-	  } else if (item.data === 313) {
+	  } else if (item.data === 290) {
 		item.detail = 'KEYLIST',
 		  item.documentation = 'Extract the keys of a MAP'
-	  } else if (item.data === 314) {
+	  } else if (item.data === 291) {
 		item.detail = 'LFLATMAP',
 		  item.documentation = 'Apply a macro on each element of a list'
-	  } else if (item.data === 315) {
+	  } else if (item.data === 292) {
 		item.detail = 'LIST->',
 		  item.documentation = 'Extract the elements of a LIST'
-	  } else if (item.data === 316) {
+	  } else if (item.data === 293) {
 		item.detail = 'LMAP',
 		  item.documentation = 'Apply a macro on each element of a list'
-	  } else if (item.data === 317) {
+	  } else if (item.data === 294) {
 		item.detail = 'MAPID',
 		  item.documentation = 'Generates a fingerprint of a map.'
-	  } else if (item.data === 318) {
+	  } else if (item.data === 295) {
 		item.detail = 'MAT->',
 		  item.documentation = 'Converts a Matrix into nested lists'
-	  } else if (item.data === 319) {
+	  } else if (item.data === 296) {
 		item.detail = 'MSORT',
 		  item.documentation = 'Sort a MAP'
-	  } else if (item.data === 320) {
+	  } else if (item.data === 297) {
 		item.detail = 'PACK',
 		  item.documentation = 'Pack a list of numeric or boolean values according to a specified format'
-	  } else if (item.data === 321) {
+	  } else if (item.data === 298) {
 		item.detail = 'SIZE',
 		  item.documentation = 'Push on the stack the size of a LIST, map or GTS'
-	  } else if (item.data === 322) {
+	  } else if (item.data === 299) {
 		item.detail = 'SUBLIST',
 		  item.documentation = 'Create a sub-LIST keeping only certain elements'
-	  } else if (item.data === 323) {
+	  } else if (item.data === 300) {
 		item.detail = 'SUBMAP',
 		  item.documentation = 'Create a sub-MAP keeping only certain pairs key-value'
-	  } else if (item.data === 324) {
+	  } else if (item.data === 301) {
 		item.detail = '->LIST',
 		  item.documentation = 'Creates a LIST with the top `N` elements of the stack'
-	  } else if (item.data === 325) {
+	  } else if (item.data === 302) {
 		item.detail = '->MAP',
 		  item.documentation = 'Creates a MAP with the top `N` elements of the stack'
-	  } else if (item.data === 326) {
+	  } else if (item.data === 303) {
 		item.detail = '->MAT',
 		  item.documentation = 'Converts nested lists of numbers into a Matrix'
-	  } else if (item.data === 327) {
+	  } else if (item.data === 304) {
 		item.detail = '->V',
 		  item.documentation = 'Convert the list on top of the stack into a set'
-	  } else if (item.data === 328) {
+	  } else if (item.data === 305) {
 		item.detail = '->VEC',
 		  item.documentation = 'Converts a list of numbers into a Vector'
-	  } else if (item.data === 329) {
+	  } else if (item.data === 306) {
 		item.detail = 'UNIQUE',
 		  item.documentation = 'Eliminates duplicate elements on a LIST'
-	  } else if (item.data === 330) {
+	  } else if (item.data === 307) {
 		item.detail = 'UNLIST',
 		  item.documentation = 'Push onto the stack all elements of the list on top of a Mark.'
-	  } else if (item.data === 331) {
+	  } else if (item.data === 308) {
 		item.detail = 'UNMAP',
 		  item.documentation = 'Deconstructs a map, putting each key/value pair as two elements on the stack on top of a Mark.'
-	  } else if (item.data === 332) {
+	  } else if (item.data === 309) {
 		item.detail = 'UNPACK',
 		  item.documentation = 'Unpack a list of numeric or boolean values according to a specified format'
-	  } else if (item.data === 333) {
+	  } else if (item.data === 310) {
 		item.detail = 'VALUELIST',
 		  item.documentation = 'Extract the values of a MAP'
-	  } else if (item.data === 334) {
+	  } else if (item.data === 311) {
 		item.detail = 'VEC->',
 		  item.documentation = 'Converts a Vector into a list'
-	  } else if (item.data === 335) {
+	  } else if (item.data === 312) {
 		item.detail = 'V->',
 		  item.documentation = 'Convert the set on top of the stack into a list'
-	  } else if (item.data === 336) {
+	  } else if (item.data === 313) {
 		item.detail = 'ZIP',
 		  item.documentation = ''
-	  } else if (item.data === 337) {
+	  } else if (item.data === 314) {
 		item.detail = 'DIFFERENCE',
 		  item.documentation = 'Computes the difference of two sets'
-	  } else if (item.data === 338) {
+	  } else if (item.data === 315) {
 		item.detail = 'INTERSECTION',
 		  item.documentation = 'Computes the intersection of two sets.'
-	  } else if (item.data === 339) {
+	  } else if (item.data === 316) {
 		item.detail = 'SET',
 		  item.documentation = 'Replace an element in a list'
-	  } else if (item.data === 340) {
+	  } else if (item.data === 317) {
 		item.detail = 'SET->',
 		  item.documentation = 'Converts the list on top of the stack into a set'
-	  } else if (item.data === 341) {
+	  } else if (item.data === 318) {
 		item.detail = '->SET',
 		  item.documentation = 'Converts the list on top of the stack into a set'
-	  } else if (item.data === 342) {
+	  } else if (item.data === 319) {
 		item.detail = 'UNION',
 		  item.documentation = 'Performs the union of two sets.'
-	  } else if (item.data === 343) {
+	  } else if (item.data === 320) {
 		item.detail = 'APPEND',
 		  item.documentation = 'Append a LIST or MAP to another'
-	  } else if (item.data === 344) {
+	  } else if (item.data === 321) {
 		item.detail = 'LSORT',
 		  item.documentation = 'Sort a LIST'
-	  } else if (item.data === 345) {
+	  } else if (item.data === 322) {
 		item.detail = 'PUT',
 		  item.documentation = 'Insert a key-value pair into a MAP'
-	  } else if (item.data === 346) {
+	  } else if (item.data === 323) {
 		item.detail = 'REMOVE',
 		  item.documentation = 'Remove an entry from a LIST or MAP'
-	  } else if (item.data === 347) {
+	  } else if (item.data === 324) {
 		item.detail = 'REVERSE',
 		  item.documentation = 'Reverse the order of a LIST'
-	  } else if (item.data === 348) {
+	  } else if (item.data === 325) {
 		item.detail = 'GEOHASH->',
 		  item.documentation = 'Converts a GeoHash to a lat/lon.'
-	  } else if (item.data === 349) {
+	  } else if (item.data === 326) {
 		item.detail = 'GEOPACK',
 		  item.documentation = 'Encode a geo zone into a compact representation.'
-	  } else if (item.data === 350) {
+	  } else if (item.data === 327) {
 		item.detail = 'GEOREGEXP',
 		  item.documentation = 'Produces a regexp from a GeoXPShape'
-	  } else if (item.data === 351) {
+	  } else if (item.data === 328) {
 		item.detail = 'GEOUNPACK',
 		  item.documentation = 'Decodes a packed geo zone.'
-	  } else if (item.data === 352) {
-		item.detail = 'GEO.DIFFERENCE',
+	  } else if (item.data === 329) {
+		item.detail = 'GEO\\.DIFFERENCE',
 		  item.documentation = 'Computes the difference of two GeoXP Shapes.'
-	  } else if (item.data === 353) {
-		item.detail = 'GEO.INTERSECTION',
+	  } else if (item.data === 330) {
+		item.detail = 'GEO\\.INTERSECTION',
 		  item.documentation = 'Computes the intersection of two GeoXP Shapes.'
-	  } else if (item.data === 354) {
-		item.detail = 'GEO.INTERSECTS',
+	  } else if (item.data === 331) {
+		item.detail = 'GEO\\.INTERSECTS',
 		  item.documentation = 'Checks if a Geo Time Series has at least one point within a shape.'
-	  } else if (item.data === 355) {
-		item.detail = 'GEO.JSON',
+	  } else if (item.data === 332) {
+		item.detail = 'GEO\\.JSON',
 		  item.documentation = 'Converts a GeoJSON string into a GeoXP Shape suitable for geo filtering'
-	  } else if (item.data === 356) {
-		item.detail = 'GEO.UNION',
+	  } else if (item.data === 333) {
+		item.detail = 'GEO\\.UNION',
 		  item.documentation = 'Computes the union of two GeoXP Shapes.'
-	  } else if (item.data === 357) {
-		item.detail = 'GEO.WITHIN',
+	  } else if (item.data === 334) {
+		item.detail = 'GEO\\.WITHIN',
 		  item.documentation = 'Checks if a Geo Time Series has all its points within a shape.'
-	  } else if (item.data === 358) {
-		item.detail = 'GEO.WKT',
+	  } else if (item.data === 335) {
+		item.detail = 'GEO\\.WKT',
 		  item.documentation = 'Converts a Well Known Text String into a GeoXP Shape suitable for geo filtering'
-	  } else if (item.data === 359) {
+	  } else if (item.data === 336) {
 		item.detail = 'HAVERSINE',
 		  item.documentation = 'Computes distance between two locations using the Haversine formula.'
-	  } else if (item.data === 360) {
+	  } else if (item.data === 337) {
 		item.detail = 'HHCODE->',
 		  item.documentation = 'Converts an HHCode to a lat/lon.'
-	  } else if (item.data === 361) {
+	  } else if (item.data === 338) {
 		item.detail = '->GEOHASH',
 		  item.documentation = 'Converts lat/lon to a GeoHash.'
-	  } else if (item.data === 362) {
+	  } else if (item.data === 339) {
 		item.detail = '->HHCODE',
 		  item.documentation = 'Converts lat/lon to an Helical Hyperspatial Code (HHCode).'
-	  } else if (item.data === 363) {
+	  } else if (item.data === 340) {
 		item.detail = 'CHUNK',
 		  item.documentation = 'Chunks a GTS into partial GTS.'
-	  } else if (item.data === 364) {
+	  } else if (item.data === 341) {
 		item.detail = 'CLIP',
 		  item.documentation = 'Clip a Geo Time Series according to a series of limits.'
-	  } else if (item.data === 365) {
+	  } else if (item.data === 342) {
 		item.detail = 'SHRINK',
 		  item.documentation = 'Shrink the number of values of a GTS'
-	  } else if (item.data === 366) {
+	  } else if (item.data === 343) {
 		item.detail = 'TIMECLIP',
 		  item.documentation = 'Clip a Geo Time Series to only retain ticks that are within a given time range'
-	  } else if (item.data === 367) {
+	  } else if (item.data === 344) {
 		item.detail = 'TIMEMODULO',
 		  item.documentation = 'Split a Geo Time Serie into a LIST of GTS whose timestamps are original timestamps modulo a value passed as parameter'
-	  } else if (item.data === 368) {
+	  } else if (item.data === 345) {
 		item.detail = 'TIMESCALE',
 		  item.documentation = 'Modify ticks by multiplying them by a scaling factor.'
-	  } else if (item.data === 369) {
+	  } else if (item.data === 346) {
 		item.detail = 'TIMESHIFT',
 		  item.documentation = 'Shift the ticks of a Geo Time Series'
-	  } else if (item.data === 370) {
+	  } else if (item.data === 347) {
 		item.detail = 'TIMESPLIT',
 		  item.documentation = 'Splits a Geo Time Series at the quiet periods'
-	  } else if (item.data === 371) {
+	  } else if (item.data === 348) {
 		item.detail = 'CORRELATE',
 		  item.documentation = 'Compute correlation between Geo Time Series'
-	  } else if (item.data === 372) {
+	  } else if (item.data === 349) {
 		item.detail = 'CPROB',
 		  item.documentation = 'Computes a conditional probability of each value in a Geo Time Series'
-	  } else if (item.data === 373) {
+	  } else if (item.data === 350) {
 		item.detail = 'ISONORMALIZE',
 		  item.documentation = 'Normalize (between -1 and 1) the values of a Geo Time Series'
-	  } else if (item.data === 374) {
+	  } else if (item.data === 351) {
 		item.detail = 'LOWESS',
 		  item.documentation = 'Smooths a Geo Time Series using local regression'
-	  } else if (item.data === 375) {
+	  } else if (item.data === 352) {
 		item.detail = 'LTTB',
 		  item.documentation = 'Downsamples a Geo Time Series using \'Least Triangle Three Bucket\''
-	  } else if (item.data === 376) {
+	  } else if (item.data === 353) {
 		item.detail = 'MODE',
 		  item.documentation = 'Compute the mode(s) for a given GTS'
-	  } else if (item.data === 377) {
+	  } else if (item.data === 354) {
 		item.detail = 'MONOTONIC',
 		  item.documentation = 'Modifies the values of a Geo Time Series so it is monotonous.'
-	  } else if (item.data === 378) {
+	  } else if (item.data === 355) {
 		item.detail = 'MUSIGMA',
 		  item.documentation = 'Calculate the mean and the standard deviation of a Geo Time Series'
-	  } else if (item.data === 379) {
+	  } else if (item.data === 356) {
 		item.detail = 'NORMALIZE',
 		  item.documentation = 'Normalize between 0 and 1 the values a Geo Time Series'
-	  } else if (item.data === 380) {
+	  } else if (item.data === 357) {
 		item.detail = 'NSUMSUMSQ',
 		  item.documentation = 'Computes the cardinality, sum of values and sum of squared values of a Geo Time Series.'
-	  } else if (item.data === 381) {
+	  } else if (item.data === 358) {
 		item.detail = 'PROB',
 		  item.documentation = 'Computes the probability of each value in a Geo Time Series'
-	  } else if (item.data === 382) {
+	  } else if (item.data === 359) {
 		item.detail = 'RLOWESS',
 		  item.documentation = 'Robust and iterative smoothing of a Geo Time Series'
-	  } else if (item.data === 383) {
+	  } else if (item.data === 360) {
 		item.detail = 'SINGLEEXPONENTIALSMOOTHING',
 		  item.documentation = 'Smooth a Geo Time Series with the given smoothing factor alpha'
-	  } else if (item.data === 384) {
+	  } else if (item.data === 361) {
 		item.detail = 'STANDARDIZE',
 		  item.documentation = 'Replace Geo Time Series values with their standardized score'
-	  } else if (item.data === 385) {
+	  } else if (item.data === 362) {
 		item.detail = 'TLTTB',
 		  item.documentation = 'Downsamples a Geo Time Series using time based \'Least Triangle Three Bucket\''
-	  } else if (item.data === 386) {
+	  } else if (item.data === 363) {
 		item.detail = 'VALUEHISTOGRAM',
 		  item.documentation = 'Builds a value histogram for a GTS.'
-	  } else if (item.data === 387) {
+	  } else if (item.data === 364) {
 		item.detail = 'DWTSPLIT',
 		  item.documentation = 'Split a Geo Time Series produced by FDWT into a set of series based on the resolution level.'
-	  } else if (item.data === 388) {
+	  } else if (item.data === 365) {
 		item.detail = 'FDWT',
 		  item.documentation = 'Computes a Forward Discrete Wavelet Transform on a GTS.'
-	  } else if (item.data === 389) {
+	  } else if (item.data === 366) {
 		item.detail = 'FFT',
 		  item.documentation = 'Computes a Fast Fourier Transform on a GTS.'
-	  } else if (item.data === 390) {
+	  } else if (item.data === 367) {
 		item.detail = 'FFTAP',
 		  item.documentation = 'Computes a Fast Fourier Transform on a GTS, returning amplitude and phase.'
-	  } else if (item.data === 391) {
+	  } else if (item.data === 368) {
 		item.detail = 'IDWT',
 		  item.documentation = 'Computes an Inverse Discrete Wavelet Transform on a GTS.'
-	  } else if (item.data === 392) {
+	  } else if (item.data === 369) {
 		item.detail = 'IFFT',
 		  item.documentation = 'Computes an Inverse Fast Fourier Transform.'
-	  } else if (item.data === 393) {
+	  } else if (item.data === 370) {
 		item.detail = 'CLONE',
 		  item.documentation = 'Make a deep copy of a GTS'
-	  } else if (item.data === 394) {
+	  } else if (item.data === 371) {
 		item.detail = 'CLONEEMPTY',
 		  item.documentation = 'Push onto the stack an empty clone of the argument GTS'
-	  } else if (item.data === 395) {
+	  } else if (item.data === 372) {
 		item.detail = 'COMMONTICKS',
 		  item.documentation = 'Modifies Geo Time Series so they all have the same ticks, the set of ticks common to all input Geo Time Series.'
-	  } else if (item.data === 396) {
+	  } else if (item.data === 373) {
 		item.detail = 'COMPACT',
 		  item.documentation = 'Remove measurements which have the same value, location and elevation as the previous one'
-	  } else if (item.data === 397) {
+	  } else if (item.data === 374) {
 		item.detail = 'DEDUP',
 		  item.documentation = 'Remove duplicate timestamps from a Geo Time Series'
-	  } else if (item.data === 398) {
+	  } else if (item.data === 375) {
 		item.detail = 'FILLTICKS',
 		  item.documentation = 'Add values to a GTS at given ticks'
-	  } else if (item.data === 399) {
+	  } else if (item.data === 376) {
 		item.detail = 'INTEGRATE',
 		  item.documentation = 'Integrate a Geo Time Serie'
-	  } else if (item.data === 400) {
+	  } else if (item.data === 377) {
 		item.detail = 'LASTSORT',
 		  item.documentation = 'Sorts a list of Geo Time Series according to their most recent value.'
-	  } else if (item.data === 401) {
+	  } else if (item.data === 378) {
 		item.detail = 'MERGE',
 		  item.documentation = 'Merge two Geo Time Series'
-	  } else if (item.data === 402) {
+	  } else if (item.data === 379) {
 		item.detail = 'NONEMPTY',
 		  item.documentation = 'Check whether or not a Geo Time Series has values'
-	  } else if (item.data === 403) {
+	  } else if (item.data === 380) {
 		item.detail = 'PARTITION',
 		  item.documentation = 'Splits GTS in equivalence classes based on label values.'
-	  } else if (item.data === 404) {
+	  } else if (item.data === 381) {
 		item.detail = 'QUANTIZE',
 		  item.documentation = 'Generates a quantified version of a Geo Time Series.'
-	  } else if (item.data === 405) {
+	  } else if (item.data === 382) {
 		item.detail = 'RANGECOMPACT',
 		  item.documentation = 'Remove intermediate values on constant ranges of a GTS'
-	  } else if (item.data === 406) {
+	  } else if (item.data === 383) {
 		item.detail = 'RESETS',
 		  item.documentation = 'Remove resets in Geo Time Series values'
-	  } else if (item.data === 407) {
+	  } else if (item.data === 384) {
 		item.detail = 'RSORT',
 		  item.documentation = 'Sort a Geo Time Series by descending timestamps'
-	  } else if (item.data === 408) {
+	  } else if (item.data === 385) {
 		item.detail = 'RVALUESORT',
 		  item.documentation = 'Sorts Geo Time Series by reverse order according to its values'
-	  } else if (item.data === 409) {
+	  } else if (item.data === 386) {
 		item.detail = 'SORT',
 		  item.documentation = 'Sort a Geo Time Series by ascending timestamps'
-	  } else if (item.data === 410) {
+	  } else if (item.data === 387) {
 		item.detail = 'SORTBY',
 		  item.documentation = 'Sort list of Geo Time Series according to values extracted by a macro'
-	  } else if (item.data === 411) {
+	  } else if (item.data === 388) {
 		item.detail = 'UNWRAP',
 		  item.documentation = 'Decode a Geo Time Series previously encoded by WRAP.'
-	  } else if (item.data === 412) {
+	  } else if (item.data === 389) {
 		item.detail = 'VALUEDEDUP',
 		  item.documentation = 'Remove duplicate values from a Geo Time Series'
-	  } else if (item.data === 413) {
+	  } else if (item.data === 390) {
 		item.detail = 'VALUESORT',
 		  item.documentation = 'Sorts Geo Time Series according to its values.'
-	  } else if (item.data === 414) {
+	  } else if (item.data === 391) {
 		item.detail = 'VALUESPLIT',
 		  item.documentation = 'Split a Geo Time Series into N distinct GTS, one for each distinct value'
-	  } else if (item.data === 415) {
+	  } else if (item.data === 392) {
 		item.detail = 'WRAP',
 		  item.documentation = 'Efficiently encode a Geo Time Series or a list thereof into strings.'
-	  } else if (item.data === 416) {
+	  } else if (item.data === 393) {
 		item.detail = 'WRAPRAW',
 		  item.documentation = 'Efficiently encode a Geo Time Series or a list thereof into byte arrays.'
-	  } else if (item.data === 417) {
+	  } else if (item.data === 394) {
 		item.detail = 'MAKEGTS',
 		  item.documentation = 'Builds a GTS from arrays.'
-	  } else if (item.data === 418) {
+	  } else if (item.data === 395) {
 		item.detail = 'NEWGTS',
 		  item.documentation = 'Push an empty Geo Time Series onto the stack'
-	  } else if (item.data === 419) {
+	  } else if (item.data === 396) {
 		item.detail = 'PARSE',
 		  item.documentation = 'Parse a STRING into a set of Geo Time Series'
-	  } else if (item.data === 420) {
+	  } else if (item.data === 397) {
 		item.detail = 'DELETE',
 		  item.documentation = 'Delete a set of GTS.'
-	  } else if (item.data === 421) {
+	  } else if (item.data === 398) {
 		item.detail = 'FETCH',
 		  item.documentation = 'Fetch data from Warp10\'s datastore'
-	  } else if (item.data === 422) {
+	  } else if (item.data === 399) {
 		item.detail = 'FETCHBOOLEAN',
 		  item.documentation = 'Fetches data from the store, forcing the returned Geo Time Series to be of type BOOLEAN.'
-	  } else if (item.data === 423) {
+	  } else if (item.data === 400) {
 		item.detail = 'FETCHDOUBLE',
 		  item.documentation = 'Fetches data from the store, forcing the returned Geo Time Series to be of type DOUBLE.'
-	  } else if (item.data === 424) {
+	  } else if (item.data === 401) {
 		item.detail = 'FETCHLONG',
 		  item.documentation = 'Fetches data from the store, forcing the returned Geo Time Series to be of type LONG.'
-	  } else if (item.data === 425) {
+	  } else if (item.data === 402) {
 		item.detail = 'FETCHSTRING',
 		  item.documentation = 'Fetches data from the store, forcing the returned Geo Time Series to be of type STRING.'
-	  } else if (item.data === 426) {
+	  } else if (item.data === 403) {
 		item.detail = 'FIND',
 		  item.documentation = 'Find Geo Time Series matching some criteria'
-	  } else if (item.data === 427) {
+	  } else if (item.data === 404) {
 		item.detail = 'FINDSTATS',
 		  item.documentation = 'Computes statistics on matching GTS.'
-	  } else if (item.data === 428) {
+	  } else if (item.data === 405) {
 		item.detail = 'UPDATE',
 		  item.documentation = 'Pushes datapoints to the Warp 10 backend.'
-	  } else if (item.data === 429) {
+	  } else if (item.data === 406) {
 		item.detail = 'DISCORDS',
 		  item.documentation = 'Detects discords in a Geo Time Series.'
-	  } else if (item.data === 430) {
+	  } else if (item.data === 407) {
 		item.detail = 'DTW',
 		  item.documentation = 'Computes similarity between two Geo Time Series using Dynamic Time Warping.'
-	  } else if (item.data === 431) {
+	  } else if (item.data === 408) {
 		item.detail = 'OPTDTW',
 		  item.documentation = 'Find the N optimal matches for a query sequence using Dynamic Time Warping.'
-	  } else if (item.data === 432) {
+	  } else if (item.data === 409) {
 		item.detail = 'PATTERNDETECTION',
 		  item.documentation = 'Detect patterns in a Geo Time Series.'
-	  } else if (item.data === 433) {
+	  } else if (item.data === 410) {
 		item.detail = 'PATTERNS',
 		  item.documentation = 'Extract patterns from a Geo Time Series.'
-	  } else if (item.data === 434) {
+	  } else if (item.data === 411) {
 		item.detail = 'ZDISCORDS',
 		  item.documentation = 'Detects discords in a standardized Geo Time Series.'
-	  } else if (item.data === 435) {
+	  } else if (item.data === 412) {
 		item.detail = 'ZPATTERNDETECTION',
 		  item.documentation = 'Detect patterns in a standardized Geo Time Series.'
-	  } else if (item.data === 436) {
+	  } else if (item.data === 413) {
 		item.detail = 'ZPATTERNS',
 		  item.documentation = 'Extract patterns from a standardized Geo Time Series.'
-	  } else if (item.data === 437) {
+	  } else if (item.data === 414) {
 		item.detail = 'ZSCORE',
 		  item.documentation = 'Normalize by the mean or median, using Z-score'
-	  } else if (item.data === 438) {
+	  } else if (item.data === 415) {
 		item.detail = 'ESDTEST',
 		  item.documentation = 'Detect outliers using an generalized extreme studentized deviate test'
-	  } else if (item.data === 439) {
+	  } else if (item.data === 416) {
 		item.detail = 'GRUBBSTEST',
 		  item.documentation = 'Detect outliers using a Grubbs\' test'
-	  } else if (item.data === 440) {
+	  } else if (item.data === 417) {
 		item.detail = 'HYBRIDTEST',
 		  item.documentation = 'Detect outliers using Seasonal Hybrid ESD test'
-	  } else if (item.data === 441) {
+	  } else if (item.data === 418) {
 		item.detail = 'HYBRIDTEST2',
 		  item.documentation = 'Detect outliers using Seasonal Entropy Hybrid ESD test'
-	  } else if (item.data === 442) {
+	  } else if (item.data === 419) {
 		item.detail = 'STLESDTEST',
 		  item.documentation = 'Detect outliers using seasonal extract and an generalized extreme studentized deviate test'
-	  } else if (item.data === 443) {
+	  } else if (item.data === 420) {
 		item.detail = 'THRESHOLDTEST',
 		  item.documentation = 'Detect outliers using a threshold test'
-	  } else if (item.data === 444) {
+	  } else if (item.data === 421) {
 		item.detail = 'ZSCORETEST',
 		  item.documentation = 'Detect outliers using a Zscore test'
-	  } else if (item.data === 445) {
+	  } else if (item.data === 422) {
 		item.detail = 'BBOX',
 		  item.documentation = 'Computes the bounding box of a Geo Time Series'
-	  } else if (item.data === 446) {
+	  } else if (item.data === 423) {
 		item.detail = 'COPYGEO',
 		  item.documentation = 'Forces the location elements of a GTS onto others.'
-	  } else if (item.data === 447) {
+	  } else if (item.data === 424) {
 		item.detail = 'ELEVATIONS',
 		  item.documentation = 'Push Geo Time Series elevations onto the stack'
-	  } else if (item.data === 448) {
+	  } else if (item.data === 425) {
 		item.detail = 'LOCATIONOFFSET',
 		  item.documentation = 'Downsamples a Geo Time Series by retaining only those datapoints farther away than a threshold distance'
-	  } else if (item.data === 449) {
+	  } else if (item.data === 426) {
 		item.detail = 'LOCATIONS',
 		  item.documentation = 'Push Geo Time Series latitudes and longitudes onto the stack'
-	  } else if (item.data === 450) {
+	  } else if (item.data === 427) {
 		item.detail = 'LOCSTRINGS',
 		  item.documentation = 'Pushes encoded locations of Geo Time Series onto the stack'
-	  } else if (item.data === 451) {
+	  } else if (item.data === 428) {
 		item.detail = 'ATTRIBUTES',
 		  item.documentation = 'Retrieves the attributes of a GTS.'
-	  } else if (item.data === 452) {
+	  } else if (item.data === 429) {
 		item.detail = 'LABELS',
 		  item.documentation = 'Push the labels of a Geo Time Series onto the stack'
-	  } else if (item.data === 453) {
+	  } else if (item.data === 430) {
 		item.detail = 'META',
 		  item.documentation = 'Sets the attributes of a list of Geo Time Series in the Warp 10 backend.'
-	  } else if (item.data === 454) {
+	  } else if (item.data === 431) {
 		item.detail = 'METASORT',
 		  item.documentation = 'Sorts a list of Geo Time Series according to their metadata (class + labels).'
-	  } else if (item.data === 455) {
+	  } else if (item.data === 432) {
 		item.detail = 'NAME',
 		  item.documentation = 'Push the class name of a Geo Time Series onto the stack'
-	  } else if (item.data === 456) {
+	  } else if (item.data === 433) {
 		item.detail = 'PARSESELECTOR',
 		  item.documentation = 'Parse a Geo Time Series selector into a class selector and a labels selection MAP'
-	  } else if (item.data === 457) {
+	  } else if (item.data === 434) {
 		item.detail = 'RELABEL',
 		  item.documentation = 'Modify the labels of a Geo Time Series'
-	  } else if (item.data === 458) {
+	  } else if (item.data === 435) {
 		item.detail = 'RENAME',
 		  item.documentation = 'Rename a Geo Time Series'
-	  } else if (item.data === 459) {
+	  } else if (item.data === 436) {
 		item.detail = 'SETATTRIBUTES',
 		  item.documentation = 'Set attributes of a GTS.'
-	  } else if (item.data === 460) {
+	  } else if (item.data === 437) {
 		item.detail = 'TOSELECTOR',
 		  item.documentation = 'Transform a class selector and a labels selection MAPs into a Geo Time Series selector'
-	  } else if (item.data === 461) {
+	  } else if (item.data === 438) {
 		item.detail = 'ADDVALUE',
 		  item.documentation = 'Add a value to a GTS'
-	  } else if (item.data === 462) {
+	  } else if (item.data === 439) {
 		item.detail = 'ATINDEX',
 		  item.documentation = 'Extract the timestamp, longitude, lattitude, elevation and value for the N-th point of the GTS'
-	  } else if (item.data === 463) {
+	  } else if (item.data === 440) {
 		item.detail = 'ATTICK',
 		  item.documentation = 'Extract the timestamp, longitude, lattitude, elevation and value for a given timestamp of the GTS'
-	  } else if (item.data === 464) {
+	  } else if (item.data === 441) {
 		item.detail = 'FIRSTTICK',
 		  item.documentation = 'Push onto the stack the timestamp of the first tick of a Geo Time Series'
-	  } else if (item.data === 465) {
+	  } else if (item.data === 442) {
 		item.detail = 'LASTTICK',
 		  item.documentation = 'Push onto the stack the timestamp of the last tick of a Geo Time Series'
-	  } else if (item.data === 466) {
+	  } else if (item.data === 443) {
 		item.detail = 'SETVALUE',
 		  item.documentation = 'Adds a value to a GTS, overwriting the value at the given timestamp.'
-	  } else if (item.data === 467) {
+	  } else if (item.data === 444) {
 		item.detail = 'TICKINDEX',
 		  item.documentation = 'Reindex the ticks of Geo Time Series'
-	  } else if (item.data === 468) {
+	  } else if (item.data === 445) {
 		item.detail = 'TICKLIST',
 		  item.documentation = 'Push Geo Time Series ticks onto the stack'
-	  } else if (item.data === 469) {
+	  } else if (item.data === 446) {
 		item.detail = 'TICKS',
 		  item.documentation = 'Push Geo Time Series timestamps onto the stack'
-	  } else if (item.data === 470) {
+	  } else if (item.data === 447) {
 		item.detail = 'VALUES',
 		  item.documentation = 'Push Geo Time Series values onto the stack'
-	  } else if (item.data === 471) {
+	  } else if (item.data === 448) {
 		item.detail = 'ATBUCKET',
 		  item.documentation = 'Extracts the data from a bucket of a Geo Time Series'
-	  } else if (item.data === 472) {
+	  } else if (item.data === 449) {
 		item.detail = 'BUCKETCOUNT',
 		  item.documentation = 'Extract bucketcount from a bucketized Geo Time Series'
-	  } else if (item.data === 473) {
+	  } else if (item.data === 450) {
 		item.detail = 'BUCKETSPAN',
 		  item.documentation = 'Extract bucketspan from a bucketized Geo Time Series'
-	  } else if (item.data === 474) {
+	  } else if (item.data === 451) {
 		item.detail = 'CROP',
 		  item.documentation = 'Rebucketize a Geo Time Series'
-	  } else if (item.data === 475) {
+	  } else if (item.data === 452) {
 		item.detail = 'FILLNEXT',
 		  item.documentation = 'Fill missing values in a bucketized Geo Time Series with the next known value'
-	  } else if (item.data === 476) {
+	  } else if (item.data === 453) {
 		item.detail = 'FILLPREVIOUS',
 		  item.documentation = 'Fill missing values in a bucketized Geo Time Series with the last known value'
-	  } else if (item.data === 477) {
+	  } else if (item.data === 454) {
 		item.detail = 'FILLVALUE',
 		  item.documentation = 'Fill missing values in a bucketized Geo Time Series with a constant'
-	  } else if (item.data === 478) {
+	  } else if (item.data === 455) {
 		item.detail = 'INTERPOLATE',
 		  item.documentation = 'Fill gaps in bucketized Geo Time Series'
-	  } else if (item.data === 479) {
+	  } else if (item.data === 456) {
 		item.detail = 'LASTBUCKET',
 		  item.documentation = 'Push the end timestamp of the last bucket of a bucketized Geo Time Series'
-	  } else if (item.data === 480) {
+	  } else if (item.data === 457) {
 		item.detail = 'STL',
 		  item.documentation = 'Apply Seasonal Trend decomposition based on Loess procedure'
-	  } else if (item.data === 481) {
+	  } else if (item.data === 458) {
 		item.detail = 'UNBUCKETIZE',
 		  item.documentation = 'Force a Geo Time Series to be un-bucketized'
-	  } else if (item.data === 482) {
+	  } else if (item.data === 459) {
 		item.detail = 'REDUCE',
 		  item.documentation = 'Apply a reducer function to a set of Geo Time Series'
-	  } else if (item.data === 483) {
+	  } else if (item.data === 460) {
 		item.detail = 'MACROREDUCER',
 		  item.documentation = 'Converts a macro into a reducer'
-	  } else if (item.data === 484) {
-		item.detail = 'reducer.and',
+	  } else if (item.data === 461) {
+		item.detail = 'reducer\\.and',
 		  item.documentation = 'Compute and between the values'
-	  } else if (item.data === 485) {
-		item.detail = 'reducer.and.exclude-nulls',
+	  } else if (item.data === 462) {
+		item.detail = 'reducer\\.and\\.exclude-nulls',
 		  item.documentation = 'Compute and between the values'
-	  } else if (item.data === 486) {
-		item.detail = 'reducer.argmax',
+	  } else if (item.data === 463) {
+		item.detail = 'reducer\\.argmax',
 		  item.documentation = 'Returns the ticks and labels for the maximum value'
-	  } else if (item.data === 487) {
-		item.detail = 'reducer.argmin',
+	  } else if (item.data === 464) {
+		item.detail = 'reducer\\.argmin',
 		  item.documentation = ''
-	  } else if (item.data === 488) {
-		item.detail = 'reducer.count',
+	  } else if (item.data === 465) {
+		item.detail = 'reducer\\.count',
 		  item.documentation = 'Return the number of values'
-	  } else if (item.data === 489) {
-		item.detail = 'reducer.join',
+	  } else if (item.data === 466) {
+		item.detail = 'reducer\\.join',
 		  item.documentation = 'Return a string concatenating all values'
-	  } else if (item.data === 490) {
-		item.detail = 'reducer.join.forbid-nulls',
+	  } else if (item.data === 467) {
+		item.detail = 'reducer\\.join\\.forbid-nulls',
 		  item.documentation = 'Return a string concatenating all values excluding nulls'
-	  } else if (item.data === 491) {
-		item.detail = 'reducer.max',
+	  } else if (item.data === 468) {
+		item.detail = 'reducer\\.max',
 		  item.documentation = 'Return the maximum of the values'
-	  } else if (item.data === 492) {
-		item.detail = 'reducer.max.forbid-nulls',
+	  } else if (item.data === 469) {
+		item.detail = 'reducer\\.max\\.forbid-nulls',
 		  item.documentation = 'Return the maximum of the values excluding nulls'
-	  } else if (item.data === 493) {
-		item.detail = 'reducer.mean',
+	  } else if (item.data === 470) {
+		item.detail = 'reducer\\.mean',
 		  item.documentation = 'Return the mean of the values'
-	  } else if (item.data === 494) {
-		item.detail = 'reducer.mean.exclude-nulls',
+	  } else if (item.data === 471) {
+		item.detail = 'reducer\\.mean\\.exclude-nulls',
 		  item.documentation = 'Return the mean of the values'
-	  } else if (item.data === 495) {
-		item.detail = 'reducer.median',
+	  } else if (item.data === 472) {
+		item.detail = 'reducer\\.median',
 		  item.documentation = 'Return the median of the values'
-	  } else if (item.data === 496) {
-		item.detail = 'reducer.min',
+	  } else if (item.data === 473) {
+		item.detail = 'reducer\\.min',
 		  item.documentation = 'Return the minimum of the values'
-	  } else if (item.data === 497) {
-		item.detail = 'reducer.min.forbid-nulls',
+	  } else if (item.data === 474) {
+		item.detail = 'reducer\\.min\\.forbid-nulls',
 		  item.documentation = 'Return the minimum of the values excluding nulls'
-	  } else if (item.data === 498) {
-		item.detail = 'reducer.or',
+	  } else if (item.data === 475) {
+		item.detail = 'reducer\\.or',
 		  item.documentation = 'Compute or between the values'
-	  } else if (item.data === 499) {
-		item.detail = 'reducer.or.exclude-nulls',
+	  } else if (item.data === 476) {
+		item.detail = 'reducer\\.or\\.exclude-nulls',
 		  item.documentation = 'Compute or between the values'
-	  } else if (item.data === 500) {
-		item.detail = 'reducer.sd',
+	  } else if (item.data === 477) {
+		item.detail = 'reducer\\.sd',
 		  item.documentation = 'Return the standard deviation of the values'
-	  } else if (item.data === 501) {
-		item.detail = 'reducer.shannonentropy.0',
+	  } else if (item.data === 478) {
+		item.detail = 'reducer\\.shannonentropy\\.0',
 		  item.documentation = 'Return the entropy of a sliding window. 0 if singleton.'
-	  } else if (item.data === 502) {
-		item.detail = 'reducer.shannonentropy.1',
+	  } else if (item.data === 479) {
+		item.detail = 'reducer\\.shannonentropy\\.1',
 		  item.documentation = 'Return the entropy of a sliding window. 1 if singleton.'
-	  } else if (item.data === 503) {
-		item.detail = 'reducer.sum',
+	  } else if (item.data === 480) {
+		item.detail = 'reducer\\.sum',
 		  item.documentation = 'Return the sum of the values'
-	  } else if (item.data === 504) {
-		item.detail = 'reducer.sum.forbid-nulls',
+	  } else if (item.data === 481) {
+		item.detail = 'reducer\\.sum\\.forbid-nulls',
 		  item.documentation = 'Return the sum of the values excluding nulls'
-	  } else if (item.data === 505) {
-		item.detail = 'reducer.var',
+	  } else if (item.data === 482) {
+		item.detail = 'reducer\\.var',
 		  item.documentation = 'Return the variance of the values'
-	  } else if (item.data === 506) {
+	  } else if (item.data === 483) {
 		item.detail = 'MAP',
 		  item.documentation = 'Apply a function on values of a Geo Time Series that fall into a sliding window'
-	  } else if (item.data === 507) {
+	  } else if (item.data === 484) {
 		item.detail = 'MACROMAPPER',
 		  item.documentation = 'Converts a macro into a mapper'
-	  } else if (item.data === 508) {
+	  } else if (item.data === 485) {
 		item.detail = 'STRICTMAPPER',
 		  item.documentation = 'Wrap a mapper to add a condition onto the number of values in the input sliding window'
-	  } else if (item.data === 509) {
-		item.detail = 'mapper.join',
+	  } else if (item.data === 486) {
+		item.detail = 'mapper\\.join',
 		  item.documentation = 'Push onto the stack a mapper to return the concatenation of the string representation of values separated by a separator.'
-	  } else if (item.data === 510) {
-		item.detail = 'mapper.npdf',
+	  } else if (item.data === 487) {
+		item.detail = 'mapper\\.npdf',
 		  item.documentation = 'Push onto the stack a mapper to compute the probability of a value within a gaussian distribution with mu/sigma.'
-	  } else if (item.data === 511) {
-		item.detail = 'mapper.percentile',
+	  } else if (item.data === 488) {
+		item.detail = 'mapper\\.percentile',
 		  item.documentation = 'Push onto the stack a mapper to compute the Nth percentile of the values on the interval.'
-	  } else if (item.data === 512) {
-		item.detail = 'mapper.truecourse',
+	  } else if (item.data === 489) {
+		item.detail = 'mapper\\.truecourse',
 		  item.documentation = 'Push onto the stack a mapper to compute the true course between points on a great circle.'
-	  } else if (item.data === 513) {
-		item.detail = 'mapper.and',
+	  } else if (item.data === 490) {
+		item.detail = 'mapper\\.and',
 		  item.documentation = 'Compute and between the values'
-	  } else if (item.data === 514) {
-		item.detail = 'mapper.count',
+	  } else if (item.data === 491) {
+		item.detail = 'mapper\\.count',
 		  item.documentation = 'Counts the number of values'
-	  } else if (item.data === 515) {
-		item.detail = 'mapper.delta',
+	  } else if (item.data === 492) {
+		item.detail = 'mapper\\.delta',
 		  item.documentation = 'Return the delta between the last and first values'
-	  } else if (item.data === 516) {
-		item.detail = 'mapper.dotproduct',
+	  } else if (item.data === 493) {
+		item.detail = 'mapper\\.dotproduct',
 		  item.documentation = 'Return the dotproduct of the values with a given LIST'
-	  } else if (item.data === 517) {
-		item.detail = 'mapper.dotproduct.positive',
+	  } else if (item.data === 494) {
+		item.detail = 'mapper\\.dotproduct\\.positive',
 		  item.documentation = 'Return the dotproduct of the values with a given LIST'
-	  } else if (item.data === 518) {
-		item.detail = 'mapper.dotproduct.sigmoid',
+	  } else if (item.data === 495) {
+		item.detail = 'mapper\\.dotproduct\\.sigmoid',
 		  item.documentation = 'Return the dotproduct of the values with a given LIST'
-	  } else if (item.data === 519) {
-		item.detail = 'mapper.dotproduct.tanh',
+	  } else if (item.data === 496) {
+		item.detail = 'mapper\\.dotproduct\\.tanh',
 		  item.documentation = 'Return the dotproduct of the values with a given LIST'
-	  } else if (item.data === 520) {
-		item.detail = 'mapper.eq',
+	  } else if (item.data === 497) {
+		item.detail = 'mapper\\.eq',
 		  item.documentation = 'Return the first value equal to a given value'
-	  } else if (item.data === 521) {
-		item.detail = 'mapper.first',
+	  } else if (item.data === 498) {
+		item.detail = 'mapper\\.first',
 		  item.documentation = 'Return the first value'
-	  } else if (item.data === 522) {
-		item.detail = 'mapper.ge',
+	  } else if (item.data === 499) {
+		item.detail = 'mapper\\.ge',
 		  item.documentation = 'Return the first value greater or equal to a given value'
-	  } else if (item.data === 523) {
-		item.detail = 'mapper.gt',
+	  } else if (item.data === 500) {
+		item.detail = 'mapper\\.gt',
 		  item.documentation = 'Return the first value greater than a given value'
-	  } else if (item.data === 524) {
-		item.detail = 'mapper.hdist',
+	  } else if (item.data === 501) {
+		item.detail = 'mapper\\.hdist',
 		  item.documentation = 'Return the horizontal distance'
-	  } else if (item.data === 525) {
-		item.detail = 'mapper.highest',
+	  } else if (item.data === 502) {
+		item.detail = 'mapper\\.highest',
 		  item.documentation = 'Return the value with the highest elevation'
-	  } else if (item.data === 526) {
-		item.detail = 'mapper.hspeed',
+	  } else if (item.data === 503) {
+		item.detail = 'mapper\\.hspeed',
 		  item.documentation = 'Return the horizontal speed'
-	  } else if (item.data === 527) {
-		item.detail = 'mapper.last',
+	  } else if (item.data === 504) {
+		item.detail = 'mapper\\.last',
 		  item.documentation = 'Return the last value'
-	  } else if (item.data === 528) {
-		item.detail = 'mapper.le',
+	  } else if (item.data === 505) {
+		item.detail = 'mapper\\.le',
 		  item.documentation = 'Return the first value lesser or equal to a given value'
-	  } else if (item.data === 529) {
-		item.detail = 'mapper.lowest',
+	  } else if (item.data === 506) {
+		item.detail = 'mapper\\.lowest',
 		  item.documentation = 'Return the value with the highest elevation'
-	  } else if (item.data === 530) {
-		item.detail = 'mapper.lt',
+	  } else if (item.data === 507) {
+		item.detail = 'mapper\\.lt',
 		  item.documentation = 'Return the first value lesser than a given value'
-	  } else if (item.data === 531) {
-		item.detail = 'mapper.max.x',
+	  } else if (item.data === 508) {
+		item.detail = 'mapper\\.max\\.x',
 		  item.documentation = 'Return the maximum between a constant and each value'
-	  } else if (item.data === 532) {
-		item.detail = 'mapper.mean',
+	  } else if (item.data === 509) {
+		item.detail = 'mapper\\.mean',
 		  item.documentation = 'Return the mean of the values'
-	  } else if (item.data === 533) {
-		item.detail = 'mapper.mean.circular',
+	  } else if (item.data === 510) {
+		item.detail = 'mapper\\.mean\\.circular',
 		  item.documentation = 'Pushes onto the stack a mapper suitable for computing the circular mean of values'
-	  } else if (item.data === 534) {
-		item.detail = 'mapper.median',
+	  } else if (item.data === 511) {
+		item.detail = 'mapper\\.median',
 		  item.documentation = 'Return the median of the values'
-	  } else if (item.data === 535) {
-		item.detail = 'mapper.min',
+	  } else if (item.data === 512) {
+		item.detail = 'mapper\\.min',
 		  item.documentation = 'Return the minimum of the values'
-	  } else if (item.data === 536) {
-		item.detail = 'mapper.min.x',
+	  } else if (item.data === 513) {
+		item.detail = 'mapper\\.min\\.x',
 		  item.documentation = 'Return the minimum between a constant and each value'
-	  } else if (item.data === 537) {
-		item.detail = 'mapper.ne',
+	  } else if (item.data === 514) {
+		item.detail = 'mapper\\.ne',
 		  item.documentation = 'Return the first value equal to a given value'
-	  } else if (item.data === 538) {
-		item.detail = 'mapper.or',
+	  } else if (item.data === 515) {
+		item.detail = 'mapper\\.or',
 		  item.documentation = 'Compute or between the values'
-	  } else if (item.data === 539) {
-		item.detail = 'mapper.product',
+	  } else if (item.data === 516) {
+		item.detail = 'mapper\\.product',
 		  item.documentation = 'Return the product of the values'
-	  } else if (item.data === 540) {
-		item.detail = 'mapper.rate',
+	  } else if (item.data === 517) {
+		item.detail = 'mapper\\.rate',
 		  item.documentation = 'Return the rate of change between the last and first values'
-	  } else if (item.data === 541) {
-		item.detail = 'mapper.replace',
+	  } else if (item.data === 518) {
+		item.detail = 'mapper\\.replace',
 		  item.documentation = 'Replace value with a constant'
-	  } else if (item.data === 542) {
-		item.detail = 'mapper.sd',
+	  } else if (item.data === 519) {
+		item.detail = 'mapper\\.sd',
 		  item.documentation = 'Return the standard deviation of the values'
-	  } else if (item.data === 543) {
-		item.detail = 'mapper.sum',
+	  } else if (item.data === 520) {
+		item.detail = 'mapper\\.sum',
 		  item.documentation = 'Return the sum of the values'
-	  } else if (item.data === 544) {
-		item.detail = 'mapper.var',
+	  } else if (item.data === 521) {
+		item.detail = 'mapper\\.var',
 		  item.documentation = 'Return the variance of the values'
-	  } else if (item.data === 545) {
-		item.detail = 'mapper.vdist',
+	  } else if (item.data === 522) {
+		item.detail = 'mapper\\.vdist',
 		  item.documentation = 'Return the vertical distance'
-	  } else if (item.data === 546) {
-		item.detail = 'mapper.vspeed',
+	  } else if (item.data === 523) {
+		item.detail = 'mapper\\.vspeed',
 		  item.documentation = 'Return the vertical speed'
-	  } else if (item.data === 547) {
-		item.detail = 'mapper.abs',
+	  } else if (item.data === 524) {
+		item.detail = 'mapper\\.abs',
 		  item.documentation = 'Return the absolute value of the single value in a sliding window'
-	  } else if (item.data === 548) {
-		item.detail = 'mapper.add',
+	  } else if (item.data === 525) {
+		item.detail = 'mapper\\.add',
 		  item.documentation = 'Add a constant to value'
-	  } else if (item.data === 549) {
-		item.detail = 'mapper.ceil',
+	  } else if (item.data === 526) {
+		item.detail = 'mapper\\.ceil',
 		  item.documentation = 'Round the single value in a sliding window to the closests greater LONG'
-	  } else if (item.data === 550) {
-		item.detail = 'mapper.day',
+	  } else if (item.data === 527) {
+		item.detail = 'mapper\\.day',
 		  item.documentation = 'Return the day of the tick for which it is computed'
-	  } else if (item.data === 551) {
-		item.detail = 'mapper.exp',
+	  } else if (item.data === 528) {
+		item.detail = 'mapper\\.exp',
 		  item.documentation = 'Raise a constant to the value power'
-	  } else if (item.data === 552) {
-		item.detail = 'mapper.floor',
+	  } else if (item.data === 529) {
+		item.detail = 'mapper\\.floor',
 		  item.documentation = 'Round the single value in a sliding window to the closests lower LONG'
-	  } else if (item.data === 553) {
-		item.detail = 'mapper.hour',
+	  } else if (item.data === 530) {
+		item.detail = 'mapper\\.hour',
 		  item.documentation = 'Return the hour of the tick for which it is computed'
-	  } else if (item.data === 554) {
-		item.detail = 'mapper.log',
+	  } else if (item.data === 531) {
+		item.detail = 'mapper\\.log',
 		  item.documentation = 'Take the log of the value'
-	  } else if (item.data === 555) {
-		item.detail = 'mapper.minute',
+	  } else if (item.data === 532) {
+		item.detail = 'mapper\\.minute',
 		  item.documentation = 'Return the minute of the tick for which it is computed'
-	  } else if (item.data === 556) {
-		item.detail = 'mapper.month',
+	  } else if (item.data === 533) {
+		item.detail = 'mapper\\.month',
 		  item.documentation = 'Return the month of the tick for which it is computed'
-	  } else if (item.data === 557) {
-		item.detail = 'mapper.mul',
+	  } else if (item.data === 534) {
+		item.detail = 'mapper\\.mul',
 		  item.documentation = 'Multiply the value by a constant'
-	  } else if (item.data === 558) {
-		item.detail = 'mapper.todouble',
+	  } else if (item.data === 535) {
+		item.detail = 'mapper\\.todouble',
 		  item.documentation = 'Convert the single value in a sliding window to DOUBLE'
-	  } else if (item.data === 559) {
-		item.detail = 'mapper.pow',
+	  } else if (item.data === 536) {
+		item.detail = 'mapper\\.pow',
 		  item.documentation = 'Raise the value to a constant power'
-	  } else if (item.data === 560) {
-		item.detail = 'mapper.round',
+	  } else if (item.data === 537) {
+		item.detail = 'mapper\\.round',
 		  item.documentation = 'Round the single value in a sliding window to the closests LONG'
-	  } else if (item.data === 561) {
-		item.detail = 'mapper.second',
+	  } else if (item.data === 538) {
+		item.detail = 'mapper\\.second',
 		  item.documentation = 'Return the second of the tick for which it is computed'
-	  } else if (item.data === 562) {
-		item.detail = 'mapper.sigmoid',
+	  } else if (item.data === 539) {
+		item.detail = 'mapper\\.sigmoid',
 		  item.documentation = 'Return the sigmoid of the single value in a sliding window'
-	  } else if (item.data === 563) {
-		item.detail = 'mapper.tanh',
+	  } else if (item.data === 540) {
+		item.detail = 'mapper\\.tanh',
 		  item.documentation = 'Return the hyperbolic tangent of the single value in a sliding window'
-	  } else if (item.data === 564) {
-		item.detail = 'mapper.tick',
+	  } else if (item.data === 541) {
+		item.detail = 'mapper\\.tick',
 		  item.documentation = 'Return the tick for which it is computed'
-	  } else if (item.data === 565) {
-		item.detail = 'mapper.toboolean',
+	  } else if (item.data === 542) {
+		item.detail = 'mapper\\.toboolean',
 		  item.documentation = 'Convert the single value in a sliding window to boolean'
-	  } else if (item.data === 566) {
-		item.detail = 'mapper.todouble',
+	  } else if (item.data === 543) {
+		item.detail = 'mapper\\.todouble',
 		  item.documentation = 'Convert the single value in a sliding window to DOUBLE'
-	  } else if (item.data === 567) {
-		item.detail = 'mapper.tolong',
+	  } else if (item.data === 544) {
+		item.detail = 'mapper\\.tolong',
 		  item.documentation = 'Convert the single value in a sliding window to LONG'
-	  } else if (item.data === 568) {
-		item.detail = 'mapper.tostring',
+	  } else if (item.data === 545) {
+		item.detail = 'mapper\\.tostring',
 		  item.documentation = 'Convert the single value in a sliding window to STRING'
-	  } else if (item.data === 569) {
-		item.detail = 'mapper.weekday',
+	  } else if (item.data === 546) {
+		item.detail = 'mapper\\.weekday',
 		  item.documentation = 'Return the day of the week of the tick for which it is computed'
-	  } else if (item.data === 570) {
-		item.detail = 'mapper.year',
+	  } else if (item.data === 547) {
+		item.detail = 'mapper\\.year',
 		  item.documentation = 'Return the year of the tick for which it is computed'
-	  } else if (item.data === 571) {
-		item.detail = 'mapper.kernel.cosine',
+	  } else if (item.data === 548) {
+		item.detail = 'mapper\\.kernel\\.cosine',
 		  item.documentation = 'Pushes onto the stack a mapper which applies a cosine kernel function on the sliding window.'
-	  } else if (item.data === 572) {
-		item.detail = 'mapper.kernel.epanechnikov',
+	  } else if (item.data === 549) {
+		item.detail = 'mapper\\.kernel\\.epanechnikov',
 		  item.documentation = 'Pushes onto the stack a mapper which applies an epanechnikov kernel function on the sliding window.'
-	  } else if (item.data === 573) {
-		item.detail = 'mapper.kernel.gaussian',
+	  } else if (item.data === 550) {
+		item.detail = 'mapper\\.kernel\\.gaussian',
 		  item.documentation = 'Pushes onto the stack a mapper which applies a gaussian kernel function on the sliding window.'
-	  } else if (item.data === 574) {
-		item.detail = 'mapper.kernel.logistic',
+	  } else if (item.data === 551) {
+		item.detail = 'mapper\\.kernel\\.logistic',
 		  item.documentation = 'Pushes onto the stack a mapper which applies a logistic kernel function on the sliding window.'
-	  } else if (item.data === 575) {
-		item.detail = 'mapper.kernel.quartic',
+	  } else if (item.data === 552) {
+		item.detail = 'mapper\\.kernel\\.quartic',
 		  item.documentation = 'Pushes onto the stack a mapper which applies a quartic kernel function on the sliding window.'
-	  } else if (item.data === 576) {
-		item.detail = 'mapper.kernel.silverman',
+	  } else if (item.data === 553) {
+		item.detail = 'mapper\\.kernel\\.silverman',
 		  item.documentation = 'Pushes onto the stack a mapper which applies a silverman kernel function on the sliding window.'
-	  } else if (item.data === 577) {
-		item.detail = 'mapper.kernel.triangular',
+	  } else if (item.data === 554) {
+		item.detail = 'mapper\\.kernel\\.triangular',
 		  item.documentation = 'Pushes onto the stack a mapper which applies a triangular kernel function on the sliding window.'
-	  } else if (item.data === 578) {
-		item.detail = 'mapper.kernel.tricube',
+	  } else if (item.data === 555) {
+		item.detail = 'mapper\\.kernel\\.tricube',
 		  item.documentation = 'Pushes onto the stack a mapper which applies a tricube kernel function on the sliding window.'
-	  } else if (item.data === 579) {
-		item.detail = 'mapper.kernel.triweight',
+	  } else if (item.data === 556) {
+		item.detail = 'mapper\\.kernel\\.triweight',
 		  item.documentation = 'Pushes onto the stack a mapper which applies a triweight kernel function on the sliding window.'
-	  } else if (item.data === 580) {
-		item.detail = 'mapper.kernel.uniform',
+	  } else if (item.data === 557) {
+		item.detail = 'mapper\\.kernel\\.uniform',
 		  item.documentation = 'Pushes onto the stack a mapper which applies a uniform kernel function on the sliding window.'
-	  } else if (item.data === 581) {
-		item.detail = 'mapper.kernel.cosine',
+	  } else if (item.data === 558) {
+		item.detail = 'mapper\\.kernel\\.cosine',
 		  item.documentation = 'Push onto the stack a kernel smoothing mapper using a cosine kernel.'
-	  } else if (item.data === 582) {
-		item.detail = 'mapper.kernel.epanechnikov',
+	  } else if (item.data === 559) {
+		item.detail = 'mapper\\.kernel\\.epanechnikov',
 		  item.documentation = 'Push onto the stack a kernel smoothing mapper using an epanechnikov kernel.'
-	  } else if (item.data === 583) {
-		item.detail = 'mapper.kernel.gaussian',
+	  } else if (item.data === 560) {
+		item.detail = 'mapper\\.kernel\\.gaussian',
 		  item.documentation = 'Push onto the stack a kernel smoothing mapper using a gaussian kernel.'
-	  } else if (item.data === 584) {
-		item.detail = 'mapper.kernel.logistic',
+	  } else if (item.data === 561) {
+		item.detail = 'mapper\\.kernel\\.logistic',
 		  item.documentation = 'Push onto the stack a kernel smoothing mapper using a logistic kernel.'
-	  } else if (item.data === 585) {
-		item.detail = 'mapper.kernel.quartic',
+	  } else if (item.data === 562) {
+		item.detail = 'mapper\\.kernel\\.quartic',
 		  item.documentation = 'Push onto the stack a kernel smoothing mapper using a quartic kernel.'
-	  } else if (item.data === 586) {
-		item.detail = 'mapper.kernel.silverman',
+	  } else if (item.data === 563) {
+		item.detail = 'mapper\\.kernel\\.silverman',
 		  item.documentation = 'Push onto the stack a kernel smoothing mapper using a silverman kernel.'
-	  } else if (item.data === 587) {
-		item.detail = 'mapper.kernel.triangular',
+	  } else if (item.data === 564) {
+		item.detail = 'mapper\\.kernel\\.triangular',
 		  item.documentation = 'Push onto the stack a kernel smoothing mapper using a triangular kernel.'
-	  } else if (item.data === 588) {
-		item.detail = 'mapper.kernel.tricube',
+	  } else if (item.data === 565) {
+		item.detail = 'mapper\\.kernel\\.tricube',
 		  item.documentation = 'Push onto the stack a kernel smoothing mapper using a tricube kernel.'
-	  } else if (item.data === 589) {
-		item.detail = 'mapper.kernel.triweight',
+	  } else if (item.data === 566) {
+		item.detail = 'mapper\\.kernel\\.triweight',
 		  item.documentation = 'Push onto the stack a kernel smoothing mapper using a triweight kernel.'
-	  } else if (item.data === 590) {
-		item.detail = 'mapper.kernel.uniform',
+	  } else if (item.data === 567) {
+		item.detail = 'mapper\\.kernel\\.uniform',
 		  item.documentation = 'Push onto the stack a kernel smoothing mapper using a uniform kernel.'
-	  } else if (item.data === 591) {
-		item.detail = 'mapper.geo.approximate',
+	  } else if (item.data === 568) {
+		item.detail = 'mapper\\.geo\\.approximate',
 		  item.documentation = 'Push onto the stack a mapper to approximate a location at the given resolution.'
-	  } else if (item.data === 592) {
-		item.detail = 'mapper.geo.clear',
+	  } else if (item.data === 569) {
+		item.detail = 'mapper\\.geo\\.clear',
 		  item.documentation = 'Push onto the stack a mapper to remove the location info from readings.'
-	  } else if (item.data === 593) {
-		item.detail = 'mapper.geo.outside',
+	  } else if (item.data === 570) {
+		item.detail = 'mapper\\.geo\\.outside',
 		  item.documentation = 'Filters the GTS, keeping only the points outside a geo zone'
-	  } else if (item.data === 594) {
-		item.detail = 'mapper.geo.within',
+	  } else if (item.data === 571) {
+		item.detail = 'mapper\\.geo\\.within',
 		  item.documentation = 'Filters the GTS, keeping only the points inside a geo zone'
-	  } else if (item.data === 595) {
+	  } else if (item.data === 572) {
 		item.detail = 'MACROFILTER',
 		  item.documentation = 'Creates a filter from a macro.'
-	  } else if (item.data === 596) {
-		item.detail = 'filter.byclass',
+	  } else if (item.data === 573) {
+		item.detail = 'filter\\.byclass',
 		  item.documentation = 'Selects the geo time series whose class name matches the filter parameter'
-	  } else if (item.data === 597) {
-		item.detail = 'filter.bylabels',
+	  } else if (item.data === 574) {
+		item.detail = 'filter\\.bylabels',
 		  item.documentation = 'Selects the geo time series whose labels match the filter parameter'
-	  } else if (item.data === 598) {
-		item.detail = 'filter.last.eq',
+	  } else if (item.data === 575) {
+		item.detail = 'filter\\.last\\.eq',
 		  item.documentation = 'Selects the geo time series whose last value equals the filter parameter'
-	  } else if (item.data === 599) {
-		item.detail = 'filter.last.ge',
+	  } else if (item.data === 576) {
+		item.detail = 'filter\\.last\\.ge',
 		  item.documentation = 'Selects the geo time series whose last value is greater or equal to the filter parameter'
-	  } else if (item.data === 600) {
-		item.detail = 'filter.last.gt',
+	  } else if (item.data === 577) {
+		item.detail = 'filter\\.last\\.gt',
 		  item.documentation = 'Selects the geo time series whose last value is greater than the filter parameter'
-	  } else if (item.data === 601) {
-		item.detail = 'filter.last.le',
+	  } else if (item.data === 578) {
+		item.detail = 'filter\\.last\\.le',
 		  item.documentation = 'Selects the geo time series whose last value is less or equal to the filter parameter'
-	  } else if (item.data === 602) {
-		item.detail = 'filter.last.lt',
+	  } else if (item.data === 579) {
+		item.detail = 'filter\\.last\\.lt',
 		  item.documentation = 'Selects the geo time series whose last value is less than the filter parameter'
-	  } else if (item.data === 603) {
-		item.detail = 'filter.last.ne',
+	  } else if (item.data === 580) {
+		item.detail = 'filter\\.last\\.ne',
 		  item.documentation = 'Selects the geo time series whose last value does not equal the filter parameter'
-	  } else if (item.data === 604) {
+	  } else if (item.data === 581) {
 		item.detail = 'MACROFILTER',
 		  item.documentation = 'Creates a filter from a macro.'
-	  } else if (item.data === 605) {
+	  } else if (item.data === 582) {
 		item.detail = 'FILTER',
 		  item.documentation = 'Extract Geo Time Series which match some criteria'
-	  } else if (item.data === 606) {
-		item.detail = 'bucketizer.percentile',
+	  } else if (item.data === 583) {
+		item.detail = 'bucketizer\\.percentile',
 		  item.documentation = 'Push onto the stack a bucketizer which returns the xth percentile of values in the interval to bucketize.'
-	  } else if (item.data === 607) {
+	  } else if (item.data === 584) {
 		item.detail = 'MACROBUCKETIZER',
 		  item.documentation = 'Converts a macro into a bucketizer'
-	  } else if (item.data === 608) {
-		item.detail = 'bucketizer.and',
+	  } else if (item.data === 585) {
+		item.detail = 'bucketizer\\.and',
 		  item.documentation = 'Compute and between the values of the interval'
-	  } else if (item.data === 609) {
-		item.detail = 'bucketizer.count',
+	  } else if (item.data === 586) {
+		item.detail = 'bucketizer\\.count',
 		  item.documentation = 'Return the number of values of the interval'
-	  } else if (item.data === 610) {
-		item.detail = 'bucketizer.first',
+	  } else if (item.data === 587) {
+		item.detail = 'bucketizer\\.first',
 		  item.documentation = 'Return the first value of the interval'
-	  } else if (item.data === 611) {
-		item.detail = 'bucketizer.join',
+	  } else if (item.data === 588) {
+		item.detail = 'bucketizer\\.join',
 		  item.documentation = 'Return a string concatenating all values'
-	  } else if (item.data === 612) {
-		item.detail = 'bucketizer.last',
+	  } else if (item.data === 589) {
+		item.detail = 'bucketizer\\.last',
 		  item.documentation = 'Return the last value of the interval'
-	  } else if (item.data === 613) {
-		item.detail = 'bucketizer.max',
+	  } else if (item.data === 590) {
+		item.detail = 'bucketizer\\.max',
 		  item.documentation = 'Return the maximum of the values of the interval'
-	  } else if (item.data === 614) {
-		item.detail = 'bucketizer.mean',
+	  } else if (item.data === 591) {
+		item.detail = 'bucketizer\\.mean',
 		  item.documentation = 'Return the mean of the values of the interval'
-	  } else if (item.data === 615) {
-		item.detail = 'bucketizer.median',
+	  } else if (item.data === 592) {
+		item.detail = 'bucketizer\\.median',
 		  item.documentation = 'Return the median of the values of the interval'
-	  } else if (item.data === 616) {
-		item.detail = 'bucketizer.min',
+	  } else if (item.data === 593) {
+		item.detail = 'bucketizer\\.min',
 		  item.documentation = 'Return the minimum of the values of the interval'
-	  } else if (item.data === 617) {
-		item.detail = 'bucketizer.or',
+	  } else if (item.data === 594) {
+		item.detail = 'bucketizer\\.or',
 		  item.documentation = 'Compute or between the values of the interval'
-	  } else if (item.data === 618) {
-		item.detail = 'bucketizer.sum',
+	  } else if (item.data === 595) {
+		item.detail = 'bucketizer\\.sum',
 		  item.documentation = 'Return the sum of the values of the interval'
-	  } else if (item.data === 619) {
+	  } else if (item.data === 596) {
 		item.detail = 'BUCKETIZE',
 		  item.documentation = 'Bucketize a Geo Time Series applying a bucketizer function'
-	  } else if (item.data === 620) {
+	  } else if (item.data === 597) {
 		item.detail = 'APPLY',
 		  item.documentation = 'Apply a function to a set of Geo Time Series'
-	  } else if (item.data === 621) {
-		item.detail = 'op.add',
+	  } else if (item.data === 598) {
+		item.detail = 'op\\.add',
 		  item.documentation = 'Produce values which are the sum of all parameter'
-	  } else if (item.data === 622) {
-		item.detail = 'op.and',
+	  } else if (item.data === 599) {
+		item.detail = 'op\\.and',
 		  item.documentation = 'AND operand on values of multiple Geo Time Series'
-	  } else if (item.data === 623) {
-		item.detail = 'op.div',
+	  } else if (item.data === 600) {
+		item.detail = 'op\\.div',
 		  item.documentation = 'Compute the division of its first parameter by the second one'
-	  } else if (item.data === 624) {
-		item.detail = 'op.eq',
+	  } else if (item.data === 601) {
+		item.detail = 'op\\.eq',
 		  item.documentation = 'Check values from N time Geo Time Series for equality'
-	  } else if (item.data === 625) {
-		item.detail = 'op.ge',
+	  } else if (item.data === 602) {
+		item.detail = 'op\\.ge',
 		  item.documentation = 'Check that values from N time series are greater opr equal to each other'
-	  } else if (item.data === 626) {
-		item.detail = 'op.gt',
+	  } else if (item.data === 603) {
+		item.detail = 'op\\.gt',
 		  item.documentation = 'Check that values from N time series are greater than each other'
-	  } else if (item.data === 627) {
-		item.detail = 'op.le',
+	  } else if (item.data === 604) {
+		item.detail = 'op\\.le',
 		  item.documentation = 'Check that values from N time series are lesser or equal to each other'
-	  } else if (item.data === 628) {
-		item.detail = 'op.lt',
+	  } else if (item.data === 605) {
+		item.detail = 'op\\.lt',
 		  item.documentation = 'Check that values from N time series are lesser than each other'
-	  } else if (item.data === 629) {
-		item.detail = 'op.mask',
+	  } else if (item.data === 606) {
+		item.detail = 'op\\.mask',
 		  item.documentation = 'Eliminate values according to a mask'
-	  } else if (item.data === 630) {
-		item.detail = 'op.mul',
+	  } else if (item.data === 607) {
+		item.detail = 'op\\.mul',
 		  item.documentation = 'Produce values which are the product of all parameters'
-	  } else if (item.data === 631) {
-		item.detail = 'op.ne',
+	  } else if (item.data === 608) {
+		item.detail = 'op\\.ne',
 		  item.documentation = 'Check values from N time Geo Time Series for inequality'
-	  } else if (item.data === 632) {
-		item.detail = 'op.negmask',
+	  } else if (item.data === 609) {
+		item.detail = 'op\\.negmask',
 		  item.documentation = 'Eliminate values according to a mask'
-	  } else if (item.data === 633) {
-		item.detail = 'op.or',
+	  } else if (item.data === 610) {
+		item.detail = 'op\\.or',
 		  item.documentation = 'OR operand on values of multiple Geo Time Series'
-	  } else if (item.data === 634) {
-		item.detail = 'op.sub',
+	  } else if (item.data === 611) {
+		item.detail = 'op\\.sub',
 		  item.documentation = 'Compute the difference between its first and second parameters'
-	  } else if (item.data === 635) {
+	  } else if (item.data === 612) {
 		item.detail = 'MAXLONG',
 		  item.documentation = 'Push Long.MAX_VALUE onto the stack'
-	  } else if (item.data === 636) {
+	  } else if (item.data === 613) {
 		item.detail = 'MINLONG',
 		  item.documentation = 'Push Long.MIN_VALUE onto the stack'
-	  } else if (item.data === 637) {
+	  } else if (item.data === 614) {
 		item.detail = 'NULL',
 		  item.documentation = 'Push the symbolic value NULL onto the stack'
-	  } else if (item.data === 638) {
+	  } else if (item.data === 615) {
 		item.detail = 'NaN',
 		  item.documentation = 'Push the symbolic value `NaN` (Not a Number) onto the stack'
-	  } else if (item.data === 639) {
+	  } else if (item.data === 616) {
 		item.detail = 'PI',
 		  item.documentation = 'Pushes PI onto the stack.'
-	  } else if (item.data === 640) {
+	  } else if (item.data === 617) {
 		item.detail = 'e',
 		  item.documentation = 'Push the value of e (2.71828....) onto the stack'
-	  } else if (item.data === 641) {
+	  } else if (item.data === 618) {
 		item.detail = 'pi',
 		  item.documentation = 'Push the value of π (3.141592....) onto the stack'
 	  }
