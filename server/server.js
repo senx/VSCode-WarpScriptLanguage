@@ -29,39 +29,14 @@ connection.onInitialize((_params) => {
         }
     };
 });
-// hold the maxNumberOfProblems setting
-let maxNumberOfProblems;
+let warp10url;
 // The settings have changed. Is send on server activation
 // as well.
 connection.onDidChangeConfiguration((change) => {
     let settings = change.settings;
-    maxNumberOfProblems = settings.warpscript.maxNumberOfProblems || 100;
-    // Revalidate any open text documents
-    documents.all().forEach(validateTextDocument);
+    warp10url = settings.warpscript.warp10url || "";
+    console.log(warp10url);
 });
-function validateTextDocument(textDocument) {
-    let diagnostics = [];
-    let lines = textDocument.getText().split(/\r?\n/g);
-    let problems = 0;
-    for (var i = 0; i < lines.length && problems < maxNumberOfProblems; i++) {
-        let line = lines[i];
-        let index = line.indexOf('typescript');
-        if (index >= 0) {
-            problems++;
-            diagnostics.push({
-                severity: vscode_languageserver_1.DiagnosticSeverity.Warning,
-                range: {
-                    start: { line: i, character: index },
-                    end: { line: i, character: index + 10 }
-                },
-                message: `${line.substr(index, 10)} should be spelled TypeScript`,
-                source: 'ex'
-            });
-        }
-    }
-    // Send the computed diagnostics to VSCode.
-    connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
-}
 connection.onDidChangeWatchedFiles((_change) => {
     // Monitored files have change in VSCode
     connection.console.log('We received an file change event');

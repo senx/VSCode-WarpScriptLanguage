@@ -20,10 +20,12 @@
 	],
 	"main": "./out/src/extension.js",
 	"contributes": {
-		"commands": [{
-            "command": "extension.execWS",
-            "title": "Run Warpscript"
-        }],
+		"commands": [
+			{
+				"command": "extension.execWS",
+				"title": "Run Warpscript"
+			}
+		],
 		"languages": [
 			{
 				"id": "warpscript",
@@ -76,6 +78,8 @@
 		"postinstall": "node ./node_modules/vscode/bin/install"
 	},
 	"dependencies": {
+		"@types/request": "^2.47.0",
+		"request": "^2.83.0",
 		"vscode": "^1.1.5",
 		"vscode-languageclient": "^3.4.2"
 	}

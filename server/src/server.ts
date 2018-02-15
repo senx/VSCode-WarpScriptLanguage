@@ -53,13 +53,13 @@ interface WarpscriptSettings {
 	warp10url: string;
 }
 
-// hold the maxNumberOfProblems setting
 let warp10url: string;
 // The settings have changed. Is send on server activation
 // as well.
 connection.onDidChangeConfiguration((change) => {
 	let settings = <Settings>change.settings;
 	warp10url = settings.warpscript.warp10url || "";
+	console.log(warp10url)
 });
 
 

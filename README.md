@@ -1,9 +1,15 @@
 # VSCode Warpscript Extension
 
-Color and completion for Warpscript langage
+Warpscript langage support
 
-TODO : 
-- Remote exec
+## Features
+
+- Syntax color
+- Code completion
+- Remote execution ( command ctrl+shif+p )
+
+## TODO
+
 - Snipets
 - Link Macro
 - Link macro through execution
