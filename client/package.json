@@ -24,6 +24,10 @@
 			{
 				"command": "extension.execWS",
 				"title": "Run Warpscript"
+			},
+			{
+				"command": "editor.printReferences",
+				"title": "Show All References"
 			}
 		],
 		"languages": [
@@ -46,6 +50,15 @@
 				"path": "./syntaxes/warpscript.tmLanguage.json"
 			}
 		],
+		"menus": {
+			"editor/context": [
+				{
+					"command": "editor.printReferences",
+					"when": "editorHasReferenceProvider",
+					"group": "navigation@1.31"
+				}
+			]
+		},
 		"configuration": {
 			"type": "object",
 			"title": "WarpScript",

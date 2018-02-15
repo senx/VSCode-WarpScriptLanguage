@@ -8,7 +8,7 @@
 	},
 	// set this to false to include "out" folder in search results
 	"search.exclude": {
-		"out": true
+		"out": false
 	},
 	"typescript.tsdk": "./node_modules/typescript/lib",
 	"typescript.tsc.autoDetect": "off"

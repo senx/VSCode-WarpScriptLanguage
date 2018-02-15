@@ -7,15 +7,13 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import * as request from 'request';
-import { workspace, ExtensionContext } from 'vscode';
+import { workspace, ExtensionContext, window } from 'vscode';
 import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient';
 
 export function activate(context: ExtensionContext) {
-	const Warp10URL: string = vscode.workspace.getConfiguration().get('warpscript.Warp10URL');
 
 	let outputWin = vscode.window.createOutputChannel('GTS');
-
-	console.log('[client] Congratulations, your extension "Warpscript" is now active! ', Warp10URL)
+	console.log('[client] Congratulations, your extension "Warpscript" is now active! ')
 	// The server is implemented in node
 	let serverModule = context.asAbsolutePath(path.join('server', 'server.js'));
 	// The debug options for the server
@@ -49,6 +47,7 @@ export function activate(context: ExtensionContext) {
 
 
 	let cmd = vscode.commands.registerCommand('extension.execWS', () => {
+		let Warp10URL: string = vscode.workspace.getConfiguration().get('warpscript.Warp10URL');
 		// The code you place here will be executed every time your command is executed
 		var currentlyOpenTabfilePath = vscode.window.activeTextEditor.document.fileName;
 		console.log(currentlyOpenTabfilePath)
@@ -59,7 +58,7 @@ export function activate(context: ExtensionContext) {
 				headers: {},
 				url: Warp10URL,
 				body: text
-			}, function (error, response, body) {
+			}, function (error: any, response: any, body: any) {
 				if (error) {
 					vscode.window.showErrorMessage(error)
 				} else {
@@ -70,7 +69,13 @@ export function activate(context: ExtensionContext) {
 					outputWin.appendLine('--- Elapsed time : ' + (+response.headers['x-warp10-elapsed'] / 100000) + ' s')
 					outputWin.appendLine('--- Data fetched : ' + response.headers['x-warp10-fetched'])
 					outputWin.appendLine('--- Ops count : ' + response.headers['x-warp10-ops'])
-					outputWin.append(body)
+					workspace.openTextDocument({ language: 'json' }).then(doc => {
+						window.showTextDocument(doc, vscode.window.activeTextEditor.viewColumn + 1).then(tdoc => {
+							tdoc.edit(cb => {
+								cb.insert(doc.positionAt(0), body)
+							})
+						})
+					});
 				}
 			});
 		});

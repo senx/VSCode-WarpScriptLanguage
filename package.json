@@ -20,17 +20,19 @@
 	],
 	"galleryBanner": {
 		"color": "#FF9900",
-        "theme": "dark"
+		"theme": "dark"
 	},
-    "activationEvents": [
-        "onLanguage:warpscript"
+	"activationEvents": [
+		"onLanguage:warpscript"
 	],
 	"main": "./client/out/src/extension",
 	"contributes": {
-		"commands": [{
-            "command": "extension.execWS",
-            "title": "Run Warpscript"
-        }],
+		"commands": [
+			{
+				"command": "extension.execWS",
+				"title": "Run Warpscript"
+			}
+		],
 		"languages": [
 			{
 				"id": "warpscript",
@@ -76,7 +78,7 @@
 		}
 	},
 	"scripts": {
-        "vscode:prepublish": "npm run compile",
+		"vscode:prepublish": "npm run compile",
 		"postinstall": "cd server && npm install && cd ../client && npm install && cd ..",
 		"compile": "tsc -p client/tsconfig.json && cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
 		"compile:client": "tsc -p client/tsconfig.json",
