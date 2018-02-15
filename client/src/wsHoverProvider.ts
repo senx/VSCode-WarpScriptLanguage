@@ -2,7 +2,6 @@
 
 import { HoverProvider, Hover, MarkedString, TextDocument, CancellationToken, Position } from 'vscode';
 import wsGlobals = require('./wsGlobals');
-//import { textToMarkedString } from './utils/markedTextUtil';
 
 export default class WSHoverProvider implements HoverProvider {
 
