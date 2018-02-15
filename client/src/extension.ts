@@ -9,6 +9,7 @@ import * as vscode from 'vscode';
 import * as request from 'request';
 import { workspace, ExtensionContext, window } from 'vscode';
 import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient';
+import WSHoverProvider from './wsHoverProvider'
 
 export function activate(context: ExtensionContext) {
 
@@ -44,7 +45,7 @@ export function activate(context: ExtensionContext) {
 	// Push the disposable to the context's subscriptions so that the 
 	// client can be deactivated on extension deactivation
 	context.subscriptions.push(disposable);
-
+	context.subscriptions.push(vscode.languages.registerHoverProvider('warpscript', new WSHoverProvider()));
 
 	let cmd = vscode.commands.registerCommand('extension.execWS', () => {
 		let Warp10URL: string = vscode.workspace.getConfiguration().get('warpscript.Warp10URL');

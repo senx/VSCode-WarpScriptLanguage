@@ -7,6 +7,7 @@ Warpscript langage support
 - Syntax color
 - Code completion
 - Remote execution ( command ctrl+shif+p )
+- Hover definition
 
 ## TODO
 

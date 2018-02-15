@@ -22,7 +22,6 @@ connection.onInitialize((_params) => {
         capabilities: {
             // Tell the client that the server works in FULL text document sync mode
             textDocumentSync: documents.syncKind,
-            definitionProvider: true,
             // Tell the client that the server support code complete
             completionProvider: {
                 resolveProvider: true
@@ -128,40 +127,40 @@ connection.onCompletion((_textDocumentPosition) => {
         { label: 'ULP',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 27 },
-        { label: 'max\\\\.tick\\\\.sliding\\\\.window',
+        { label: 'max.tick.sliding.window',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 28 },
-        { label: 'max\\\\.time\\\\.sliding\\\\.window',
+        { label: 'max.time.sliding.window',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 29 },
-        { label: 'op\\\\.and\\\\.ignore-nulls',
+        { label: 'op.and.ignore-nulls',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 30 },
-        { label: 'op\\\\.or\\\\.ignore-nulls',
+        { label: 'op.or.ignore-nulls',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 31 },
-        { label: 'reducer\\\\.percentile',
+        { label: 'reducer.percentile',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 32 },
-        { label: 'reducer\\\\.sd\\\\.forbid-nulls',
+        { label: 'reducer.sd.forbid-nulls',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 33 },
-        { label: 'reducer\\\\.var\\\\.forbid-nulls',
+        { label: 'reducer.var.forbid-nulls',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 34 },
         { label: 'Macros',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 35 },
-        { label: 'SENSISION\\\\.EVENT',
+        { label: 'SENSISION.EVENT',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 36 },
-        { label: 'SENSISION\\\\.GET',
+        { label: 'SENSISION.GET',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 37 },
-        { label: 'SENSISION\\\\.SET',
+        { label: 'SENSISION.SET',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 38 },
-        { label: 'SENSISION\\\\.UPDATE',
+        { label: 'SENSISION.UPDATE',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 39 },
         { label: 'CEVAL',
@@ -1031,25 +1030,25 @@ connection.onCompletion((_textDocumentPosition) => {
         { label: 'GEOUNPACK',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 328 },
-        { label: 'GEO\\\\.DIFFERENCE',
+        { label: 'GEO.DIFFERENCE',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 329 },
-        { label: 'GEO\\\\.INTERSECTION',
+        { label: 'GEO.INTERSECTION',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 330 },
-        { label: 'GEO\\\\.INTERSECTS',
+        { label: 'GEO.INTERSECTS',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 331 },
-        { label: 'GEO\\\\.JSON',
+        { label: 'GEO.JSON',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 332 },
-        { label: 'GEO\\\\.UNION',
+        { label: 'GEO.UNION',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 333 },
-        { label: 'GEO\\\\.WITHIN',
+        { label: 'GEO.WITHIN',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 334 },
-        { label: 'GEO\\\\.WKT',
+        { label: 'GEO.WKT',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 335 },
         { label: 'HAVERSINE',
@@ -1427,70 +1426,70 @@ connection.onCompletion((_textDocumentPosition) => {
         { label: 'MACROREDUCER',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 460 },
-        { label: 'reducer\\\\.and',
+        { label: 'reducer.and',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 461 },
-        { label: 'reducer\\\\.and\\\\.exclude-nulls',
+        { label: 'reducer.and.exclude-nulls',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 462 },
-        { label: 'reducer\\\\.argmax',
+        { label: 'reducer.argmax',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 463 },
-        { label: 'reducer\\\\.argmin',
+        { label: 'reducer.argmin',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 464 },
-        { label: 'reducer\\\\.count',
+        { label: 'reducer.count',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 465 },
-        { label: 'reducer\\\\.join',
+        { label: 'reducer.join',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 466 },
-        { label: 'reducer\\\\.join\\\\.forbid-nulls',
+        { label: 'reducer.join.forbid-nulls',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 467 },
-        { label: 'reducer\\\\.max',
+        { label: 'reducer.max',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 468 },
-        { label: 'reducer\\\\.max\\\\.forbid-nulls',
+        { label: 'reducer.max.forbid-nulls',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 469 },
-        { label: 'reducer\\\\.mean',
+        { label: 'reducer.mean',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 470 },
-        { label: 'reducer\\\\.mean\\\\.exclude-nulls',
+        { label: 'reducer.mean.exclude-nulls',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 471 },
-        { label: 'reducer\\\\.median',
+        { label: 'reducer.median',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 472 },
-        { label: 'reducer\\\\.min',
+        { label: 'reducer.min',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 473 },
-        { label: 'reducer\\\\.min\\\\.forbid-nulls',
+        { label: 'reducer.min.forbid-nulls',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 474 },
-        { label: 'reducer\\\\.or',
+        { label: 'reducer.or',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 475 },
-        { label: 'reducer\\\\.or\\\\.exclude-nulls',
+        { label: 'reducer.or.exclude-nulls',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 476 },
-        { label: 'reducer\\\\.sd',
+        { label: 'reducer.sd',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 477 },
-        { label: 'reducer\\\\.shannonentropy\\\\.0',
+        { label: 'reducer.shannonentropy.0',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 478 },
-        { label: 'reducer\\\\.shannonentropy\\\\.1',
+        { label: 'reducer.shannonentropy.1',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 479 },
-        { label: 'reducer\\\\.sum',
+        { label: 'reducer.sum',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 480 },
-        { label: 'reducer\\\\.sum\\\\.forbid-nulls',
+        { label: 'reducer.sum.forbid-nulls',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 481 },
-        { label: 'reducer\\\\.var',
+        { label: 'reducer.var',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 482 },
         { label: 'MAP',
@@ -1502,289 +1501,289 @@ connection.onCompletion((_textDocumentPosition) => {
         { label: 'STRICTMAPPER',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 485 },
-        { label: 'mapper\\\\.join',
+        { label: 'mapper.join',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 486 },
-        { label: 'mapper\\\\.npdf',
+        { label: 'mapper.npdf',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 487 },
-        { label: 'mapper\\\\.percentile',
+        { label: 'mapper.percentile',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 488 },
-        { label: 'mapper\\\\.truecourse',
+        { label: 'mapper.truecourse',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 489 },
-        { label: 'mapper\\\\.and',
+        { label: 'mapper.and',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 490 },
-        { label: 'mapper\\\\.count',
+        { label: 'mapper.count',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 491 },
-        { label: 'mapper\\\\.delta',
+        { label: 'mapper.delta',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 492 },
-        { label: 'mapper\\\\.dotproduct',
+        { label: 'mapper.dotproduct',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 493 },
-        { label: 'mapper\\\\.dotproduct\\\\.positive',
+        { label: 'mapper.dotproduct.positive',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 494 },
-        { label: 'mapper\\\\.dotproduct\\\\.sigmoid',
+        { label: 'mapper.dotproduct.sigmoid',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 495 },
-        { label: 'mapper\\\\.dotproduct\\\\.tanh',
+        { label: 'mapper.dotproduct.tanh',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 496 },
-        { label: 'mapper\\\\.eq',
+        { label: 'mapper.eq',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 497 },
-        { label: 'mapper\\\\.first',
+        { label: 'mapper.first',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 498 },
-        { label: 'mapper\\\\.ge',
+        { label: 'mapper.ge',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 499 },
-        { label: 'mapper\\\\.gt',
+        { label: 'mapper.gt',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 500 },
-        { label: 'mapper\\\\.hdist',
+        { label: 'mapper.hdist',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 501 },
-        { label: 'mapper\\\\.highest',
+        { label: 'mapper.highest',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 502 },
-        { label: 'mapper\\\\.hspeed',
+        { label: 'mapper.hspeed',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 503 },
-        { label: 'mapper\\\\.last',
+        { label: 'mapper.last',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 504 },
-        { label: 'mapper\\\\.le',
+        { label: 'mapper.le',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 505 },
-        { label: 'mapper\\\\.lowest',
+        { label: 'mapper.lowest',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 506 },
-        { label: 'mapper\\\\.lt',
+        { label: 'mapper.lt',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 507 },
-        { label: 'mapper\\\\.max\\\\.x',
+        { label: 'mapper.max.x',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 508 },
-        { label: 'mapper\\\\.mean',
+        { label: 'mapper.mean',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 509 },
-        { label: 'mapper\\\\.mean\\\\.circular',
+        { label: 'mapper.mean.circular',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 510 },
-        { label: 'mapper\\\\.median',
+        { label: 'mapper.median',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 511 },
-        { label: 'mapper\\\\.min',
+        { label: 'mapper.min',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 512 },
-        { label: 'mapper\\\\.min\\\\.x',
+        { label: 'mapper.min.x',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 513 },
-        { label: 'mapper\\\\.ne',
+        { label: 'mapper.ne',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 514 },
-        { label: 'mapper\\\\.or',
+        { label: 'mapper.or',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 515 },
-        { label: 'mapper\\\\.product',
+        { label: 'mapper.product',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 516 },
-        { label: 'mapper\\\\.rate',
+        { label: 'mapper.rate',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 517 },
-        { label: 'mapper\\\\.replace',
+        { label: 'mapper.replace',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 518 },
-        { label: 'mapper\\\\.sd',
+        { label: 'mapper.sd',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 519 },
-        { label: 'mapper\\\\.sum',
+        { label: 'mapper.sum',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 520 },
-        { label: 'mapper\\\\.var',
+        { label: 'mapper.var',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 521 },
-        { label: 'mapper\\\\.vdist',
+        { label: 'mapper.vdist',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 522 },
-        { label: 'mapper\\\\.vspeed',
+        { label: 'mapper.vspeed',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 523 },
-        { label: 'mapper\\\\.abs',
+        { label: 'mapper.abs',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 524 },
-        { label: 'mapper\\\\.add',
+        { label: 'mapper.add',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 525 },
-        { label: 'mapper\\\\.ceil',
+        { label: 'mapper.ceil',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 526 },
-        { label: 'mapper\\\\.day',
+        { label: 'mapper.day',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 527 },
-        { label: 'mapper\\\\.exp',
+        { label: 'mapper.exp',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 528 },
-        { label: 'mapper\\\\.floor',
+        { label: 'mapper.floor',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 529 },
-        { label: 'mapper\\\\.hour',
+        { label: 'mapper.hour',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 530 },
-        { label: 'mapper\\\\.log',
+        { label: 'mapper.log',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 531 },
-        { label: 'mapper\\\\.minute',
+        { label: 'mapper.minute',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 532 },
-        { label: 'mapper\\\\.month',
+        { label: 'mapper.month',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 533 },
-        { label: 'mapper\\\\.mul',
+        { label: 'mapper.mul',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 534 },
-        { label: 'mapper\\\\.todouble',
+        { label: 'mapper.todouble',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 535 },
-        { label: 'mapper\\\\.pow',
+        { label: 'mapper.pow',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 536 },
-        { label: 'mapper\\\\.round',
+        { label: 'mapper.round',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 537 },
-        { label: 'mapper\\\\.second',
+        { label: 'mapper.second',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 538 },
-        { label: 'mapper\\\\.sigmoid',
+        { label: 'mapper.sigmoid',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 539 },
-        { label: 'mapper\\\\.tanh',
+        { label: 'mapper.tanh',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 540 },
-        { label: 'mapper\\\\.tick',
+        { label: 'mapper.tick',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 541 },
-        { label: 'mapper\\\\.toboolean',
+        { label: 'mapper.toboolean',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 542 },
-        { label: 'mapper\\\\.todouble',
+        { label: 'mapper.todouble',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 543 },
-        { label: 'mapper\\\\.tolong',
+        { label: 'mapper.tolong',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 544 },
-        { label: 'mapper\\\\.tostring',
+        { label: 'mapper.tostring',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 545 },
-        { label: 'mapper\\\\.weekday',
+        { label: 'mapper.weekday',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 546 },
-        { label: 'mapper\\\\.year',
+        { label: 'mapper.year',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 547 },
-        { label: 'mapper\\\\.kernel\\\\.cosine',
+        { label: 'mapper.kernel.cosine',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 548 },
-        { label: 'mapper\\\\.kernel\\\\.epanechnikov',
+        { label: 'mapper.kernel.epanechnikov',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 549 },
-        { label: 'mapper\\\\.kernel\\\\.gaussian',
+        { label: 'mapper.kernel.gaussian',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 550 },
-        { label: 'mapper\\\\.kernel\\\\.logistic',
+        { label: 'mapper.kernel.logistic',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 551 },
-        { label: 'mapper\\\\.kernel\\\\.quartic',
+        { label: 'mapper.kernel.quartic',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 552 },
-        { label: 'mapper\\\\.kernel\\\\.silverman',
+        { label: 'mapper.kernel.silverman',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 553 },
-        { label: 'mapper\\\\.kernel\\\\.triangular',
+        { label: 'mapper.kernel.triangular',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 554 },
-        { label: 'mapper\\\\.kernel\\\\.tricube',
+        { label: 'mapper.kernel.tricube',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 555 },
-        { label: 'mapper\\\\.kernel\\\\.triweight',
+        { label: 'mapper.kernel.triweight',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 556 },
-        { label: 'mapper\\\\.kernel\\\\.uniform',
+        { label: 'mapper.kernel.uniform',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 557 },
-        { label: 'mapper\\\\.kernel\\\\.cosine',
+        { label: 'mapper.kernel.cosine',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 558 },
-        { label: 'mapper\\\\.kernel\\\\.epanechnikov',
+        { label: 'mapper.kernel.epanechnikov',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 559 },
-        { label: 'mapper\\\\.kernel\\\\.gaussian',
+        { label: 'mapper.kernel.gaussian',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 560 },
-        { label: 'mapper\\\\.kernel\\\\.logistic',
+        { label: 'mapper.kernel.logistic',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 561 },
-        { label: 'mapper\\\\.kernel\\\\.quartic',
+        { label: 'mapper.kernel.quartic',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 562 },
-        { label: 'mapper\\\\.kernel\\\\.silverman',
+        { label: 'mapper.kernel.silverman',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 563 },
-        { label: 'mapper\\\\.kernel\\\\.triangular',
+        { label: 'mapper.kernel.triangular',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 564 },
-        { label: 'mapper\\\\.kernel\\\\.tricube',
+        { label: 'mapper.kernel.tricube',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 565 },
-        { label: 'mapper\\\\.kernel\\\\.triweight',
+        { label: 'mapper.kernel.triweight',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 566 },
-        { label: 'mapper\\\\.kernel\\\\.uniform',
+        { label: 'mapper.kernel.uniform',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 567 },
-        { label: 'mapper\\\\.geo\\\\.approximate',
+        { label: 'mapper.geo.approximate',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 568 },
-        { label: 'mapper\\\\.geo\\\\.clear',
+        { label: 'mapper.geo.clear',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 569 },
-        { label: 'mapper\\\\.geo\\\\.outside',
+        { label: 'mapper.geo.outside',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 570 },
-        { label: 'mapper\\\\.geo\\\\.within',
+        { label: 'mapper.geo.within',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 571 },
         { label: 'MACROFILTER',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 572 },
-        { label: 'filter\\\\.byclass',
+        { label: 'filter.byclass',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 573 },
-        { label: 'filter\\\\.bylabels',
+        { label: 'filter.bylabels',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 574 },
-        { label: 'filter\\\\.last\\\\.eq',
+        { label: 'filter.last.eq',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 575 },
-        { label: 'filter\\\\.last\\\\.ge',
+        { label: 'filter.last.ge',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 576 },
-        { label: 'filter\\\\.last\\\\.gt',
+        { label: 'filter.last.gt',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 577 },
-        { label: 'filter\\\\.last\\\\.le',
+        { label: 'filter.last.le',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 578 },
-        { label: 'filter\\\\.last\\\\.lt',
+        { label: 'filter.last.lt',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 579 },
-        { label: 'filter\\\\.last\\\\.ne',
+        { label: 'filter.last.ne',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 580 },
         { label: 'MACROFILTER',
@@ -1793,43 +1792,43 @@ connection.onCompletion((_textDocumentPosition) => {
         { label: 'FILTER',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 582 },
-        { label: 'bucketizer\\\\.percentile',
+        { label: 'bucketizer.percentile',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 583 },
         { label: 'MACROBUCKETIZER',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 584 },
-        { label: 'bucketizer\\\\.and',
+        { label: 'bucketizer.and',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 585 },
-        { label: 'bucketizer\\\\.count',
+        { label: 'bucketizer.count',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 586 },
-        { label: 'bucketizer\\\\.first',
+        { label: 'bucketizer.first',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 587 },
-        { label: 'bucketizer\\\\.join',
+        { label: 'bucketizer.join',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 588 },
-        { label: 'bucketizer\\\\.last',
+        { label: 'bucketizer.last',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 589 },
-        { label: 'bucketizer\\\\.max',
+        { label: 'bucketizer.max',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 590 },
-        { label: 'bucketizer\\\\.mean',
+        { label: 'bucketizer.mean',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 591 },
-        { label: 'bucketizer\\\\.median',
+        { label: 'bucketizer.median',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 592 },
-        { label: 'bucketizer\\\\.min',
+        { label: 'bucketizer.min',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 593 },
-        { label: 'bucketizer\\\\.or',
+        { label: 'bucketizer.or',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 594 },
-        { label: 'bucketizer\\\\.sum',
+        { label: 'bucketizer.sum',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 595 },
         { label: 'BUCKETIZE',
@@ -1838,46 +1837,46 @@ connection.onCompletion((_textDocumentPosition) => {
         { label: 'APPLY',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 597 },
-        { label: 'op\\\\.add',
+        { label: 'op.add',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 598 },
-        { label: 'op\\\\.and',
+        { label: 'op.and',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 599 },
-        { label: 'op\\\\.div',
+        { label: 'op.div',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 600 },
-        { label: 'op\\\\.eq',
+        { label: 'op.eq',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 601 },
-        { label: 'op\\\\.ge',
+        { label: 'op.ge',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 602 },
-        { label: 'op\\\\.gt',
+        { label: 'op.gt',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 603 },
-        { label: 'op\\\\.le',
+        { label: 'op.le',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 604 },
-        { label: 'op\\\\.lt',
+        { label: 'op.lt',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 605 },
-        { label: 'op\\\\.mask',
+        { label: 'op.mask',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 606 },
-        { label: 'op\\\\.mul',
+        { label: 'op.mul',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 607 },
-        { label: 'op\\\\.ne',
+        { label: 'op.ne',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 608 },
-        { label: 'op\\\\.negmask',
+        { label: 'op.negmask',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 609 },
-        { label: 'op\\\\.or',
+        { label: 'op.or',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 610 },
-        { label: 'op\\\\.sub',
+        { label: 'op.sub',
             kind: vscode_languageserver_1.CompletionItemKind.Text,
             data: 611 },
         { label: 'MAXLONG',
@@ -2014,31 +2013,31 @@ connection.onCompletionResolve((item) => {
             item.documentation = 'Returns the size of an Units in the Last Place of the top of the stack.';
     }
     else if (item.data === 28) {
-        item.detail = 'max\\.tick\\.sliding\\.window',
+        item.detail = 'max.tick.sliding.window',
             item.documentation = 'Max tick value in a sliding window.';
     }
     else if (item.data === 29) {
-        item.detail = 'max\\.time\\.sliding\\.window',
+        item.detail = 'max.time.sliding.window',
             item.documentation = 'Max time of a sliding window.';
     }
     else if (item.data === 30) {
-        item.detail = 'op\\.and\\.ignore-nulls',
+        item.detail = 'op.and.ignore-nulls',
             item.documentation = 'Pushes onto the stack an operator to perform a logical and between values of multiple GTS. Null values will be ignored.';
     }
     else if (item.data === 31) {
-        item.detail = 'op\\.or\\.ignore-nulls',
+        item.detail = 'op.or.ignore-nulls',
             item.documentation = 'Pushes onto the stack an operator to perform a logical or between values of multiple GTS. Null values will be ignored.';
     }
     else if (item.data === 32) {
-        item.detail = 'reducer\\.percentile',
+        item.detail = 'reducer.percentile',
             item.documentation = 'Push onto the stack a reducer to return the Nth percentile of the values for each tick.';
     }
     else if (item.data === 33) {
-        item.detail = 'reducer\\.sd\\.forbid-nulls',
+        item.detail = 'reducer.sd.forbid-nulls',
             item.documentation = 'Push onto the stack a reducer to compute the standard deviation (with or without Bessel\'s correction) of the values for each tick, null values lead to a null result.';
     }
     else if (item.data === 34) {
-        item.detail = 'reducer\\.var\\.forbid-nulls',
+        item.detail = 'reducer.var.forbid-nulls',
             item.documentation = 'Push onto the stack a reducer to compute the variance (with or without Bessel\'s correction) of the values for each tick. Missing (null) values lead to a null result.';
     }
     else if (item.data === 35) {
@@ -2046,19 +2045,19 @@ connection.onCompletionResolve((item) => {
             item.documentation = 'Macros allow users to define new functions combining existing WarpScript functions and operations';
     }
     else if (item.data === 36) {
-        item.detail = 'SENSISION\\.EVENT',
+        item.detail = 'SENSISION.EVENT',
             item.documentation = 'Emits a Sensision event.';
     }
     else if (item.data === 37) {
-        item.detail = 'SENSISION\\.GET',
+        item.detail = 'SENSISION.GET',
             item.documentation = 'Set a value for a Sensision metric.';
     }
     else if (item.data === 38) {
-        item.detail = 'SENSISION\\.SET',
+        item.detail = 'SENSISION.SET',
             item.documentation = 'Set a value for a Sensision metric.';
     }
     else if (item.data === 39) {
-        item.detail = 'SENSISION\\.UPDATE',
+        item.detail = 'SENSISION.UPDATE',
             item.documentation = 'Update a value for a numerical Sensision metric.';
     }
     else if (item.data === 40) {
@@ -3218,31 +3217,31 @@ connection.onCompletionResolve((item) => {
             item.documentation = 'Decodes a packed geo zone.';
     }
     else if (item.data === 329) {
-        item.detail = 'GEO\\.DIFFERENCE',
+        item.detail = 'GEO.DIFFERENCE',
             item.documentation = 'Computes the difference of two GeoXP Shapes.';
     }
     else if (item.data === 330) {
-        item.detail = 'GEO\\.INTERSECTION',
+        item.detail = 'GEO.INTERSECTION',
             item.documentation = 'Computes the intersection of two GeoXP Shapes.';
     }
     else if (item.data === 331) {
-        item.detail = 'GEO\\.INTERSECTS',
+        item.detail = 'GEO.INTERSECTS',
             item.documentation = 'Checks if a Geo Time Series has at least one point within a shape.';
     }
     else if (item.data === 332) {
-        item.detail = 'GEO\\.JSON',
+        item.detail = 'GEO.JSON',
             item.documentation = 'Converts a GeoJSON string into a GeoXP Shape suitable for geo filtering';
     }
     else if (item.data === 333) {
-        item.detail = 'GEO\\.UNION',
+        item.detail = 'GEO.UNION',
             item.documentation = 'Computes the union of two GeoXP Shapes.';
     }
     else if (item.data === 334) {
-        item.detail = 'GEO\\.WITHIN',
+        item.detail = 'GEO.WITHIN',
             item.documentation = 'Checks if a Geo Time Series has all its points within a shape.';
     }
     else if (item.data === 335) {
-        item.detail = 'GEO\\.WKT',
+        item.detail = 'GEO.WKT',
             item.documentation = 'Converts a Well Known Text String into a GeoXP Shape suitable for geo filtering';
     }
     else if (item.data === 336) {
@@ -3746,91 +3745,91 @@ connection.onCompletionResolve((item) => {
             item.documentation = 'Converts a macro into a reducer';
     }
     else if (item.data === 461) {
-        item.detail = 'reducer\\.and',
+        item.detail = 'reducer.and',
             item.documentation = 'Compute and between the values';
     }
     else if (item.data === 462) {
-        item.detail = 'reducer\\.and\\.exclude-nulls',
+        item.detail = 'reducer.and.exclude-nulls',
             item.documentation = 'Compute and between the values';
     }
     else if (item.data === 463) {
-        item.detail = 'reducer\\.argmax',
+        item.detail = 'reducer.argmax',
             item.documentation = 'Returns the ticks and labels for the maximum value';
     }
     else if (item.data === 464) {
-        item.detail = 'reducer\\.argmin',
+        item.detail = 'reducer.argmin',
             item.documentation = '';
     }
     else if (item.data === 465) {
-        item.detail = 'reducer\\.count',
+        item.detail = 'reducer.count',
             item.documentation = 'Return the number of values';
     }
     else if (item.data === 466) {
-        item.detail = 'reducer\\.join',
+        item.detail = 'reducer.join',
             item.documentation = 'Return a string concatenating all values';
     }
     else if (item.data === 467) {
-        item.detail = 'reducer\\.join\\.forbid-nulls',
+        item.detail = 'reducer.join.forbid-nulls',
             item.documentation = 'Return a string concatenating all values excluding nulls';
     }
     else if (item.data === 468) {
-        item.detail = 'reducer\\.max',
+        item.detail = 'reducer.max',
             item.documentation = 'Return the maximum of the values';
     }
     else if (item.data === 469) {
-        item.detail = 'reducer\\.max\\.forbid-nulls',
+        item.detail = 'reducer.max.forbid-nulls',
             item.documentation = 'Return the maximum of the values excluding nulls';
     }
     else if (item.data === 470) {
-        item.detail = 'reducer\\.mean',
+        item.detail = 'reducer.mean',
             item.documentation = 'Return the mean of the values';
     }
     else if (item.data === 471) {
-        item.detail = 'reducer\\.mean\\.exclude-nulls',
+        item.detail = 'reducer.mean.exclude-nulls',
             item.documentation = 'Return the mean of the values';
     }
     else if (item.data === 472) {
-        item.detail = 'reducer\\.median',
+        item.detail = 'reducer.median',
             item.documentation = 'Return the median of the values';
     }
     else if (item.data === 473) {
-        item.detail = 'reducer\\.min',
+        item.detail = 'reducer.min',
             item.documentation = 'Return the minimum of the values';
     }
     else if (item.data === 474) {
-        item.detail = 'reducer\\.min\\.forbid-nulls',
+        item.detail = 'reducer.min.forbid-nulls',
             item.documentation = 'Return the minimum of the values excluding nulls';
     }
     else if (item.data === 475) {
-        item.detail = 'reducer\\.or',
+        item.detail = 'reducer.or',
             item.documentation = 'Compute or between the values';
     }
     else if (item.data === 476) {
-        item.detail = 'reducer\\.or\\.exclude-nulls',
+        item.detail = 'reducer.or.exclude-nulls',
             item.documentation = 'Compute or between the values';
     }
     else if (item.data === 477) {
-        item.detail = 'reducer\\.sd',
+        item.detail = 'reducer.sd',
             item.documentation = 'Return the standard deviation of the values';
     }
     else if (item.data === 478) {
-        item.detail = 'reducer\\.shannonentropy\\.0',
+        item.detail = 'reducer.shannonentropy.0',
             item.documentation = 'Return the entropy of a sliding window. 0 if singleton.';
     }
     else if (item.data === 479) {
-        item.detail = 'reducer\\.shannonentropy\\.1',
+        item.detail = 'reducer.shannonentropy.1',
             item.documentation = 'Return the entropy of a sliding window. 1 if singleton.';
     }
     else if (item.data === 480) {
-        item.detail = 'reducer\\.sum',
+        item.detail = 'reducer.sum',
             item.documentation = 'Return the sum of the values';
     }
     else if (item.data === 481) {
-        item.detail = 'reducer\\.sum\\.forbid-nulls',
+        item.detail = 'reducer.sum.forbid-nulls',
             item.documentation = 'Return the sum of the values excluding nulls';
     }
     else if (item.data === 482) {
-        item.detail = 'reducer\\.var',
+        item.detail = 'reducer.var',
             item.documentation = 'Return the variance of the values';
     }
     else if (item.data === 483) {
@@ -3846,347 +3845,347 @@ connection.onCompletionResolve((item) => {
             item.documentation = 'Wrap a mapper to add a condition onto the number of values in the input sliding window';
     }
     else if (item.data === 486) {
-        item.detail = 'mapper\\.join',
+        item.detail = 'mapper.join',
             item.documentation = 'Push onto the stack a mapper to return the concatenation of the string representation of values separated by a separator.';
     }
     else if (item.data === 487) {
-        item.detail = 'mapper\\.npdf',
+        item.detail = 'mapper.npdf',
             item.documentation = 'Push onto the stack a mapper to compute the probability of a value within a gaussian distribution with mu/sigma.';
     }
     else if (item.data === 488) {
-        item.detail = 'mapper\\.percentile',
+        item.detail = 'mapper.percentile',
             item.documentation = 'Push onto the stack a mapper to compute the Nth percentile of the values on the interval.';
     }
     else if (item.data === 489) {
-        item.detail = 'mapper\\.truecourse',
+        item.detail = 'mapper.truecourse',
             item.documentation = 'Push onto the stack a mapper to compute the true course between points on a great circle.';
     }
     else if (item.data === 490) {
-        item.detail = 'mapper\\.and',
+        item.detail = 'mapper.and',
             item.documentation = 'Compute and between the values';
     }
     else if (item.data === 491) {
-        item.detail = 'mapper\\.count',
+        item.detail = 'mapper.count',
             item.documentation = 'Counts the number of values';
     }
     else if (item.data === 492) {
-        item.detail = 'mapper\\.delta',
+        item.detail = 'mapper.delta',
             item.documentation = 'Return the delta between the last and first values';
     }
     else if (item.data === 493) {
-        item.detail = 'mapper\\.dotproduct',
+        item.detail = 'mapper.dotproduct',
             item.documentation = 'Return the dotproduct of the values with a given LIST';
     }
     else if (item.data === 494) {
-        item.detail = 'mapper\\.dotproduct\\.positive',
+        item.detail = 'mapper.dotproduct.positive',
             item.documentation = 'Return the dotproduct of the values with a given LIST';
     }
     else if (item.data === 495) {
-        item.detail = 'mapper\\.dotproduct\\.sigmoid',
+        item.detail = 'mapper.dotproduct.sigmoid',
             item.documentation = 'Return the dotproduct of the values with a given LIST';
     }
     else if (item.data === 496) {
-        item.detail = 'mapper\\.dotproduct\\.tanh',
+        item.detail = 'mapper.dotproduct.tanh',
             item.documentation = 'Return the dotproduct of the values with a given LIST';
     }
     else if (item.data === 497) {
-        item.detail = 'mapper\\.eq',
+        item.detail = 'mapper.eq',
             item.documentation = 'Return the first value equal to a given value';
     }
     else if (item.data === 498) {
-        item.detail = 'mapper\\.first',
+        item.detail = 'mapper.first',
             item.documentation = 'Return the first value';
     }
     else if (item.data === 499) {
-        item.detail = 'mapper\\.ge',
+        item.detail = 'mapper.ge',
             item.documentation = 'Return the first value greater or equal to a given value';
     }
     else if (item.data === 500) {
-        item.detail = 'mapper\\.gt',
+        item.detail = 'mapper.gt',
             item.documentation = 'Return the first value greater than a given value';
     }
     else if (item.data === 501) {
-        item.detail = 'mapper\\.hdist',
+        item.detail = 'mapper.hdist',
             item.documentation = 'Return the horizontal distance';
     }
     else if (item.data === 502) {
-        item.detail = 'mapper\\.highest',
+        item.detail = 'mapper.highest',
             item.documentation = 'Return the value with the highest elevation';
     }
     else if (item.data === 503) {
-        item.detail = 'mapper\\.hspeed',
+        item.detail = 'mapper.hspeed',
             item.documentation = 'Return the horizontal speed';
     }
     else if (item.data === 504) {
-        item.detail = 'mapper\\.last',
+        item.detail = 'mapper.last',
             item.documentation = 'Return the last value';
     }
     else if (item.data === 505) {
-        item.detail = 'mapper\\.le',
+        item.detail = 'mapper.le',
             item.documentation = 'Return the first value lesser or equal to a given value';
     }
     else if (item.data === 506) {
-        item.detail = 'mapper\\.lowest',
+        item.detail = 'mapper.lowest',
             item.documentation = 'Return the value with the highest elevation';
     }
     else if (item.data === 507) {
-        item.detail = 'mapper\\.lt',
+        item.detail = 'mapper.lt',
             item.documentation = 'Return the first value lesser than a given value';
     }
     else if (item.data === 508) {
-        item.detail = 'mapper\\.max\\.x',
+        item.detail = 'mapper.max.x',
             item.documentation = 'Return the maximum between a constant and each value';
     }
     else if (item.data === 509) {
-        item.detail = 'mapper\\.mean',
+        item.detail = 'mapper.mean',
             item.documentation = 'Return the mean of the values';
     }
     else if (item.data === 510) {
-        item.detail = 'mapper\\.mean\\.circular',
+        item.detail = 'mapper.mean.circular',
             item.documentation = 'Pushes onto the stack a mapper suitable for computing the circular mean of values';
     }
     else if (item.data === 511) {
-        item.detail = 'mapper\\.median',
+        item.detail = 'mapper.median',
             item.documentation = 'Return the median of the values';
     }
     else if (item.data === 512) {
-        item.detail = 'mapper\\.min',
+        item.detail = 'mapper.min',
             item.documentation = 'Return the minimum of the values';
     }
     else if (item.data === 513) {
-        item.detail = 'mapper\\.min\\.x',
+        item.detail = 'mapper.min.x',
             item.documentation = 'Return the minimum between a constant and each value';
     }
     else if (item.data === 514) {
-        item.detail = 'mapper\\.ne',
+        item.detail = 'mapper.ne',
             item.documentation = 'Return the first value equal to a given value';
     }
     else if (item.data === 515) {
-        item.detail = 'mapper\\.or',
+        item.detail = 'mapper.or',
             item.documentation = 'Compute or between the values';
     }
     else if (item.data === 516) {
-        item.detail = 'mapper\\.product',
+        item.detail = 'mapper.product',
             item.documentation = 'Return the product of the values';
     }
     else if (item.data === 517) {
-        item.detail = 'mapper\\.rate',
+        item.detail = 'mapper.rate',
             item.documentation = 'Return the rate of change between the last and first values';
     }
     else if (item.data === 518) {
-        item.detail = 'mapper\\.replace',
+        item.detail = 'mapper.replace',
             item.documentation = 'Replace value with a constant';
     }
     else if (item.data === 519) {
-        item.detail = 'mapper\\.sd',
+        item.detail = 'mapper.sd',
             item.documentation = 'Return the standard deviation of the values';
     }
     else if (item.data === 520) {
-        item.detail = 'mapper\\.sum',
+        item.detail = 'mapper.sum',
             item.documentation = 'Return the sum of the values';
     }
     else if (item.data === 521) {
-        item.detail = 'mapper\\.var',
+        item.detail = 'mapper.var',
             item.documentation = 'Return the variance of the values';
     }
     else if (item.data === 522) {
-        item.detail = 'mapper\\.vdist',
+        item.detail = 'mapper.vdist',
             item.documentation = 'Return the vertical distance';
     }
     else if (item.data === 523) {
-        item.detail = 'mapper\\.vspeed',
+        item.detail = 'mapper.vspeed',
             item.documentation = 'Return the vertical speed';
     }
     else if (item.data === 524) {
-        item.detail = 'mapper\\.abs',
+        item.detail = 'mapper.abs',
             item.documentation = 'Return the absolute value of the single value in a sliding window';
     }
     else if (item.data === 525) {
-        item.detail = 'mapper\\.add',
+        item.detail = 'mapper.add',
             item.documentation = 'Add a constant to value';
     }
     else if (item.data === 526) {
-        item.detail = 'mapper\\.ceil',
+        item.detail = 'mapper.ceil',
             item.documentation = 'Round the single value in a sliding window to the closests greater LONG';
     }
     else if (item.data === 527) {
-        item.detail = 'mapper\\.day',
+        item.detail = 'mapper.day',
             item.documentation = 'Return the day of the tick for which it is computed';
     }
     else if (item.data === 528) {
-        item.detail = 'mapper\\.exp',
+        item.detail = 'mapper.exp',
             item.documentation = 'Raise a constant to the value power';
     }
     else if (item.data === 529) {
-        item.detail = 'mapper\\.floor',
+        item.detail = 'mapper.floor',
             item.documentation = 'Round the single value in a sliding window to the closests lower LONG';
     }
     else if (item.data === 530) {
-        item.detail = 'mapper\\.hour',
+        item.detail = 'mapper.hour',
             item.documentation = 'Return the hour of the tick for which it is computed';
     }
     else if (item.data === 531) {
-        item.detail = 'mapper\\.log',
+        item.detail = 'mapper.log',
             item.documentation = 'Take the log of the value';
     }
     else if (item.data === 532) {
-        item.detail = 'mapper\\.minute',
+        item.detail = 'mapper.minute',
             item.documentation = 'Return the minute of the tick for which it is computed';
     }
     else if (item.data === 533) {
-        item.detail = 'mapper\\.month',
+        item.detail = 'mapper.month',
             item.documentation = 'Return the month of the tick for which it is computed';
     }
     else if (item.data === 534) {
-        item.detail = 'mapper\\.mul',
+        item.detail = 'mapper.mul',
             item.documentation = 'Multiply the value by a constant';
     }
     else if (item.data === 535) {
-        item.detail = 'mapper\\.todouble',
+        item.detail = 'mapper.todouble',
             item.documentation = 'Convert the single value in a sliding window to DOUBLE';
     }
     else if (item.data === 536) {
-        item.detail = 'mapper\\.pow',
+        item.detail = 'mapper.pow',
             item.documentation = 'Raise the value to a constant power';
     }
     else if (item.data === 537) {
-        item.detail = 'mapper\\.round',
+        item.detail = 'mapper.round',
             item.documentation = 'Round the single value in a sliding window to the closests LONG';
     }
     else if (item.data === 538) {
-        item.detail = 'mapper\\.second',
+        item.detail = 'mapper.second',
             item.documentation = 'Return the second of the tick for which it is computed';
     }
     else if (item.data === 539) {
-        item.detail = 'mapper\\.sigmoid',
+        item.detail = 'mapper.sigmoid',
             item.documentation = 'Return the sigmoid of the single value in a sliding window';
     }
     else if (item.data === 540) {
-        item.detail = 'mapper\\.tanh',
+        item.detail = 'mapper.tanh',
             item.documentation = 'Return the hyperbolic tangent of the single value in a sliding window';
     }
     else if (item.data === 541) {
-        item.detail = 'mapper\\.tick',
+        item.detail = 'mapper.tick',
             item.documentation = 'Return the tick for which it is computed';
     }
     else if (item.data === 542) {
-        item.detail = 'mapper\\.toboolean',
+        item.detail = 'mapper.toboolean',
             item.documentation = 'Convert the single value in a sliding window to boolean';
     }
     else if (item.data === 543) {
-        item.detail = 'mapper\\.todouble',
+        item.detail = 'mapper.todouble',
             item.documentation = 'Convert the single value in a sliding window to DOUBLE';
     }
     else if (item.data === 544) {
-        item.detail = 'mapper\\.tolong',
+        item.detail = 'mapper.tolong',
             item.documentation = 'Convert the single value in a sliding window to LONG';
     }
     else if (item.data === 545) {
-        item.detail = 'mapper\\.tostring',
+        item.detail = 'mapper.tostring',
             item.documentation = 'Convert the single value in a sliding window to STRING';
     }
     else if (item.data === 546) {
-        item.detail = 'mapper\\.weekday',
+        item.detail = 'mapper.weekday',
             item.documentation = 'Return the day of the week of the tick for which it is computed';
     }
     else if (item.data === 547) {
-        item.detail = 'mapper\\.year',
+        item.detail = 'mapper.year',
             item.documentation = 'Return the year of the tick for which it is computed';
     }
     else if (item.data === 548) {
-        item.detail = 'mapper\\.kernel\\.cosine',
+        item.detail = 'mapper.kernel.cosine',
             item.documentation = 'Pushes onto the stack a mapper which applies a cosine kernel function on the sliding window.';
     }
     else if (item.data === 549) {
-        item.detail = 'mapper\\.kernel\\.epanechnikov',
+        item.detail = 'mapper.kernel.epanechnikov',
             item.documentation = 'Pushes onto the stack a mapper which applies an epanechnikov kernel function on the sliding window.';
     }
     else if (item.data === 550) {
-        item.detail = 'mapper\\.kernel\\.gaussian',
+        item.detail = 'mapper.kernel.gaussian',
             item.documentation = 'Pushes onto the stack a mapper which applies a gaussian kernel function on the sliding window.';
     }
     else if (item.data === 551) {
-        item.detail = 'mapper\\.kernel\\.logistic',
+        item.detail = 'mapper.kernel.logistic',
             item.documentation = 'Pushes onto the stack a mapper which applies a logistic kernel function on the sliding window.';
     }
     else if (item.data === 552) {
-        item.detail = 'mapper\\.kernel\\.quartic',
+        item.detail = 'mapper.kernel.quartic',
             item.documentation = 'Pushes onto the stack a mapper which applies a quartic kernel function on the sliding window.';
     }
     else if (item.data === 553) {
-        item.detail = 'mapper\\.kernel\\.silverman',
+        item.detail = 'mapper.kernel.silverman',
             item.documentation = 'Pushes onto the stack a mapper which applies a silverman kernel function on the sliding window.';
     }
     else if (item.data === 554) {
-        item.detail = 'mapper\\.kernel\\.triangular',
+        item.detail = 'mapper.kernel.triangular',
             item.documentation = 'Pushes onto the stack a mapper which applies a triangular kernel function on the sliding window.';
     }
     else if (item.data === 555) {
-        item.detail = 'mapper\\.kernel\\.tricube',
+        item.detail = 'mapper.kernel.tricube',
             item.documentation = 'Pushes onto the stack a mapper which applies a tricube kernel function on the sliding window.';
     }
     else if (item.data === 556) {
-        item.detail = 'mapper\\.kernel\\.triweight',
+        item.detail = 'mapper.kernel.triweight',
             item.documentation = 'Pushes onto the stack a mapper which applies a triweight kernel function on the sliding window.';
     }
     else if (item.data === 557) {
-        item.detail = 'mapper\\.kernel\\.uniform',
+        item.detail = 'mapper.kernel.uniform',
             item.documentation = 'Pushes onto the stack a mapper which applies a uniform kernel function on the sliding window.';
     }
     else if (item.data === 558) {
-        item.detail = 'mapper\\.kernel\\.cosine',
+        item.detail = 'mapper.kernel.cosine',
             item.documentation = 'Push onto the stack a kernel smoothing mapper using a cosine kernel.';
     }
     else if (item.data === 559) {
-        item.detail = 'mapper\\.kernel\\.epanechnikov',
+        item.detail = 'mapper.kernel.epanechnikov',
             item.documentation = 'Push onto the stack a kernel smoothing mapper using an epanechnikov kernel.';
     }
     else if (item.data === 560) {
-        item.detail = 'mapper\\.kernel\\.gaussian',
+        item.detail = 'mapper.kernel.gaussian',
             item.documentation = 'Push onto the stack a kernel smoothing mapper using a gaussian kernel.';
     }
     else if (item.data === 561) {
-        item.detail = 'mapper\\.kernel\\.logistic',
+        item.detail = 'mapper.kernel.logistic',
             item.documentation = 'Push onto the stack a kernel smoothing mapper using a logistic kernel.';
     }
     else if (item.data === 562) {
-        item.detail = 'mapper\\.kernel\\.quartic',
+        item.detail = 'mapper.kernel.quartic',
             item.documentation = 'Push onto the stack a kernel smoothing mapper using a quartic kernel.';
     }
     else if (item.data === 563) {
-        item.detail = 'mapper\\.kernel\\.silverman',
+        item.detail = 'mapper.kernel.silverman',
             item.documentation = 'Push onto the stack a kernel smoothing mapper using a silverman kernel.';
     }
     else if (item.data === 564) {
-        item.detail = 'mapper\\.kernel\\.triangular',
+        item.detail = 'mapper.kernel.triangular',
             item.documentation = 'Push onto the stack a kernel smoothing mapper using a triangular kernel.';
     }
     else if (item.data === 565) {
-        item.detail = 'mapper\\.kernel\\.tricube',
+        item.detail = 'mapper.kernel.tricube',
             item.documentation = 'Push onto the stack a kernel smoothing mapper using a tricube kernel.';
     }
     else if (item.data === 566) {
-        item.detail = 'mapper\\.kernel\\.triweight',
+        item.detail = 'mapper.kernel.triweight',
             item.documentation = 'Push onto the stack a kernel smoothing mapper using a triweight kernel.';
     }
     else if (item.data === 567) {
-        item.detail = 'mapper\\.kernel\\.uniform',
+        item.detail = 'mapper.kernel.uniform',
             item.documentation = 'Push onto the stack a kernel smoothing mapper using a uniform kernel.';
     }
     else if (item.data === 568) {
-        item.detail = 'mapper\\.geo\\.approximate',
+        item.detail = 'mapper.geo.approximate',
             item.documentation = 'Push onto the stack a mapper to approximate a location at the given resolution.';
     }
     else if (item.data === 569) {
-        item.detail = 'mapper\\.geo\\.clear',
+        item.detail = 'mapper.geo.clear',
             item.documentation = 'Push onto the stack a mapper to remove the location info from readings.';
     }
     else if (item.data === 570) {
-        item.detail = 'mapper\\.geo\\.outside',
+        item.detail = 'mapper.geo.outside',
             item.documentation = 'Filters the GTS, keeping only the points outside a geo zone';
     }
     else if (item.data === 571) {
-        item.detail = 'mapper\\.geo\\.within',
+        item.detail = 'mapper.geo.within',
             item.documentation = 'Filters the GTS, keeping only the points inside a geo zone';
     }
     else if (item.data === 572) {
@@ -4194,35 +4193,35 @@ connection.onCompletionResolve((item) => {
             item.documentation = 'Creates a filter from a macro.';
     }
     else if (item.data === 573) {
-        item.detail = 'filter\\.byclass',
+        item.detail = 'filter.byclass',
             item.documentation = 'Selects the geo time series whose class name matches the filter parameter';
     }
     else if (item.data === 574) {
-        item.detail = 'filter\\.bylabels',
+        item.detail = 'filter.bylabels',
             item.documentation = 'Selects the geo time series whose labels match the filter parameter';
     }
     else if (item.data === 575) {
-        item.detail = 'filter\\.last\\.eq',
+        item.detail = 'filter.last.eq',
             item.documentation = 'Selects the geo time series whose last value equals the filter parameter';
     }
     else if (item.data === 576) {
-        item.detail = 'filter\\.last\\.ge',
+        item.detail = 'filter.last.ge',
             item.documentation = 'Selects the geo time series whose last value is greater or equal to the filter parameter';
     }
     else if (item.data === 577) {
-        item.detail = 'filter\\.last\\.gt',
+        item.detail = 'filter.last.gt',
             item.documentation = 'Selects the geo time series whose last value is greater than the filter parameter';
     }
     else if (item.data === 578) {
-        item.detail = 'filter\\.last\\.le',
+        item.detail = 'filter.last.le',
             item.documentation = 'Selects the geo time series whose last value is less or equal to the filter parameter';
     }
     else if (item.data === 579) {
-        item.detail = 'filter\\.last\\.lt',
+        item.detail = 'filter.last.lt',
             item.documentation = 'Selects the geo time series whose last value is less than the filter parameter';
     }
     else if (item.data === 580) {
-        item.detail = 'filter\\.last\\.ne',
+        item.detail = 'filter.last.ne',
             item.documentation = 'Selects the geo time series whose last value does not equal the filter parameter';
     }
     else if (item.data === 581) {
@@ -4234,7 +4233,7 @@ connection.onCompletionResolve((item) => {
             item.documentation = 'Extract Geo Time Series which match some criteria';
     }
     else if (item.data === 583) {
-        item.detail = 'bucketizer\\.percentile',
+        item.detail = 'bucketizer.percentile',
             item.documentation = 'Push onto the stack a bucketizer which returns the xth percentile of values in the interval to bucketize.';
     }
     else if (item.data === 584) {
@@ -4242,47 +4241,47 @@ connection.onCompletionResolve((item) => {
             item.documentation = 'Converts a macro into a bucketizer';
     }
     else if (item.data === 585) {
-        item.detail = 'bucketizer\\.and',
+        item.detail = 'bucketizer.and',
             item.documentation = 'Compute and between the values of the interval';
     }
     else if (item.data === 586) {
-        item.detail = 'bucketizer\\.count',
+        item.detail = 'bucketizer.count',
             item.documentation = 'Return the number of values of the interval';
     }
     else if (item.data === 587) {
-        item.detail = 'bucketizer\\.first',
+        item.detail = 'bucketizer.first',
             item.documentation = 'Return the first value of the interval';
     }
     else if (item.data === 588) {
-        item.detail = 'bucketizer\\.join',
+        item.detail = 'bucketizer.join',
             item.documentation = 'Return a string concatenating all values';
     }
     else if (item.data === 589) {
-        item.detail = 'bucketizer\\.last',
+        item.detail = 'bucketizer.last',
             item.documentation = 'Return the last value of the interval';
     }
     else if (item.data === 590) {
-        item.detail = 'bucketizer\\.max',
+        item.detail = 'bucketizer.max',
             item.documentation = 'Return the maximum of the values of the interval';
     }
     else if (item.data === 591) {
-        item.detail = 'bucketizer\\.mean',
+        item.detail = 'bucketizer.mean',
             item.documentation = 'Return the mean of the values of the interval';
     }
     else if (item.data === 592) {
-        item.detail = 'bucketizer\\.median',
+        item.detail = 'bucketizer.median',
             item.documentation = 'Return the median of the values of the interval';
     }
     else if (item.data === 593) {
-        item.detail = 'bucketizer\\.min',
+        item.detail = 'bucketizer.min',
             item.documentation = 'Return the minimum of the values of the interval';
     }
     else if (item.data === 594) {
-        item.detail = 'bucketizer\\.or',
+        item.detail = 'bucketizer.or',
             item.documentation = 'Compute or between the values of the interval';
     }
     else if (item.data === 595) {
-        item.detail = 'bucketizer\\.sum',
+        item.detail = 'bucketizer.sum',
             item.documentation = 'Return the sum of the values of the interval';
     }
     else if (item.data === 596) {
@@ -4294,59 +4293,59 @@ connection.onCompletionResolve((item) => {
             item.documentation = 'Apply a function to a set of Geo Time Series';
     }
     else if (item.data === 598) {
-        item.detail = 'op\\.add',
+        item.detail = 'op.add',
             item.documentation = 'Produce values which are the sum of all parameter';
     }
     else if (item.data === 599) {
-        item.detail = 'op\\.and',
+        item.detail = 'op.and',
             item.documentation = 'AND operand on values of multiple Geo Time Series';
     }
     else if (item.data === 600) {
-        item.detail = 'op\\.div',
+        item.detail = 'op.div',
             item.documentation = 'Compute the division of its first parameter by the second one';
     }
     else if (item.data === 601) {
-        item.detail = 'op\\.eq',
+        item.detail = 'op.eq',
             item.documentation = 'Check values from N time Geo Time Series for equality';
     }
     else if (item.data === 602) {
-        item.detail = 'op\\.ge',
+        item.detail = 'op.ge',
             item.documentation = 'Check that values from N time series are greater opr equal to each other';
     }
     else if (item.data === 603) {
-        item.detail = 'op\\.gt',
+        item.detail = 'op.gt',
             item.documentation = 'Check that values from N time series are greater than each other';
     }
     else if (item.data === 604) {
-        item.detail = 'op\\.le',
+        item.detail = 'op.le',
             item.documentation = 'Check that values from N time series are lesser or equal to each other';
     }
     else if (item.data === 605) {
-        item.detail = 'op\\.lt',
+        item.detail = 'op.lt',
             item.documentation = 'Check that values from N time series are lesser than each other';
     }
     else if (item.data === 606) {
-        item.detail = 'op\\.mask',
+        item.detail = 'op.mask',
             item.documentation = 'Eliminate values according to a mask';
     }
     else if (item.data === 607) {
-        item.detail = 'op\\.mul',
+        item.detail = 'op.mul',
             item.documentation = 'Produce values which are the product of all parameters';
     }
     else if (item.data === 608) {
-        item.detail = 'op\\.ne',
+        item.detail = 'op.ne',
             item.documentation = 'Check values from N time Geo Time Series for inequality';
     }
     else if (item.data === 609) {
-        item.detail = 'op\\.negmask',
+        item.detail = 'op.negmask',
             item.documentation = 'Eliminate values according to a mask';
     }
     else if (item.data === 610) {
-        item.detail = 'op\\.or',
+        item.detail = 'op.or',
             item.documentation = 'OR operand on values of multiple Geo Time Series';
     }
     else if (item.data === 611) {
-        item.detail = 'op\\.sub',
+        item.detail = 'op.sub',
             item.documentation = 'Compute the difference between its first and second parameters';
     }
     else if (item.data === 612) {
