@@ -1,18 +1,82 @@
 {
-	"name": "vscode-warpscriptlangage",
-	"description": "A language server example",
-	"author": "Xavier MARIN",
+	"name": "warpscript-language",
+	"description": "Warpscript support",
+	"author": {
+		"name": "CityZen Data"
+	},
+	"icon": "images/warp10.png",
 	"license": "MIT",
 	"version": "0.0.1",
 	"publisher": "xavmarin",
 	"engines": {
-		"vscode": "^1.8.0"
+		"vscode": "^1.0.0"
 	},
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Giwi/VSCode-WarpScriptLangage"
 	},
+	"categories": [
+		"Languages"
+	],
+	"galleryBanner": {
+		"color": "#FF9900",
+        "theme": "dark"
+	},
+    "activationEvents": [
+        "onLanguage:warpscript"
+	],
+	"main": "./client/out/src/extension",
+	"contributes": {
+		"commands": [{
+            "command": "extension.execWS",
+            "title": "Run Warpscript"
+        }],
+		"languages": [
+			{
+				"id": "warpscript",
+				"aliases": [
+					"WarpScript",
+					"warpscript"
+				],
+				"extensions": [
+					"mc2"
+				],
+				"configuration": "./client/syntaxes/language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "warpscript",
+				"scopeName": "source.warpscript",
+				"path": "./client/syntaxes/warpscript.tmLanguage.json"
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "WarpScript",
+			"properties": {
+				"warpscript.Warp10URL": {
+					"scope": "resource",
+					"type": "String",
+					"default": "https://warp.cityzendata.net/api/v0/exec",
+					"description": "Warp10 URL"
+				},
+				"warpscript.trace.server": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"off",
+						"messages",
+						"verbose"
+					],
+					"default": "messages",
+					"description": "Traces the communication between VSCode and the language server."
+				}
+			}
+		}
+	},
 	"scripts": {
+        "vscode:prepublish": "npm run compile",
 		"postinstall": "cd server && npm install && cd ../client && npm install && cd ..",
 		"compile": "tsc -p client/tsconfig.json && cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
 		"compile:client": "tsc -p client/tsconfig.json",
@@ -23,6 +87,7 @@
 	"devDependencies": {
 		"@types/mocha": "^2.2.42",
 		"@types/node": "^6.0.88",
+		"vscode": "^1.1.6",
 		"typescript": "^2.5.2",
 		"@types/js-yaml": "latest",
 		"vscode-textmate": "latest",

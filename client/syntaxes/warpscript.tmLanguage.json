@@ -15,6 +15,9 @@
       "include": "#strings"
     },
     {
+      "include": "#strings2"
+    },
+    {
       "include": "#numbers"
     },
     {
@@ -59,11 +62,11 @@
 							"name": "punctuation.definition.comment.java"
 						}
 					},
-					"end": "\\*/",
+					"end": "(\\s)*\\*/",
 					"name": "comment.block.java"
 				},
 				{
-					"begin": "(^[ \\t]+)?(?=//)",
+					"begin": "(^[\\s\\t]+)?(?=//)",
 					"beginCaptures": {
 						"1": {
 							"name": "punctuation.whitespace.comment.leading.java"
@@ -72,7 +75,7 @@
 					"end": "(?!\\G)",
 					"patterns": [
 						{
-							"begin": "//",
+							"begin": "(\\s)*//",
 							"beginCaptures": {
 								"0": {
 									"name": "punctuation.definition.comment.java"
@@ -88,9 +91,102 @@
     "functions": {
       "patterns": [
         {
-          "match": "(?<!\\S)(DOUBLEEXPONENTIALSMOOTHING|EVERY|EXPM1|FINDSETS|FUSE|GROOVY|HYPOT|IMMUTABLE|JS|LOG1P|LUA|ONLYBUCKETS|PAPPLY|PFILTER|PYTHON|QCONJUGATE|QDIVIDE|QMULTIPLY|QROTATE|QROTATION|R|ROTATIONQ|R->|RUBY|STACKATTRIBUTE|->Q|ULP|max\\.tick\\.sliding\\.window|max\\.time\\.sliding\\.window|op\\.and\\.ignore-nulls|op\\.or\\.ignore-nulls|reducer\\.percentile|reducer\\.sd\\.forbid-nulls|reducer\\.var\\.forbid-nulls|Macros|SENSISION\\.EVENT|SENSISION\\.GET|SENSISION\\.SET|SENSISION\\.UPDATE|CEVAL|SYNC|JSON->|PICKLE->|TOBIN|TOBOOLEAN|TODOUBLE|TOLONG|TOSTRING|TOTIMESTAMP|CALL|CUDF|UDF|->BIN|->HEX|B64->|B64TOHEX|B64URL->|BIN->|BINTOHEX|BYTES->|FROMBIN|FROMHEX|HASH|HEX->|HEXTOB64|HEXTOBIN|JOIN|MATCH|MATCHER|OBP64->|OPB64TOHEX|REPLACE|REPLACEALL|SPLIT|SUBSTRING|TEMPLATE|->B64|->B64URL|->BYTES|TOHEX|TOLOWER|->OPB64|TOUPPER|TRIM|URLDECODE|URLENCODE|UUID|ADDDAYS|ADDMONTHS|ADDYEARS|AGO|DURATION|HUMANDURATION|ISO8601|ISODURATION|MSTU|NOTAFTER|NOTBEFORE|NOW|STU|->TSELEMENTS|TSELEMENTS|TSELEMENTS->|AESUNWRAP|AESWRAP|MD5|RSADECRYPT|RSAENCRYPT|RSAGEN|RSAPRIVATE|RSAPUBLIC|RSASIGN|RSAVERIFY|SHA1|SHA1HMAC|SHA256|SHA256HMAC|GZIP|->Z|UNGZIP|Z->|AUTHENTICATE|BOOTSTRAP|CLEAR|CLEARDEFS|CLEARSYMBOLS|CLEARTOMARK|COUNTTOMARK|CSTORE|DEBUGOFF|DEBUGON|DEF|DEPTH|DOC|DOCMODE|DROP|DROPN|DUP|DUPN|ELAPSED|EXPORT|LOAD|MARK|NDEBUGON|NOTIMINGS|PICK|RESET|REXEC|ROLL|ROLLD|ROT|RUN|SNAPSHOT|SNAPSHOTALL|SNAPSHOTALLTOMARK|SNAPSHOTTOMARK|STACKATTRIBUTE|STACKTOLIST|STORE|SWAP|TIMINGS|TYPEOF|EVALSECURE|HEADER|IDENT|JSONLOOSE|JSONSTRICT|LIMIT|MAXBUCKETS|MAXDEPTH|MAXGTS|MAXLOOP|MAXOPS|MAXSYMBOLS|NOOP|OPS|RESTORE|REV|RTFM|SAVE|SECUREKEY|TOKENINFO|UNSECURE|URLFETCH|WEBCALL|ABS|AND|^|CBRT|CEIL|COPYSIGN|DOUBLEBITS->|EXP|FLOATBITS->|FLOOR|>|IEEEREMAINDER|ISNULL|ISNaN|LBOUNDS|<<|LOG|LOG10|<|MAX|MIN|%|NBOUNDS|NEXTAFTER|NEXTUP|!|NOT|NPDF|OR|PROBABILITY|RAND|RANDPDF|REVBITS|>>|RINT|ROUND|SIGNUM|SQRT|-|->DOUBLEBITS|->FLOATBITS|>>>|->PICKLE|ACOS|ASIN|ATAN|COS|COSH|SIN|SINH|TAN|TANH|TODEGREES|TORADIANS|d|h|m|ms|ns|ps|s|us|w|COUNTER|COUNTERDELTA|COUNTERVALUE|RANGE|QCONJUGATE|QDIVIDE|QMULTIPLY|QROTATE|QROTATION|Q->|ROTATIONQ|->Q|BITCOUNT|BITGET|BITSTOBYTES|BYTESTOBITS|ASSERT|BREAK|CONTINUE|DEFINED|DEFINEDMACRO|EVAL|FAIL|FOR|FOREACH|FORSTEP|IFT|IFTE|MSGFAIL|NRETURN|RETURN|STOP|SWITCH|UNTIL|WHILE|CLONEREVERSE|CONTAINS|CONTAINSKEY|CONTAINSVALUE|FLATTEN|GET|KEYLIST|LFLATMAP|LIST->|LMAP|MAPID|MAT->|MSORT|PACK|SIZE|SUBLIST|SUBMAP|->LIST|->MAP|->MAT|->V|->VEC|UNIQUE|UNLIST|UNMAP|UNPACK|VALUELIST|VEC->|V->|ZIP|DIFFERENCE|INTERSECTION|SET|SET->|->SET|UNION|APPEND|LSORT|PUT|REMOVE|REVERSE|GEOHASH->|GEOPACK|GEOREGEXP|GEOUNPACK|GEO\\.DIFFERENCE|GEO\\.INTERSECTION|GEO\\.INTERSECTS|GEO\\.JSON|GEO\\.UNION|GEO\\.WITHIN|GEO\\.WKT|HAVERSINE|HHCODE->|->GEOHASH|->HHCODE|CHUNK|CLIP|SHRINK|TIMECLIP|TIMEMODULO|TIMESCALE|TIMESHIFT|TIMESPLIT|CORRELATE|CPROB|ISONORMALIZE|LOWESS|LTTB|MODE|MONOTONIC|MUSIGMA|NORMALIZE|NSUMSUMSQ|PROB|RLOWESS|SINGLEEXPONENTIALSMOOTHING|STANDARDIZE|TLTTB|VALUEHISTOGRAM|DWTSPLIT|FDWT|FFT|FFTAP|IDWT|IFFT|CLONE|CLONEEMPTY|COMMONTICKS|COMPACT|DEDUP|FILLTICKS|INTEGRATE|LASTSORT|MERGE|NONEMPTY|PARTITION|QUANTIZE|RANGECOMPACT|RESETS|RSORT|RVALUESORT|SORT|SORTBY|UNWRAP|VALUEDEDUP|VALUESORT|VALUESPLIT|WRAP|WRAPRAW|MAKEGTS|NEWGTS|PARSE|DELETE|FETCH|FETCHBOOLEAN|FETCHDOUBLE|FETCHLONG|FETCHSTRING|FIND|FINDSTATS|UPDATE|DISCORDS|DTW|OPTDTW|PATTERNDETECTION|PATTERNS|ZDISCORDS|ZPATTERNDETECTION|ZPATTERNS|ZSCORE|ESDTEST|GRUBBSTEST|HYBRIDTEST|HYBRIDTEST2|STLESDTEST|THRESHOLDTEST|ZSCORETEST|BBOX|COPYGEO|ELEVATIONS|LOCATIONOFFSET|LOCATIONS|LOCSTRINGS|ATTRIBUTES|LABELS|META|METASORT|NAME|PARSESELECTOR|RELABEL|RENAME|SETATTRIBUTES|TOSELECTOR|ADDVALUE|ATINDEX|ATTICK|FIRSTTICK|LASTTICK|SETVALUE|TICKINDEX|TICKLIST|TICKS|VALUES|ATBUCKET|BUCKETCOUNT|BUCKETSPAN|CROP|FILLNEXT|FILLPREVIOUS|FILLVALUE|INTERPOLATE|LASTBUCKET|STL|UNBUCKETIZE|REDUCE|MACROREDUCER|reducer\\.and|reducer\\.and\\.exclude-nulls|reducer\\.argmax|reducer\\.argmin|reducer\\.count|reducer\\.join|reducer\\.join\\.forbid-nulls|reducer\\.max|reducer\\.max\\.forbid-nulls|reducer\\.mean|reducer\\.mean\\.exclude-nulls|reducer\\.median|reducer\\.min|reducer\\.min\\.forbid-nulls|reducer\\.or|reducer\\.or\\.exclude-nulls|reducer\\.sd|reducer\\.shannonentropy\\.0|reducer\\.shannonentropy\\.1|reducer\\.sum|reducer\\.sum\\.forbid-nulls|reducer\\.var|MAP|MACROMAPPER|STRICTMAPPER|mapper\\.join|mapper\\.npdf|mapper\\.percentile|mapper\\.truecourse|mapper\\.and|mapper\\.count|mapper\\.delta|mapper\\.dotproduct|mapper\\.dotproduct\\.positive|mapper\\.dotproduct\\.sigmoid|mapper\\.dotproduct\\.tanh|mapper\\.eq|mapper\\.first|mapper\\.ge|mapper\\.gt|mapper\\.hdist|mapper\\.highest|mapper\\.hspeed|mapper\\.last|mapper\\.le|mapper\\.lowest|mapper\\.lt|mapper\\.max\\.x|mapper\\.mean|mapper\\.mean\\.circular|mapper\\.median|mapper\\.min|mapper\\.min\\.x|mapper\\.ne|mapper\\.or|mapper\\.product|mapper\\.rate|mapper\\.replace|mapper\\.sd|mapper\\.sum|mapper\\.var|mapper\\.vdist|mapper\\.vspeed|mapper\\.abs|mapper\\.add|mapper\\.ceil|mapper\\.day|mapper\\.exp|mapper\\.floor|mapper\\.hour|mapper\\.log|mapper\\.minute|mapper\\.month|mapper\\.mul|mapper\\.todouble|mapper\\.pow|mapper\\.round|mapper\\.second|mapper\\.sigmoid|mapper\\.tanh|mapper\\.tick|mapper\\.toboolean|mapper\\.todouble|mapper\\.tolong|mapper\\.tostring|mapper\\.weekday|mapper\\.year|mapper\\.kernel\\.cosine|mapper\\.kernel\\.epanechnikov|mapper\\.kernel\\.gaussian|mapper\\.kernel\\.logistic|mapper\\.kernel\\.quartic|mapper\\.kernel\\.silverman|mapper\\.kernel\\.triangular|mapper\\.kernel\\.tricube|mapper\\.kernel\\.triweight|mapper\\.kernel\\.uniform|mapper\\.kernel\\.cosine|mapper\\.kernel\\.epanechnikov|mapper\\.kernel\\.gaussian|mapper\\.kernel\\.logistic|mapper\\.kernel\\.quartic|mapper\\.kernel\\.silverman|mapper\\.kernel\\.triangular|mapper\\.kernel\\.tricube|mapper\\.kernel\\.triweight|mapper\\.kernel\\.uniform|mapper\\.geo\\.approximate|mapper\\.geo\\.clear|mapper\\.geo\\.outside|mapper\\.geo\\.within|MACROFILTER|filter\\.byclass|filter\\.bylabels|filter\\.last\\.eq|filter\\.last\\.ge|filter\\.last\\.gt|filter\\.last\\.le|filter\\.last\\.lt|filter\\.last\\.ne|MACROFILTER|FILTER|bucketizer\\.percentile|MACROBUCKETIZER|bucketizer\\.and|bucketizer\\.count|bucketizer\\.first|bucketizer\\.join|bucketizer\\.last|bucketizer\\.max|bucketizer\\.mean|bucketizer\\.median|bucketizer\\.min|bucketizer\\.or|bucketizer\\.sum|BUCKETIZE|APPLY|op\\.add|op\\.and|op\\.div|op\\.eq|op\\.ge|op\\.gt|op\\.le|op\\.lt|op\\.mask|op\\.mul|op\\.ne|op\\.negmask|op\\.or|op\\.sub|MAXLONG|MINLONG|NULL|NaN|PI|e|pi)(?!\\S)",
+          "match": "(?<!\\S)(DOUBLEEXPONENTIALSMOOTHING|EVERY|EXPM1|FINDSETS|FUSE|GROOVY|HYPOT|IMMUTABLE|JS|LOG1P|LUA|ONLYBUCKETS|PAPPLY|PFILTER|PYTHON|QCONJUGATE)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(QDIVIDE|QMULTIPLY|QROTATE|QROTATION|R|ROTATIONQ|R->|RUBY|STACKATTRIBUTE|->Q|ULP|max\\.tick\\.sliding\\.window|max\\.time\\.sliding\\.window|op\\.and\\.ignore-nulls)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(op\\.and\\.ignore-nulls|op\\.or\\.ignore-nulls|reducer\\.percentile|reducer\\.sd\\.forbid-nulls|reducer\\.var\\.forbid-nulls|Macros|SENSISION\\.EVENT|SENSISION\\.GET|SENSISION\\.SET)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(SENSISION\\.UPDATE|CEVAL|SYNC|JSON->|PICKLE->|TOBIN|TOBOOLEAN|TODOUBLE|TOLONG|TOSTRING|TOTIMESTAMP|CALL|CUDF|UDF|->BIN|->HEX|B64->|B64TOHEX|B64URL->|BIN->|BINTOHEX|BYTES->|FROMBIN|FROMHEX|HASH|HEX->|HEXTOB64|HEXTOBIN)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(JOIN|MATCH|MATCHER|OBP64->|OPB64TOHEX|REPLACE|REPLACEALL|SPLIT|SUBSTRING|TEMPLATE|->B64|->B64URL|->BYTES|TOHEX|TOLOWER|->OPB64|TOUPPER|TRIM|URLDECODE|URLENCODE|UUID|ADDDAYS|ADDMONTHS|ADDYEARS|AGO|DURATION|HUMANDURATION|ISO8601|ISODURATION|MSTU)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(NOTAFTER|NOTBEFORE|NOW|STU|->TSELEMENTS|TSELEMENTS|TSELEMENTS->|AESUNWRAP|AESWRAP|MD5|RSADECRYPT|RSAENCRYPT|RSAGEN|RSAPRIVATE|RSAPUBLIC|RSASIGN|RSAVERIFY|SHA1|SHA1HMAC|SHA256|SHA256HMAC|GZIP|->Z|UNGZIP|Z->|AUTHENTICATE|BOOTSTRAP|CLEAR|CLEARDEFS|CLEARSYMBOLS|CLEARTOMARK)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(COUNTTOMARK|CSTORE|DEBUGOFF|DEBUGON|DEF|DEPTH|DOC|DOCMODE|DROP|DROPN|DUP|DUPN|ELAPSED|EXPORT|LOAD|MARK|NDEBUGON|NOTIMINGS|PICK|RESET|REXEC|ROLL|ROLLD|ROT|RUN|SNAPSHOT|SNAPSHOTALL|SNAPSHOTALLTOMARK|SNAPSHOTTOMARK|STACKATTRIBUTE|STACKTOLIST|STORE|SWAP|TIMINGS|TYPEOF)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(EVALSECURE|HEADER|IDENT|JSONLOOSE|JSONSTRICT|LIMIT|MAXBUCKETS|MAXDEPTH|MAXGTS|MAXLOOP|MAXOPS|MAXSYMBOLS|NOOP|OPS|RESTORE|REV|RTFM|SAVE|SECUREKEY|TOKENINFO|UNSECURE|URLFETCH|WEBCALL|ABS|AND|CBRT|CEIL|COPYSIGN|DOUBLEBITS->|EXP|FLOATBITS->|FLOOR|>|IEEEREMAINDER)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(ISNULL|ISNaN|LBOUNDS|<<|LOG|LOG10|<|MAX|MIN|%|NBOUNDS|NEXTAFTER|NEXTUP|!|NOT|NPDF|OR|PROBABILITY|RAND|RANDPDF|REVBITS|>>|RINT|ROUND|SIGNUM|SQRT|-|->DOUBLEBITS|->FLOATBITS|>>>|->PICKLE|ACOS|ASIN|ATAN|COS|COSH|SIN|SINH|TAN|TANH|TODEGREES|TORADIANS|d|h|m|ms|ns|ps|s|us|w)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(COUNTER|COUNTERDELTA|COUNTERVALUE|RANGE|QCONJUGATE|QDIVIDE|QMULTIPLY|QROTATE|QROTATION|Q->|ROTATIONQ|->Q|BITCOUNT|BITGET|BITSTOBYTES|BYTESTOBITS|ASSERT|BREAK|CONTINUE|DEFINED|DEFINEDMACRO|EVAL|FAIL|FOR|FOREACH|FORSTEP|IFT|IFTE|MSGFAIL|NRETURN|RETURN|STOP|SWITCH|UNTIL|WHILE|CLONEREVERSE)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(CONTAINS|CONTAINSKEY|CONTAINSVALUE|FLATTEN|GET|KEYLIST|LFLATMAP|LIST->|LMAP|MAPID|MAT->|MSORT|PACK|SIZE|SUBLIST|SUBMAP|->LIST|->MAP|->MAT|->V|->VEC|UNIQUE|UNLIST|UNMAP|UNPACK|VALUELIST|VEC->|V->|ZIP|DIFFERENCE|INTERSECTION|SET|SET->|->SET|UNION|APPEND|LSORT|PUT|REMOVE|REVERSE|GEOHASH->|GEOPACK)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(GEOREGEXP|GEOUNPACK|GEO\\.DIFFERENCE|GEO\\.INTERSECTION|GEO\\.INTERSECTS|GEO\\.JSON|GEO\\.UNION|GEO\\.WITHIN|GEO\\.WKT|HAVERSINE|HHCODE->|->GEOHASH|->HHCODE|CHUNK|CLIP|SHRINK|TIMECLIP|TIMEMODULO|TIMESCALE|TIMESHIFT|TIMESPLIT|CORRELATE|CPROB|ISONORMALIZE|LOWESS|LTTB|MODE|MONOTONIC|MUSIGMA|NORMALIZE|NSUMSUMSQ|PROB)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(RLOWESS|SINGLEEXPONENTIALSMOOTHING|STANDARDIZE|TLTTB|VALUEHISTOGRAM|DWTSPLIT|FDWT|FFT|FFTAP|IDWT|IFFT|CLONE|CLONEEMPTY|COMMONTICKS|COMPACT|DEDUP|FILLTICKS|INTEGRATE|LASTSORT|MERGE|NONEMPTY|PARTITION|QUANTIZE|RANGECOMPACT|RESETS|RSORT|RVALUESORT|SORT|SORTBY|UNWRAP|VALUEDEDUP|VALUESORT|VALUESPLIT|WRAP|WRAPRAW|MAKEGTS)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(NEWGTS|PARSE|DELETE|FETCH|FETCHBOOLEAN|FETCHDOUBLE|FETCHLONG|FETCHSTRING|FIND|FINDSTATS|UPDATE|DISCORDS|DTW|OPTDTW|PATTERNDETECTION|PATTERNS|ZDISCORDS|ZPATTERNDETECTION|ZPATTERNS|ZSCORE|ESDTEST|GRUBBSTEST|HYBRIDTEST|HYBRIDTEST2|STLESDTEST|THRESHOLDTEST|ZSCORETEST|BBOX|COPYGEO|ELEVATIONS|LOCATIONOFFSET|LOCATIONS|LOCSTRINGS)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(ATTRIBUTES|LABELS|META|METASORT|NAME|PARSESELECTOR|RELABEL|RENAME|SETATTRIBUTES|TOSELECTOR|ADDVALUE|ATINDEX|ATTICK|FIRSTTICK|LASTTICK|SETVALUE|TICKINDEX|TICKLIST|TICKS|VALUES|ATBUCKET|BUCKETCOUNT|BUCKETSPAN|CROP|FILLNEXT|FILLPREVIOUS|FILLVALUE|INTERPOLATE|LASTBUCKET|STL|UNBUCKETIZE|REDUCE|MACROREDUCER|reducer\\.and)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(reducer\\.and\\.exclude-nulls|reducer\\.argmax|reducer\\.argmin|reducer\\.count|reducer\\.join|reducer\\.join\\.forbid-nulls|reducer\\.max|reducer\\.max\\.forbid-nulls|reducer\\.mean|reducer\\.mean\\.exclude-nulls|reducer\\.median|reducer\\.min|reducer\\.min\\.forbid-nulls|reducer\\.or|reducer\\.or\\.exclude-nulls|reducer\\.sd)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(reducer\\.shannonentropy\\.0|reducer\\.shannonentropy\\.1|reducer\\.sum|reducer\\.sum\\.forbid-nulls|reducer\\.var|MAP|MACROMAPPER|STRICTMAPPER|mapper\\.join|mapper\\.npdf|mapper\\.percentile|mapper\\.truecourse|mapper\\.and|mapper\\.count|mapper\\.delta|mapper\\.dotproduct|mapper\\.dotproduct\\.positive|mapper\\.dotproduct\\.sigmoid)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(mapper\\.dotproduct\\.tanh|mapper\\.eq|mapper\\.first|mapper\\.ge|mapper\\.gt|mapper\\.hdist|mapper\\.highest|mapper\\.hspeed|mapper\\.last|mapper\\.le|mapper\\.lowest|mapper\\.lt|mapper\\.max\\.x|mapper\\.mean|mapper\\.mean\\.circular|mapper\\.median|mapper\\.min|mapper\\.min\\.x|mapper\\.ne|mapper\\.or|mapper\\.product|mapper\\.rate|mapper\\.replace)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(mapper\\.sd|mapper\\.sum|mapper\\.var|mapper\\.vdist|mapper\\.vspeed|mapper\\.abs|mapper\\.add|mapper\\.ceil|mapper\\.day|mapper\\.exp|mapper\\.floor|mapper\\.hour|mapper\\.log|mapper\\.minute|mapper\\.month|mapper\\.mul|mapper\\.todouble|mapper\\.pow|mapper\\.round|mapper\\.second|mapper\\.sigmoid|mapper\\.tanh|mapper\\.tick|mapper\\.toboolean)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(mapper\\.todouble|mapper\\.tolong|mapper\\.tostring|mapper\\.weekday|mapper\\.year|mapper\\.kernel\\.cosine|mapper\\.kernel\\.epanechnikov|mapper\\.kernel\\.gaussian|mapper\\.kernel\\.logistic|mapper\\.kernel\\.quartic|mapper\\.kernel\\.silverman|mapper\\.kernel\\.triangular|mapper\\.kernel\\.tricube|mapper\\.kernel\\.triweight|mapper\\.kernel\\.uniform)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(mapper\\.kernel\\.cosine|mapper\\.kernel\\.epanechnikov|mapper\\.kernel\\.gaussian|mapper\\.kernel\\.logistic|mapper\\.kernel\\.quartic|mapper\\.kernel\\.silverman|mapper\\.kernel\\.triangular)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(mapper\\.kernel\\.tricube|mapper\\.kernel\\.triweight|mapper\\.kernel\\.uniform|mapper\\.geo\\.approximate|mapper\\.geo\\.clear|mapper\\.geo\\.outside|mapper\\.geo\\.within|MACROFILTER|filter\\.byclass|filter\\.bylabels|filter\\.last\\.eq)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(filter\\.last\\.ge|filter\\.last\\.gt|filter\\.last\\.le|filter\\.last\\.lt|filter\\.last\\.ne|MACROFILTER|FILTER|bucketizer\\.percentile|MACROBUCKETIZER|bucketizer\\.and|bucketizer\\.count|bucketizer\\.first|bucketizer\\.join)(?!\\S)",
+          "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(bucketizer\\.last|bucketizer\\.max|bucketizer\\.mean|bucketizer\\.median|bucketizer\\.min|bucketizer\\.or|bucketizer\\.sum|BUCKETIZE|APPLY|op\\.add|op\\.and|op\\.div|op\\.eq|op\\.ge|op\\.gt|op\\.le|op\\.lt|op\\.mask|op\\.mul|op\\.ne|op\\.negmask|op\\.or|op\\.sub|MAXLONG|MINLONG|NULL|NaN|PI|e|pi)(?!\\S)",
           "name": "entity.name.function.warpscript"
         }
+       
       ]
     },
     "operators": {
@@ -161,6 +257,17 @@
       "name": "string.quoted.double.warpscript",
       "begin": "\"",
       "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.warpscript",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "strings2": {
+      "name": "string.quoted.double.warpscript",
+      "begin": "'",
+      "end": "'",
       "patterns": [
         {
           "name": "constant.character.escape.warpscript",

@@ -5,13 +5,13 @@
 'use strict';
 
 import * as path from 'path';
-
+import * as vscode from 'vscode';
 import { workspace, ExtensionContext } from 'vscode';
 import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient';
 
 export function activate(context: ExtensionContext) {
-	console.log('[client] Congratulations, your extension "Warpscript" is now active!')
-
+	const Warp10URL = vscode.workspace.getConfiguration().get('warpscript.Warp10URL');
+	console.log('[client] Congratulations, your extension "Warpscript" is now active! ', Warp10URL)
 	// The server is implemented in node
 	let serverModule = context.asAbsolutePath(path.join('server', 'server.js'));
 	// The debug options for the server
@@ -37,9 +37,24 @@ export function activate(context: ExtensionContext) {
 	}
 	
 	// Create the language client and start the client.
-	let disposable = new LanguageClient('warpscript', 'Language Server Example', serverOptions, clientOptions).start();
+	let disposable = new LanguageClient('warpscript', 'Warpscript Language Server', serverOptions, clientOptions).start();
 	
 	// Push the disposable to the context's subscriptions so that the 
 	// client can be deactivated on extension deactivation
 	context.subscriptions.push(disposable);
+
+	let cmd = vscode.commands.registerCommand('extension.execWS', () => {
+        // The code you place here will be executed every time your command is executed
+
+        // Display a message box to the user
+		vscode.window.showInformationMessage('Hello World!');
+		var currentlyOpenTabfilePath = vscode.window.activeTextEditor.document.fileName;
+		console.log(currentlyOpenTabfilePath)
+		vscode.workspace.openTextDocument(currentlyOpenTabfilePath).then((document) => {
+			let text = document.getText();
+			console.log(text)
+		//	vscode.window.showInformationMessage(text);
+		  }); 
+    });
+	context.subscriptions.push(cmd);
 }

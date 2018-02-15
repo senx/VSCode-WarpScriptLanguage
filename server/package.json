@@ -1,6 +1,6 @@
 {
 	"name": "Warpscript",
-	"description": "Implementation of a language server in node.",
+	"description": "Warpscript support",
 	"version": "0.0.1",
 	"author": "Xavier MARIN",
 	"license": "MIT",
@@ -15,7 +15,7 @@
 		"vscode-languageserver": "^3.4.2"
 	},
 	"scripts": {
-		"installServer": "installServerIntoExtension ../client ./package.json ./tsconfig.json",
+		"installServer": "installServerIntoExtension ../client ./package.json ./tsconfig.json && cp ../client/server/server.js ../server/.",
 		"compile": "installServerIntoExtension ../client ./package.json ./tsconfig.json && tsc -p .",
 		"watch": "installServerIntoExtension ../client ./package.json ./tsconfig.json && tsc -w -p ."
 	}

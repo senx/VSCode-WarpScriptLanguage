@@ -13,13 +13,17 @@
 		"vscode": "^1.16.0"
 	},
 	"categories": [
-		"Other"
+		"Languages"
 	],
 	"activationEvents": [
 		"onLanguage:warpscript"
 	],
 	"main": "./out/src/extension.js",
 	"contributes": {
+		"commands": [{
+            "command": "extension.execWS",
+            "title": "Run Warpscript"
+        }],
 		"languages": [
 			{
 				"id": "warpscript",
@@ -33,20 +37,22 @@
 				"configuration": "./syntaxes/language-configuration.json"
 			}
 		],
-		"grammars": [{
-            "language": "warpscript",
-            "scopeName": "source.warpscript",
-            "path": "./syntaxes/warpscript.tmLanguage.json"
-        }],
+		"grammars": [
+			{
+				"language": "warpscript",
+				"scopeName": "source.warpscript",
+				"path": "./syntaxes/warpscript.tmLanguage.json"
+			}
+		],
 		"configuration": {
 			"type": "object",
-			"title": "Configuration",
+			"title": "WarpScript",
 			"properties": {
-				"warpscript.maxNumberOfProblems": {
+				"warpscript.Warp10URL": {
 					"scope": "resource",
-					"type": "number",
-					"default": 100,
-					"description": "Controls the maximum number of problems produced by the server."
+					"type": "String",
+					"default": "https://warp.cityzendata.net/api/v0:exec",
+					"description": "Warp10 URL"
 				},
 				"warpscript.trace.server": {
 					"scope": "window",
