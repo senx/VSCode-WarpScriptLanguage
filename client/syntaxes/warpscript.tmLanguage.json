@@ -233,7 +233,7 @@
       "patterns": [
         {
           "match": "\\$([A-Za-z0-9._]+)",
-          "name": "variable.parameter.warpscript"
+          "name": "constant.other.reference.link.warpscript"
         }
       ]
     },
@@ -241,7 +241,7 @@
       "patterns": [
         {
           "match": "\\@([A-Za-z0-9._]+)",
-          "name": "entity.name.filename.warpscript"
+          "name": "constant.other.reference.link.warpscript"
         }
       ]
     },

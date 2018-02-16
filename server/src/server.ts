@@ -28,6 +28,7 @@ connection.onInitialize((_params): InitializeResult => {
 		capabilities: {
 			// Tell the client that the server works in FULL text document sync mode
 			textDocumentSync: documents.syncKind,
+      //      definitionProvider: true,
 			// Tell the client that the server support code complete
 			completionProvider: {
 				resolveProvider: true
@@ -46,7 +47,15 @@ connection.onInitialize((_params): InitializeResult => {
 interface Settings {
 	warpscript: WarpscriptSettings;
 }
-
+/*
+connection.onDefinition((textDocumentIdentifier:TextDocumentIdentifier): Definition => {
+	connection.console.log(textDocumentIdentifier)
+    return Location.create(textDocumentIdentifier.uri, {
+        start: { line: 2, character: 5 },
+        end: { line: 2, character: 6 }
+    });
+});
+*/
 // These are the example settings we defined in the client's package.json
 // file
 interface WarpscriptSettings {

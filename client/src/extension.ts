@@ -10,6 +10,7 @@ import * as request from 'request';
 import { workspace, ExtensionContext, window } from 'vscode';
 import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient';
 import WSHoverProvider from './wsHoverProvider'
+import WSDocumentLinksProvider from './wsDocumentLinksProvider'
 
 export function activate(context: ExtensionContext) {
 
@@ -39,13 +40,9 @@ export function activate(context: ExtensionContext) {
 		}
 	}
 
-	// Create the language client and start the client.
-	let disposable = new LanguageClient('warpscript', 'Warpscript Language Server', serverOptions, clientOptions).start();
-
-	// Push the disposable to the context's subscriptions so that the 
-	// client can be deactivated on extension deactivation
-	context.subscriptions.push(disposable);
+	context.subscriptions.push( new LanguageClient('warpscript', 'Warpscript Language Server', serverOptions, clientOptions).start());
 	context.subscriptions.push(vscode.languages.registerHoverProvider('warpscript', new WSHoverProvider()));
+	context.subscriptions.push(vscode.languages.registerDocumentLinkProvider('warpscript', new WSDocumentLinksProvider()));
 
 	let cmd = vscode.commands.registerCommand('extension.execWS', () => {
 		let Warp10URL: string = vscode.workspace.getConfiguration().get('warpscript.Warp10URL');
@@ -63,8 +60,7 @@ export function activate(context: ExtensionContext) {
 				if (error) {
 					vscode.window.showErrorMessage(error)
 				} else {
-					vscode.window.showInformationMessage('Warpscript executed');
-					console.log(response)
+					//vscode.window.showInformationMessage('Warpscript executed');
 					outputWin.show()
 					outputWin.appendLine(new Date().toLocaleTimeString())
 					outputWin.appendLine('--- Elapsed time : ' + (+response.headers['x-warp10-elapsed'] / 100000) + ' s')

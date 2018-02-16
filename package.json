@@ -27,6 +27,13 @@
 	],
 	"main": "./client/out/src/extension",
 	"contributes": {
+		"keybindings": [
+            {
+                "command": "extension.execWS",
+                "key": "ctrl+alt+e",
+                "when": "editorFocus && !replaceActive && !searchViewletVisible && !findWidgetVisible"
+            }
+        ],
 		"commands": [
 			{
 				"command": "extension.execWS",
