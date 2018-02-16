@@ -6,7 +6,7 @@ export default class WSDocumentLinksProvider implements DocumentLinkProvider {
     private _linkPattern = /([@][^\s]+)/g;
     public static links: any = {};
 
-    public async provideDocumentLinks(document: TextDocument, token: CancellationToken): Promise<DocumentLink[]> {
+    public async provideDocumentLinks(document: TextDocument, _token: CancellationToken): Promise<DocumentLink[]> {
         const results: DocumentLink[] = []
         const text = document.getText();
         WSDocumentLinksProvider.links = {};
@@ -24,7 +24,6 @@ export default class WSDocumentLinksProvider implements DocumentLinkProvider {
             WSDocumentLinksProvider.links[pre] = doc[0].path
             results.push(new DocumentLink(new Range(linkStart, linkEnd), uri));
         }
-        console.log(WSDocumentLinksProvider.links)
         return Promise.resolve(results);
     }
 }

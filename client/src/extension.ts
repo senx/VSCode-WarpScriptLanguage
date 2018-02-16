@@ -40,7 +40,7 @@ export function activate(context: ExtensionContext) {
 		}
 	}
 
-	context.subscriptions.push( new LanguageClient('warpscript', 'Warpscript Language Server', serverOptions, clientOptions).start());
+	context.subscriptions.push(new LanguageClient('warpscript', 'Warpscript Language Server', serverOptions, clientOptions).start());
 	context.subscriptions.push(vscode.languages.registerHoverProvider('warpscript', new WSHoverProvider()));
 	context.subscriptions.push(vscode.languages.registerDocumentLinkProvider('warpscript', new WSDocumentLinksProvider()));
 
@@ -48,10 +48,23 @@ export function activate(context: ExtensionContext) {
 		let Warp10URL: string = vscode.workspace.getConfiguration().get('warpscript.Warp10URL');
 		// The code you place here will be executed every time your command is executed
 		var currentlyOpenTabfilePath = vscode.window.activeTextEditor.document.fileName;
-		console.log(currentlyOpenTabfilePath)
-		vscode.workspace.openTextDocument(currentlyOpenTabfilePath).then((document) => {
+		vscode.workspace.openTextDocument(currentlyOpenTabfilePath).then(async (document) => {
 			let text = document.getText();
-			console.log(text)
+			let macroPattern = /([@][^\s]+)/g;
+			let match: RegExpMatchArray | null;
+			while ((match = macroPattern.exec(text))) {
+				const pre = match[1];
+				let macro = WSDocumentLinksProvider.links[pre]
+				if (macro) {
+					let tdoc = await workspace.openTextDocument(vscode.Uri.parse('file:/' + macro));
+					let macroCode = tdoc.getText()
+					if (macroCode.trim().match(/[^\s]+$/)) {
+						macroCode += ' EVAL'
+					}
+					text = text.replace(pre, '\n' + macroCode + ' \n')
+
+				}
+			}
 			request.post({
 				headers: {},
 				url: Warp10URL,
@@ -60,19 +73,25 @@ export function activate(context: ExtensionContext) {
 				if (error) {
 					vscode.window.showErrorMessage(error)
 				} else {
-					//vscode.window.showInformationMessage('Warpscript executed');
 					outputWin.show()
 					outputWin.appendLine(new Date().toLocaleTimeString())
 					outputWin.appendLine('--- Elapsed time : ' + (+response.headers['x-warp10-elapsed'] / 100000) + ' s')
 					outputWin.appendLine('--- Data fetched : ' + response.headers['x-warp10-fetched'])
 					outputWin.appendLine('--- Ops count : ' + response.headers['x-warp10-ops'])
-					workspace.openTextDocument({ language: 'json' }).then(doc => {
-						window.showTextDocument(doc, vscode.window.activeTextEditor.viewColumn + 1).then(tdoc => {
-							tdoc.edit(cb => {
-								cb.insert(doc.positionAt(0), body)
+					if (response.headers['x-warp10-error-message']) {
+						let line = parseInt(response.headers['x-warp10-error-line'])
+						vscode.window.showErrorMessage('Error at line ' + line + ' : ' + response.headers['x-warp10-error-message'])
+						let p: vscode.Position = new vscode.Position(line, 0);
+						vscode.window.activeTextEditor.revealRange(new vscode.Range(p, p))
+					} else {
+						workspace.openTextDocument({ language: 'json' }).then(doc => {
+							window.showTextDocument(doc, vscode.window.activeTextEditor.viewColumn + 1).then(tdoc => {
+								tdoc.edit(cb => {
+									cb.insert(doc.positionAt(0), body)
+								})
 							})
-						})
-					});
+						});
+					}
 				}
 			});
 		});
