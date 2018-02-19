@@ -67,7 +67,7 @@
 				"warpscript.Warp10URL": {
 					"scope": "resource",
 					"type": "String",
-					"default": "https://warp.cityzendata.net/api/v0/exec",
+					"default": "https://127.0.0.1:8080/api/v0/exec",
 					"description": "Warp10 URL"
 				},
 				"warpscript.trace.server": {
