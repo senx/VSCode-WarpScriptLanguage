@@ -9,10 +9,12 @@ import * as vscode from 'vscode';
 import * as request from 'request';
 import { workspace, ExtensionContext, window } from 'vscode';
 import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient';
-import WSHoverProvider from './wsHoverProvider'
-import WSDocumentLinksProvider from './wsDocumentLinksProvider'
+import WSHoverProvider from './providers/wsHoverProvider'
+import WSDocumentLinksProvider from './providers/wsDocumentLinksProvider'
+import WSContentProvider from './providers/wsContentProvider'
 
 export function activate(context: ExtensionContext) {
+	let jsonOutput: vscode.TextDocument = undefined
 
 	let outputWin = vscode.window.createOutputChannel('GTS');
 	console.log('[client] Congratulations, your extension "Warpscript" is now active! ')
@@ -20,6 +22,7 @@ export function activate(context: ExtensionContext) {
 	let serverModule = context.asAbsolutePath(path.join('server', 'server.js'));
 	// The debug options for the server
 	let debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
+
 
 	// If the extension is launched in debug mode then the debug server options are used
 	// Otherwise the run options are used
@@ -39,13 +42,14 @@ export function activate(context: ExtensionContext) {
 			fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
 		}
 	}
-
+	let provider = new WSContentProvider()
+	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('gts-preview', provider));
 	context.subscriptions.push(new LanguageClient('warpscript', 'Warpscript Language Server', serverOptions, clientOptions).start());
 	context.subscriptions.push(vscode.languages.registerHoverProvider('warpscript', new WSHoverProvider()));
 	context.subscriptions.push(vscode.languages.registerDocumentLinkProvider('warpscript', new WSDocumentLinksProvider()));
 
 	let cmd = vscode.commands.registerCommand('extension.execWS', () => {
-		let Warp10URL: string = vscode.workspace.getConfiguration().get('warpscript.Warp10URL');
+		let Warp10URL: string = vscode.workspace.getConfiguration(null, null).get('warpscript.Warp10URL');
 		// The code you place here will be executed every time your command is executed
 		var currentlyOpenTabfilePath = vscode.window.activeTextEditor.document.fileName;
 		vscode.workspace.openTextDocument(currentlyOpenTabfilePath).then(async (document) => {
@@ -84,11 +88,29 @@ export function activate(context: ExtensionContext) {
 						let p: vscode.Position = new vscode.Position(line, 0);
 						vscode.window.activeTextEditor.revealRange(new vscode.Range(p, p))
 					} else {
-						workspace.openTextDocument({ language: 'json' }).then(doc => {
+						let p: Thenable<vscode.TextDocument>
+						if (jsonOutput) {
+							p = workspace.openTextDocument(jsonOutput.uri)
+						} else {
+							p = workspace.openTextDocument({ language: 'json' })
+						}
+
+						p.then(doc => {
+							jsonOutput = doc
+							provider.update(vscode.Uri.parse("gts-preview://authority/gts-preview"), body)
+							vscode.commands.executeCommand('vscode.previewHtml', vscode.Uri.parse("gts-preview://authority/gts-preview"), vscode.ViewColumn.Two, 'GTS Preview')
+							.then((success) => {
+								console.log(success)
+							}, (reason) => {
+								vscode.window.showErrorMessage(reason);
+							});
 							window.showTextDocument(doc, vscode.window.activeTextEditor.viewColumn + 1).then(tdoc => {
 								tdoc.edit(cb => {
+									cb.delete(new vscode.Range(new vscode.Position(0, 0), new vscode.Position(jsonOutput.lineCount, 0)))
 									cb.insert(doc.positionAt(0), body)
 								})
+							}, e => {
+								vscode.window.showErrorMessage(e)
 							})
 						});
 					}

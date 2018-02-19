@@ -1,0 +1,57 @@
+{
+    "macro": {
+		"prefix": "macro",
+		"body": [
+			"<%",
+            "\t<'",
+            "\t\tMacro documentation",
+            "\t'> DOC",
+            "\t// Macro signature",
+            "\t[  [ [ ]  [ ] ] ] SIG",
+            "\tSAVE 'context' STORE",
+            "\t// Code of the actual macro",
+            "\t\\$context RESTORE",
+            "%>",
+            "'macro' STORE",
+            "// Unit tests",
+            "\\$macro"
+        ],
+		"description": "Macro"
+    },
+    "fetch": {
+        "prefix": "fetch",
+        "body": [
+            "[ 'TOKEN' 'className'  { 'label0' '=value0'  'label1' '~val.' }  start timespan ] FETCH"
+        ]
+    },
+    "bucketize": {
+        "prefix": "bucketize",
+        "body": [
+            "[ [GTS] ... [GTS] bucketizer lastbucket bucketspan bucketcount ] BUCKETIZE"
+        ]
+    },
+    "filter": {
+        "prefix": "filter",
+        "body": [
+            "[ [GTS] ... [GTS] [labels] filter ] FILTER"
+        ]
+    },
+    "map": {
+        "prefix": "map",
+        "body": [
+            "[ [GTS] ... [GTS] mapper pre post occurrences ] MAP"
+        ]
+    },
+    "reduce": {
+        "prefix": "reduce",
+        "body": [
+            "[ [GTS] ... [GTS] [labels] reducer ] REDUCE"
+        ]
+    },
+    "apply": {
+        "prefix": "apply",
+        "body": [
+            "[ [GTS] ... [GTS] [labels] op ] APPLY"
+        ]
+    }
+}

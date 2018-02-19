@@ -1,7 +1,7 @@
 'use strict';
 
 import { HoverProvider, Hover, MarkedString, TextDocument, CancellationToken, Position } from 'vscode';
-import wsGlobals = require('./wsGlobals');
+import wsGlobals = require('../wsGlobals');
 
 export default class WSHoverProvider implements HoverProvider {
 

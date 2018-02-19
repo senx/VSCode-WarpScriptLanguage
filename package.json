@@ -27,17 +27,28 @@
 	],
 	"main": "./client/out/src/extension",
 	"contributes": {
+		"snippets": [
+			{
+				"language": "warpscript",
+				"path": "./snippets/snippets.json"
+			}
+		],
 		"keybindings": [
-            {
-                "command": "extension.execWS",
-                "key": "ctrl+alt+e",
-                "when": "editorFocus && !replaceActive && !searchViewletVisible && !findWidgetVisible"
-            }
-        ],
+			{
+				"command": "extension.execWS",
+				"key": "ctrl+alt+e",
+				"when": "editorFocus && !replaceActive && !searchViewletVisible && !findWidgetVisible"
+			}
+		],
 		"commands": [
 			{
 				"command": "extension.execWS",
-				"title": "Run Warpscript"
+				"title": "Run Warpscript",
+				"category": "Warpscript",
+				"icon": {
+					"light": "./image/run.svg",
+					"dark": "./image/run_inverse.svg"
+				}
 			}
 		],
 		"languages": [
@@ -94,13 +105,15 @@
 		"watch:server": "cd server && npm run installServer && cd .. && tsc -w -p server/tsconfig.json"
 	},
 	"devDependencies": {
-		"@types/mocha": "^2.2.42",
-		"@types/node": "^6.0.88",
-		"vscode": "^1.1.6",
-		"typescript": "^2.5.2",
 		"@types/js-yaml": "latest",
-		"vscode-textmate": "latest",
+		"@types/mocha": "^2.2.42",
+		"@types/node": "7.0.43",
+		"js-yaml": "latest",
 		"plist": "latest",
-		"js-yaml": "latest"
+		"typescript": "^2.5.2",
+		"vscode": "^1.1.10",
+		"vscode-textmate": "latest"
+	},
+	"dependencies": {
 	}
 }
