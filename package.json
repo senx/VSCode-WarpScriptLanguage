@@ -2,11 +2,11 @@
 	"name": "warpscript-language",
 	"description": "Warpscript support",
 	"author": {
-		"name": "CityZen Data"
+		"name": "Xavier MARIN"
 	},
 	"icon": "images/warp10.png",
 	"license": "MIT",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"publisher": "xavmarin",
 	"engines": {
 		"vscode": "^1.0.0"
@@ -97,7 +97,7 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
-		"postinstall": "cd server && npm install && cd ../client && npm install && cd ..",
+		"postinstall": "cd server && npm install && cd ../client && npm install && bower install && cd ..",
 		"compile": "tsc -p client/tsconfig.json && cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
 		"compile:client": "tsc -p client/tsconfig.json",
 		"watch:client": "tsc -w -p client/tsconfig.json",

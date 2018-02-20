@@ -3,27 +3,29 @@ import * as vscode from 'vscode';
 export default class WSContentProvider implements vscode.TextDocumentContentProvider {
     private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
     private content:string
-
+    constructor(
+		private context: vscode.ExtensionContext
+	) { }
     /**
-     * 
+     * /home/xavier/workspace/VSCode-WarpScriptLangage/client/images/warp10.png
      * @param sourceUri 
+     * 
      */
-    public async provideTextDocumentContent(sourceUri: vscode.Uri): Promise<string> {
-        console.log(sourceUri)
+    public async provideTextDocumentContent(): Promise<string> {
         return `
-<script src="https://cdn.cityzendata.net/quantum/current/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
-<link href="http://polygit.org/polymer+:master/components/polymer/polymer.html" rel="import">
-<link rel="import" href="https://cdn.cityzendata.net/quantum/current/bower_components/warp10-quantum-elements/quantum-plot.html">
-
-<style> body { background-color: #fff; }</style>
-    <quantum-plot
-    name="plot"
-    stack="${this.content}"
-    debug ></quantum-plot>
-    <!--   <warp10-display-chart 
-        data='${this.content}'
-        debug></warp10-display-chart>
-  <pre>${this.content}</pre> -->`
+<script src="file://${this.context.asAbsolutePath('bower_components/webcomponentsjs/webcomponents-loader.js')}"></script>
+<link rel="import" href="file://${this.context.asAbsolutePath('bower_components/shadycss/apply-shim.html')}">
+<link rel="import" href="file://${this.context.asAbsolutePath('bower_components/warp10-quantum-elements/quantum-plot.html')}">
+<style>
+    body { 
+        background-color: #fff; 
+        color: #000; 
+    } 
+    .right { 
+        display: none; background: hotpink;
+    }
+</style>
+<div class="container"><quantum-plot name="plot" stack='${this.content}'></quantum-plot></div>`
     }
 
     get onDidChange(): vscode.Event<vscode.Uri> {

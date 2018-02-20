@@ -1,6 +1,8 @@
 # VSCode Warpscript Extension
 
-Warpscript langage support
+Warpscript language support
+
+More details on [warp10.io](http://www.warp10.io)
 
 ## Features
 
@@ -10,8 +12,11 @@ Warpscript langage support
 - Hover definition
 - Link to workspace macros
 - Link macro through execution
-
-## TODO
-
-- Snipets
-- Inner macro links
+- Snippets
+  - macro
+  - mapper 
+  - bucketize
+  - reduce
+  - filter
+  - apply
+- Embeded Quantum Dataviz

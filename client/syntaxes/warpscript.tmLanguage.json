@@ -185,6 +185,10 @@
         {
           "match": "(?<!\\S)(bucketizer\\.last|bucketizer\\.max|bucketizer\\.mean|bucketizer\\.median|bucketizer\\.min|bucketizer\\.or|bucketizer\\.sum|BUCKETIZE|APPLY|op\\.add|op\\.and|op\\.div|op\\.eq|op\\.ge|op\\.gt|op\\.le|op\\.lt|op\\.mask|op\\.mul|op\\.ne|op\\.negmask|op\\.or|op\\.sub|MAXLONG|MINLONG|NULL|NaN|PI|e|pi)(?!\\S)",
           "name": "entity.name.function.warpscript"
+        },
+        {
+          "match": "(?<!\\S)(PpopStyle|PpushStyle|Parc|Pellipse|Pline|Ppoint|Pquad|Prect|Ptriangle|Curves|Pbezier|PbezierDetail|PbezierPoint|PbezierTangent|Pcurve|PcurveDetail|PcurvePoint|PcurveTangent|PcurveTightness|Pbox|Psphere|PsphereDetail|Attributes|PellipseMode|PrectMode|PstrokeCap|PstrokeJoin|PstrokeWeight|Vertex|PbeginContour|PbeginShape|PbezierVertex|PcurveVertex|PendContour|PendVertex|PquadraticVertex|Pvertex|PshapeMode|Transform|PpopMatrix|PpushMatrix|PresetMatrix|Protate|ProtateX|ProtateY|ProtateZ|Pscale|PshearX|PshearY|Ptranslate|Pbackground|Pclear|PcolorMode|Pfill|PnoFill|PnoStroke|Pstroke|Palpha|Pblue|Pbrightness|Pcolor|Pgreen|Phue|PlerpColor|Pred|Psaturation|Pimage|PimageMode|PnoTint|Ptint|Pblend|Pcopy|Pfilter|Pget|Ppixels|Pset|PupdatePixels|PblendMode|Pclip|PnoClip|PcreateFont|Ptext|PtextFont|PtextAlign|PtextLeading|PtextMode|Pencode|PtextSize|PtextWidth|PtextAscent|PtextDescent|Pconstain|Pdist|Plerp|Pmag|Pmap|Pnorm)(?!\\S)",
+          "name": "entity.name.function.warpscript"
         }
        
       ]
@@ -249,6 +253,10 @@
       "patterns": [
         {
           "match": "(?<!\\S)(-)?[0-9.]+\\b",
+          "name": "constant.numeric.warpscript"
+        },
+        {
+          "match": "(?<!\\S)0x[0-9ABCDEFabcdef]+\\b",
           "name": "constant.numeric.warpscript"
         }
       ]
