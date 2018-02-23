@@ -1,4 +1,13 @@
-# CHANGELOG
+# VSCode Warpscript Extension
+## 0.0.5
+> +  Sinppets bug fix  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/26d494150dc7c7600a1fbeb813edd9df17f98eed)*)
+> +  Readme  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/390fdd200d17a877f712069832b871da52cf7331)*)
+> +  gitignore  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/699941ff3ff4aa722ab8a37e96c3e275b3cbc4fd)*)
+> +  cleanup  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/11a92e9a2e1d64e70aa979b74f859ca973716d5d)*)
+> +  Bug fix on dataviz  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/04ade9a88c04bb19501de30456c24f09ba63dbe6)*)
+> +  adding changelog  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/a5b982b3fba46fd3c3a185a2861b3f8ec84b4f51)*)
+> +  changelog fix  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/1f534b1027c0400d4fe019920fff3042d1bafa0c)*)
+> +  Adding changelog  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/edfcfdb4d644567210d8bf883525929c45e3654b)*)
 
 ## 0.0.4
 > +  Adding snippets and dataviz  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/a5a3999c382970f5f9a4bc1eb92c3f27eed017bd)*)
@@ -19,3 +28,4 @@
 > +  Grammar fix  (*by [Xavier MARIN](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/0dc2248556ddef411afa005769ff66904eff02dc)*)
 > +  WIP  (*by [Xavier MARIN](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/f757532a39f4ac9551b76981f3dbd0128762b491)*)
 > +  some fixes  (*by [Xavier MARIN](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/6d2967c1f2cec8e06483dd32414eaf42eb5a2c3e)*)
+
