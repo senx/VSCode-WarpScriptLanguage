@@ -2,6 +2,8 @@
 
 Warpscript language support
 
+[![vsmarketplacebadge](https://vsmarketplacebadge.apphb.com/version/xavmarin.warpscript-language.svg)](https://marketplace.visualstudio.com/items?itemName=xavmarin.warpscript-language)
+
 More details on [warp10.io](http://www.warp10.io)
 
 ## Features

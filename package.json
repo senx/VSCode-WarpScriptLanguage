@@ -15,6 +15,9 @@
 		"type": "git",
 		"url": "https://github.com/Giwi/VSCode-WarpScriptLangage"
 	},
+	"bugs" : {
+		"url": "https://github.com/Giwi/VSCode-WarpScriptLangage/issues"
+	},
 	"categories": [
 		"Languages"
 	],
