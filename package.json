@@ -62,7 +62,8 @@
 					"warpscript"
 				],
 				"extensions": [
-					"mc2"
+					"mc2",
+					"ws"
 				],
 				"configuration": "./client/syntaxes/language-configuration.json"
 			}
