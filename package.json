@@ -5,7 +5,7 @@
 		"name": "Xavier MARIN"
 	},
 	"icon": "images/warp10.png",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"version": "0.0.5",
 	"publisher": "xavmarin",
 	"engines": {
@@ -15,7 +15,7 @@
 		"type": "git",
 		"url": "https://github.com/Giwi/VSCode-WarpScriptLangage"
 	},
-	"bugs" : {
+	"bugs": {
 		"url": "https://github.com/Giwi/VSCode-WarpScriptLangage/issues"
 	},
 	"categories": [
@@ -117,6 +117,5 @@
 		"vscode": "^1.1.10",
 		"vscode-textmate": "latest"
 	},
-	"dependencies": {
-	}
+	"dependencies": {}
 }

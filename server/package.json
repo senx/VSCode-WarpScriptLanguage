@@ -3,7 +3,7 @@
 	"description": "Warpscript support",
 	"version": "0.0.2",
 	"author": "Xavier MARIN",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"engines": {
 		"node": "*"
 	},
