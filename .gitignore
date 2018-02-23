@@ -3,3 +3,4 @@ out
 client/server
 .idea
 bower_components
+*.vsix
