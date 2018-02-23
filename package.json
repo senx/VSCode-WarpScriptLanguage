@@ -33,7 +33,7 @@
 		"snippets": [
 			{
 				"language": "warpscript",
-				"path": "./snippets/snippets.json"
+				"path": "./client/snippets/snippets.json"
 			}
 		],
 		"keybindings": [
