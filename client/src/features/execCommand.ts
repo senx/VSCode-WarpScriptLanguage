@@ -43,7 +43,7 @@ export default class ExecCommand {
                                 progress.report({ message: 'Parsing response' });
                                 outputWin.show()
                                 outputWin.appendLine(new Date().toLocaleTimeString())
-                                outputWin.appendLine('--- Elapsed time : ' + (+response.headers['x-warp10-elapsed'] / 100000) + ' s')
+                                outputWin.appendLine(`--- Elapsed time : ${this._formatElapsedTime(response.headers['x-warp10-elapsed'])}`)
                                 outputWin.appendLine('--- Data fetched : ' + response.headers['x-warp10-fetched'])
                                 outputWin.appendLine('--- Ops count : ' + response.headers['x-warp10-ops'])
                                 if (response.headers['x-warp10-error-message']) {
@@ -79,5 +79,17 @@ export default class ExecCommand {
                 })
             })
         }
+    }
+    private _formatElapsedTime(elapsed: number) {
+        if (elapsed < 1000) {
+            return '' + elapsed + ' ns';
+        }
+        if (elapsed < 1000000) {
+            return '' + (elapsed / 1000).toFixed(3) + ' μs';
+        }
+        if (elapsed < 1000000000) {
+            return '' + (elapsed / 1000000).toFixed(3) + ' ms';
+        }
+        return '' + (elapsed / 1000000000).toFixed(3) + ' s';
     }
 }

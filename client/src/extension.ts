@@ -6,6 +6,7 @@ import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } f
 import WSHoverProvider from './providers/wsHoverProvider'
 import WSDocumentLinksProvider from './providers/wsDocumentLinksProvider'
 import WSContentProvider from './providers/wsContentProvider'
+import WSDocumentFormattingEditProvider from './providers/wsDocumentFormattingEditProvider'
 import ExecCommand from './features/execCommand'
 
 
@@ -46,5 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(new LanguageClient('warpscript', 'Warpscript Language Server', serverOptions, clientOptions).start());
 	context.subscriptions.push(vscode.languages.registerHoverProvider('warpscript', new WSHoverProvider()));
 	context.subscriptions.push(vscode.languages.registerDocumentLinkProvider('warpscript', new WSDocumentLinksProvider()));
-	context.subscriptions.push(vscode.commands.registerCommand('extension.execWS',new ExecCommand().exec(outputWin, provider)));
+	context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', new ExecCommand().exec(outputWin, provider)));
+	new WSDocumentFormattingEditProvider();
+//	context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('warpscript', new WSDocumentFormattingEditProvider()));
 }
