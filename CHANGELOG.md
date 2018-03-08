@@ -1,4 +1,10 @@
 # VSCode Warpscript Extension
+## 0.0.6
+> +  Avoid loop on macro that refers to itself  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/ae698a64fa014c6d4674432104f4076be587ccd0)*)
+> +  bug fix elapsed time  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/01d62c82563dd941e9f497d42c13a3027c5b0ce8)*)
+> +  adding licence  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/711e8d393629a4868a2f31c2e1f7c06d279f962e)*)
+> +  changelog  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/25ec2d29a0686776716e27277b53dfd4aa107478)*)
+
 ## 0.0.5
 > +  Sinppets bug fix  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/26d494150dc7c7600a1fbeb813edd9df17f98eed)*)
 > +  Readme  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/390fdd200d17a877f712069832b871da52cf7331)*)
