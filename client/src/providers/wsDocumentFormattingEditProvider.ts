@@ -7,7 +7,7 @@ export default class WSDocumentFormattingEditProvider implements vscode.Document
   private _blockEnd = /\s*(\]|\}|%>|'>\s?)/;
 
 
-  provideDocumentFormattingEdits(document: vscode.TextDocument, options: vscode.FormattingOptions, token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
+  provideDocumentFormattingEdits(document: vscode.TextDocument, _options: vscode.FormattingOptions, _token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
     let text = document.getText()
     let match: RegExpMatchArray | null;
     let indent: number = 0
