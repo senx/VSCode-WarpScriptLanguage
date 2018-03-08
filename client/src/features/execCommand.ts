@@ -22,7 +22,7 @@ export default class ExecCommand {
                         while ((match = macroPattern.exec(text))) {
                             const pre = match[1];
                             let macro = WSDocumentLinksProvider.links[pre]
-                            if (macro) {
+                            if (macro &&  '/' + macro !== currentlyOpenTabfilePath) {
                                 let tdoc = await vscode.workspace.openTextDocument(vscode.Uri.parse('file:/' + macro));
                                 let macroCode = tdoc.getText()
                                 if (macroCode.trim().match(/[^\s]+$/)) {
@@ -38,6 +38,7 @@ export default class ExecCommand {
                         }, (error: any, response: any, body: string) => {
                             if (error) {
                                 vscode.window.showErrorMessage(error)
+                                console.error(error)
                                 return e(error)
                             } else {
                                 progress.report({ message: 'Parsing response' });
@@ -75,6 +76,10 @@ export default class ExecCommand {
                                 }
                             }
                         });
+                    }, (e: any) => {
+                        console.error(e)
+                        vscode.window.showErrorMessage(e)
+                        return e(e)
                     });
                 })
             })

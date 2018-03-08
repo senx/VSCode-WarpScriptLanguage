@@ -10,7 +10,6 @@ export default class WSDocumentFormattingEditProvider implements vscode.Document
   provideDocumentFormattingEdits(document: vscode.TextDocument, options: vscode.FormattingOptions, token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
     let text = document.getText()
     let match: RegExpMatchArray | null;
-    console.log(options, token)
     let indent: number = 0
     let doc = ''
     for (let i = 0; i < document.lineCount; i++) {

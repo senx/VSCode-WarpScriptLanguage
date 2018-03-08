@@ -6,7 +6,7 @@
 	},
 	"icon": "images/warp10.png",
 	"license": "Apache-2.0",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"publisher": "xavmarin",
 	"engines": {
 		"vscode": "^1.0.0"
@@ -81,7 +81,7 @@
 				"warpscript.Warp10URL": {
 					"scope": "resource",
 					"type": "String",
-					"default": "https://127.0.0.1:8080/api/v0/exec",
+					"default": "http://127.0.0.1:8080/api/v0/exec",
 					"description": "Warp10 URL"
 				},
 				"warpscript.trace.server": {

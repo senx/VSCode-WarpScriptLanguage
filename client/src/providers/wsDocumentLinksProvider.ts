@@ -20,9 +20,11 @@ export default class WSDocumentLinksProvider implements DocumentLinkProvider {
             const linkEnd = document.positionAt(offset + pre.length);
             macroNames.push(pre.replace('@', ''))
             const doc = await workspace.findFiles('**/' + pre.replace('@', '') + '.mc2', '**/node_modules/**', 1)
-            let uri = Uri.parse('file:/' + doc[0].path);
-            WSDocumentLinksProvider.links[pre] = doc[0].path
-            results.push(new DocumentLink(new Range(linkStart, linkEnd), uri));
+            if (doc[0]) {
+                let uri = Uri.parse('file:/' + doc[0].path);
+                WSDocumentLinksProvider.links[pre] = doc[0].path
+                results.push(new DocumentLink(new Range(linkStart, linkEnd), uri));
+            }
         }
         return Promise.resolve(results);
     }
