@@ -1,4 +1,11 @@
 # VSCode Warpscript Extension
+## 0.0.7
+> +  version bump for the Bond edition  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/34a5156ac2008c08280a4a1ba0855c291d70d8fa)*)
+> +  Avoid loop on macro substitution  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/28a321352f721a4a9e8daddea06db168cb4c6bef)*)
+> +  npm  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/9615a444f9398988f1fc43133af6c8580f67c991)*)
+> +  typo fix  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/b3767938a03279cbec7eae906dec7e74ef09ba5b)*)
+> +  changelog  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/04d8ca33ec12dbf48d6a46a3316ec8089c841dec)*)
+
 ## 0.0.6
 > +  Avoid loop on macro that refers to itself  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/ae698a64fa014c6d4674432104f4076be587ccd0)*)
 > +  bug fix elapsed time  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/01d62c82563dd941e9f497d42c13a3027c5b0ce8)*)
