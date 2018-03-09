@@ -5,7 +5,10 @@ import WSContentProvider from '../providers/wsContentProvider';
 
 export default class ExecCommand {
 
+    private _macrosLoaded:string[] = []
+
     public exec(outputWin: vscode.OutputChannel, provider: WSContentProvider): any {
+        this._macrosLoaded = []
         return () => {
             let Warp10URL: string = vscode.workspace.getConfiguration(null, null).get('warpscript.Warp10URL');
             vscode.window.withProgress<boolean>({
@@ -22,7 +25,9 @@ export default class ExecCommand {
                         while ((match = macroPattern.exec(text))) {
                             const pre = match[1];
                             let macro = WSDocumentLinksProvider.links[pre]
-                            if (macro &&  '/' + macro !== currentlyOpenTabfilePath) {
+                            if (macro &&  '/' + macro !== currentlyOpenTabfilePath && this._macrosLoaded.indexOf(macro) === -1) {
+                                console.log('found', macro)
+                                this._macrosLoaded.push(macro)
                                 let tdoc = await vscode.workspace.openTextDocument(vscode.Uri.parse('file:/' + macro));
                                 let macroCode = tdoc.getText()
                                 if (macroCode.trim().match(/[^\s]+$/)) {
