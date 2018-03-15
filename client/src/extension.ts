@@ -8,7 +8,7 @@ import WSDocumentLinksProvider from './providers/wsDocumentLinksProvider'
 import WSContentProvider from './providers/wsContentProvider'
 import WSDocumentFormattingEditProvider from './providers/wsDocumentFormattingEditProvider'
 import ExecCommand from './features/execCommand'
-
+import WSImagebase64Provider from './providers/wsImagebase64Provider'
 
 /**
  * Main extension's entrypoint
@@ -44,10 +44,12 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 	let provider = new WSContentProvider(context)
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('gts-preview', provider));
+	let imgprovider = new WSImagebase64Provider(context)
+	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('data', imgprovider))
 	context.subscriptions.push(new LanguageClient('warpscript', 'Warpscript Language Server', serverOptions, clientOptions).start());
 	context.subscriptions.push(vscode.languages.registerHoverProvider('warpscript', new WSHoverProvider()));
 	context.subscriptions.push(vscode.languages.registerDocumentLinkProvider('warpscript', new WSDocumentLinksProvider()));
-	context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', new ExecCommand().exec(outputWin, provider)));
+	context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', new ExecCommand().exec(outputWin, provider,imgprovider)));
 	new WSDocumentFormattingEditProvider();
 //	context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('warpscript', new WSDocumentFormattingEditProvider()));
 }
