@@ -6,10 +6,7 @@ import WSImagebase64Provider from '../providers/wsImagebase64Provider';
 
 export default class ExecCommand {
 
-    private _macrosLoaded: string[] = []
-
-    public exec(outputWin: vscode.OutputChannel, provider: WSContentProvider, imagebase64provider : WSImagebase64Provider): any {
-        this._macrosLoaded = []
+    public exec(outputWin: vscode.OutputChannel, provider: WSContentProvider, imagebase64provider: WSImagebase64Provider): any {
         return () => {
             let Warp10URL: string = vscode.workspace.getConfiguration(null, null).get('warpscript.Warp10URL');
             vscode.window.withProgress<boolean>({
@@ -18,25 +15,32 @@ export default class ExecCommand {
             }, (progress: vscode.Progress<{ message?: string; }>) => {
                 return new Promise((c, e) => {
                     progress.report({ message: 'Executing Warpscript on ' + Warp10URL });
-                    var currentlyOpenTabfilePath = vscode.window.activeTextEditor.document.fileName;
-                    vscode.workspace.openTextDocument(currentlyOpenTabfilePath).then(async (document: vscode.TextDocument) => {
+                    var currentlyOpenTabUri = vscode.window.activeTextEditor.document.uri;
+                    vscode.workspace.openTextDocument(currentlyOpenTabUri).then(async (document: vscode.TextDocument) => {
                         let text = document.getText();
-                        let macroPattern = /([@][^\s]+)/g;
+                        let alreadyLoadedMacros: string[] = []
+                        let macroPattern = /@([^\s]+)/g;  // Captures the macro name
                         let match: RegExpMatchArray | null;
-                        while ((match = macroPattern.exec(text))) {
-                            const pre = match[1];
-                            let macro = WSDocumentLinksProvider.links[pre]
-                            if (macro && '/' + macro !== currentlyOpenTabfilePath && this._macrosLoaded.indexOf(macro) === -1) {
-                                console.log('found', macro)
-                                this._macrosLoaded.push(macro)
-                                let tdoc = await vscode.workspace.openTextDocument(vscode.Uri.parse('file:/' + macro));
-                                let macroCode = tdoc.getText()
-                                if (macroCode.trim().match(/[^\s]+$/)) {
-                                    macroCode += ' EVAL'
+                        console.log('Looking for macros...')
+
+                        while ((match = macroPattern.exec(text))) {  // When text is modified, the search restart from the beggining.
+                            const macroName = match[1];
+                            await WSDocumentLinksProvider.getMacroURI(macroName).then(
+                                async (uri) => {
+                                    console.log('Found used macro', macroName);
+                                    if (uri !== currentlyOpenTabUri && alreadyLoadedMacros.indexOf(uri.path) === -1) {
+                                        console.log('Included macro', uri.path)
+                                        alreadyLoadedMacros.push(uri.path)
+                                        let tdoc = await vscode.workspace.openTextDocument(uri);
+                                        let macroCode = tdoc.getText()
+                                        // Prepend the macro, store it and then append the rest of the script.
+                                        text = macroCode + '\n\'' + macroName + '\' STORE\n\n' + text
+                                    }
                                 }
-                                text = text.replace(pre, '\n' + macroCode + ' \n')
-                            }
+                            );
+
                         }
+
                         request.post({
                             headers: {},
                             url: Warp10URL,
@@ -64,6 +68,7 @@ export default class ExecCommand {
                                 if (!response.headers['content-type']) { // If no content-type is specified, response is the JSON representation of the stack
                                     provider.update(vscode.Uri.parse("gts-preview://authority/gts-preview"), body)
                                     imagebase64provider.update(vscode.Uri.parse("data:image/png;base64"), body);
+
                                     vscode.commands.executeCommand('vscode.previewHtml', vscode.Uri.parse("gts-preview://authority/gts-preview"), vscode.ViewColumn.Two, 'GTS Preview')
                                         .then(() => {
                                             // nothing
@@ -72,8 +77,8 @@ export default class ExecCommand {
                                         });        
                                         
                                     vscode.workspace.openTextDocument({ language: 'json' }).then((doc: vscode.TextDocument) => {
-                                        
-                                        vscode.window.showTextDocument(doc, vscode.window.activeTextEditor.viewColumn + 1,true).then((tdoc: vscode.TextEditor) => {
+
+                                        vscode.window.showTextDocument(doc, vscode.window.activeTextEditor.viewColumn + 1, true).then((tdoc: vscode.TextEditor) => {
                                             tdoc.edit((cb: vscode.TextEditorEdit) => {
                                                 cb.insert(doc.positionAt(0), body)
                                                 progress.report({ message: 'Done' });
@@ -82,15 +87,15 @@ export default class ExecCommand {
                                             vscode.window.showErrorMessage(e)
                                             errorParam = e
                                         });
-                                        
+
                                     });
-                                    
-                                    vscode.commands.executeCommand('vscode.previewHtml',vscode.Uri.parse("data:image/png;base64"), vscode.ViewColumn.Two,'Image Preview')
+
+                                    vscode.commands.executeCommand('vscode.previewHtml', vscode.Uri.parse("data:image/png;base64"), vscode.ViewColumn.Two, 'Image Preview')
                                         .then(() => {
                                             // nothing
                                         }, (reason: any) => {
                                             vscode.window.showErrorMessage(reason)
-                                        });  
+                                        });
                                 }
 
                                 if (errorParam) {
