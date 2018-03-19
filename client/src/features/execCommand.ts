@@ -47,6 +47,7 @@ export default class ExecCommand {
                                 console.error(error)
                                 return e(error)
                             } else {
+                                let errorParam: any = null
                                 progress.report({ message: 'Parsing response' });
                                 outputWin.show()
                                 outputWin.appendLine(new Date().toLocaleTimeString())
@@ -58,8 +59,9 @@ export default class ExecCommand {
                                     vscode.window.showErrorMessage('Error at line ' + line + ' : ' + response.headers['x-warp10-error-message'])
                                     let p: vscode.Position = new vscode.Position(line, 0);
                                     vscode.window.activeTextEditor.revealRange(new vscode.Range(p, p))
-                                    return e('Error at line ' + line + ' : ' + response.headers['x-warp10-error-message'])
-                                } else {
+                                    errorParam = 'Error at line ' + line + ' : ' + response.headers['x-warp10-error-message']
+                                } 
+                                if (!response.headers['content-type']) { // If no content-type is specified, response is the JSON representation of the stack
                                     provider.update(vscode.Uri.parse("gts-preview://authority/gts-preview"), body)
                                     imagebase64provider.update(vscode.Uri.parse("data:image/png;base64"), body);
                                     vscode.commands.executeCommand('vscode.previewHtml', vscode.Uri.parse("gts-preview://authority/gts-preview"), vscode.ViewColumn.Two, 'GTS Preview')
@@ -67,9 +69,7 @@ export default class ExecCommand {
                                             // nothing
                                         }, (reason: any) => {
                                             vscode.window.showErrorMessage(reason)
-                                        });
-
-         
+                                        });        
                                         
                                     vscode.workspace.openTextDocument({ language: 'json' }).then((doc: vscode.TextDocument) => {
                                         
@@ -77,11 +77,10 @@ export default class ExecCommand {
                                             tdoc.edit((cb: vscode.TextEditorEdit) => {
                                                 cb.insert(doc.positionAt(0), body)
                                                 progress.report({ message: 'Done' });
-                                                return c(true)
                                             })
                                         }, (e: any) => {
                                             vscode.window.showErrorMessage(e)
-                                            return e(e)
+                                            errorParam = e
                                         });
                                         
                                     });
@@ -92,6 +91,12 @@ export default class ExecCommand {
                                         }, (reason: any) => {
                                             vscode.window.showErrorMessage(reason)
                                         });  
+                                }
+
+                                if (errorParam) {
+                                    e(errorParam)
+                                } else {
+                                    c(true)
                                 }
                             }
                         });
