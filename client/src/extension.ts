@@ -44,7 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 	let provider = new WSContentProvider(context)
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('gts-preview', provider));
-	let imgprovider = new WSImagebase64Provider(context)
+	let imgprovider = new WSImagebase64Provider()
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('data', imgprovider))
 	context.subscriptions.push(new LanguageClient('warpscript', 'Warpscript Language Server', serverOptions, clientOptions).start());
 	context.subscriptions.push(vscode.languages.registerHoverProvider('warpscript', new WSHoverProvider()));
