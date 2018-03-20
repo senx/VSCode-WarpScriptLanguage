@@ -10,17 +10,15 @@ export default class WSDocumentLinksProvider implements DocumentLinkProvider {
         const text = document.getText();
         this._linkPattern.lastIndex = 0;
         let match: RegExpMatchArray | null;
-        let macroNames = []
         while ((match = this._linkPattern.exec(text))) {
             const macroLinkName = match[0];
             const macroName = match[1];
             const offset = match.index;
             const linkStart = document.positionAt(offset);
             const linkEnd = document.positionAt(offset + macroLinkName.length);
-            macroNames.push(macroName)
             await WSDocumentLinksProvider.getMacroURI(macroName).then(
                 (uri) => results.push(new DocumentLink(new Range(linkStart, linkEnd), uri))
-            );
+            ).catch( () => { /* Ignore missing macros */ } );
         }
         return Promise.resolve(results);
     }
@@ -31,8 +29,9 @@ export default class WSDocumentLinksProvider implements DocumentLinkProvider {
             if (doc[0]) {
                 let uri = Uri.parse('file:/' + doc[0].path);
                 resolve(uri);
+            } else {
+                reject(macroName);
             }
-            reject();
         });
     }
 }
