@@ -282,6 +282,17 @@
           "match": "\\\\."
         }
       ]
+    },
+    "strings3": {
+      "name": "string.quoted.double.warpscript",
+      "begin": "<'",
+      "end": "'>",
+      "patterns": [
+        {
+          "name": "constant.character.escape.warpscript",
+          "match": "\\\\."
+        }
+      ]
     }
   },
   "scopeName": "source.warpscript"
