@@ -23,3 +23,8 @@ More details on [warp10.io](http://www.warp10.io)
   - filter
   - apply
 - Embeded Quantum Dataviz
+
+## How to run 
+
+  yarn install
+  npm compile

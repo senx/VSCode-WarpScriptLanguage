@@ -1,4 +1,11 @@
 # VSCode Warpscript Extension
+## 0.0.9
+> +  version bump  (*by [Xavier MARIN](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/65ccd295891ea48d48c919c6e4afdeea6a90a0e5)*)
+> +  yarn and README update  (*by [Xavier MARIN](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/c66fe948f0bf6d612498f50ab81a9de064f8f8c4)*)
+> +  Merge pull request #5 from ftence/linkPromise  (*by [GitHub](mailto:noreply@github.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/30464eab62333cd54814a10ee12941d82358fe37)*)
+> +  Added catch to handle unknow links.  (*by [Fabien Tencé](mailto:fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/1f5ca68d7bca337b9c19ccebd003cb9f74b4190a)*)
+> +  version bump  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/7398e311bb481649a62e447808ce077794660488)*)
+
 ## 0.0.8
 > +  typo fix  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/1456e6bc675ab858a27cf23ea94e0053f68eb008)*)
 > +  Merge pull request #4 from ftence/localMacros  (*by [GitHub](mailto:noreply@github.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/ad1af7eeb402b4683b1f1f3a4b9d41bd07ba221a)*)
