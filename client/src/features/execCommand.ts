@@ -37,6 +37,8 @@ export default class ExecCommand {
                                         text = macroCode + '\n\'' + macroName + '\' STORE\n\n' + text
                                     }
                                 }
+                            ).catch(
+                                () => { /* Ignore missing macros */ }
                             );
 
                         }
