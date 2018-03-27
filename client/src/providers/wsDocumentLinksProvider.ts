@@ -27,7 +27,7 @@ export default class WSDocumentLinksProvider implements DocumentLinkProvider {
         return new Promise<Uri>(async (resolve, reject) => {
             const doc = await workspace.findFiles('**/' + macroName + '.mc2', '**/node_modules/**', 1)
             if (doc[0]) {
-                let uri = Uri.parse('file:/' + doc[0].path);
+                let uri = Uri.parse('file://' + doc[0].path);
                 resolve(uri);
             } else {
                 reject(macroName);
