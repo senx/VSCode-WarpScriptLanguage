@@ -80,7 +80,7 @@ export default class ExecCommand {
                                         
                                     vscode.workspace.openTextDocument({ language: 'json' }).then((doc: vscode.TextDocument) => {
 
-                                        vscode.window.showTextDocument(doc, vscode.window.activeTextEditor.viewColumn + 1, true).then((tdoc: vscode.TextEditor) => {
+                                        vscode.window.showTextDocument(doc, vscode.ViewColumn.Two, true).then((tdoc: vscode.TextEditor) => {
                                             tdoc.edit((cb: vscode.TextEditorEdit) => {
                                                 cb.insert(doc.positionAt(0), body)
                                                 progress.report({ message: 'Done' });
