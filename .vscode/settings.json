@@ -11,5 +11,10 @@
 		"out": false
 	},
 	"typescript.tsdk": "./node_modules/typescript/lib",
-	"typescript.tsc.autoDetect": "off"
+	"typescript.tsc.autoDetect": "off",
+	"spellright.language": "fr",
+	"spellright.documentTypes": [
+		"latex",
+		"plaintext"
+	]
 }
