@@ -18,6 +18,9 @@
       "include": "#strings2"
     },
     {
+      "include": "#strings3"
+    },
+    {
       "include": "#numbers"
     },
     {
@@ -50,7 +53,7 @@
 				},
 				{
 					"include": "#comments-inline"
-				}
+        }
 			]
 		},
 		"comments-inline": {
