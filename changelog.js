@@ -1,5 +1,7 @@
 const { execSync } = require('child_process');
-let lastTags = execSync('git tag | head -n 20 | sort -u -r').toString().split('\n')
+let lastTags = execSync('git tag | head -n 20').toString().split('\n').map( a => a.split('.').map( n => +n+100000 ).join('.') ).sort()
+.map( a => a.split('.').map( n => +n-100000 ).join('.') ).reverse();
+
 lastTags[lastTags.length - 1] = execSync('git rev-list --max-parents=0 HEAD').toString()
 let changelog = {}
 
