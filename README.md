@@ -24,7 +24,9 @@ More details on [warp10.io](http://www.warp10.io)
   - apply
 - Embeded Quantum Dataviz
 
-## How to run 
+## How to run 
 
-  yarn install
-  npm compile
+```bash
+yarn install
+npm compile
+```
