@@ -1,4 +1,21 @@
 # VSCode Warpscript Extension
+## 0.0.11
+> +  changelog  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/f42c2f5505e160948c556cd601f5406ce03d3c2c)*)
+
+## 0.0.11
+> +  changelog  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/f42c2f5505e160948c556cd601f5406ce03d3c2c)*)
+
+## 0.0.10
+> +  multiline strings  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/096b10e00c746581ab3eed71f49e61b806694b4a)*)
+> +  Merge pull request #7 from ftence/colTwo  (*by [GitHub](mailto:noreply@github.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/45e53d84e4116d920df441d04ed80cc56e880dc3)*)
+> +  Force JSON to be opened in column two to avoid undefined and to be consistent with other visu.  (*by [Fabien Tencé](mailto:fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/495b112c775e7a94d2ecc62ca3aef9339a65928c)*)
+> +  Merge pull request #6 from ftence/missingSlash  (*by [GitHub](mailto:noreply@github.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/cce11c390e7ed6f01afe08e7327495e7dc722258)*)
+> +  Missing / made VS code not detecting changes done to a local referenced macro.  (*by [Fabien Tencé](mailto:fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/434867c08195ae7bb3d021a5bc5be14c22956a25)*)
+> +  merge  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/8190a1aa711406f1ecfc074e91cb8a7637f1b273)*)
+> +  multiline comments  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/069dd9ceba95cbc825a76f772327847073bd59f3)*)
+> +  changelog  (*by [Xavier MARIN](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/be8a18446ebac0e17b50a8385bd3e2cee070888b)*)
+> +  changelog  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/264d8d22237cc2d0a5e33fb2695cbc89322644ab)*)
+
 ## 0.0.10
 > +  multiline strings  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/096b10e00c746581ab3eed71f49e61b806694b4a)*)
 > +  Merge pull request #7 from ftence/colTwo  (*by [GitHub](mailto:noreply@github.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/45e53d84e4116d920df441d04ed80cc56e880dc3)*)
@@ -17,6 +34,13 @@
 > +  Added catch to handle unknow links.  (*by [Fabien Tencé](mailto:fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/1f5ca68d7bca337b9c19ccebd003cb9f74b4190a)*)
 > +  version bump  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/7398e311bb481649a62e447808ce077794660488)*)
 
+## 0.0.9
+> +  version bump  (*by [Xavier MARIN](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/65ccd295891ea48d48c919c6e4afdeea6a90a0e5)*)
+> +  yarn and README update  (*by [Xavier MARIN](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/c66fe948f0bf6d612498f50ab81a9de064f8f8c4)*)
+> +  Merge pull request #5 from ftence/linkPromise  (*by [GitHub](mailto:noreply@github.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/30464eab62333cd54814a10ee12941d82358fe37)*)
+> +  Added catch to handle unknow links.  (*by [Fabien Tencé](mailto:fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/1f5ca68d7bca337b9c19ccebd003cb9f74b4190a)*)
+> +  version bump  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/7398e311bb481649a62e447808ce077794660488)*)
+
 ## 0.0.8
 > +  typo fix  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/1456e6bc675ab858a27cf23ea94e0053f68eb008)*)
 > +  Merge pull request #4 from ftence/localMacros  (*by [GitHub](mailto:noreply@github.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/ad1af7eeb402b4683b1f1f3a4b9d41bd07ba221a)*)
@@ -26,6 +50,23 @@
 > +  Merge pull request #2 from pi-r-p/master  (*by [GitHub](mailto:noreply@github.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/869fad49422ae01cfbf112f630b278f188fd8964)*)
 > +  Display images in base64 in an image preview tab  (*by [PAP1](mailto:pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/a49acf09b1e6b1f69f6d8d73928502dfcc1f9fe9)*)
 > +  changelog  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/48f3c719cbb6625cc364a4ebb68232323c1f8376)*)
+
+## 0.0.8
+> +  typo fix  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/1456e6bc675ab858a27cf23ea94e0053f68eb008)*)
+> +  Merge pull request #4 from ftence/localMacros  (*by [GitHub](mailto:noreply@github.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/ad1af7eeb402b4683b1f1f3a4b9d41bd07ba221a)*)
+> +  Fixed and enhanced the local referencing macros feature.  (*by [Fabien Tencé](mailto:fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/1e9e7a1d3fe6b0efc44f4a436aa3148d0d8114d3)*)
+> +  Merge pull request #3 from ftence/debugonstack  (*by [GitHub](mailto:noreply@github.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/ab58ea6af68e9a4d718d09875edf3bd9b82e916b)*)
+> +  Fix to display the stack even if there is an error when DEBUGONit used.  (*by [Fabien Tencé](mailto:fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/fa77247a20074f2bc58f688694aeff0d70cde130)*)
+> +  Merge pull request #2 from pi-r-p/master  (*by [GitHub](mailto:noreply@github.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/869fad49422ae01cfbf112f630b278f188fd8964)*)
+> +  Display images in base64 in an image preview tab  (*by [PAP1](mailto:pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/a49acf09b1e6b1f69f6d8d73928502dfcc1f9fe9)*)
+> +  changelog  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/48f3c719cbb6625cc364a4ebb68232323c1f8376)*)
+
+## 0.0.7
+> +  version bump for the Bond edition  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/34a5156ac2008c08280a4a1ba0855c291d70d8fa)*)
+> +  Avoid loop on macro substitution  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/28a321352f721a4a9e8daddea06db168cb4c6bef)*)
+> +  npm  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/9615a444f9398988f1fc43133af6c8580f67c991)*)
+> +  typo fix  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/b3767938a03279cbec7eae906dec7e74ef09ba5b)*)
+> +  changelog  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/04d8ca33ec12dbf48d6a46a3316ec8089c841dec)*)
 
 ## 0.0.7
 > +  version bump for the Bond edition  (*by [Xavier Marin](mailto:marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/34a5156ac2008c08280a4a1ba0855c291d70d8fa)*)
