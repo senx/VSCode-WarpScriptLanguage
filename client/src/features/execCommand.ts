@@ -5,7 +5,6 @@ import WSContentProvider from '../providers/wsContentProvider';
 import WSImagebase64Provider from '../providers/wsImagebase64Provider';
 
 export default class ExecCommand {
-
     public exec(outputWin: vscode.OutputChannel, provider: WSContentProvider, imagebase64provider: WSImagebase64Provider): any {
         return () => {
             let Warp10URL: string = vscode.workspace.getConfiguration(null, null).get('warpscript.Warp10URL');
@@ -42,10 +41,10 @@ export default class ExecCommand {
                             );
 
                         }
-
                         request.post({
                             headers: {},
-                            url: Warp10URL,
+                            url: Warp10URL, 
+                            gzip: true,
                             body: text
                         }, (error: any, response: any, body: string) => {
                             if (error) {
@@ -79,7 +78,6 @@ export default class ExecCommand {
                                         });        
                                         
                                     vscode.workspace.openTextDocument({ language: 'json' }).then((doc: vscode.TextDocument) => {
-
                                         vscode.window.showTextDocument(doc, vscode.ViewColumn.Two, true).then((tdoc: vscode.TextEditor) => {
                                             tdoc.edit((cb: vscode.TextEditorEdit) => {
                                                 cb.insert(doc.positionAt(0), body)
