@@ -3,6 +3,7 @@ import * as request from 'request';
 import WSDocumentLinksProvider from '../providers/wsDocumentLinksProvider';
 import WSContentProvider from '../providers/wsContentProvider';
 import WSImagebase64Provider from '../providers/wsImagebase64Provider';
+import { Uri } from 'vscode';
 
 export default class ExecCommand {
     public exec(outputWin: vscode.OutputChannel, provider: WSContentProvider, imagebase64provider: WSImagebase64Provider): any {
@@ -17,9 +18,10 @@ export default class ExecCommand {
                     var currentlyOpenTabUri = vscode.window.activeTextEditor.document.uri;
                     vscode.workspace.openTextDocument(currentlyOpenTabUri).then(async (document: vscode.TextDocument) => {
                         let text = document.getText();
-                        let alreadyLoadedMacros: string[] = []
                         let macroPattern = /@([^\s]+)/g;  // Captures the macro name
                         let match: RegExpMatchArray | null;
+                        let lines: number[] = [document.lineCount]
+                        let uris: string[] = [document.uri.toString()]
                         console.log('Looking for macros...')
 
                         while ((match = macroPattern.exec(text))) {  // When text is modified, the search restart from the beggining.
@@ -27,13 +29,15 @@ export default class ExecCommand {
                             await WSDocumentLinksProvider.getMacroURI(macroName).then(
                                 async (uri) => {
                                     console.log('Found used macro', macroName);
-                                    if (uri !== currentlyOpenTabUri && alreadyLoadedMacros.indexOf(uri.path) === -1) {
+                                    if (uris.indexOf(uri.toString()) === -1) {
                                         console.log('Included macro', uri.path)
-                                        alreadyLoadedMacros.push(uri.path)
                                         let tdoc = await vscode.workspace.openTextDocument(uri);
                                         let macroCode = tdoc.getText()
                                         // Prepend the macro, store it and then append the rest of the script.
                                         text = macroCode + '\n\'' + macroName + '\' STORE\n\n' + text
+                                        // Update lines and uris references
+                                        lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
+                                        uris.unshift(uri.toString());
                                     }
                                 }
                             ).catch(
@@ -43,10 +47,10 @@ export default class ExecCommand {
                         }
                         request.post({
                             headers: {},
-                            url: Warp10URL, 
+                            url: Warp10URL,
                             gzip: true,
                             body: text
-                        }, (error: any, response: any, body: string) => {
+                        }, async (error: any, response: any, body: string) => {
                             if (error) {
                                 vscode.window.showErrorMessage(error)
                                 console.error(error)
@@ -61,11 +65,29 @@ export default class ExecCommand {
                                 outputWin.appendLine('--- Ops count : ' + response.headers['x-warp10-ops'])
                                 if (response.headers['x-warp10-error-message']) {
                                     let line = parseInt(response.headers['x-warp10-error-line'])
-                                    vscode.window.showErrorMessage('Error at line ' + line + ' : ' + response.headers['x-warp10-error-message'])
-                                    let p: vscode.Position = new vscode.Position(line, 0);
-                                    vscode.window.activeTextEditor.revealRange(new vscode.Range(p, p))
-                                    errorParam = 'Error at line ' + line + ' : ' + response.headers['x-warp10-error-message']
-                                } 
+                                    let fileInError;
+                                    let lineInError = line;
+                                    for (var i = 0; i < lines.length; i++) {
+                                        if (lineInError <= lines[i]) {
+                                            fileInError = uris[i];
+                                            break;
+                                        }
+                                        else {
+                                            lineInError -= lines[i];
+                                        }
+                                    }
+                                    errorParam = 'Error in file ' + fileInError + ' at line ' + lineInError + ' : ' + response.headers['x-warp10-error-message'];
+                                    vscode.window.showErrorMessage(errorParam, { title: 'Show line', id: "show"}).then(item => {
+                                        if (item.id === 'show') {
+                                            vscode.window.showTextDocument(Uri.parse(uris[i]),
+                                                {
+                                                    preserveFocus: true,
+                                                    viewColumn: vscode.ViewColumn.One,
+                                                    selection: new vscode.Range(lineInError - 1, 0, lineInError - 1, 99999)
+                                                });
+                                        }
+                                    });
+                                }
                                 if (!response.headers['content-type']) { // If no content-type is specified, response is the JSON representation of the stack
                                     provider.update(vscode.Uri.parse("gts-preview://authority/gts-preview"), body)
                                     imagebase64provider.update(vscode.Uri.parse("data:image/png;base64"), body);
@@ -75,8 +97,8 @@ export default class ExecCommand {
                                             // nothing
                                         }, (reason: any) => {
                                             vscode.window.showErrorMessage(reason)
-                                        });        
-                                        
+                                        });
+
                                     vscode.workspace.openTextDocument({ language: 'json' }).then((doc: vscode.TextDocument) => {
                                         vscode.window.showTextDocument(doc, vscode.ViewColumn.Two, true).then((tdoc: vscode.TextEditor) => {
                                             tdoc.edit((cb: vscode.TextEditorEdit) => {
