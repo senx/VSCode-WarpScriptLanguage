@@ -4,6 +4,7 @@ import WSDocumentLinksProvider from '../providers/wsDocumentLinksProvider';
 import { Uri } from 'vscode';
 import fs = require('fs');
 import os = require('os');
+import zlib = require("zlib");
 
 export default class ExecCommand {
 
@@ -55,97 +56,100 @@ export default class ExecCommand {
                             () => { /* Ignore missing macros */ }
                         );
                     }
-                    request.post({
-                        headers: {},
-                        url: Warp10URL,
-                        gzip: true,
-                        timeout: 3600000, // 1 hour
-                        body: executedWarpScript
-                    }, async (error: any, response: any, body: string) => {
-                        if (error) {
-                            vscode.window.showErrorMessage(error.message)
-                            console.error(error)
-                            return e(error)
-                        } else {
-                            let errorParam: any = null
-                            progress.report({ message: 'Parsing response' });
+                    // Gzip the script before sending it.
+                    zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
+                        request.post({
+                            headers: { 'Content-Type': 'application/gzip', 'Transfer-Encoding': 'chunked' },
+                            url: Warp10URL,
+                            gzip: true,
+                            timeout: 3600000, // 1 hour
+                            body: gzipWarpScript
+                        }, async (error: any, response: any, body: string) => {
+                            if (error) {
+                                vscode.window.showErrorMessage(error.message)
+                                console.error(error)
+                                return e(error)
+                            } else {
+                                let errorParam: any = null
+                                progress.report({ message: 'Parsing response' });
 
-                            if (response.headers['x-warp10-error-message']) {
-                                let line = parseInt(response.headers['x-warp10-error-line'])
-                                let fileInError;
-                                let lineInError = line;
-                                for (var i = 0; i < lines.length; i++) {
-                                    if (lineInError <= lines[i]) {
-                                        fileInError = uris[i];
-                                        break;
-                                    }
-                                    else {
-                                        lineInError -= lines[i];
-                                    }
-                                }
-                                errorParam = 'Error in file ' + fileInError + ' at line ' + lineInError + ' : ' + response.headers['x-warp10-error-message'];
-
-                                outputWin.show();
-                                outputWin.append('[' + execDate + '] ');
-                                outputWin.append('ERROR ');
-                                outputWin.append(Uri.parse(uris[i]).fsPath + ':' + lineInError);
-                                outputWin.appendLine(' ' + response.headers['x-warp10-error-message']);
-                            }
-                            if (!response.headers['content-type']) { // If no content-type is specified, response is the JSON representation of the stack
-
-                                // Generate unique filenames, ordered by execution order.
-                                let uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
-                                let wsFilename = os.tmpdir() + '/' + uuid + '.mc2';
-                                let jsonFilename = os.tmpdir() + '/' + uuid + '.json';
-
-                                // Save executed warpscript
-                                fs.unlink(wsFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
-                                    fs.writeFile(wsFilename, executedWarpScript, { mode: 0o0400 }, function (err) {
-                                        if (err) {
-                                            vscode.window.showErrorMessage(err.message);
-                                        }
-                                    });
-                                });
-
-
-                                // Save resulting JSON
-                                fs.unlink(jsonFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
-                                    fs.writeFile(jsonFilename, body, { mode: 0o0400 }, function (err) {
-                                        if (err) {
-                                            vscode.window.showErrorMessage(err.message);
-                                            errorParam = err.message;
+                                if (response.headers['x-warp10-error-message']) {
+                                    let line = parseInt(response.headers['x-warp10-error-line'])
+                                    let fileInError;
+                                    let lineInError = line;
+                                    for (var i = 0; i < lines.length; i++) {
+                                        if (lineInError <= lines[i]) {
+                                            fileInError = uris[i];
+                                            break;
                                         }
                                         else {
-                                            // Display JSON result
-                                            vscode.workspace.openTextDocument(jsonFilename).then((doc: vscode.TextDocument) => {
-                                                vscode.window.showTextDocument(doc, { viewColumn: vscode.ViewColumn.Two, preview: true, preserveFocus: false }).then(
-                                                    () => {
-                                                        progress.report({ message: 'Done' });
-                                                    },
-                                                    (err: any) => {
-                                                        vscode.window.showErrorMessage(err.message);
-                                                        errorParam = err;
-                                                    });
-                                            });
+                                            lineInError -= lines[i];
                                         }
-                                    });
-                                });
+                                    }
+                                    errorParam = 'Error in file ' + fileInError + ' at line ' + lineInError + ' : ' + response.headers['x-warp10-error-message'];
 
-                                outputWin.show();
-                                outputWin.append('[' + execDate + '] ');
-                                outputWin.append('file://' + wsFilename);
-                                outputWin.append(' => ' + 'file://' + jsonFilename);
-                                outputWin.append(' ' + ExecCommand.formatElapsedTime(response.headers['x-warp10-elapsed']));
-                                outputWin.append(' ' + ExecCommand.pad(response.headers['x-warp10-fetched'], 10, ' ') + ' fetched ');
-                                outputWin.append(ExecCommand.pad(response.headers['x-warp10-ops'], 10, ' ') + ' ops ');
-                                outputWin.appendLine(ExecCommand.pad(baseFilename, 23, ' '));
+                                    outputWin.show();
+                                    outputWin.append('[' + execDate + '] ');
+                                    outputWin.append('ERROR ');
+                                    outputWin.append(Uri.parse(uris[i]).fsPath + ':' + lineInError);
+                                    outputWin.appendLine(' ' + response.headers['x-warp10-error-message']);
+                                }
+                                if (!response.headers['content-type']) { // If no content-type is specified, response is the JSON representation of the stack
+
+                                    // Generate unique filenames, ordered by execution order.
+                                    let uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
+                                    let wsFilename = os.tmpdir() + '/' + uuid + '.mc2';
+                                    let jsonFilename = os.tmpdir() + '/' + uuid + '.json';
+
+                                    // Save executed warpscript
+                                    fs.unlink(wsFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
+                                        fs.writeFile(wsFilename, executedWarpScript, { mode: 0o0400 }, function (err) {
+                                            if (err) {
+                                                vscode.window.showErrorMessage(err.message);
+                                            }
+                                        });
+                                    });
+
+
+                                    // Save resulting JSON
+                                    fs.unlink(jsonFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
+                                        fs.writeFile(jsonFilename, body, { mode: 0o0400 }, function (err) {
+                                            if (err) {
+                                                vscode.window.showErrorMessage(err.message);
+                                                errorParam = err.message;
+                                            }
+                                            else {
+                                                // Display JSON result
+                                                vscode.workspace.openTextDocument(jsonFilename).then((doc: vscode.TextDocument) => {
+                                                    vscode.window.showTextDocument(doc, { viewColumn: vscode.ViewColumn.Two, preview: true, preserveFocus: false }).then(
+                                                        () => {
+                                                            progress.report({ message: 'Done' });
+                                                        },
+                                                        (err: any) => {
+                                                            vscode.window.showErrorMessage(err.message);
+                                                            errorParam = err;
+                                                        });
+                                                });
+                                            }
+                                        });
+                                    });
+
+                                    outputWin.show();
+                                    outputWin.append('[' + execDate + '] ');
+                                    outputWin.append('file://' + wsFilename);
+                                    outputWin.append(' => ' + 'file://' + jsonFilename);
+                                    outputWin.append(' ' + ExecCommand.formatElapsedTime(response.headers['x-warp10-elapsed']));
+                                    outputWin.append(' ' + ExecCommand.pad(response.headers['x-warp10-fetched'], 10, ' ') + ' fetched ');
+                                    outputWin.append(ExecCommand.pad(response.headers['x-warp10-ops'], 10, ' ') + ' ops ');
+                                    outputWin.appendLine(ExecCommand.pad(baseFilename, 23, ' '));
+                                }
+                                if (errorParam) {
+                                    e(errorParam)
+                                } else {
+                                    c(true)
+                                }
                             }
-                            if (errorParam) {
-                                e(errorParam)
-                            } else {
-                                c(true)
-                            }
-                        }
+                        });
                     });
                 })
             })
