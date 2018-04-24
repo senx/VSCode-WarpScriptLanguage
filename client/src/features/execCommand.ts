@@ -38,7 +38,7 @@ export default class ExecCommand {
                     let lines: number[] = [document.lineCount]
                     let uris: string[] = [document.uri.toString()]
 
-                    while ((match = macroPattern.exec(executedWarpScript))) {  // When text is modified, the search restart from the beggining.
+                    while ((match = macroPattern.exec(executedWarpScript))) {
                         const macroName = match[1];
                         await WSDocumentLinksProvider.getMacroURI(macroName).then(
                             async (uri) => {
@@ -50,6 +50,7 @@ export default class ExecCommand {
                                     // Update lines and uris references
                                     lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
                                     uris.unshift(uri.toString());
+                                    macroPattern.lastIndex = 0; // Restart the regex matching at the start of the string.
                                 }
                             }
                         ).catch(
@@ -75,6 +76,14 @@ export default class ExecCommand {
 
                                 if (response.headers['x-warp10-error-message']) {
                                     let line = parseInt(response.headers['x-warp10-error-line'])
+
+                                    // Check if error message contains infos from LINEON
+                                    let lineonPattern = /\[Line #(\d+)\]/g;  // Captures the lines sections name
+                                    let lineonMatch: RegExpMatchArray | null;
+                                    while ((lineonMatch = lineonPattern.exec(response.headers['x-warp10-error-message']))) {
+                                        line = parseInt(lineonMatch[1]);
+                                    }
+
                                     let fileInError;
                                     let lineInError = line;
                                     for (var i = 0; i < lines.length; i++) {
