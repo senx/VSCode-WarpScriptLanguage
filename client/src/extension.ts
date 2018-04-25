@@ -50,7 +50,13 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(new LanguageClient('warpscript', 'Warpscript Language Server', serverOptions, clientOptions).start());
 	context.subscriptions.push(vscode.languages.registerHoverProvider('warpscript', new WSHoverProvider()));
 	context.subscriptions.push(vscode.languages.registerDocumentLinkProvider('warpscript', new WSDocumentLinksProvider()));
-	context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', new ExecCommand().exec(outputWin)));
+	context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', () => {new ExecCommand().exec(outputWin)("");}));
+	context.subscriptions.push(vscode.commands.registerCommand('extension.execWSOnSelection', () => {
+			let editor = vscode.window.activeTextEditor;
+			let selection = editor.selection;
+			let text = editor.document.getText(selection);
+			new ExecCommand().exec(outputWin)(text);
+		}));
 	new WSDocumentFormattingEditProvider();
 	//	context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('warpscript', new WSDocumentFormattingEditProvider()));
 
