@@ -27,6 +27,10 @@ export default class WSImagebase64Provider implements vscode.TextDocumentContent
             border-style: dashed;
             border-color: red;
             border-width: 1px;
+            background-color: #fff;
+            background-image: linear-gradient(45deg,#efefef 25%,transparent 25%,transparent 75%,#efefef 75%,#efefef),linear-gradient(45deg,#efefef 25%,transparent 25%,transparent 75%,#efefef 75%,#efefef);
+            background-position: 0 0,10px 10px;
+            background-size: 21px 21px;        
         }
         
         </style>
