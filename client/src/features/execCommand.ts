@@ -13,7 +13,7 @@ export default class ExecCommand {
     static pad(str: any, size: number, padder: string) { return (padder.repeat(30) + str).substr(-size); }
 
     public exec(outputWin: vscode.OutputChannel): any {
-        return () => {
+        return (selectiontext:string) => {
             // Check current active document is a warpcript
             if (typeof vscode.window.activeTextEditor === 'undefined' || vscode.window.activeTextEditor.document.languageId !== 'warpscript') {
                 // Not a warpscript, exit early.
@@ -31,8 +31,15 @@ export default class ExecCommand {
             }, (progress: vscode.Progress<{ message?: string; }>) => {
                 return new Promise(async (c, e) => {
                     progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
-
-                    let executedWarpScript = document.getText();
+                    
+                    let executedWarpScript="";
+                    if(selectiontext === "" ) {
+                        executedWarpScript = document.getText(); //if executed with empty string, take the full text
+                    }
+                    else
+                    {
+                        executedWarpScript = selectiontext;
+                    }
                     let macroPattern = /@([^\s]+)/g;  // Captures the macro name
                     let match: RegExpMatchArray | null;
                     let lines: number[] = [document.lineCount]
@@ -59,7 +66,9 @@ export default class ExecCommand {
                     }
                     // Gzip the script before sending it.
                     zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
-                        console.error(err);
+                        if (err) {
+                            console.error(err);
+                        }
                         request.post({
                             headers: { 'Content-Type': 'application/gzip', 'Transfer-Encoding': 'chunked' },
                             url: Warp10URL,
