@@ -36,7 +36,7 @@
 				"command": "extension.execWSOnSelection",
 				"key": "ctrl+alt+a",
 				"when": "editorHasSelection && editorFocus && !replaceActive && !searchViewletVisible && !findWidgetVisible"
-			},			
+			},
 			{
 				"key": "shift+ctrl+j",
 				"command": "_webview.openDevTools"
@@ -51,7 +51,6 @@
 				"command": "extension.execWSOnSelection",
 				"title": "Run Warpscript on selection"
 			}
-			
 		],
 		"languages": [
 			{
