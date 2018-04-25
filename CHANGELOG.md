@@ -1,6 +1,16 @@
 VSCode Warpscript Extension
 ---
 
+## v0.0.14
+
+> +  2018/04/25  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f8ca6424652397dda7aca94c6fd1cc8019248b97)*)
+> +  2018/04/25  | version bumb  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/5ba083298edb386e1040b4bd94a582c140966656)*)
+> +  2018/04/25  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/dbf14c81b4b74d6410bef5ff170f38966724ae7a)*)
+> +  2018/04/25  | Changed to ctrl alt a and remove console output  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/85b814d0ce6f9cfda74412dedbe492abc9b914f5)*)
+> +  2018/04/25  | Ctrl Shift U on a selection run the selected warpscript  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/173eae9d23840dbc6958905a0457dd017908cb2e)*)
+> +  2018/04/25  | Ctrl Shift U on a selection run the selected warpscript  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/3cbd9c2be4e4084c7d223abe686ed481a8030526)*)
+> +  2018/04/24  | Added support for error message resulting from LINEON and macro link bugfix.  (*[Fabien Tencé](fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8087dfe405642ce9a7dead31ee599444732abeee)*)
+
 ## v0.0.13
 
 > +  2018/04/22  | fix  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/bac95f66955c07c6618535ba8f5b64fa7fec6d73)*)
@@ -36,9 +46,5 @@ VSCode Warpscript Extension
 
 ## v0.0.10
 
-
-## 0.0.11
-
-> +  2018/03/29  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f42c2f5505e160948c556cd601f5406ce03d3c2c)*)
 
 
