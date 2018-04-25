@@ -34,7 +34,7 @@
 			},
 			{
 				"command": "extension.execWSOnSelection",
-				"key": "ctrl+alt+u",
+				"key": "ctrl+alt+a",
 				"when": "editorHasSelection && editorFocus && !replaceActive && !searchViewletVisible && !findWidgetVisible"
 			},			
 			{

@@ -55,7 +55,6 @@ export function activate(context: vscode.ExtensionContext) {
 			let editor = vscode.window.activeTextEditor;
 			let selection = editor.selection;
 			let text = editor.document.getText(selection);
-			console.log(text);
 			new ExecCommand().exec(outputWin)(text);
 		}));
 	new WSDocumentFormattingEditProvider();

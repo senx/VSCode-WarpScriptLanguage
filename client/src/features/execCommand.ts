@@ -65,7 +65,9 @@ export default class ExecCommand {
                     }
                     // Gzip the script before sending it.
                     zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
-                        console.error(err);
+                        if (err) {
+                            console.error(err);
+                        }
                         request.post({
                             headers: { 'Content-Type': 'application/gzip', 'Transfer-Encoding': 'chunked' },
                             url: Warp10URL,
