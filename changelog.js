@@ -1,26 +1,32 @@
+#!/usr/bin/env node
 const { execSync } = require('child_process');
-let lastTags = execSync('git tag | head -n 20').toString()
-  .split('\n')
-  .map( a => a.replace('v', '').split('.')
-    .map( n => +n+100000 ).join('.') ).sort()
-.map( a => a.replace('v', '').split('.').map( n => +n-100000 ).join('.') ).reverse();
+let repo = 'https://github.com/Giwi/VSCode-WarpScriptLangage/';
+let md =
+  `VSCode Warpscript Extension
+---
 
-lastTags[lastTags.length - 1] = execSync('git rev-list --max-parents=0 HEAD').toString()
-let changelog = {}
+`;
 
-console.log('# VSCode Warpscript Extension')
+let tagList = execSync('git tag --sort=-committerdate | head -n 10').toString().split('\n');
+let lastTag = tagList[0];
+tagList = tagList.slice(1, -1);
+tagList.forEach(tag => {
+  md += `## ${lastTag}
 
-for (let i = 0; i < lastTags.length - 1; i++) {
-  let cmd = 'git log ' + lastTags[i + 1].replace('\n', '') +
-    '..' +
-    lastTags[i].replace('\n', '') +
-    ' --format="> +  %s %N (*by [%cN](mailto:%ce) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage/commit/%H)*)"'
-  let commits = execSync(cmd).toString().split('\n')
-  changelog[lastTags[i]] = commits
-}
-lastTags.reverse().slice(1).reverse().forEach(tag => {
-  console.log('## ' + tag)
-  changelog[tag].forEach(c => {
-    console.log(c)
-  })
-})
+`;
+ execSync(`git log --no-merges --date=iso --format="> +  ts%ct  | %s %N (*[%cN](%ce) | [view commit](${repo}/commit/%H)*)" ${tag}..${lastTag}`)
+    .toString().split('\n').forEach(l => {
+    let timestamp = /ts([0-9]+)/.exec(l);
+    if (timestamp) {
+      l = l.replace('ts' + timestamp[1], new Date(timestamp[1] * 1000).toISOString().split('T')[0].replace(/\-/gi, '/'));
+    }
+    let issue = /#([0-9]+)/.exec(l);
+    if (issue) {
+      l = l.replace('#' + issue[1], `[#${issue[1]}](${repo}/issues/${issue[1]})`);
+    }
+    md += l + '\n';
+  });
+  lastTag = tag;
+
+});
+console.log(md);
