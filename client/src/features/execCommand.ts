@@ -5,7 +5,6 @@ import { Uri } from 'vscode';
 import fs = require('fs');
 import os = require('os');
 import zlib = require("zlib");
-import { isNullOrUndefined } from 'util';
 
 export default class ExecCommand {
 
