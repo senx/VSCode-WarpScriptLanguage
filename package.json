@@ -6,7 +6,7 @@
 	},
 	"icon": "images/warp10.png",
 	"license": "Apache-2.0",
-	"version": "0.0.13",
+	"version": "0.0.14",
 	"publisher": "xavmarin",
 	"engines": {
 		"vscode": "^1.0.0"
