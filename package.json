@@ -108,14 +108,14 @@
 		"watch:server": "cd server && npm run installServer && cd .. && tsc -w -p server/tsconfig.json"
 	},
 	"devDependencies": {
-		"@types/js-yaml": "latest",
-		"@types/mocha": "^2.2.42",
+		"@types/js-yaml": "3.11.1",
+		"@types/mocha": "^5.2.0",
 		"@types/node": "7.0.43",
-		"js-yaml": "latest",
-		"plist": "latest",
-		"typescript": "^2.5.2",
-		"vscode": "^1.1.10",
-		"vscode-textmate": "latest"
+		"js-yaml": "3.11.0",
+		"plist": "3.0.1",
+		"typescript": "^2.8.3",
+		"vscode": "^1.1.14",
+		"vscode-textmate": "3.3.3"
 	},
 	"dependencies": {}
 }
