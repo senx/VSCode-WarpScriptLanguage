@@ -105,8 +105,8 @@
 	},
 	"dependencies": {
 		"@types/request": "^2.47.0",
-		"request": "^2.83.0",
-		"vscode": "^1.1.10",
-		"vscode-languageclient": "^3.4.2"
+		"request": "^2.85.0",
+		"vscode": "^1.1.14",
+		"vscode-languageclient": "^4.1.3"
 	}
 }
