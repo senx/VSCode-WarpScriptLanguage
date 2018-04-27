@@ -41,6 +41,11 @@
 				"command": "extension.execWS",
 				"key": "ctrl+alt+e",
 				"when": "editorFocus && !replaceActive && !searchViewletVisible && !findWidgetVisible"
+			},
+			{
+				"command": "extension.execWSOnSelection",
+				"key": "ctrl+alt+a",
+				"when": "editorHasSelection && editorFocus && !replaceActive && !searchViewletVisible && !findWidgetVisible"
 			}
 		],
 		"commands": [
@@ -52,7 +57,12 @@
 					"light": "./image/run.svg",
 					"dark": "./image/run_inverse.svg"
 				}
+			},
+			{
+				"command": "extension.execWSOnSelection",
+				"title": "Run Warpscript on selection"
 			}
+
 		],
 		"languages": [
 			{
