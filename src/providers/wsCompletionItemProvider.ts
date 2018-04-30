@@ -59,6 +59,8 @@ export default class WSCompletionItemProvider implements CompletionItemProvider 
         return CompletionItemKind.Keyword;
       } else if(t.indexOf('operators') > -1) {
         return CompletionItemKind.Operator;
+      } else if(t.indexOf('stack') > -1) {
+        return CompletionItemKind.Event;
       } else {
       return CompletionItemKind.Function;
       }
