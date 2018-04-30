@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 export default class WSContentProvider implements vscode.TextDocumentContentProvider {
     private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
-    private currentDocument: vscode.TextDocument;
+    private currentDocument: vscode.TextDocument | undefined;
 
     constructor(
         private context: vscode.ExtensionContext
@@ -15,10 +15,8 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
      */
     public async provideTextDocumentContent(): Promise<string> {
         let rootPath = this.context.asAbsolutePath('.')
-        if (!rootPath.endsWith('client')) {
-            rootPath += '/client'
-        }
-        return `
+        if (this.currentDocument) {
+            return `
 <script src="file://${rootPath + '/bower_components/webcomponentsjs/webcomponents-loader.js'}"></script>
 <link rel="import" href="file://${rootPath + '/bower_components/shadycss/apply-shim.html'}">
 <link rel="import" href="file://${rootPath + '/bower_components/warp10-quantum-elements/quantum-plot.html'}">
@@ -29,6 +27,7 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
     }
 </style>
 <div class="container"><quantum-plot name="plot" stack='${this.currentDocument.getText()}'></quantum-plot></div>`
+        } else return '';
     }
 
     get onDidChange(): vscode.Event<vscode.Uri> {
