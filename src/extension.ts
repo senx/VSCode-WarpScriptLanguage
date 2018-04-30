@@ -9,6 +9,7 @@ import WSContentProvider from './providers/wsContentProvider'
 import WSDocumentFormattingEditProvider from './providers/wsDocumentFormattingEditProvider'
 import ExecCommand from './features/execCommand'
 import WSImagebase64Provider from './providers/wsImagebase64Provider'
+import WSCompletionItemProvider from './providers/wsCompletionItemProvider'
 import os = require('os');
 
 /**
@@ -20,18 +21,19 @@ export function activate(context: vscode.ExtensionContext) {
 	let outputWin = vscode.window.createOutputChannel('Warp10');
 	console.log('[client] Congratulations, your extension "Warpscript" is now active! ')
 	// The server is implemented in node
-	let serverModule = context.asAbsolutePath(path.join('server', 'server.js'));
+	//let serverModule = context.asAbsolutePath(path.join('server', 'server.js'));
 	// The debug options for the server
 	let debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
 
 
 	// If the extension is launched in debug mode then the debug server options are used
 	// Otherwise the run options are used
+	/*
 	let serverOptions: ServerOptions = {
 		run: { module: serverModule, transport: TransportKind.ipc },
 		debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions }
 	}
-
+*/
 	// Options to control the language client
 	let clientOptions: LanguageClientOptions = {
 		// Register the server for warpscript text documents
@@ -47,16 +49,19 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('gts-preview', wscontentprovider));
 	let imagebase64provider = new WSImagebase64Provider()
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('imagebase64-preview', imagebase64provider))
-	context.subscriptions.push(new LanguageClient('warpscript', 'Warpscript Language Server', serverOptions, clientOptions).start());
+	//	context.subscriptions.push(new LanguageClient('warpscript', 'Warpscript Language Server', serverOptions, clientOptions).start());
 	context.subscriptions.push(vscode.languages.registerHoverProvider('warpscript', new WSHoverProvider()));
+	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('warpscript', new WSCompletionItemProvider()));
 	context.subscriptions.push(vscode.languages.registerDocumentLinkProvider('warpscript', new WSDocumentLinksProvider()));
-	context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', () => {new ExecCommand().exec(outputWin)("");}));
+	context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(""); }));
 	context.subscriptions.push(vscode.commands.registerCommand('extension.execWSOnSelection', () => {
-			let editor = vscode.window.activeTextEditor;
+		let editor = vscode.window.activeTextEditor;
+		if (editor) {
 			let selection = editor.selection;
 			let text = editor.document.getText(selection);
 			new ExecCommand().exec(outputWin)(text);
-		}));
+		}
+	}));
 	new WSDocumentFormattingEditProvider();
 	//	context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('warpscript', new WSDocumentFormattingEditProvider()));
 

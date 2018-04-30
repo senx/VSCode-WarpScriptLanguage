@@ -1,20 +1,8 @@
 {
-	// set to false to hide directory from the VS Code Document Sidebar
 	"files.exclude": {
-		"client/out/**/*": false,
-		"client/server/**/*": false,
-		"client/node_modules": false,
-		"server/node_modules": false
+		"out": false // set this to true to hide the "out" folder with the compiled JS files
 	},
-	// set this to false to include "out" folder in search results
 	"search.exclude": {
-		"out": false
-	},
-	"typescript.tsdk": "./node_modules/typescript/lib",
-	"typescript.tsc.autoDetect": "off",
-	"spellright.language": "fr",
-	"spellright.documentTypes": [
-		"latex",
-		"plaintext"
-	]
+		"out": true // set this to false to include "out" folder in search results
+	}
 }

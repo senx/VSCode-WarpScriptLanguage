@@ -20,7 +20,7 @@ export default class ExecCommand {
                 return;
             }
 
-            let Warp10URL: string = vscode.workspace.getConfiguration(null, null).get('warpscript.Warp10URL');
+            let Warp10URL: string = vscode.workspace.getConfiguration().get('warpscript.Warp10URL');
             let execDate: string = new Date().toLocaleTimeString();
             let document = vscode.window.activeTextEditor.document;
             let baseFilename = document.fileName.split('\\').pop().split('/').pop();

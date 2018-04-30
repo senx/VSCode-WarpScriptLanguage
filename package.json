@@ -9,7 +9,7 @@
 	"version": "0.0.14",
 	"publisher": "xavmarin",
 	"engines": {
-		"vscode": "^1.0.0"
+		"vscode": "^1.16.0"
 	},
 	"repository": {
 		"type": "git",
@@ -28,12 +28,12 @@
 	"activationEvents": [
 		"onLanguage:warpscript"
 	],
-	"main": "./client/out/src/extension",
+	"main": "./out/extension",
 	"contributes": {
 		"snippets": [
 			{
 				"language": "warpscript",
-				"path": "./client/snippets/snippets.json"
+				"path": "./snippets/snippets.json"
 			}
 		],
 		"keybindings": [
@@ -62,7 +62,6 @@
 				"command": "extension.execWSOnSelection",
 				"title": "Run Warpscript on selection"
 			}
-
 		],
 		"languages": [
 			{
@@ -74,14 +73,14 @@
 				"extensions": [
 					"mc2"
 				],
-				"configuration": "./client/syntaxes/language-configuration.json"
+				"configuration": "./syntaxes/language-configuration.json"
 			}
 		],
 		"grammars": [
 			{
 				"language": "warpscript",
 				"scopeName": "source.warpscript",
-				"path": "./client/syntaxes/warpscript.tmLanguage.json"
+				"path": "./syntaxes/warpscript.tmLanguage.json"
 			}
 		],
 		"configuration": {
@@ -90,7 +89,7 @@
 			"properties": {
 				"warpscript.Warp10URL": {
 					"scope": "resource",
-					"type": "String",
+					"type": "string",
 					"default": "http://127.0.0.1:8080/api/v0/exec",
 					"description": "Warp10 URL"
 				},
@@ -110,22 +109,27 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
-		"postinstall": "cd server && npm install && cd ../client && npm install && bower install && cd ..",
-		"compile": "tsc -p client/tsconfig.json && cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
-		"compile:client": "tsc -p client/tsconfig.json",
-		"watch:client": "tsc -w -p client/tsconfig.json",
-		"compile:server": "cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
-		"watch:server": "cd server && npm run installServer && cd .. && tsc -w -p server/tsconfig.json"
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
 		"@types/js-yaml": "3.11.1",
 		"@types/mocha": "^5.2.0",
 		"@types/node": "7.0.43",
 		"js-yaml": "3.11.0",
+		"lodash": "^4.17.10",
 		"plist": "3.0.1",
+		"showdown": "^1.8.6",
 		"typescript": "^2.8.3",
 		"vscode": "^1.1.14",
 		"vscode-textmate": "3.3.3"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"@types/request": "^2.47.0",
+		"request": "^2.85.0",
+		"vscode": "^1.1.14",
+		"vscode-languageclient": "^3.5.0"
+	}
 }
