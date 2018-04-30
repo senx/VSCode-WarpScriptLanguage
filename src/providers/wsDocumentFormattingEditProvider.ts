@@ -8,8 +8,7 @@ export default class WSDocumentFormattingEditProvider implements DocumentRangeFo
   private _blockEnd = /\s*(\]|\}|%>|'>\s?)/;
 
 
-  provideDocumentRangeFormattingEdits(document: TextDocument, range: Range, options: FormattingOptions, token: CancellationToken): Thenable<TextEdit[]> {
-    console.log('WSDocumentFormattingEditProvider', document, range, options, token);
+  provideDocumentRangeFormattingEdits(document: TextDocument, _range: Range, _options: FormattingOptions, _token: CancellationToken): Thenable<TextEdit[]> {
     return new Promise<TextEdit[]>((resolve) => {
       let text = document.getText()
       let match: RegExpMatchArray | null;
