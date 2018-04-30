@@ -1,10 +1,11 @@
-import { CompletionItemProvider, TextDocument, Position, CancellationToken, CompletionItem, ExtensionContext, MarkdownString } from "vscode";
+import { CompletionItemProvider, TextDocument, Position, CancellationToken, CompletionItem, MarkdownString } from "vscode";
 import { WarpScript } from '../ref';
 import { CompletionItemKind } from "vscode";
 
 export default class WSCompletionItemProvider implements CompletionItemProvider {
   public provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken): Thenable<CompletionItem[]> {
-    return new Promise<CompletionItem[]>((resolve, reject) => {
+    console.log('WSCompletionItemProvider', document, position, token);
+    return new Promise<CompletionItem[]>((resolve) => {
       let result: CompletionItem[] = [];
       let lineText = document.lineAt(position.line).text;
       if (lineText.match(/^\s*\/\//)) {

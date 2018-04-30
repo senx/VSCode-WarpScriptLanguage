@@ -9,7 +9,8 @@ export default class WSDocumentFormattingEditProvider implements DocumentRangeFo
 
 
   provideDocumentRangeFormattingEdits(document: TextDocument, range: Range, options: FormattingOptions, token: CancellationToken): Thenable<TextEdit[]> {
-    return new Promise<TextEdit[]>((resolve, reject) => {
+    console.log('WSDocumentFormattingEditProvider', document, range, options, token);
+    return new Promise<TextEdit[]>((resolve) => {
       let text = document.getText()
       let match: RegExpMatchArray | null;
       let indent: number = 0
