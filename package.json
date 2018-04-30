@@ -92,17 +92,6 @@
 					"type": "string",
 					"default": "http://127.0.0.1:8080/api/v0/exec",
 					"description": "Warp10 URL"
-				},
-				"warpscript.trace.server": {
-					"scope": "window",
-					"type": "string",
-					"enum": [
-						"off",
-						"messages",
-						"verbose"
-					],
-					"default": "messages",
-					"description": "Traces the communication between VSCode and the language server."
 				}
 			}
 		}
