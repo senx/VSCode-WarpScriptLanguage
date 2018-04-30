@@ -49,20 +49,24 @@ zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
             let functions = [];
             let funcmap = {};
             JSON.parse(body)[0].forEach(fn => {
+              let sig  =generateSig(fn);
+              sig = sig.substr(0, sig.lastIndexOf('\n'));
                 functions.push({
                     name: fn.name,
-                    detail: generateSig(fn),
-                    documentation: fn.desc + ' ' + getParams(fn.params)
+                    detail: sig,
+                    documentation: fn.desc + '\n\n' + getParams(fn.params),
+                    tags: fn.tags
                 });
                 funcmap[fn.name] = {
-                    description: fn.desc + ' \n\n' + getParams(fn.params),
-                    signature: generateSig(fn)
+                    description: fn.desc + '\n\n' + getParams(fn.params),
+                    signature: sig,
+                    tags: fn.tags
                 }
             });
             fs.writeFileSync('src/ref.ts', `export class WarpScript {
   static reference:any[] = ${JSON.stringify(functions)};
             }`);
-            fs.writeFileSync('src/wsGlobals.ts', `export interface IEntry { description?: string; signature?: string; }
+            fs.writeFileSync('src/wsGlobals.ts', `export interface IEntry { description?: string; signature?: string; tags?: string[]}
             export interface IEntries { [name: string]: IEntry; }            
             export var globalfunctions: IEntries = ${JSON.stringify(funcmap)};`);
 
@@ -74,7 +78,7 @@ zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
 function getParams(p) {
   let params = '';
   _.forIn(p, (value, key) => {
-    params += '- @param `' + key + '` ' + value + '\n';
+    params += '@param `' + key + '` ' + value + '\n\n';
   });
   return params;
 }

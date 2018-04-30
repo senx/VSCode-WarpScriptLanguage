@@ -9,7 +9,7 @@
 	"version": "0.0.14",
 	"publisher": "xavmarin",
 	"engines": {
-		"vscode": "^1.16.0"
+		"vscode": "^1.19.1"
 	},
 	"repository": {
 		"type": "git",

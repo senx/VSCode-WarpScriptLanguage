@@ -4,13 +4,13 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
     private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
     private currentDocument: vscode.TextDocument | undefined;
 
-    constructor(
-        private context: vscode.ExtensionContext
-    ) { }
+    /**
+     * 
+     * @param {ExtensionContext} context 
+     */
+    constructor(private context: vscode.ExtensionContext) { }
 
     /**
-     * /home/xavier/workspace/VSCode-WarpScriptLangage/client/images/warp10.png
-     * @param sourceUri 
      * 
      */
     public async provideTextDocumentContent(): Promise<string> {
