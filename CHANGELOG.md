@@ -1,6 +1,22 @@
 VSCode Warpscript Extension
 ---
 
+## v0.0.15
+
+> +  2018/04/30  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/56ddea9b22df41d25b216cfac3aea60c46054628)*)
+> +  2018/04/30  | Syntax color for types  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d86eb446e6480fb62f949c9ddeba776f68ac7046)*)
+> +  2018/04/30  | Code highlight grammar generation  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/25feb38f9ba3c2e3c21093bb552d1278349027de)*)
+> +  2018/04/30  | better documentation  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/2d8fbc7a30aabe41881296aeb7b053525d8255ba)*)
+> +  2018/04/30  | cleanup  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f513e502028e35c1eb3455fc4753b6f54b018fab)*)
+> +  2018/04/30  | lints  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/5f4a3e769b7753bc625844bd68694e85dfa0b065)*)
+> +  2018/04/30  | refactoring and documentation generation  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/c3b1e2ffcc1e3cd6a548c9ae22f091d74eecdc8c)*)
+> +  2018/04/27  | deps update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/2195e1f7522bf30bd232badad497d87b983f56d5)*)
+> +  2018/04/26  | add global ctrl shift a shortcut in package.json  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/1b84613712c9e6535d81ec4931d45aff512ceed1)*)
+> +  2018/04/26  | Add global ctrl shift a shortcut  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/0df83037f290012f902dbfda7b73e9a859c2d823)*)
+> +  2018/04/25  | Add a chess background to image preview pane  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/2f10f19f9946c070626226007cb5259336ff881d)*)
+> +  2018/04/25  | yarn  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/bb5fda48bdfdfd25ad35c661bea2abfc78ab945a)*)
+> +  2018/04/25  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d1a717f9d94c866ac7a36bde09964ef1be46eba9)*)
+
 ## v0.0.14
 
 > +  2018/04/25  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f8ca6424652397dda7aca94c6fd1cc8019248b97)*)
@@ -42,9 +58,6 @@ VSCode Warpscript Extension
 
 
 ## v0.0.7
-
-
-## v0.0.10
 
 
 
