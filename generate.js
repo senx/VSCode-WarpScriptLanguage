@@ -75,6 +75,7 @@ zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
           variables: { patterns: [{ match: "\\$([A-Za-z0-9._]+)", name: "constant.other.reference.link.warpscript" }] },
           macros: { patterns: [{ match: "\\@([A-Za-z0-9._]+)", name: "constant.other.reference.link.warpscript" }] },
           numbers: { patterns: [{ match: "(?<!\\S)(-)?[0-9.]+\\b", name: "constant.numeric.warpscript" }, { match: "(?<!\\S)0x[0-9ABCDEFabcdef]+\\b", name: "constant.numeric.warpscript" }] },
+          types: { patterns: [{ match: "(<LIST(<.+>)?>|<STRING>|<GTS>|<BUCKETIZER>|<MAPPER>|<FILTER>|<REDUCER>|<LONG>|<DOUBLE>|<ANY>|<NUMBER>|<MAP>|<VECTOR>|<BYTES>|<BITSET>)(?!\\S)", name: "entity.name.type" }] },
           string1: { name: "string.quoted.double.warpscript", begin: '"', end: '"', patterns: [{ name: "constant.character.escape.warpscript", match: "\\\\." }] },
           string2: { name: "string.quoted.double.warpscript", begin: "'", end: "'", patterns: [{ name: "constant.character.escape.warpscript", match: "\\\\." }] },
           string3: { name: "string.quoted.double.warpscript", begin: "^\\s*<'", end: "'>", patterns: [{ name: "constant.character.escape.warpscript", match: "\\\\." }] },
@@ -120,10 +121,11 @@ zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
         { include: "#string1" },
         { include: "#string2" },
         { include: "#string3" },
+        { include: "#types" },
         { include: "#operator" }].forEach(s => {
           syntax.patterns.push(s);
         });
-      Object.keys(tags).reverse().forEach(tag => {
+      Object.keys(tags).forEach(tag => {
         syntax.patterns.push({ include: '#' + tag });
         syntax.repository[tag] = { patterns: [] };
         syntax.repository['frameworks'] = {
