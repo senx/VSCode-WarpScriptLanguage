@@ -1,6 +1,12 @@
 VSCode Warpscript Extension
 ---
 
+## v0.0.16
+
+> +  2018/05/15  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/64a41024ce206c19493762704c5099723db1fcf3)*)
+> +  2018/05/15  | doc update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/013604cc831c40c6377e189f7c8cad82dd221327)*)
+> +  2018/04/30  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8089aa957cbd34a08f23be71f02a446e04317b6e)*)
+
 ## v0.0.15
 
 > +  2018/04/30  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/56ddea9b22df41d25b216cfac3aea60c46054628)*)
@@ -55,9 +61,6 @@ VSCode Warpscript Extension
 
 
 ## v0.0.8
-
-
-## v0.0.7
 
 
 
