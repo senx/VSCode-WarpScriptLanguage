@@ -3,6 +3,10 @@ VSCode Warpscript Extension
 
 ## v0.0.16
 
+> +  2018/05/15  | exclude  monarch  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/6cedc5613f292218cedae12d4e2bb7d76c46d122)*)
+> +  2018/05/15  | yarn update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/757c492c522010c0eaab1522bdc43d64419ac6e1)*)
+> +  2018/05/15  | npm versions bumb  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/faede38e3e84460024ef378783f925322a29c5a8)*)
+> +  2018/05/15  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/a5166760b00557f8c974d5bc8b38a098103f8123)*)
 > +  2018/05/15  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/64a41024ce206c19493762704c5099723db1fcf3)*)
 > +  2018/05/15  | doc update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/013604cc831c40c6377e189f7c8cad82dd221327)*)
 > +  2018/04/30  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8089aa957cbd34a08f23be71f02a446e04317b6e)*)
