@@ -48,6 +48,70 @@ zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
     } else {
       let functions = [];
       let funcmap = {};
+      let monarch = {
+        keywords: [],
+        constants: [],
+        functions: [],
+        control: [],
+        operators: ['&', '^', '|', '>>>', '~', '<<', '>>', '!=', '<', '>', '~=', '<=', '==', '>=', '%', '*', '+', '-', '/', '**', '!', '&&', 'AND', 'OR', 'NOT', '|', '&', '^', '|', '>>>', '~', '<<', '>>'],
+        escapes: '\\\\(?:[abfnrtv\\"\']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})',
+        tokenizer: {
+          root: [
+            ['\\@[A-Za-z0-9._\\/]+', 'variable'],
+            ['\\$[A-Za-z0-9._\\/]+', 'variable'],
+            ['true|false', 'number'],
+            ['[A-Za-z_][.\\w$]*', {
+              cases: {
+                '@constants': 'regexp',
+                '@keywords': 'keyword',
+                '@functions': 'type',
+                '@control': 'metatag',
+                '@default': 'identifier'
+              }
+            }],
+            ['[{}()\[\\]]', '@brackets'],
+            ['\\d*\\.\\d+([eE][\\-+]?\\d+)?[fFdD]?', 'number.float'],
+            ['0[xX][0-9a-fA-F_]*[0-9a-fA-F][Ll]?', 'number.hex'],
+            ['0[0-7_]*[0-7][Ll]?', 'number.octal'],
+            ['0[bB][0-1_]*[0-1][Ll]?', 'number.binary'],
+            ['\\d+[lL]?', 'number'],
+            { include: '@whitespace' },
+            ['"([^"\\\\]|\\\\.)*$', 'string.invalid'],
+            ['"', 'string', '@string'],
+            ['\'([^\'\\\\]|\\\\.)*$', 'string.invalid'],
+            ['\'', 'string', '@string2'],
+
+            ['<\'', 'string', '@string3'],
+
+          ],
+          whitespace: [
+            ['[ \\t\\r\\n]+', 'white'],
+            ['\\/\\*', 'comment', '@comment'],
+            ['\\/\\/.*$', 'comment'],
+          ],
+          comment: [
+            ['[^\\/*]+', 'comment'],
+            ['\\/\\*', 'comment.invalid'],
+            ["\\*/", 'comment', '@pop'],
+            ['[\\/*]', 'comment']
+          ],
+          string: [
+            ['[^\\"]+', 'string'],
+            ['@escapes', 'string.escape'],
+            ['\\.', 'string.escape.invalid'],
+            ['"', 'string', '@pop']
+          ], string2: [
+            ['[^\\\']+', 'string'],
+            ['@escapes', 'string.escape'],
+            ['\\.', 'string.escape.invalid'],
+            ['\'', 'string', '@pop']
+          ], string3: [
+            ['[^\\(<\')]+', 'string'],
+            ['\'>', 'string', '@pop']
+          ]
+        }
+      };
+
       let syntax = {
         '$schema': 'https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json',
         name: 'WarpScript',
@@ -73,7 +137,7 @@ zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
             ]
           },
           variables: { patterns: [{ match: "\\$([A-Za-z0-9._]+)", name: "constant.other.reference.link.warpscript" }] },
-          macros: { patterns: [{ match: "\\@([A-Za-z0-9._]+)", name: "constant.other.reference.link.warpscript" }] },
+          macros: { patterns: [{ match: "\\@([A-Za-z0-9._\\/]+)", name: "constant.other.reference.link.warpscript" }] },
           numbers: { patterns: [{ match: "(?<!\\S)(-)?[0-9.]+\\b", name: "constant.numeric.warpscript" }, { match: "(?<!\\S)0x[0-9ABCDEFabcdef]+\\b", name: "constant.numeric.warpscript" }] },
           types: { patterns: [{ match: "(<LIST(<.+>)?>|<STRING>|<GTS>|<BUCKETIZER>|<MAPPER>|<FILTER>|<REDUCER>|<LONG>|<DOUBLE>|<ANY>|<NUMBER>|<MAP>|<VECTOR>|<BYTES>|<BITSET>)(?!\\S)", name: "entity.name.type" }] },
           string1: { name: "string.quoted.double.warpscript", begin: '"', end: '"', patterns: [{ name: "constant.character.escape.warpscript", match: "\\\\." }] },
@@ -109,7 +173,7 @@ zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
           if (!tags[t]) {
             tags[t] = [];
           }
-          tags[t].push(fn.name.replace(/(\.|\||\[|\]|\(|\)|\$|\^|\}|\{|\*|\+)/gi, '\\$1').replace());
+          tags[t].push(fn.name);
         });
       });
 
@@ -125,57 +189,67 @@ zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
         { include: "#operator" }].forEach(s => {
           syntax.patterns.push(s);
         });
+
+      monarch.keywords = monarch.keywords.concat('MAP|FILTER|APPLY|REDUCE|BUCKETIZE'.split('|'));
+      syntax.repository['frameworks'] = {
+        patterns: [{
+          match: '(?<!\\S)(MAP|FILTER|APPLY|REDUCE|BUCKETIZE)(?!\\S)',
+          name: 'entity.name.function.warpscript'
+        }]
+      };
       Object.keys(tags).forEach(tag => {
         syntax.patterns.push({ include: '#' + tag });
         syntax.repository[tag] = { patterns: [] };
-        syntax.repository['frameworks'] = {
-          patterns: [{
-            match: '(?<!\\S)(MAP|FILTER|APPLY|REDUCE|BUCKETIZE)(?!\\S)',
-            name: 'entity.name.function.warpscript'
-          }]
-        };
+
         switch (tag) {
           case 'control':
             syntax.repository[tag].patterns.push({
-              match: '(?<!\\S)(' + tags[tag].join('|') + '|true|false)(?!\\S)',
+              match: '(?<!\\S)(' + tags[tag].join('|').replace(/(\.|\||\[|\]|\(|\)|\$|\^|\}|\{|\*|\+)/gi, '\\$1') + '|true|false)(?!\\S)',
               name: 'keyword.control.warpscript'
             });
+            monarch.control = monarch.control.concat(tags[tag]);
             break;
           case 'constants':
             syntax.repository[tag].patterns.push({
-              match: '(?<!\\S)(' + tags[tag].join('|') + ')(?!\\S)',
+              match: '(?<!\\S)(' + tags[tag].join('|').replace(/(\.|\||\[|\]|\(|\)|\$|\^|\}|\{|\*|\+)/gi, '\\$1') + ')(?!\\S)',
               name: 'constant.language.warpscript'
             });
+            monarch.constants = monarch.constants.concat(tags[tag]);
             break;
           case 'reducer':
             syntax.repository[tag].patterns.push({
-              match: '(?<!\\S)(' + tags[tag].filter(i => i !== 'REDUCE').join('|') + ')(?!\\S)',
-              name: 'entity.name.typePi'
+              match: '(?<!\\S)(' + tags[tag].filter(i => i !== 'REDUCE').join('|').replace(/(\.|\||\[|\]|\(|\)|\$|\^|\}|\{|\*|\+)/gi, '\\$1') + ')(?!\\S)',
+              name: 'entity.name.type'
             });
+            monarch.functions = monarch.functions.concat(tags[tag]);
             break;
           case 'mapper':
             syntax.repository[tag].patterns.push({
-              match: '(?<!\\S)(' + tags[tag].filter(i => i !== 'MAP').join('|') + ')(?!\\S)',
+              match: '(?<!\\S)(' + tags[tag].filter(i => i !== 'MAP').join('|').replace(/(\.|\||\[|\]|\(|\)|\$|\^|\}|\{|\*|\+)/gi, '\\$1') + ')(?!\\S)',
               name: 'entity.name.type'
             });
+            monarch.functions = monarch.functions.concat(tags[tag]);
             break;
           case 'bucketize':
             syntax.repository[tag].patterns.push({
-              match: '(?<!\\S)(' + tags[tag].filter(i => i !== 'BUCKETIZE').join('|') + ')(?!\\S)',
+              match: '(?<!\\S)(' + tags[tag].filter(i => i !== 'BUCKETIZE').join('|').replace(/(\.|\||\[|\]|\(|\)|\$|\^|\}|\{|\*|\+)/gi, '\\$1') + ')(?!\\S)',
               name: 'entity.name.type'
             });
+            monarch.functions = monarch.functions.concat(tags[tag]);
             break;
           case 'filter':
             syntax.repository[tag].patterns.push({
-              match: '(?<!\\S)(' + tags[tag].filter(i => i !== 'FILTER').join('|') + ')(?!\\S)',
+              match: '(?<!\\S)(' + tags[tag].filter(i => i !== 'FILTER').join('|').replace(/(\.|\||\[|\]|\(|\)|\$|\^|\}|\{|\*|\+)/gi, '\\$1') + ')(?!\\S)',
               name: 'entity.name.type'
             });
+            monarch.functions = monarch.functions.concat(tags[tag]);
             break;
           default:
             syntax.repository[tag].patterns.push({
-              match: '(?<!\\S)(' + tags[tag].join('|') + ')(?!\\S)',
+              match: '(?<!\\S)(' + tags[tag].join('|').replace(/(\.|\||\[|\]|\(|\)|\$|\^|\}|\{|\*|\+)/gi, '\\$1') + ')(?!\\S)',
               name: "entity.name.function.warpscript"
             });
+            monarch.keywords = monarch.keywords.concat(tags[tag]);
             break;
         }
       });
@@ -184,6 +258,10 @@ zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
   static reference:any[] = ${JSON.stringify(functions)};
 }
       `);
+
+      fs.writeFileSync('monarch.ts', `export class Monarch {
+        public static rules:any =  ${JSON.stringify(monarch, null, 4)};
+      }`);
       fs.writeFileSync('syntaxes/warpscript.tmLanguage.json', JSON.stringify(syntax));
       fs.writeFileSync('src/wsGlobals.ts', `export interface IEntry { description?: string; signature?: string; tags?: string[]}
 export interface IEntries { [name: string]: IEntry; }            
