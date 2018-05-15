@@ -30,7 +30,6 @@ export default class WSCompletionItemProvider implements CompletionItemProvider 
       }
 
       WarpScript.reference.filter(d => new RegExp(currentWord).exec(d.name)).forEach(keyword => {
-        console.log(keyword)
         let item = new CompletionItem(keyword.name, this.getType(keyword.tags, keyword.name));
         item.detail = keyword.name;
         item.documentation = new MarkdownString()
