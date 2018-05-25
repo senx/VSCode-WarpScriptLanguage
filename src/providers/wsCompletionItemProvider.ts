@@ -27,7 +27,7 @@ export default class WSCompletionItemProvider
       if (lineText.match(/^\s*\/\//)) {
         return resolve([]);
       }
-      let wordAtPosition = document.getWordRangeAtPosition(position, /(\->)?[A-Za-z]+\.?[A-Za-z]*/);
+      let wordAtPosition = document.getWordRangeAtPosition(position, /[^\$](\->)?[A-Za-z]+\.?[A-Za-z]*/);
       let currentWord = "";
       if ( wordAtPosition && wordAtPosition.start.character < position.character ) {
         let word = document.getText(wordAtPosition);
