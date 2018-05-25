@@ -23,7 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let imagebase64provider = new WSImagebase64Provider()
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('imagebase64-preview', imagebase64provider))
 	context.subscriptions.push(vscode.languages.registerHoverProvider('warpscript', new WSHoverProvider()));
-	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('warpscript', new WSCompletionItemProvider()));
+	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('warpscript', new WSCompletionItemProvider(), ' ' , '.'));
 	context.subscriptions.push(vscode.languages.registerDocumentLinkProvider('warpscript', new WSDocumentLinksProvider()));
 	context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(""); }));
 	context.subscriptions.push(vscode.commands.registerCommand('extension.execWSOnSelection', () => {
