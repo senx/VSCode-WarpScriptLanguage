@@ -162,12 +162,14 @@ zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
           name: fn.name,
           detail: sig,
           documentation: fn.desc + '\n\n' + getParams(fn.params),
-          tags: fn.tags
+          tags: fn.tags,
+          since: fn.since
         });
         funcmap[fn.name] = {
           description: fn.desc + '\n\n' + getParams(fn.params),
           signature: sig,
-          tags: fn.tags
+          tags: fn.tags,
+          since: fn.since
         }
         fn.tags.forEach(t => {
           if (!tags[t]) {
@@ -263,7 +265,7 @@ zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
         public static rules:any =  ${JSON.stringify(monarch, null, 4)};
       }`);
       fs.writeFileSync('syntaxes/warpscript.tmLanguage.json', JSON.stringify(syntax));
-      fs.writeFileSync('src/wsGlobals.ts', `export interface IEntry { description?: string; signature?: string; tags?: string[]}
+      fs.writeFileSync('src/wsGlobals.ts', `export interface IEntry { description?: string; signature?: string; tags?: string[], since: string}
 export interface IEntries { [name: string]: IEntry; }            
 export var globalfunctions: IEntries = ${JSON.stringify(funcmap)};
             `);

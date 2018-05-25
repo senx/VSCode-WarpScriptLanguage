@@ -365,6 +365,7 @@ export class Monarch {
         "op.eq",
         "op.div",
         "op.and",
+        "op.and.ignore-nulls",
         "op.add",
         "op.add.ignore-nulls",
         "NEXTUP",
