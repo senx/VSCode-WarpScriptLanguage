@@ -136,8 +136,8 @@ zlib.gzip(executedWarpScript, function (err, gzipWarpScript) {
               }
             ]
           },
-          variables: { patterns: [{ match: "\\$([A-Za-z0-9._]+)", name: "constant.other.reference.link.warpscript" }] },
-          macros: { patterns: [{ match: "\\@([A-Za-z0-9._\\/]+)", name: "constant.other.reference.link.warpscript" }] },
+          variables: { patterns: [{ match: "\\$([A-Za-z0-9._]+)", name: "keyword.control.export.js" }] },
+          macros: { patterns: [{ match: "\\@([A-Za-z0-9._\\/]+)", name: "keyword.control.export.js" }] },
           numbers: { patterns: [{ match: "(?<!\\S)(-)?[0-9.]+\\b", name: "constant.numeric.warpscript" }, { match: "(?<!\\S)0x[0-9ABCDEFabcdef]+\\b", name: "constant.numeric.warpscript" }] },
           types: { patterns: [{ match: "(<LIST(<.+>)?>|<STRING>|<GTS>|<BUCKETIZER>|<MAPPER>|<FILTER>|<REDUCER>|<LONG>|<DOUBLE>|<ANY>|<NUMBER>|<MAP>|<VECTOR>|<BYTES>|<BITSET>)(?!\\S)", name: "entity.name.type" }] },
           string1: { name: "string.quoted.double.warpscript", begin: '"', end: '"', patterns: [{ name: "constant.character.escape.warpscript", match: "\\\\." }] },
