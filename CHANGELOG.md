@@ -1,6 +1,13 @@
 VSCode Warpscript Extension
 ---
 
+## v0.0.17
+
+> +  2018/05/25  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/154b3d349dc6ab2cae5b39c2993b08737862afc3)*)
+> +  2018/05/25  | Hover fix on variables named like functions  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/805e0644c90b9814e75e7304b3656fb0b4214bbe)*)
+> +  2018/05/25  | Better completion with "->xxx" like functions  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/1a4b473055b4ca9e2ca5d5aa610dfc8d7382fd92)*)
+> +  2018/05/15  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/fe62fe98b4ab06fd98cc74bde37e2f45f4439856)*)
+
 ## v0.0.16
 
 > +  2018/05/15  | exclude  monarch  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/6cedc5613f292218cedae12d4e2bb7d76c46d122)*)
@@ -62,9 +69,6 @@ VSCode Warpscript Extension
 > +  2018/03/30  | gzip requests and better multiline handle  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d67dc2cda595e7ce5bd6eb0e3d6dc73f96a89281)*)
 
 ## v0.0.9
-
-
-## v0.0.8
 
 
 
