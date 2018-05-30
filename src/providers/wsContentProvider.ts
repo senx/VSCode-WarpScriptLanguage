@@ -14,7 +14,7 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
      * 
      */
     public async provideTextDocumentContent(): Promise<string> {
-        let rootPath = this.context.asAbsolutePath('.')
+        let rootPath = this.context.asAbsolutePath('.').replace(/\\/g, '/');
         if (this.currentDocument) {
             return `
 <script src="file://${rootPath + '/bower_components/webcomponentsjs/webcomponents-loader.js'}"></script>
