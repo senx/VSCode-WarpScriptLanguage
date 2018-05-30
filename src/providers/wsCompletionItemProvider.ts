@@ -25,6 +25,7 @@ export default class WSCompletionItemProvider
       let result: CompletionItem[] = [];
       let lineText = document.lineAt(position.line).text;
      if (lineText.match(/^\s*\/\//)) {
+      console.log('[WarpScriptExtension/completionProvider] - match space');
         return resolve([]);
       }
       let wordAtPosition = document.getWordRangeAtPosition(position, /(\->|\$)?[A-Za-z]+\.?[A-Za-z]*/);
@@ -34,14 +35,18 @@ export default class WSCompletionItemProvider
         currentWord = word.substr(0, position.character - wordAtPosition.start.character);
       }
       if (currentWord.match(/^\d+$/)) {
+        console.log('[WarpScriptExtension/completionProvider] - match no word');
         return resolve([]);
       }
       if(currentWord.startsWith('$')) {
+        console.log('[WarpScriptExtension/completionProvider] - starts with &');
         return resolve([]);        
       }
+      console.log('[WarpScriptExtension/completionProvider] - search', currentWord);
       WarpScript.reference
         .filter(d => new RegExp(currentWord).exec(d.name))
         .forEach(keyword => {
+          console.log('[WarpScriptExtension/completionProvider] - found', keyword);
           let item = new CompletionItem(
             keyword.name,
             this.getType(keyword.tags, keyword.name)
