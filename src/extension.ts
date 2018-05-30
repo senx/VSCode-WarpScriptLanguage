@@ -37,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 	new WSDocumentFormattingEditProvider();
 	//	context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('warpscript', new WSDocumentFormattingEditProvider()));
 
-	let jsonResultRegEx = new RegExp(os.tmpdir().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '\/' + '\\d{3}\\.json', 'g');
+	let jsonResultRegEx = new RegExp(os.tmpdir().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '[\/\\\\]' + '\\d{3}\\.json', 'g');
 
 	let shouldRefresh = true;
 
