@@ -1,6 +1,13 @@
 VSCode Warpscript Extension
 ---
 
+## v0.0.18
+
+> +  2018/05/30  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/cff95afee8cc8e43902b5a2f7f34341159832f5c)*)
+> +  2018/05/30  | adding logs  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/b3150fabed719f5eb98a7bc50bd600b8e3d68dc2)*)
+> +  2018/05/30  | Some fixes on sig and completion  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/3d4e2f26a542bcf32f8dd082894783bccf8c3d6c)*)
+> +  2018/05/25  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f88a5d9ff2fe61db3ab0b5a20de60e6409628969)*)
+
 ## v0.0.17
 
 > +  2018/05/25  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/154b3d349dc6ab2cae5b39c2993b08737862afc3)*)
@@ -67,8 +74,5 @@ VSCode Warpscript Extension
 > +  2018/03/30  | Update README.md  (*[GitHub](noreply@github.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/6527dc8a58effb26f5eed35099d340594b062ca2)*)
 > +  2018/03/30  | changelog and version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8fb5f4c2cd60675c57e18f0e22b6a6204ee5bc34)*)
 > +  2018/03/30  | gzip requests and better multiline handle  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d67dc2cda595e7ce5bd6eb0e3d6dc73f96a89281)*)
-
-## v0.0.9
-
 
 
