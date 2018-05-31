@@ -3,6 +3,8 @@ VSCode Warpscript Extension
 
 ## v0.0.19
 
+> +  2018/05/31  | version bump  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/9681b5fe1d8baf5183f0bbabeecca6481cce90db)*)
+> +  2018/05/31  | changelog  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f1273d61484e9e0dab1b2eb3f3d8e56b23987dfc)*)
 > +  2018/05/31  | Dataviz not displayed on windows OS  (*[Giwi](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/3ca662dfbd3e6f9d71d4afcd1e0cfcaccddc1cbf)*)
 > +  2018/05/30  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/7c8fa924bef77ee75ce72a0f45f438d3528bbd90)*)
 
