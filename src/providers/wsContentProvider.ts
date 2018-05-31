@@ -41,7 +41,6 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
     public update(uri: vscode.Uri, document: vscode.TextDocument) {
         this.currentDocument = document
         this._onDidChange.fire(uri);
-
         vscode.commands.executeCommand('vscode.previewHtml', uri, vscode.ViewColumn.Two, 'GTS Preview')
             .then(() => {
                 // nothing

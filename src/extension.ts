@@ -17,10 +17,10 @@ import os = require('os');
  */
 export function activate(context: vscode.ExtensionContext) {
 	let outputWin = vscode.window.createOutputChannel('Warp10');
-	console.log('[client] Congratulations, your extension "Warpscript" is now active! ')
-	let wscontentprovider = new WSContentProvider(context)
+	console.log('[client] Congratulations, your extension "Warpscript" is now active! ');
+	let wscontentprovider = new WSContentProvider(context);
+	let imagebase64provider = new WSImagebase64Provider();
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('gts-preview', wscontentprovider));
-	let imagebase64provider = new WSImagebase64Provider()
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('imagebase64-preview', imagebase64provider))
 	context.subscriptions.push(vscode.languages.registerHoverProvider('warpscript', new WSHoverProvider()));
 	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('warpscript', new WSCompletionItemProvider(), '.'));
@@ -37,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 	new WSDocumentFormattingEditProvider();
 	//	context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('warpscript', new WSDocumentFormattingEditProvider()));
 
-	let jsonResultRegEx = new RegExp(os.tmpdir().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '[\/\\\\]' + '\\d{3}\\.json', 'g');
+	let jsonResultRegEx = new RegExp(os.tmpdir().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '[\/\\\\]' + '\\d{3}\\.json', 'gi');
 
 	let shouldRefresh = true;
 
@@ -46,11 +46,9 @@ export function activate(context: vscode.ExtensionContext) {
 			typeof textEditor.document !== 'undefined' &&
 			textEditor.document.languageId === 'json' &&
 			textEditor.document.uri.fsPath.match(jsonResultRegEx)) {
-
 			if (shouldRefresh) {
 				imagebase64provider.update(vscode.Uri.parse("imagebase64-preview://authority/imagebase64-preview"), textEditor.document);
 				wscontentprovider.update(vscode.Uri.parse("gts-preview://authority/gts-preview"), textEditor.document)
-
 				// Restore focus because the preview-html steals the focus.
 				vscode.window.showTextDocument(textEditor.document, { viewColumn: textEditor.viewColumn, preview: true, preserveFocus: false });
 			}

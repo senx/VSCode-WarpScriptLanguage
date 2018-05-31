@@ -33,5 +33,6 @@ More details on [warp10.io](http://www.warp10.io)
 
 ```bash
 yarn install
-npm compile
+bower install
+npm run compile
 ```
