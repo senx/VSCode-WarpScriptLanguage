@@ -1,6 +1,11 @@
 VSCode Warpscript Extension
 ---
 
+## v0.0.19
+
+> +  2018/05/31  | Dataviz not displayed on windows OS  (*[Giwi](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/3ca662dfbd3e6f9d71d4afcd1e0cfcaccddc1cbf)*)
+> +  2018/05/30  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/7c8fa924bef77ee75ce72a0f45f438d3528bbd90)*)
+
 ## v0.0.18
 
 > +  2018/05/30  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/cff95afee8cc8e43902b5a2f7f34341159832f5c)*)
@@ -68,11 +73,5 @@ VSCode Warpscript Extension
 > +  2018/04/13  | Nice output and some fixes.  (*[Fabien Tencé](fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/cd385109af65eb60f5d12f788dcf48fe8c01cbbe)*)
 > +  2018/04/04  | Add support for error line indicator in multiple file using local links macros.  (*[Fabien Tencé](fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d207082baef5823caaf60f0a982343c934da3b78)*)
 > +  2018/03/30  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/76e684ffcb887d7ea6428590ab40680e1fcea6a8)*)
-
-## v0.0.11
-
-> +  2018/03/30  | Update README.md  (*[GitHub](noreply@github.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/6527dc8a58effb26f5eed35099d340594b062ca2)*)
-> +  2018/03/30  | changelog and version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8fb5f4c2cd60675c57e18f0e22b6a6204ee5bc34)*)
-> +  2018/03/30  | gzip requests and better multiline handle  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d67dc2cda595e7ce5bd6eb0e3d6dc73f96a89281)*)
 
 
