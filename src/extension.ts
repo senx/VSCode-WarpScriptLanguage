@@ -12,12 +12,12 @@ import os = require('os');
 
 /**
  * Main extension's entrypoint
- * 
- * @param context 
+ *
+ * @param context
  */
 export function activate(context: vscode.ExtensionContext) {
 	let outputWin = vscode.window.createOutputChannel('Warp10');
-	console.log('[client] Congratulations, your extension "Warpscript" is now active! ');
+	console.log('[client] Congratulations, your extension "WarpScript" is now active! ');
 	let wscontentprovider = new WSContentProvider(context);
 	let imagebase64provider = new WSImagebase64Provider();
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('gts-preview', wscontentprovider));
