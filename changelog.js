@@ -2,7 +2,7 @@
 const { execSync } = require('child_process');
 let repo = 'https://github.com/Giwi/VSCode-WarpScriptLangage/';
 let md =
-  `VSCode Warpscript Extension
+  `VSCode WarpScript Extension
 ---
 
 `;
