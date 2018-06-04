@@ -114,5 +114,35 @@
             "UNTIL"
         ],
 		"description": "Until loop"
+    },
+    "for": {
+		"prefix": "for",
+		"body": [
+            "<% ${1:inititial_value} %>",
+            "<% ${2:final_value} %>",
+			"<% ${3:action} %>",
+            "FOR"
+        ],
+		"description": "For loop"
+    },
+    "foreach": {
+		"prefix": "foreach",
+		"body": [
+            "${1:object}",
+			"<% ${2:action} %>",
+            "FOREACH"
+        ],
+		"description": "Foreach loop"
+    },
+    "forstep": {
+		"prefix": "forstep",
+		"body": [
+            "<% ${1:inititial_value} %>",
+            "<% ${2:final_value} %>",
+			"<% ${3:step} %>",
+			"<% ${4:action} %>",
+            "FORSTEP"
+        ],
+		"description": "Forstep loop"
     }
 }
