@@ -30,38 +30,6 @@
 			"$macro"
 		],
 		"description": "Macro"
-<<<<<<< HEAD
-	},
-	"fetch": {
-		"prefix": "fetch",
-		"body": [
-			"[ 'TOKEN' 'className'  { 'label0' '=value0'  'label1' '~val.' }  start timespan ] FETCH"
-		]
-	},
-	"bucketize": {
-		"prefix": "bucketize",
-		"body": [
-			"[ [GTS] ... [GTS] bucketizer lastbucket bucketspan bucketcount ] BUCKETIZE"
-		]
-	},
-	"filter": {
-		"prefix": "filter",
-		"body": ["[ [GTS] ... [GTS] [labels] filter ] FILTER"]
-	},
-	"map": {
-		"prefix": "map",
-		"body": ["[ [GTS] ... [GTS] mapper pre post occurrences ] MAP"]
-	},
-	"reduce": {
-		"prefix": "reduce",
-		"body": ["[ [GTS] ... [GTS] [labels] reducer ] REDUCE"]
-	},
-	"apply": {
-		"prefix": "apply",
-		"body": ["[ [GTS] ... [GTS] [labels] op ] APPLY"]
-	}
-}
-=======
     },
     "fetch": {
         "prefix": "fetch",
@@ -191,4 +159,3 @@
 		"description": "Forstep loop"
     }
 }
->>>>>>> d2ac10ad9060d0d1473eb642cd8d64d57378fd81
