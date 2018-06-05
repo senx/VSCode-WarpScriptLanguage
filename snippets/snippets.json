@@ -1,57 +1,62 @@
 {
-    "macro": {
+	"macro": {
 		"prefix": "macro",
 		"body": [
 			"<%",
-            "\t<'",
-            "\t\tMacro documentation",
-            "\t'> ",
-            "\tDOC",
-            "\t// Macro signature",
-            "\tSAVE 'context' STORE",
-            "\t// Code of the actual macro",
-            "\t\\$context RESTORE",
-            "%>",
-            "'macro' STORE",
-            "// Unit tests",
-            "\\$macro"
-        ],
+			"\t{",
+			"\t\t'name' '<macro name>'",
+			"\t\t'desc'",
+			"\t\t\t<'",
+			"Macro description",
+			"\t\t\t'>",
+			"\t\t'sig' [ [ [ 'input:TYPE' ] [ 'output:TYPE' ] ] ] // Signature",
+			"\t\t'params' {",
+			"\t\t\t// Signature params description",
+			"\t\t\t'input' 'TODO'",
+			"\t\t\t'output' 'TODO'",
+			"\t\t}",
+			"\t\t'examples' [",
+			"\t\t\t<'",
+			"Warpscript usage example",
+			"\t\t\t'>",
+			"\t\t]",
+			"\t} INFO",
+			"\tSAVE 'context' STORE",
+			"\t\t// Code of the actual macro",
+			"\t$context RESTORE",
+			"%>",
+			"'macro' STORE",
+			"// Unit tests",
+			"$macro"
+		],
 		"description": "Macro"
-    },
-    "fetch": {
-        "prefix": "fetch",
-        "body": [
-            "[ 'TOKEN' 'className'  { 'label0' '=value0'  'label1' '~val.' }  start timespan ] FETCH"
-        ]
-    },
-    "bucketize": {
-        "prefix": "bucketize",
-        "body": [
-            "[ [GTS] ... [GTS] bucketizer lastbucket bucketspan bucketcount ] BUCKETIZE"
-        ]
-    },
-    "filter": {
-        "prefix": "filter",
-        "body": [
-            "[ [GTS] ... [GTS] [labels] filter ] FILTER"
-        ]
-    },
-    "map": {
-        "prefix": "map",
-        "body": [
-            "[ [GTS] ... [GTS] mapper pre post occurrences ] MAP"
-        ]
-    },
-    "reduce": {
-        "prefix": "reduce",
-        "body": [
-            "[ [GTS] ... [GTS] [labels] reducer ] REDUCE"
-        ]
-    },
-    "apply": {
-        "prefix": "apply",
-        "body": [
-            "[ [GTS] ... [GTS] [labels] op ] APPLY"
-        ]
-    }
+	},
+	"fetch": {
+		"prefix": "fetch",
+		"body": [
+			"[ 'TOKEN' 'className'  { 'label0' '=value0'  'label1' '~val.' }  start timespan ] FETCH"
+		]
+	},
+	"bucketize": {
+		"prefix": "bucketize",
+		"body": [
+			"[ [GTS] ... [GTS] bucketizer lastbucket bucketspan bucketcount ] BUCKETIZE"
+		]
+	},
+	"filter": {
+		"prefix": "filter",
+		"body": ["[ [GTS] ... [GTS] [labels] filter ] FILTER"]
+	},
+	"map": {
+		"prefix": "map",
+		"body": ["[ [GTS] ... [GTS] mapper pre post occurrences ] MAP"]
+	},
+	"reduce": {
+		"prefix": "reduce",
+		"body": ["[ [GTS] ... [GTS] [labels] reducer ] REDUCE"]
+	},
+	"apply": {
+		"prefix": "apply",
+		"body": ["[ [GTS] ... [GTS] [labels] op ] APPLY"]
+	}
 }
