@@ -1,6 +1,7 @@
 {
 	"name": "warpscript-language",
-	"description": "Warpscript support",
+	"displayName": "WarpScript language support",
+	"description": "WarpScript support",
 	"author": {
 		"name": "Xavier MARIN"
 	},
@@ -19,7 +20,15 @@
 		"url": "https://github.com/Giwi/VSCode-WarpScriptLangage/issues"
 	},
 	"categories": [
-		"Languages"
+		"Programming Languages",
+		"Snippets",
+		"Linters"
+	],
+	"keywords": [
+		"Warp 10",
+		"WarpScript",
+		"Geo Times Series",
+		"Times Series"
 	],
 	"galleryBanner": {
 		"color": "#FF9900",
@@ -51,8 +60,8 @@
 		"commands": [
 			{
 				"command": "extension.execWS",
-				"title": "Run Warpscript",
-				"category": "Warpscript",
+				"title": "Run WarpScript",
+				"category": "WarpScript",
 				"icon": {
 					"light": "./image/run.svg",
 					"dark": "./image/run_inverse.svg"
@@ -60,7 +69,8 @@
 			},
 			{
 				"command": "extension.execWSOnSelection",
-				"title": "Run Warpscript on selection"
+				"title": "Run WarpScript on selection",
+				"category": "WarpScript"
 			}
 		],
 		"languages": [
