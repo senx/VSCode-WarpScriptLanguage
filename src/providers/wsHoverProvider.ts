@@ -27,6 +27,27 @@ export default class WSHoverProvider implements HoverProvider {
 			return new Hover(contents, wordRange);
 		}
 
+		/**
+		 * Deals with internal VSCode documentation
+		 * This part could not be in wsGlobals
+		 */
+		let otherKeywordsDoc = JSON.parse(`{
+			"@localmacrosubstitution": {
+				"sig": "@localmacrosubstitution b:BOOLEAN",
+				"help": "When false, deactivate the inline macro substitution done by VSCode Warpscript plugin. "
+			},
+			"@endpoint": {
+				"sig": "@endpoint URL:STRING",
+				"help": "Override the _warpscript.Warp10URL_ settings in VSCode. Typical Warp 10 URL is http://127.0.0.1/api/v0/exec"
+			} 
+		}`);
+
+		let help = otherKeywordsDoc[name];
+		if (help) {
+			let contents: MarkedString[] = ['### ' + name, { language: 'warpscript', value: help["sig"] }, help["help"]];
+			return new Hover(contents, wordRange);
+		}
+
 		return undefined;
 	}
 }
