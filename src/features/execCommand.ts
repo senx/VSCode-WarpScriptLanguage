@@ -30,9 +30,9 @@ export default class ExecCommand {
                 title: 'Executing ' + baseFilename + ' on ' + Warp10URL
             }, (progress: vscode.Progress<{ message?: string; }>) => {
                 return new Promise(async (c, e) => {
-                    progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
-                    
-                    let executedWarpScript="";
+                    let executedWarpScript = "";
+                    let substitutionWithLocalMacros = true;
+
                     if(selectiontext === "" ) {
                         executedWarpScript = document.getText(); //if executed with empty string, take the full text
                     }
@@ -40,12 +40,61 @@ export default class ExecCommand {
                     {
                         executedWarpScript = selectiontext;
                     }
+                    //
+                    //analyse the first warpscript lines starting with //
+                    // 
+                    console.log(Warp10URL);
+                    let warpscriptlines = executedWarpScript.split('\n');
+                    for(let l = 0; l < warpscriptlines.length; l++) {
+                        let currentline = warpscriptlines[l];
+                        if(currentline.startsWith("//")) {
+                            //find and extract // @paramname parameters
+                            let extraparamsPattern = /\/\/\s*@(\w*)\s*(.*)$/g;
+                            let lineonMatch: RegExpMatchArray | null;
+                            let re = RegExp(extraparamsPattern);
+                            while (lineonMatch = re.exec(currentline)) {
+                                let parametername = lineonMatch[1];
+                                let parametervalue = lineonMatch[2];
+                                switch (parametername) {
+                                    case "endpoint":        //        // @endpoint http://mywarp10server/api/v0/exec
+                                        Warp10URL = parametervalue;   // overrides the Warp10URL configuration
+                                        console.log(Warp10URL);
+                                        break;
+                                    case "localmacrosubstitution":    
+                                        substitutionWithLocalMacros = ("true" === parametervalue.toLowerCase());   // overrides the substitutionWithLocalMacros
+                                        console.log("substitutionWithLocalMacros="+substitutionWithLocalMacros);
+                                        break;
+                                
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                        else {
+                            break; //no more comments at the beginning of the file
+                        }
+                    }
+                    //
+                    //find the hostname in Warp10URL. 
+                    //
+                    let Warp10URLhostname = Warp10URL; //if regexp fail, keep the full URL
+                    let hostnamePattern = /https?\:\/\/((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9]))[\/\:].*/g;  // Captures the lines sections name
+                    let lineonMatch: RegExpMatchArray | null; // https://www.regextester.com/ for easy tests
+                    let re = RegExp(hostnamePattern)
+                    while (lineonMatch = re.exec(Warp10URL)) {
+                        Warp10URLhostname=lineonMatch[1]; //group 1
+                    }
+
+
+
+                    progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
+                    
                     let macroPattern = /@([^\s]+)/g;  // Captures the macro name
                     let match: RegExpMatchArray | null;
                     let lines: number[] = [document.lineCount]
                     let uris: string[] = [document.uri.toString()]
 
-                    while ((match = macroPattern.exec(executedWarpScript))) {
+                    while (substitutionWithLocalMacros && (match = macroPattern.exec(executedWarpScript))) {
                         const macroName = match[1];
                         await WSDocumentLinksProvider.getMacroURI(macroName).then(
                             async (uri) => {
@@ -160,7 +209,8 @@ export default class ExecCommand {
                                     outputWin.append(' ' + ExecCommand.formatElapsedTime(response.headers['x-warp10-elapsed']));
                                     outputWin.append(' ' + ExecCommand.pad(response.headers['x-warp10-fetched'], 10, ' ') + ' fetched ');
                                     outputWin.append(ExecCommand.pad(response.headers['x-warp10-ops'], 10, ' ') + ' ops ');
-                                    outputWin.appendLine(ExecCommand.pad(baseFilename, 23, ' '));
+                                    outputWin.append(ExecCommand.pad(baseFilename, 23, ' '));
+                                    outputWin.appendLine(' @' + Warp10URLhostname.substr(0,30));
                                 }
                                 if (errorParam) {
                                     e(errorParam)
