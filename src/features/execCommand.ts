@@ -30,7 +30,9 @@ export default class ExecCommand {
                 title: 'Executing ' + baseFilename + ' on ' + Warp10URL
             }, (progress: vscode.Progress<{ message?: string; }>) => {
                 return new Promise(async (c, e) => {
-                    let executedWarpScript="";
+                    let executedWarpScript = "";
+                    let substitutionWithLocalMacros = true;
+
                     if(selectiontext === "" ) {
                         executedWarpScript = document.getText(); //if executed with empty string, take the full text
                     }
@@ -57,6 +59,10 @@ export default class ExecCommand {
                                     case "endpoint":        //        // @endpoint http://mywarp10server/api/v0/exec
                                         Warp10URL = parametervalue;   // overrides the Warp10URL configuration
                                         console.log(Warp10URL);
+                                        break;
+                                    case "localmacrosubstitution":    
+                                        substitutionWithLocalMacros = ("true" === parametervalue.toLowerCase());   // overrides the substitutionWithLocalMacros
+                                        console.log("substitutionWithLocalMacros="+substitutionWithLocalMacros);
                                         break;
                                 
                                     default:
@@ -88,7 +94,7 @@ export default class ExecCommand {
                     let lines: number[] = [document.lineCount]
                     let uris: string[] = [document.uri.toString()]
 
-                    while ((match = macroPattern.exec(executedWarpScript))) {
+                    while (substitutionWithLocalMacros && (match = macroPattern.exec(executedWarpScript))) {
                         const macroName = match[1];
                         await WSDocumentLinksProvider.getMacroURI(macroName).then(
                             async (uri) => {
