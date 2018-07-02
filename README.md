@@ -29,6 +29,8 @@ More details on [warp10.io](http://www.warp10.io)
   - [EXEC_START_DATE] file:///os_temp_dir/executed_warpscript.mc2 => file:///os_temp_dir/result.json exec_time fetched_data op_count main_filename.mc2
   - [EXEC_START_DATE] ERROR /path/to/script/in/error.mc2:error_line reason_of_failure
 - WarpScript and resulting JSON are sent gzipped between the client and the server
+- // @endpoint http://xxx/api/v0/exec at the beginning of the script change the remote execution endpoint
+- // @localmacrosubstitution false at the beginning of the script deactivate the local macro substitution
 
 ## How to run
 
