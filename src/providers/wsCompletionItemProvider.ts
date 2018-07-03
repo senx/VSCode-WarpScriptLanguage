@@ -24,20 +24,23 @@ export default class WSCompletionItemProvider
     return new Promise<CompletionItem[]>(resolve => {
       let result: CompletionItem[] = [];
       let lineText = document.lineAt(position.line).text;
-     if (lineText.match(/^\s*\/\//)) {
+      if (lineText.match(/^\s*\/\//)) {
         return resolve([]);
       }
-      let wordAtPosition = document.getWordRangeAtPosition(position, /(\->|\$)?[A-Za-z]+\.?[A-Za-z]*/);
+      let wordAtPosition = document.getWordRangeAtPosition(position, /(\->|\$|\@)?[A-Za-z]+\.?[A-Za-z]*/);
       let currentWord = "";
-      if ( wordAtPosition && wordAtPosition.start.character < position.character ) {
+      if (wordAtPosition && wordAtPosition.start.character < position.character) {
         let word = document.getText(wordAtPosition);
         currentWord = word.substr(0, position.character - wordAtPosition.start.character);
       }
       if (currentWord.match(/^\d+$/)) {
         return resolve([]);
       }
-      if(currentWord.startsWith('$')) {
-        return resolve([]);        
+      if (currentWord.startsWith('$')) {
+        return resolve([]);
+      } 
+      if (currentWord.startsWith('@')) {
+        return resolve([]);
       }
       WarpScript.reference
         .filter(d => new RegExp(currentWord).exec(d.name))
@@ -47,7 +50,7 @@ export default class WSCompletionItemProvider
             this.getType(keyword.tags, keyword.name)
           );
           item.detail = keyword.name;
-          item.range =  wordAtPosition;
+          item.range = wordAtPosition;
           item.documentation = new MarkdownString()
             .appendText("Since : " + keyword.since)
             .appendCodeblock(keyword.detail, "warpscript")
@@ -55,6 +58,9 @@ export default class WSCompletionItemProvider
 
           result.push(item);
         });
+      //Add true and false in the list
+      result.push(new CompletionItem("true", CompletionItemKind.Constant))
+      result.push(new CompletionItem("false", CompletionItemKind.Constant))
       return resolve(result);
     });
   }
