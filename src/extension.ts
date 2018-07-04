@@ -8,8 +8,9 @@ import WSDocumentFormattingEditProvider from './providers/wsDocumentFormattingEd
 import ExecCommand from './features/execCommand'
 import WSImagebase64Provider from './providers/wsImagebase64Provider'
 import WSCompletionItemProvider from './providers/wsCompletionItemProvider'
+import WSCompletionVariablesProvider from './providers/wsCompletionVariablesProvider'
+//import WSCompletionMacrosProvider from './providers/wsCompletionMacrosProvider' //TODO
 import os = require('os');
-
 /**
  * Main extension's entrypoint
  *
@@ -23,7 +24,9 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('gts-preview', wscontentprovider));
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('imagebase64-preview', imagebase64provider))
 	context.subscriptions.push(vscode.languages.registerHoverProvider('warpscript', new WSHoverProvider()));
-	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('warpscript', new WSCompletionItemProvider(), '.'));
+	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('warpscript', new WSCompletionItemProvider()));
+	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('warpscript', new WSCompletionVariablesProvider(),"'","$"));
+	//context.subscriptions.push(vscode.languages.registerCompletionItemProvider('warpscript', new WSCompletionMacrosProvider(),"@","/")); //TODO
 	context.subscriptions.push(vscode.languages.registerDocumentLinkProvider('warpscript', new WSDocumentLinksProvider()));
 	context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(""); }));
 	context.subscriptions.push(vscode.commands.registerCommand('extension.execWSOnSelection', () => {
