@@ -3,6 +3,8 @@ VSCode WarpScript Extension
 
 ## v0.0.20
 
+> +  2018/07/05  | bug fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/85bc84dde208c23aff5debf2ed205f30ca676983)*)
+> +  2018/07/05  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/744ca51116ce79c5a123168c5500faa20db8f619)*)
 > +  2018/07/05  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/42384efae6b6cb8bcfb37bedfc90f32666561a13)*)
 > +  2018/07/05  | wip  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8c82033116659f82008c7b99f5335bd139a05d5b)*)
 > +  2018/07/03  | Autocompletion for variables  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/0f261d34676ed7b0a12f76243e496ea256b6dc02)*)
