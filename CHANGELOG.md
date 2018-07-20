@@ -1,5 +1,22 @@
-VSCode Warpscript Extension
+VSCode WarpScript Extension
 ---
+
+## v0.0.20
+
+> +  2018/07/05  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/42384efae6b6cb8bcfb37bedfc90f32666561a13)*)
+> +  2018/07/05  | wip  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8c82033116659f82008c7b99f5335bd139a05d5b)*)
+> +  2018/07/03  | Autocompletion for variables  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/0f261d34676ed7b0a12f76243e496ea256b6dc02)*)
+> +  2018/07/02  | Added internal doc for @parameters  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/7c21afff8f314b55bc068bf0d50a6e427857b36d)*)
+> +  2018/07/02  | Add a parameter to deactivate inline substitution of macros  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/25176f4ebf2f2364e67e94704feb8e15537a0163)*)
+> +  2018/06/27  | Add a way to override Warp 10 URL in the file comments  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/645458135bbb070d7e13769351224b7a8dd07962)*)
+> +  2018/06/05  | doc update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/c772a262a701cc8efcb47ad52744b91a97081cee)*)
+> +  2018/06/05  | merge  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f37371420ffa4abe3391aad2bb4706bcebaa51df)*)
+> +  2018/06/05  | snipets  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/10c16a05263ff556cc9a63e1005a8db2fff70151)*)
+> +  2018/06/04  | Add snippets for 'FOR', 'FOREACH', 'FORSTEP'  (*[Steven GUEGUEN](steven.gueguen@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/13efccf9f743dd09d1be77c5251560501caf54fa)*)
+> +  2018/06/04  | Add categories and keywords  (*[Steven GUEGUEN](steven.gueguen@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/bcf48f8cf327fedc0ae28b2f65902f977bb14331)*)
+> +  2018/06/04  | Typo  (*[Steven GUEGUEN](steven.gueguen@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/fbdda95fb3c8999526f66a08e7b58739642536c0)*)
+> +  2018/06/04  | Add snippets for 'IFT', 'IFTE', 'SWITCH', 'WHILE', 'UNTIL',  (*[Steven GUEGUEN](steven.gueguen@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d525df4acc845cb2ebbd6524524b92742cd4fe06)*)
+> +  2018/05/31  | changelog  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/becc5ae7fdcf7ccca91e210f96f71c5830db3f55)*)
 
 ## v0.0.19
 
@@ -68,12 +85,5 @@ VSCode Warpscript Extension
 
 ## v0.0.6
 
-
-## v0.0.12
-
-> +  2018/04/13  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/7218118f1ccf80a6a0232ab80cabff3cbc969100)*)
-> +  2018/04/13  | Nice output and some fixes.  (*[Fabien Tencé](fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/cd385109af65eb60f5d12f788dcf48fe8c01cbbe)*)
-> +  2018/04/04  | Add support for error line indicator in multiple file using local links macros.  (*[Fabien Tencé](fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d207082baef5823caaf60f0a982343c934da3b78)*)
-> +  2018/03/30  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/76e684ffcb887d7ea6428590ab40680e1fcea6a8)*)
 
 
