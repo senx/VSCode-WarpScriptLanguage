@@ -3,8 +3,7 @@ import {
   TextDocument,
   Position,
   CancellationToken,
-  CompletionItem,
-  MarkdownString
+  CompletionItem
 } from "vscode";
 import { CompletionItemKind } from "vscode";
 
