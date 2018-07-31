@@ -153,7 +153,134 @@ zlib.gzip(executedWarpScript, function(err, gzipWarpScript) {
           }
         };
 
-        let syntax = { $schema: "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json", name: "WarpScript", patterns: [], repository: { comments: { patterns: [{ captures: { "0": { name: "punctuation.definition.comment" } }, match: "/\\*\\*/", name: "comment.block.empty" }, { include: "text.html.javadoc" }, { include: "#comments-inline" }] }, "comments-inline": { patterns: [{ begin: "/\\*", captures: { "0": { name: "punctuation.definition.comment" } }, end: "(\\s)*\\*/", name: "comment.block" }, { begin: "(^[\\s\\t]+)?(?=//)", beginCaptures: { "1": { name: "punctuation.whitespace.comment.leading" } }, end: "(?!\\G)", patterns: [{ begin: "(\\s)*//", beginCaptures: { "0": { name: "punctuation.definition.comment" } }, end: "\\n", name: "comment.line.double-slash" }] }] }, variables: { patterns: [{ match: "\\$([^ ]+)", name: "variable" }] }, macros: { patterns: [{ match: "\\@([^ ]+)", name: "variable" }] }, numbers: { patterns: [{ match: "(?<!\\S)((-)?[0-9.])+\\b", name: "constant.numeric" }, { match: "(?<!\\S)(true|false)(?!\\S)", name: "constant.numeric" }, { match: "(?<!\\S)0x[0-9ABCDEFabcdef]+\\b", name: "constant.numeric" }] }, types: { patterns: [{ match: "(<LIST(<.+>)?>|<STRING>|<GTS>|<BUCKETIZER>|<MAPPER>|<FILTER>|<REDUCER>|<LONG>|<DOUBLE>|<ANY>|<NUMBER>|<MAP>|<VECTOR>|<BYTES>|<BITSET>)(?!\\S)", name: "entity.name.type" }] }, string1: { name: "string.quoted.double", begin: '"', end: '"', patterns: [{ name: "constant.character.escape", match: "\\\\." }] }, string2: { name: "string.quoted.double", begin: "'", end: "'", patterns: [{ name: "constant.character.escape", match: "\\\\." }] }, string3: { name: "string.quoted.double", begin: "^\\s*<'", end: "'>", patterns: [{ name: "constant.character.escape", match: "\\\\." }] }, operator: { patterns: [{ match: "(?<!\\S)(!=|<|>|~=|<=|==|>=)(?!\\S)", name: "keyword.operator.comparison" }, { match: "(?<!\\S)(%|\\*|\\+|-|/|\\*\\*)(?!\\S)", name: "keyword.operator.arithmetic" }, { match: "(?<!\\S)(!|&&|AND|OR|NOT|\\|\\|)(?!\\S)", name: "keyword.operator.logical" }, { match: "(?<!\\S)(&|\\^|\\||>>>|~|<<|>>)(?!\\S)", name: "keyword.operator.bitwise" }] } }, scopeName: "source.warpscript" };
+        let syntax = {
+          $schema:
+            "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+          name: "WarpScript",
+          patterns: [],
+          repository: {
+            comments: {
+              patterns: [
+                {
+                  captures: { "0": { name: "punctuation.definition.comment" } },
+                  match: "/\\*\\*/",
+                  name: "comment.block.empty"
+                },
+                { include: "text.html.javadoc" },
+                { include: "#comments-inline" }
+              ]
+            },
+            "comments-inline": {
+              patterns: [
+                {
+                  begin: "/\\*",
+                  captures: { "0": { name: "punctuation.definition.comment" } },
+                  end: "(\\s)*\\*/",
+                  name: "comment.block"
+                },
+                {
+                  begin: "(^[\\s\\t]+)?(?=//)",
+                  beginCaptures: {
+                    "1": { name: "punctuation.whitespace.comment.leading" }
+                  },
+                  end: "(?!\\G)",
+                  patterns: [
+                    {
+                      begin: "(\\s)*//",
+                      beginCaptures: {
+                        "0": { name: "punctuation.definition.comment" }
+                      },
+                      end: "\\n",
+                      name: "comment.line.double-slash"
+                    }
+                  ]
+                },
+                {
+                  begin: "(^[\\s\\t]+)?(?=#)",
+                  beginCaptures: {
+                    "1": { name: "punctuation.whitespace.comment.leading" }
+                  },
+                  end: "(?!\\G)",
+                  patterns: [
+                    {
+                      begin: "(\\s)*#",
+                      beginCaptures: {
+                        "0": { name: "punctuation.definition.comment" }
+                      },
+                      end: "\\n",
+                      name: "comment.line.double-slash"
+                    }
+                  ]
+                }
+              ]
+            },
+            variables: {
+              patterns: [{ match: "\\$([^ ]+)", name: "variable" }]
+            },
+            macros: { patterns: [{ match: "\\@([^ ]+)", name: "variable" }] },
+            numbers: {
+              patterns: [
+                { match: "(?<!\\S)((-)?[0-9.])+\\b", name: "constant.numeric" },
+                {
+                  match: "(?<!\\S)(true|false)(?!\\S)",
+                  name: "constant.numeric"
+                },
+                {
+                  match: "(?<!\\S)0x[0-9ABCDEFabcdef]+\\b",
+                  name: "constant.numeric"
+                }
+              ]
+            },
+            types: {
+              patterns: [
+                {
+                  match:
+                    "(<LIST(<.+>)?>|<STRING>|<GTS>|<BUCKETIZER>|<MAPPER>|<FILTER>|<REDUCER>|<LONG>|<DOUBLE>|<ANY>|<NUMBER>|<MAP>|<VECTOR>|<BYTES>|<BITSET>)(?!\\S)",
+                  name: "entity.name.type"
+                }
+              ]
+            },
+            string1: {
+              name: "string.quoted.double",
+              begin: '"',
+              end: '"',
+              patterns: [{ name: "constant.character.escape", match: "\\\\." }]
+            },
+            string2: {
+              name: "string.quoted.double",
+              begin: "'",
+              end: "'",
+              patterns: [{ name: "constant.character.escape", match: "\\\\." }]
+            },
+            string3: {
+              name: "string.quoted.double",
+              begin: "^\\s*<'",
+              end: "'>",
+              patterns: [{ name: "constant.character.escape", match: "\\\\." }]
+            },
+            operator: {
+              patterns: [
+                {
+                  match: "(?<!\\S)(!=|<|>|~=|<=|==|>=)(?!\\S)",
+                  name: "keyword.operator.comparison"
+                },
+                {
+                  match: "(?<!\\S)(%|\\*|\\+|-|/|\\*\\*)(?!\\S)",
+                  name: "keyword.operator.arithmetic"
+                },
+                {
+                  match: "(?<!\\S)(!|&&|AND|OR|NOT|\\|\\|)(?!\\S)",
+                  name: "keyword.operator.logical"
+                },
+                {
+                  match: "(?<!\\S)(&|\\^|\\||>>>|~|<<|>>)(?!\\S)",
+                  name: "keyword.operator.bitwise"
+                }
+              ]
+            }
+          },
+          scopeName: "source.warpscript"
+        };
         let tags = {};
         JSON.parse(body)[0].forEach(fn => {
           let sig = generateSig(fn);
@@ -204,7 +331,7 @@ zlib.gzip(executedWarpScript, function(err, gzipWarpScript) {
             }
           ]
         };
-  
+
         Object.keys(tags).forEach(tag => {
           syntax.patterns.push({ include: "#" + tag });
           syntax.repository[tag] = { patterns: [] };
@@ -249,9 +376,7 @@ zlib.gzip(executedWarpScript, function(err, gzipWarpScript) {
               syntax.repository[tag].patterns.push({
                 match:
                   "(?<!\\S)(" +
-                  tags[tag]
-                    .filter(i => i !== "REDUCE")
-                    .join("|") +
+                  tags[tag].filter(i => i !== "REDUCE").join("|") +
                   ")(?!\\S)",
                 name: "support.function"
               });
@@ -271,9 +396,7 @@ zlib.gzip(executedWarpScript, function(err, gzipWarpScript) {
               syntax.repository[tag].patterns.push({
                 match:
                   "(?<!\\S)(" +
-                  tags[tag]
-                    .filter(i => i !== "BUCKETIZE")
-                    .join("|") +
+                  tags[tag].filter(i => i !== "BUCKETIZE").join("|") +
                   ")(?!\\S)",
                 name: "support.function"
               });
@@ -283,9 +406,7 @@ zlib.gzip(executedWarpScript, function(err, gzipWarpScript) {
               syntax.repository[tag].patterns.push({
                 match:
                   "(?<!\\S)(" +
-                  tags[tag]
-                    .filter(i => i !== "FILTER")
-                    .join("|") +
+                  tags[tag].filter(i => i !== "FILTER").join("|") +
                   ")(?!\\S)",
                 name: "support.function"
               });

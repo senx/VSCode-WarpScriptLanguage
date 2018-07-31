@@ -4,10 +4,10 @@
 		"body": [
 			"<%",
 			"\t{",
-			"\t\t'name' '<macro name>'",
+			"\t\t'name' '${1:name}'",
 			"\t\t'desc'",
 			"\t\t\t<'",
-			"Macro description",
+			"${2:description}",
 			"\t\t\t'>",
 			"\t\t'sig' [ [ [ 'input:TYPE' ] [ 'output:TYPE' ] ] ] // Signature",
 			"\t\t'params' {",
@@ -27,7 +27,7 @@
 			"%>",
 			"'macro' STORE",
 			"// Unit tests",
-			"$macro"
+			"\\$macro"
 		],
 		"description": "Macro"
     },
