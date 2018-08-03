@@ -26,11 +26,17 @@ More details on [warp10.io](http://www.warp10.io)
 - Embedded Quantum Dataviz
 - Embedded base 64 image viewer (visible only if returned JSON contains at least one base64 image)
 - WarpScript execution history in output window using the format (files are clickable):
-  - [EXEC_START_DATE] file:///os_temp_dir/executed_warpscript.mc2 => file:///os_temp_dir/result.json exec_time fetched_data op_count main_filename.mc2
+  - [EXEC_START_DATE] file:///os_temp_dir/executed_warpscript.mc2 => file:///os_temp_dir/result.json exec_time fetched_data op_count main_filename.mc2 endpoint
   - [EXEC_START_DATE] ERROR /path/to/script/in/error.mc2:error_line reason_of_failure
 - WarpScript and resulting JSON are sent gzipped between the client and the server
-- // @endpoint http://xxx/api/v0/exec at the beginning of the script change the remote execution endpoint
-- // @localmacrosubstitution false at the beginning of the script deactivate the local macro substitution
+
+
+## Tips
+
+- To slow down autocompletion, you can use VSCode built in configuration `editor.quickSuggestionsDelay`
+- `// @endpoint http://xxx/api/v0/exec` at the beginning of the script change the remote execution endpoint
+- `// @localmacrosubstitution false` at the beginning of the script deactivate the local macro substitution
+
 
 ## How to run
 
