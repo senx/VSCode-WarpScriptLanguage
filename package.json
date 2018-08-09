@@ -7,7 +7,7 @@
 	},
 	"icon": "images/warp10.png",
 	"license": "Apache-2.0",
-	"version": "0.0.20",
+	"version": "0.0.21",
 	"publisher": "xavmarin",
 	"engines": {
 		"vscode": "^1.19.1"
@@ -121,13 +121,14 @@
 		"lodash": "^4.17.10",
 		"plist": "3.0.1",
 		"showdown": "^1.8.6",
-		"typescript": "^2.8.3",
-		"vscode": "^1.1.17",
-		"vscode-textmate": "3.3.3"
+		"typescript": "3.0.1",
+		"vscode": "1.1.18",
+		"vscode-textmate": "4.0.1"
 	},
 	"dependencies": {
-		"@types/request": "^2.47.0",
-		"request": "^2.85.0",
-		"vscode-languageclient": "^3.5.0"
+		"@types/request": "2.47.1",
+		"request": "2.87.0",
+		"vsce": "^1.46.0",
+		"vscode-languageclient": "4.4.0"
 	}
 }
