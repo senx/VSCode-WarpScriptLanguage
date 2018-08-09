@@ -36,7 +36,6 @@ export class Monarch {
         "UNWRAP",
         "UNBUCKETIZE",
         "TOSELECTOR",
-        "T", "F",
         "TOKENINFO",
         "TOBITS",
         "TLTTB",
