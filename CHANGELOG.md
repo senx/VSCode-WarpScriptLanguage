@@ -1,6 +1,18 @@
 VSCode WarpScript Extension
 ---
 
+## v0.0.21
+
+> +  2018/08/09  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/70dccf3c047876bee3880eaf5cdee0498017737d)*)
+> +  2018/08/09  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/88a56ee227f8bd8d949c0de1ddcce0acb3df90a0)*)
+> +  2018/08/03  | add tips to readme  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/57a4f12e889398b0bf42d823a54747f834d3ab5b)*)
+> +  2018/08/03  | add tips to readme  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/51f54fd13fe7a06030763800547942e1ceb9a7e0)*)
+> +  2018/08/03  | add tips to readme  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/c1d2a502c92d5affdaa8801f284fc1a0dd2e7a99)*)
+> +  2018/07/31  | # as comment  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/df5828959bb73a71d7d7207119e28f897bfbcce5)*)
+> +  2018/07/26  | doc  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/3de10da5b37e4f3d0b09c576f7402539a9422b6d)*)
+> +  2018/07/20  | Dedup the autocompletion variable list  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/2b3cb6af19c461d752fcd213c67b223953ab7542)*)
+> +  2018/07/05  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/4ca3ddccfbd559c60379208e279236419e40f59a)*)
+
 ## v0.0.20
 
 > +  2018/07/05  | bug fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/85bc84dde208c23aff5debf2ed205f30ca676983)*)
@@ -84,8 +96,5 @@ VSCode WarpScript Extension
 > +  2018/04/22  | version bump  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/97d672144f2268499e74d0c10d18b78e343feaf3)*)
 > +  2018/04/20  | Added gzip for sent data.  (*[Fabien Tencé](fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/ee4cb68da6f9c29c35e30bee23c7bdfd462634f9)*)
 > +  2018/04/13  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/946d9b7ede831bd6169256b07250858fcceafdc2)*)
-
-## v0.0.6
-
 
 
