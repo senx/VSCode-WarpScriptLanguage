@@ -23,11 +23,11 @@
 			"\t} INFO",
 			"\tSAVE 'context' STORE",
 			"\t\t// Code of the actual macro",
-			"\t$context RESTORE",
+			"\t$$context RESTORE",
 			"%>",
 			"'macro' STORE",
 			"// Unit tests",
-			"\\$macro"
+			"$$macro"
 		],
 		"description": "Macro"
     },
