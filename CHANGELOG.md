@@ -1,6 +1,16 @@
 VSCode WarpScript Extension
 ---
 
+## v0.0.22
+
+> +  2018/08/10  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/64d2c9a7eecef16cc9a61c785187fac69f7b7292)*)
+> +  2018/08/10  | Doc update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8f3ae32ccaeae2a8a28e9d3dbb319b2b8ab5bfc0)*)
+> +  2018/08/10  | lineComment fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/6a8a0c2e6593f490e56e04855546a7397338507b)*)
+> +  2018/08/09  | need a 19957 for $ in snippet syntax  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/dae2f80e106b473ab747e6b768d1e2861e01c63b)*)
+> +  2018/08/09  | vsce version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/63dc697ee174f7d10129dc729d6fda75329f4293)*)
+> +  2018/08/09  | npm  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/632a436ef2acd408b928e262bcf09f86dea8a5fb)*)
+> +  2018/08/09  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/c92729f1c3ca492a0ec17da55bdaf73015baa874)*)
+
 ## v0.0.21
 
 > +  2018/08/09  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/70dccf3c047876bee3880eaf5cdee0498017737d)*)
@@ -88,13 +98,5 @@ VSCode WarpScript Extension
 > +  2018/04/25  | Ctrl Shift U on a selection run the selected warpscript  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/173eae9d23840dbc6958905a0457dd017908cb2e)*)
 > +  2018/04/25  | Ctrl Shift U on a selection run the selected warpscript  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/3cbd9c2be4e4084c7d223abe686ed481a8030526)*)
 > +  2018/04/24  | Added support for error message resulting from LINEON and macro link bugfix.  (*[Fabien Tencé](fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8087dfe405642ce9a7dead31ee599444732abeee)*)
-
-## v0.0.13
-
-> +  2018/04/22  | fix  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/bac95f66955c07c6618535ba8f5b64fa7fec6d73)*)
-> +  2018/04/22  | changelog  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/4711121b1c86656d98fb5e0dd7e1f2789835ea09)*)
-> +  2018/04/22  | version bump  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/97d672144f2268499e74d0c10d18b78e343feaf3)*)
-> +  2018/04/20  | Added gzip for sent data.  (*[Fabien Tencé](fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/ee4cb68da6f9c29c35e30bee23c7bdfd462634f9)*)
-> +  2018/04/13  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/946d9b7ede831bd6169256b07250858fcceafdc2)*)
 
 
