@@ -21,9 +21,10 @@ export default class ExecCommand {
             }
 
             let Warp10URL: string = vscode.workspace.getConfiguration().get('warpscript.Warp10URL');
-            let execDate: string = new Date().toLocaleTimeString();
-            let document = vscode.window.activeTextEditor.document;
-            let baseFilename = document.fileName.split('\\').pop().split('/').pop();
+            const useGZIP = vscode.workspace.getConfiguration().get('warpscript.useGZIP');
+            const execDate: string = new Date().toLocaleTimeString();
+            const document = vscode.window.activeTextEditor.document;
+            const baseFilename = document.fileName.split('\\').pop().split('/').pop();
 
             vscode.window.withProgress<boolean>({
                 location: vscode.ProgressLocation.Window,
@@ -43,7 +44,6 @@ export default class ExecCommand {
                     //
                     //analyse the first warpscript lines starting with //
                     // 
-                    console.log(Warp10URL);
                     let warpscriptlines = executedWarpScript.split('\n');
                     for(let l = 0; l < warpscriptlines.length; l++) {
                         let currentline = warpscriptlines[l];
@@ -85,8 +85,6 @@ export default class ExecCommand {
                         Warp10URLhostname=lineonMatch[1]; //group 1
                     }
 
-
-
                     progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
                     
                     let macroPattern = /@([^\s]+)/g;  // Captures the macro name
@@ -118,12 +116,17 @@ export default class ExecCommand {
                         if (err) {
                             console.error(err);
                         }
+                        let headers = { 'Content-Type': 'application/gzip', 'Transfer-Encoding': 'chunked' };
+                        if(!useGZIP) {
+                            headers['Content-Type'] = 'text/plain';
+                        }
+                        console.log(headers)
                         request.post({
-                            headers: { 'Content-Type': 'application/gzip', 'Transfer-Encoding': 'chunked' },
+                            headers: headers,
                             url: Warp10URL,
                             gzip: true,
                             timeout: 3600000, // 1 hour
-                            body: gzipWarpScript
+                            body: useGZIP?gzipWarpScript:executedWarpScript
                         }, async (error: any, response: any, body: string) => {
                             if (error) {
                                 vscode.window.showErrorMessage(error.message)
