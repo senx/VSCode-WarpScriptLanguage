@@ -133,6 +133,7 @@ export default class ExecCommand {
                                 console.error(error)
                                 return e(error)
                             } else {
+                                console.log(error, response, body)
                                 let errorParam: any = null
                                 progress.report({ message: 'Parsing response' });
 
@@ -165,7 +166,8 @@ export default class ExecCommand {
                                     outputWin.append(Uri.parse(uris[i]).fsPath + ':' + lineInError);
                                     outputWin.appendLine(' ' + response.headers['x-warp10-error-message']);
                                 }
-                                if (!response.headers['content-type']) { // If no content-type is specified, response is the JSON representation of the stack
+                                // If no content-type is specified, response is the JSON representation of the stack
+                                if (!response.headers['content-type'] || "application/json" === response.headers['content-type']) { 
 
                                     // Generate unique filenames, ordered by execution order.
                                     let uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
