@@ -27,7 +27,7 @@ export default class WSCompletionVariablesProvider
       if (lineText.match(/^\s*\/\//)) { //no variable completion in comments
         return resolve([]);
       }
-      let wordAtPosition = document.getWordRangeAtPosition(position, /(\$|\')[A-Za-z0-9]*(\')?/); // 'tB9' , $tB9
+      let wordAtPosition = document.getWordRangeAtPosition(position, /(\$|\')[A-Za-z0-9\.]*(\')?/); // 'tB9' , $tB9
       let currentWord = "";
       //console.log("line" + lineText);
       if (wordAtPosition && wordAtPosition.start.character < position.character) {
@@ -57,8 +57,9 @@ export default class WSCompletionVariablesProvider
     for (let l = 0; l < warpscriptlines.length; l++) {
       let currentline = warpscriptlines[l];
 
-      //find and extract // @paramname parameters
-      let varPattern = /\'([A-Za-z0-9]+)\'\s+STORE(\/\/.*)?$/g;
+      //find and extract variable name can have dots or underscores or dash. 
+      //the line must end with STORE (followed by spaces or an // comment)
+      let varPattern = /\'([A-Za-z0-9-_\.]+)\'\s+STORE([ ]*)(\/\/.*)?$/g;
       let lineonMatch: RegExpMatchArray | null;
       let re = RegExp(varPattern);
       while (lineonMatch = re.exec(currentline)) {
