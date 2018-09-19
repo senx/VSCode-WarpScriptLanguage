@@ -97,6 +97,15 @@
 			"type": "object",
 			"title": "WarpScript",
 			"properties": {
+				"warpscript.theme" : {
+					"enum": [
+            "light",
+            "dark"
+          ],
+					"scope": "window",
+					"default": "light",
+				"description": "Data visualization theme"
+				},
 				"warpscript.Warp10URL": {
 					"scope": "resource",
 					"type": "string",
