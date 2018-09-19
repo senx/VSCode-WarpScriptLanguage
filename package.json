@@ -116,7 +116,7 @@
 					"scope": "resource",
 					"type": "boolean",
 					"default": true,
-					"description": "use GZIP compression"
+					"description": "Use GZIP compression"
 				}
 			}
 		}
