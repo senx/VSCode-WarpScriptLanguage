@@ -17,16 +17,16 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
         let rootPath = this.context.asAbsolutePath('.').replace(/\\/g, '/');
         if (this.currentDocument) {
             return `
-<script src="file://${rootPath + '/bower_components/webcomponentsjs/webcomponents-loader.js'}"></script>
-<link rel="import" href="file://${rootPath + '/bower_components/shadycss/apply-shim.html'}">
-<link rel="import" href="file://${rootPath + '/bower_components/warp10-quantum-elements/quantum-plot.html'}">
+<script src="file://${rootPath + '/bower_components/quantum-viz/dist/quantumviz.js'}"></script>
 <style>
     body { 
         background-color: #fff; 
         color: #000; 
     }
 </style>
-<div class="container"><quantum-plot name="plot" stack='${this.currentDocument.getText()}'></quantum-plot></div>`
+<div class="container">
+    <quantum-plot responsive="true" data='${this.currentDocument.getText()}' showLegend="false" ></quantum-plot>
+</div>`
         } else return '';
     }
 
