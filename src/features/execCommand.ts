@@ -136,7 +136,6 @@ export default class ExecCommand {
                                 console.log(error, response, body)
                                 let errorParam: any = null
                                 progress.report({ message: 'Parsing response' });
-                                console.log("parsing")
 
                                 if (response.headers['x-warp10-error-message']) {
                                     let line = parseInt(response.headers['x-warp10-error-line'])
