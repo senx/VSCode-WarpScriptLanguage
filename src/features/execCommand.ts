@@ -28,7 +28,7 @@ export default class ExecCommand {
 
             vscode.window.withProgress<boolean>({
                 location: vscode.ProgressLocation.Window,
-                title: 'Executing ' + baseFilename + ' on ' + Warp10URL
+                title: 'WarpScript'
             }, (progress: vscode.Progress<{ message?: string; }>) => {
                 return new Promise(async (c, e) => {
                     let executedWarpScript = "";
