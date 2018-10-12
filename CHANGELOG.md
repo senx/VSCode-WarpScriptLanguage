@@ -1,6 +1,23 @@
 VSCode WarpScript Extension
 ---
 
+## v0.0.24
+
+> +  2018/10/12  | Web Components revert  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/95aaab846ee1156c068bcdff9f4c220b7b7aeaf5)*)
+> +  2018/10/12  | doc update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d89730b6e8af6008e7020a0be47e233d6eed3a6f)*)
+> +  2018/10/12  | fix the status bar message  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/b2e13343714eea4c5f21dc0a84891f241339f18e)*)
+> +  2018/10/12  | fix the status bar message  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/6d0e07dee23ae86bf3db43da3c37f6cdd0a4b2b8)*)
+> +  2018/10/12  | fix the status bar message  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/e05bba673c718e99e53ce58ffc8e607ccb87c324)*)
+> +  2018/09/19  | fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/ff9171ea848bb4bf07b7e8bbec78fbac12161873)*)
+> +  2018/09/19  | Adding theme setting  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/5090de7b89da013828ee051f976f0faf100f2ea9)*)
+> +  2018/09/19  | add new data-viz  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/2d77bd603835201b2f690d836af9ac435b1ac4d9)*)
+> +  2018/09/18  | code cleanup  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/49448fb28f0a0275137eb9511f651c71991d4923)*)
+> +  2018/09/18  | WarpScript plugin inline config completion (starts with // @)  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/0cb6a0191293cf06f5ac8b2492bbd2892b5566ab)*)
+> +  2018/09/17  | Wider character range for variable name autocompletion  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/3757cd3689affd3f50c2df563960c11caeb2cfaf)*)
+> +  2018/09/17  | Wider character range for variable name autocompletion  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/eabd3fb768ff553d17074ff098076a164c50ead4)*)
+> +  2018/08/29  | Adding Gzip compression switch parameter  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/bb52fba449fc7e6b9ecb79a2fece94cdf7bd3b67)*)
+> +  2018/08/10  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/34f49ed2fa6d1afadc7c1e7a75daf6bceaee7b69)*)
+
 ## v0.0.22
 
 > +  2018/08/10  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/64d2c9a7eecef16cc9a61c785187fac69f7b7292)*)
@@ -88,15 +105,5 @@ VSCode WarpScript Extension
 > +  2018/04/25  | Add a chess background to image preview pane  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/2f10f19f9946c070626226007cb5259336ff881d)*)
 > +  2018/04/25  | yarn  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/bb5fda48bdfdfd25ad35c661bea2abfc78ab945a)*)
 > +  2018/04/25  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d1a717f9d94c866ac7a36bde09964ef1be46eba9)*)
-
-## v0.0.14
-
-> +  2018/04/25  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f8ca6424652397dda7aca94c6fd1cc8019248b97)*)
-> +  2018/04/25  | version bumb  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/5ba083298edb386e1040b4bd94a582c140966656)*)
-> +  2018/04/25  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/dbf14c81b4b74d6410bef5ff170f38966724ae7a)*)
-> +  2018/04/25  | Changed to ctrl alt a and remove console output  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/85b814d0ce6f9cfda74412dedbe492abc9b914f5)*)
-> +  2018/04/25  | Ctrl Shift U on a selection run the selected warpscript  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/173eae9d23840dbc6958905a0457dd017908cb2e)*)
-> +  2018/04/25  | Ctrl Shift U on a selection run the selected warpscript  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/3cbd9c2be4e4084c7d223abe686ed481a8030526)*)
-> +  2018/04/24  | Added support for error message resulting from LINEON and macro link bugfix.  (*[Fabien Tencé](fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8087dfe405642ce9a7dead31ee599444732abeee)*)
 
 
