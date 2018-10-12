@@ -28,7 +28,7 @@ export default class ExecCommand {
 
             vscode.window.withProgress<boolean>({
                 location: vscode.ProgressLocation.Window,
-                title: 'WarpScript: '
+                title: 'WarpScript'
             }, (progress: vscode.Progress<{ message?: string; }>) => {
                 return new Promise(async (c, e) => {
                     let executedWarpScript = "";
@@ -136,6 +136,7 @@ export default class ExecCommand {
                                 console.log(error, response, body)
                                 let errorParam: any = null
                                 progress.report({ message: 'Parsing response' });
+                                console.log("parsing")
 
                                 if (response.headers['x-warp10-error-message']) {
                                     let line = parseInt(response.headers['x-warp10-error-line'])
