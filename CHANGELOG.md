@@ -1,6 +1,14 @@
 VSCode WarpScript Extension
 ---
 
+## v0.0.25
+
+
+## v0
+
+> +  2018/10/15  | fix broken viz  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/668cac492c2e203698c205d59afbdee013543b3f)*)
+> +  2018/10/12  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/70ad84a47599fef5d38bb9d4a22b2eb57561c3f3)*)
+
 ## v0.0.24
 
 > +  2018/10/12  | Web Components revert  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/95aaab846ee1156c068bcdff9f4c220b7b7aeaf5)*)
@@ -79,31 +87,5 @@ VSCode WarpScript Extension
 > +  2018/05/25  | Hover fix on variables named like functions  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/805e0644c90b9814e75e7304b3656fb0b4214bbe)*)
 > +  2018/05/25  | Better completion with "->xxx" like functions  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/1a4b473055b4ca9e2ca5d5aa610dfc8d7382fd92)*)
 > +  2018/05/15  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/fe62fe98b4ab06fd98cc74bde37e2f45f4439856)*)
-
-## v0.0.16
-
-> +  2018/05/15  | exclude  monarch  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/6cedc5613f292218cedae12d4e2bb7d76c46d122)*)
-> +  2018/05/15  | yarn update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/757c492c522010c0eaab1522bdc43d64419ac6e1)*)
-> +  2018/05/15  | npm versions bumb  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/faede38e3e84460024ef378783f925322a29c5a8)*)
-> +  2018/05/15  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/a5166760b00557f8c974d5bc8b38a098103f8123)*)
-> +  2018/05/15  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/64a41024ce206c19493762704c5099723db1fcf3)*)
-> +  2018/05/15  | doc update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/013604cc831c40c6377e189f7c8cad82dd221327)*)
-> +  2018/04/30  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8089aa957cbd34a08f23be71f02a446e04317b6e)*)
-
-## v0.0.15
-
-> +  2018/04/30  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/56ddea9b22df41d25b216cfac3aea60c46054628)*)
-> +  2018/04/30  | Syntax color for types  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d86eb446e6480fb62f949c9ddeba776f68ac7046)*)
-> +  2018/04/30  | Code highlight grammar generation  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/25feb38f9ba3c2e3c21093bb552d1278349027de)*)
-> +  2018/04/30  | better documentation  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/2d8fbc7a30aabe41881296aeb7b053525d8255ba)*)
-> +  2018/04/30  | cleanup  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f513e502028e35c1eb3455fc4753b6f54b018fab)*)
-> +  2018/04/30  | lints  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/5f4a3e769b7753bc625844bd68694e85dfa0b065)*)
-> +  2018/04/30  | refactoring and documentation generation  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/c3b1e2ffcc1e3cd6a548c9ae22f091d74eecdc8c)*)
-> +  2018/04/27  | deps update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/2195e1f7522bf30bd232badad497d87b983f56d5)*)
-> +  2018/04/26  | add global ctrl shift a shortcut in package.json  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/1b84613712c9e6535d81ec4931d45aff512ceed1)*)
-> +  2018/04/26  | Add global ctrl shift a shortcut  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/0df83037f290012f902dbfda7b73e9a859c2d823)*)
-> +  2018/04/25  | Add a chess background to image preview pane  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/2f10f19f9946c070626226007cb5259336ff881d)*)
-> +  2018/04/25  | yarn  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/bb5fda48bdfdfd25ad35c661bea2abfc78ab945a)*)
-> +  2018/04/25  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d1a717f9d94c866ac7a36bde09964ef1be46eba9)*)
 
 
