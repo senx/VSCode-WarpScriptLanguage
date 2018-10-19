@@ -26,7 +26,7 @@ export class StatusbarUi {
 
     static Working(workingMsg: string = 'Working on it...') {
         StatusbarUi.statusbar.text = `$(sync~spin) ${workingMsg}`;
-        StatusbarUi.statusbar.tooltip = 'In case if it takes long time, try to close all browser window.';
+        StatusbarUi.statusbar.tooltip = '...';
         StatusbarUi.statusbar.command = null;
     }
 
