@@ -1,3 +1,4 @@
+import { StatusbarUi } from './../statusbarUi';
 import * as vscode from 'vscode';
 import * as request from 'request';
 import WSDocumentLinksProvider from '../providers/wsDocumentLinksProvider';
@@ -18,6 +19,7 @@ export default class ExecCommand {
   static pad(str: any, size: number, padder: string) { return (padder.repeat(30) + str).substr(-size); }
 
   public exec(outputWin: vscode.OutputChannel): any {
+    StatusbarUi.Working('loading...');
     return (selectiontext: string) => {
       // Check current active document is a warpcript
       if (typeof vscode.window.activeTextEditor === 'undefined' || vscode.window.activeTextEditor.document.languageId !== 'warpscript') {
@@ -235,6 +237,7 @@ export default class ExecCommand {
                           vscode.window.showTextDocument(doc, { viewColumn: vscode.ViewColumn.Two, preview: true, preserveFocus: false }).then(
                             () => {
                               progress.report({ message: 'Done' });
+                              StatusbarUi.Execute();
                             },
                             (err: any) => {
                               vscode.window.showErrorMessage(err.message);
