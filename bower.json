@@ -34,9 +34,9 @@
     "ace-widget": "LostInBrittany/ace-widget#^1.3.4",
     "granite-alert": "LostInBrittany/granite-alert#^1.0.5",
     "granite-spinner": "LostInBrittany/granite-spinner#^2.0.0",
-    "warp10-iron": "cityzendata/warp10-iron#^2.0.1",
-    "warp10-quantum-elements": "cityzendata/warp10-quantum-elements#^2.0.4-rc3",
-    "warp10-quantumviz": "cityzendata/warp10-quantumviz#^2.1.3"
+    "warp10-iron": "senx/warp10-iron#^2.0.1",
+    "warp10-quantum-elements": "senx/warp10-quantum-elements#^2.0.4-rc3",
+    "warp10-quantumviz": "senx/warp10-quantumviz#^2.1.3"
   },
   "ignore": [
     "**/.*",

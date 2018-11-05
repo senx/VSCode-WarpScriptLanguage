@@ -14,10 +14,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Giwi/VSCode-WarpScriptLangage"
+		"url": "https://github.com/senx/VSCode-WarpScriptLanguage"
 	},
 	"bugs": {
-		"url": "https://github.com/Giwi/VSCode-WarpScriptLangage/issues"
+		"url": "https://github.com/senx/VSCode-WarpScriptLanguage/issues"
 	},
 	"categories": [
 		"Programming Languages",
