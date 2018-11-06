@@ -1,6 +1,22 @@
 VSCode WarpScript Extension
 ---
 
+## v0.0.27
+
+> +  2018/11/06  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/9bd83ac2492e172201316e6903d67996c6f83596)*)
+> +  2018/11/06  | update logo  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d178763342ff27c914fabc884706ab6e96d2b889)*)
+> +  2018/11/05  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/504f993e14a90f4234a7989ad0f272337ff374cb)*)
+> +  2018/11/05  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/63c5a88cfbdb871445194680877b57a9eab77e5f)*)
+
+## v0.0.26
+
+> +  2018/11/05  | update repos  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d388c5fee9b7e02afcd3ecbb47422fee040c4fba)*)
+> +  2018/10/19  | Typo fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/01abfca120e043ffa1b1970f8eec6973fee98fb4)*)
+> +  2018/10/19  | Add Execute button  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/15556041f04413fd8c947fb17acea37de049209a)*)
+> +  2018/10/15  | Add proxy.pac support for HTTP and SOCKS proxy  (*[Fabien Tencé](fabien.tence@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/1c4b04c18c725170b2d3cdde65ab6094f717e3af)*)
+> +  2018/10/15  | changlog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/ab691c4ade9e1558d8fee6ddbdf8e6f3a4361368)*)
+> +  2018/10/15  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/17616ccb9c4b5949800485c199ec6d84427f2176)*)
+
 ## v0.0.25
 
 
@@ -73,19 +89,5 @@ VSCode WarpScript Extension
 > +  2018/05/31  | changelog  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f1273d61484e9e0dab1b2eb3f3d8e56b23987dfc)*)
 > +  2018/05/31  | Dataviz not displayed on windows OS  (*[Giwi](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/3ca662dfbd3e6f9d71d4afcd1e0cfcaccddc1cbf)*)
 > +  2018/05/30  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/7c8fa924bef77ee75ce72a0f45f438d3528bbd90)*)
-
-## v0.0.18
-
-> +  2018/05/30  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/cff95afee8cc8e43902b5a2f7f34341159832f5c)*)
-> +  2018/05/30  | adding logs  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/b3150fabed719f5eb98a7bc50bd600b8e3d68dc2)*)
-> +  2018/05/30  | Some fixes on sig and completion  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/3d4e2f26a542bcf32f8dd082894783bccf8c3d6c)*)
-> +  2018/05/25  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f88a5d9ff2fe61db3ab0b5a20de60e6409628969)*)
-
-## v0.0.17
-
-> +  2018/05/25  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/154b3d349dc6ab2cae5b39c2993b08737862afc3)*)
-> +  2018/05/25  | Hover fix on variables named like functions  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/805e0644c90b9814e75e7304b3656fb0b4214bbe)*)
-> +  2018/05/25  | Better completion with "->xxx" like functions  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/1a4b473055b4ca9e2ca5d5aa610dfc8d7382fd92)*)
-> +  2018/05/15  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/fe62fe98b4ab06fd98cc74bde37e2f45f4439856)*)
 
 
