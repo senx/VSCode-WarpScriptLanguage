@@ -4,3 +4,4 @@ client/server
 .idea
 bower_components
 *.vsix
+generate-doc.js

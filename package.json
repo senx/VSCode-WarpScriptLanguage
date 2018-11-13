@@ -141,7 +141,7 @@
 		"plist": "3.0.1",
 		"showdown": "^1.8.6",
 		"typescript": "3.0.1",
-		"vscode": "1.1.18",
+		"vscode": "^1.1.21",
 		"vscode-textmate": "4.0.1"
 	},
 	"dependencies": {
