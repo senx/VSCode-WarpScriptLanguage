@@ -2,12 +2,16 @@
 	"name": "warpscript-language",
 	"displayName": "WarpScript language support",
 	"description": "WarpScript support",
-	"author": {
-		"name": "Xavier MARIN"
-	},
+	"keywords": [
+		"Warp 10",
+		"WarpScript",
+		"Geo Times Series",
+		"Times Series"
+	],
+	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
 	"license": "Apache-2.0",
-	"version": "0.0.27",
+	"version": "0.0.28",
 	"publisher": "xavmarin",
 	"engines": {
 		"vscode": "^1.19.1"
@@ -23,12 +27,6 @@
 		"Programming Languages",
 		"Snippets",
 		"Linters"
-	],
-	"keywords": [
-		"Warp 10",
-		"WarpScript",
-		"Geo Times Series",
-		"Times Series"
 	],
 	"galleryBanner": {
 		"color": "#FF9900",
