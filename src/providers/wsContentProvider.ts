@@ -18,7 +18,7 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
         let rootPath = this.context.asAbsolutePath('.').replace(/\\/g, '/');
         if (this.currentDocument) {
             return `
-<script src="file://${rootPath + '/bower_components/warpview/dist/warpview.js'}"></script>
+<script src="file://${rootPath + '/bower_components/senx-warpview/dist/warpview.js'}"></script>
 <style>
     body { 
         background-color: #fff; 
