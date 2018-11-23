@@ -27,8 +27,8 @@ export default class ExecCommand {
         return;
       }
 
-      let Warp10URL: string = vscode.workspace.getConfiguration().get('warpscript.Warp10URL');
-      const useGZIP = vscode.workspace.getConfiguration().get('warpscript.useGZIP');
+      let Warp10URL: string = vscode.workspace.getConfiguration('warpscript', null).get('Warp10URL');
+      const useGZIP = vscode.workspace.getConfiguration('warpscript', null).get('useGZIP');
       const execDate: string = new Date().toLocaleTimeString();
       const document = vscode.window.activeTextEditor.document;
       const baseFilename = document.fileName.split('\\').pop().split('/').pop();
