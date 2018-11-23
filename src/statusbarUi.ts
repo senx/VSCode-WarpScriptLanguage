@@ -10,7 +10,7 @@ export class StatusbarUi {
                 .createStatusBarItem(StatusBarAlignment.Right, 100);
 
             // Show status bar only if user wants :)
-            if (workspace.getConfiguration().get('warpscript.showButton'))
+            if (workspace.getConfiguration('warpscript', null).get('showButton'))
                 this.statusbar.show();
         }
 
