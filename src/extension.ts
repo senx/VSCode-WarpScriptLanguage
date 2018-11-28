@@ -23,11 +23,11 @@ export function activate(context: vscode.ExtensionContext) {
 	let imagebase64provider = new WSImagebase64Provider();
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('gts-preview', wscontentprovider));
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('imagebase64-preview', imagebase64provider))
-	context.subscriptions.push(vscode.languages.registerHoverProvider('warpscript', new WSHoverProvider()));
-	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('warpscript', new WSCompletionItemProvider()));
-	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('warpscript', new WSCompletionVariablesProvider(),"'","$"));
-	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('warpscript', new WSCompletionMacrosProvider(),"@","/"));
-	context.subscriptions.push(vscode.languages.registerDocumentLinkProvider('warpscript', new WSDocumentLinksProvider()));
+	context.subscriptions.push(vscode.languages.registerHoverProvider({ scheme: 'file', language: 'warpscript' }, new WSHoverProvider()));
+	context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ scheme: 'file', language: 'warpscript' }, new WSCompletionItemProvider()));
+	context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ scheme: 'file', language: 'warpscript' }, new WSCompletionVariablesProvider(), "'", "$"));
+	context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ scheme: 'file', language: 'warpscript' }, new WSCompletionMacrosProvider(), "@", "/"));
+	context.subscriptions.push(vscode.languages.registerDocumentLinkProvider({ scheme: 'file', language: 'warpscript' }, new WSDocumentLinksProvider()));
 	context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(""); }));
 	context.subscriptions.push(vscode.commands.registerCommand('extension.execWSOnSelection', () => {
 		let editor = vscode.window.activeTextEditor;
