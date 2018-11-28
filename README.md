@@ -3,7 +3,7 @@
 WarpScript language support
 
 [![Apache License](https://img.shields.io/badge/license-Apache%202.0-orange.svg?style=flat-square)](http://www.apache.org/licenses/LICENSE-2.0)
-[![vsmarketplacebadge](https://vsmarketplacebadge.apphb.com/version/xavmarin.warpscript-language.svg)](https://marketplace.visualstudio.com/items?itemName=senx.warpscript-language)
+[![vsmarketplacebadge](https://vsmarketplacebadge.apphb.com/version/senx.warpscript-language.svg)](https://marketplace.visualstudio.com/items?itemName=senx.warpscript-language)
 
 More details on [warp10.io](https://www.warp10.io)
 
@@ -37,6 +37,12 @@ More details on [warp10.io](https://www.warp10.io)
 - `// @endpoint http://xxx/api/v0/exec` at the beginning of the script change the remote execution endpoint
 - `// @localmacrosubstitution false` at the beginning of the script deactivate the local macro substitution
 
+## Graph interactions
+
+- Alt + Mouse wheel : Zoom
+- Click + Drag : Select to zoom
+- Shift + Click : Pan
+- Double Click : Restore zoom
 
 ## How to run
 
