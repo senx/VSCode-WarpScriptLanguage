@@ -127,12 +127,13 @@ export default class ExecCommand {
               headers['Content-Type'] = 'text/plain';
             }
 
-            var request_options = {
+            var request_options = {              
               headers: headers,
               url: Warp10URL,
               gzip: true,
               timeout: 3600000, // 1 hour
-              body: useGZIP ? gzipWarpScript : executedWarpScript
+              body: useGZIP ? gzipWarpScript : executedWarpScript,
+              rejectUnauthorized: false
             }
 
             let proxy_pac: string = vscode.workspace.getConfiguration().get('proxy.pac');
