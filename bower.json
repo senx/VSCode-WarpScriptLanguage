@@ -6,7 +6,7 @@
     "Xavier MARIN"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/Giwi/VSCode-WarpScriptLangage",
+  "homepage": "https://github.com/SenX/VSCode-WarpScriptLangage",
   "private": true,
   "dependencies": {
     "senx-warpview": "^1.0.12"
