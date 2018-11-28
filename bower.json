@@ -9,7 +9,7 @@
   "homepage": "https://github.com/Giwi/VSCode-WarpScriptLangage",
   "private": true,
   "dependencies": {
-    "senx-warpview": "^1.0.11"
+    "senx-warpview": "^1.0.12"
   },
   "ignore": [
     "**/.*",
