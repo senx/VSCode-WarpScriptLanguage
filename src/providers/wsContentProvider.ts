@@ -21,7 +21,7 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
 <script src="file://${rootPath + '/bower_components/senx-warpview/dist/warpview.js'}"></script>
 <style>
     body { 
-        background-color: #fff; 
+        background-color: ${theme == 'light'? '#fff': '#222'}; 
         color: #000; 
         padding: 0;
         --warp-view-switch-width: 50px;
