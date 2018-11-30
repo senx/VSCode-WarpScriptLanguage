@@ -149,6 +149,7 @@
 		"pac-resolver": "3.0.0",
 		"request": "2.88.0",
 		"socks-proxy-agent": "4.0.1",
+		"util.promisify": "^1.0.0",
 		"vsce": "1.53.2",
 		"vscode-languageclient": "5.1.1"
 	}
