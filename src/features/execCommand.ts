@@ -10,7 +10,7 @@ const SocksProxyAgent = require('socks-proxy-agent');
 const pac = require('pac-resolver');
 const dns = require('dns');
 const util = require('util');
-const lookupAsync = util.promisify(dns.lookup);
+var lookupAsync = util.promisify(dns.lookup);
 
 export default class ExecCommand {
 
