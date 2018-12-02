@@ -9,8 +9,8 @@ import zlib = require("zlib");
 const SocksProxyAgent = require('socks-proxy-agent');
 const pac = require('pac-resolver');
 const dns = require('dns');
-const util = require('util');
-var lookupAsync = util.promisify(dns.lookup);
+const promisify = require('util.promisify');
+var lookupAsync = promisify(dns.lookup);
 
 export default class ExecCommand {
 
