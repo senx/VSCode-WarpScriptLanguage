@@ -54,7 +54,7 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
     }
 </style>
 <div class="container ${theme}">
-<warp-view-plot responsive="true" data='${this.currentDocument.getText()}' showLegend="false" ></warp-view-plot>
+<warp-view-plot responsive="true" data='${this.currentDocument.getText().replace(/'/gi, "\\'")}' showLegend="false" ></warp-view-plot>
 </div>`
         } else return '';
     }

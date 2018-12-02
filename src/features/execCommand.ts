@@ -241,6 +241,7 @@ export default class ExecCommand {
                               StatusbarUi.Execute();
                             },
                             (err: any) => {
+                              console.error(err)
                               vscode.window.showErrorMessage(err.message);
                               errorParam = err;
                             });
