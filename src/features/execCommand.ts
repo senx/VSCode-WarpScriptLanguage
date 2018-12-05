@@ -147,6 +147,7 @@ export default class ExecCommand {
                 proxy_pac_resp = await FindProxyForURL(Warp10URL);
               } catch (e) {
                 console.log(e);
+                StatusbarUi.Execute();
               }
 
               // Only handle one proxy for now
@@ -172,6 +173,7 @@ export default class ExecCommand {
               if (error) {
                 vscode.window.showErrorMessage(error.message)
                 console.error(error)
+                StatusbarUi.Execute();
                 return e(error)
               } else {
                 // console.log(error, response, body)
@@ -220,6 +222,7 @@ export default class ExecCommand {
                     fs.writeFile(wsFilename, executedWarpScript, { mode: 0o0400 }, function (err) {
                       if (err) {
                         vscode.window.showErrorMessage(err.message);
+                        StatusbarUi.Execute();
                       }
                     });
                   });
@@ -231,6 +234,7 @@ export default class ExecCommand {
                       if (err) {
                         vscode.window.showErrorMessage(err.message);
                         errorParam = err.message;
+                        StatusbarUi.Execute();
                       }
                       else {
                         // Display JSON result
@@ -244,6 +248,7 @@ export default class ExecCommand {
                               console.error(err)
                               vscode.window.showErrorMessage(err.message);
                               errorParam = err;
+                              StatusbarUi.Execute();
                             });
                         });
                       }
