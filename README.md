@@ -36,6 +36,7 @@ More details on [warp10.io](https://www.warp10.io)
 - To slow down autocompletion, you can use VSCode built in configuration `editor.quickSuggestionsDelay`
 - `// @endpoint http://xxx/api/v0/exec` at the beginning of the script change the remote execution endpoint
 - `// @localmacrosubstitution false` at the beginning of the script deactivate the local macro substitution
+- In your settings.json you can add `"proxy.pac": "/path/to/your/proxy.pac"` for this extension to use proxy.pac rules to connect directly or through SOCKS proxies depending on the selected endpoint.
 
 ## Graph interactions
 
