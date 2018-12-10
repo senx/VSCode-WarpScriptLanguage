@@ -19,13 +19,13 @@ export default class ExecCommand {
   static pad(str: any, size: number, padder: string) { return (padder.repeat(30) + str).substr(-size); }
 
   public exec(outputWin: vscode.OutputChannel): any {
-    StatusbarUi.Working('loading...');
     return (selectiontext: string) => {
       // Check current active document is a warpcript
       if (typeof vscode.window.activeTextEditor === 'undefined' || vscode.window.activeTextEditor.document.languageId !== 'warpscript') {
         // Not a warpscript, exit early.
         return;
       }
+      StatusbarUi.Working('loading...');
 
       let Warp10URL: string = vscode.workspace.getConfiguration('warpscript', null).get('Warp10URL');
       const useGZIP = vscode.workspace.getConfiguration('warpscript', null).get('useGZIP');
