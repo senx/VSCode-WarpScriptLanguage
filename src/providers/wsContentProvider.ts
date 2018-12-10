@@ -3,7 +3,9 @@ import * as vscode from 'vscode';
 export default class WSContentProvider implements vscode.TextDocumentContentProvider {
     private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
     private currentDocument: vscode.TextDocument | undefined;
-
+    private replaceAll(target: string, search: string, replacement: string) {
+        return target.replace(new RegExp(search, 'g'), replacement);
+    };
     /**
      * 
      * @param {ExtensionContext} context 
@@ -17,7 +19,7 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
         const theme = vscode.workspace.getConfiguration().get('warpscript.theme');
         let rootPath = this.context.asAbsolutePath('.').replace(/\\/g, '/');
         if (this.currentDocument) {
-            return `
+            const result = `
 <script src="file://${rootPath + '/bower_components/senx-warpview/dist/warpview.js'}"></script>
 <style>
     body { 
@@ -54,8 +56,10 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
     }
 </style>
 <div class="container ${theme}">
-<warp-view-plot responsive="true" data='${this.currentDocument.getText().replace(/'/gi, "\\'")}' showLegend="false" ></warp-view-plot>
+<warp-view-plot responsive="true" data="${this.replaceAll(this.currentDocument.getText(), '"', '&#34;')}" showLegend="false" ></warp-view-plot>
 </div>`
+    console.log(result);
+    return result;
         } else return '';
     }
 
