@@ -28,6 +28,8 @@ export default class ExecCommand {
       StatusbarUi.Working('loading...');
 
       let Warp10URL: string = vscode.workspace.getConfiguration('warpscript', null).get('Warp10URL');
+      let PreviewTimeUnit: string = vscode.workspace.getConfiguration('warpscript', null).get('DefaultTimeUnit');
+
       const useGZIP = vscode.workspace.getConfiguration('warpscript', null).get('useGZIP');
       const execDate: string = new Date().toLocaleTimeString();
       const document = vscode.window.activeTextEditor.document;
@@ -70,7 +72,11 @@ export default class ExecCommand {
                     substitutionWithLocalMacros = ("true" === parametervalue.toLowerCase());   // overrides the substitutionWithLocalMacros
                     console.log("substitutionWithLocalMacros=" + substitutionWithLocalMacros);
                     break;
-
+                  case "timeunit":
+                    if (['us', 'ms', 'ns'].indexOf(parametervalue.trim()) > -1) {
+                      PreviewTimeUnit = parametervalue;
+                    }
+                    break;
                   default:
                     break;
                 }
@@ -80,10 +86,14 @@ export default class ExecCommand {
               break; //no more comments at the beginning of the file
             }
           }
-          //
-          //find the hostname in Warp10URL. 
-          //
-          let Warp10URLhostname = Warp10URL; //if regexp fail, keep the full URL
+            //
+            // keep a simple suffix for the json filename (either n for nanosecond or m for millisecond. nothing for default.)
+          let jsonSuffix :string = PreviewTimeUnit.substr(0,1);
+          if (jsonSuffix === 'u') { jsonSuffix = ''; }
+            //
+            //find the hostname in Warp10URL. 
+            //
+            let Warp10URLhostname = Warp10URL; //if regexp fail, keep the full URL
           let hostnamePattern = /https?\:\/\/((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9]))[\/\:].*/g;  // Captures the lines sections name
           let lineonMatch: RegExpMatchArray | null; // https://www.regextester.com/ for easy tests
           let re = RegExp(hostnamePattern)
@@ -215,7 +225,7 @@ export default class ExecCommand {
                   // Generate unique filenames, ordered by execution order.
                   let uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
                   let wsFilename = os.tmpdir() + '/' + uuid + '.mc2';
-                  let jsonFilename = os.tmpdir() + '/' + uuid + '.json';
+                  let jsonFilename = os.tmpdir() + '/' + uuid + jsonSuffix + '.json';
 
                   // Save executed warpscript
                   fs.unlink(wsFilename, () => { // Remove overwritten file. If file unexistent, fail silently.

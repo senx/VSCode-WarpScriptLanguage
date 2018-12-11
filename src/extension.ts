@@ -41,7 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
 	StatusbarUi.Init();
 	//	context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('warpscript', new WSDocumentFormattingEditProvider()));
 
-	let jsonResultRegEx = new RegExp(os.tmpdir().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '[\/\\\\]' + '\\d{3}\\.json', 'gi');
+	let jsonResultRegEx = new RegExp(os.tmpdir().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '[\/\\\\]' + '\\d{3}([nm]?)\\.json', 'gi');
 
 	let shouldRefresh = true;
 
@@ -50,9 +50,12 @@ export function activate(context: vscode.ExtensionContext) {
 			typeof textEditor.document !== 'undefined' &&
 			textEditor.document.languageId === 'json' &&
 			textEditor.document.uri.fsPath.match(jsonResultRegEx)) {
-			if (shouldRefresh) {
+				//look for a timeUnit indication into the json name
+				let timeUnit:string = jsonResultRegEx.exec(textEditor.document.uri.fsPath)[1] || 'u';
+				timeUnit = timeUnit + 's';
+				if (shouldRefresh) {	
 				imagebase64provider.update(vscode.Uri.parse("imagebase64-preview://authority/imagebase64-preview"), textEditor.document);
-				wscontentprovider.update(vscode.Uri.parse("gts-preview://authority/gts-preview"), textEditor.document)
+				wscontentprovider.update(vscode.Uri.parse(`gts-preview://authority/gts-preview?timeUnit=${timeUnit}&teub=big`), textEditor.document)
 				// Restore focus because the preview-html steals the focus.
 				vscode.window.showTextDocument(textEditor.document, { viewColumn: textEditor.viewColumn, preview: true, preserveFocus: false });
 			}
