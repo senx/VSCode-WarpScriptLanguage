@@ -69,6 +69,11 @@
 				"command": "extension.execWSOnSelection",
 				"title": "Run WarpScript on selection",
 				"category": "WarpScript"
+			},
+			{
+				"command": "extension.execCloseJsonResults",
+				"title": "Close all Warp 10 json output in the workspace",
+				"category": "WarpScript"
 			}
 		],
 		"languages": [
