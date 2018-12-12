@@ -37,6 +37,7 @@ export default class CloseJsonResults {
         if (activefilepath === editor.document.uri.toString()) {
           console.log('end of close cycle?');
           if (firstLoop) {
+            firstLoop=false;
             vscode.commands.executeCommand("workbench.action.nextEditor");
           } else {
             if (onchangecallback) { onchangecallback.dispose(); } 
