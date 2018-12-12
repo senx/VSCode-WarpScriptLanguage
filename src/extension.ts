@@ -7,11 +7,13 @@ import WSDocumentLinksProvider from './providers/wsDocumentLinksProvider'
 import WSContentProvider from './providers/wsContentProvider'
 import WSDocumentFormattingEditProvider from './providers/wsDocumentFormattingEditProvider'
 import ExecCommand from './features/execCommand'
+import CloseJsonResults from './features/closeJsonResults'
 import WSImagebase64Provider from './providers/wsImagebase64Provider'
 import WSCompletionItemProvider from './providers/wsCompletionItemProvider'
 import WSCompletionVariablesProvider from './providers/wsCompletionVariablesProvider'
 import WSCompletionMacrosProvider from './providers/wsCompletionMacrosProvider' //TODO
-import os = require('os');
+import WarpScriptExtConstants from './constants'
+import WarpStriptExtGlobals = require('./globals')
 /**
  * Main extension's entrypoint
  *
@@ -28,6 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ scheme: 'file', language: 'warpscript' }, new WSCompletionVariablesProvider(), "'", "$"));
 	context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ scheme: 'file', language: 'warpscript' }, new WSCompletionMacrosProvider(), "@", "/"));
 	context.subscriptions.push(vscode.languages.registerDocumentLinkProvider({ scheme: 'file', language: 'warpscript' }, new WSDocumentLinksProvider()));
+	context.subscriptions.push(vscode.commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(); }));
 	context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(""); }));
 	context.subscriptions.push(vscode.commands.registerCommand('extension.execWSOnSelection', () => {
 		let editor = vscode.window.activeTextEditor;
@@ -41,12 +44,13 @@ export function activate(context: vscode.ExtensionContext) {
 	StatusbarUi.Init();
 	//	context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('warpscript', new WSDocumentFormattingEditProvider()));
 
-	let jsonResultRegEx = new RegExp(os.tmpdir().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '[\/\\\\]' + '\\d{3}([nmu]?)\\.json', 'gi');
+	let jsonResultRegEx = new WarpScriptExtConstants().jsonResultRegEx;
 
 	let shouldRefresh = true;
 
 	vscode.window.onDidChangeActiveTextEditor((textEditor: vscode.TextEditor) => {
-		if (typeof textEditor !== 'undefined' &&
+		if ( !WarpStriptExtGlobals.weAreClosingFilesFlag &&
+			typeof textEditor !== 'undefined' &&
 			typeof textEditor.document !== 'undefined' &&
 			textEditor.document.languageId === 'json' &&
 			textEditor.document.uri.fsPath.match(jsonResultRegEx)) {
