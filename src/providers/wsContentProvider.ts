@@ -6,7 +6,7 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
     private replaceAll(target: string, search: string, replacement: string) {
         return target.replace(new RegExp(search, 'g'), replacement);
     };
-    private timeUnit:string = 'us'; 
+    private timeUnit: string = 'us';
     /**
      * 
      * @param {ExtensionContext} context 
@@ -19,9 +19,9 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
     public async provideTextDocumentContent(): Promise<string> {
         const theme = vscode.workspace.getConfiguration().get('warpscript.theme');
         let rootPath = this.context.asAbsolutePath('.').replace(/\\/g, '/');
-        let TimeUnitWarning : string = '';
-        if(this.timeUnit!='us') {
-            TimeUnitWarning=`<div class="timeunitwarning">(${this.timeUnit} time units)</div>`
+        let TimeUnitWarning: string = '';
+        if (this.timeUnit != 'us') {
+            TimeUnitWarning = `<div class="timeunitwarning">(${this.timeUnit} time units)</div>`
         }
 
         if (this.currentDocument) {
@@ -29,7 +29,7 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
 <script src="file://${rootPath + '/bower_components/senx-warpview/dist/warpview.js'}"></script>
 <style>
     body { 
-        background-color: ${theme == 'light'? '#fff': '#222'}; 
+        background-color: ${theme == 'light' ? '#fff' : '#222'}; 
         color: #000; 
         padding: 0;
         --warp-view-switch-width: 50px;
@@ -68,8 +68,8 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
 ${TimeUnitWarning}
 <warp-view-plot responsive="true" data="${this.replaceAll(this.currentDocument.getText(), '"', '&#34;')}" showLegend="false" options="{&#34timeUnit&#34 : &#34${this.timeUnit}&#34 }" ></warp-view-plot>
 </div>`
-    //console.log(result);
-    return result;
+            //console.log(result);
+            return result;
         } else return '';
     }
 
@@ -84,7 +84,7 @@ ${TimeUnitWarning}
     public update(uri: vscode.Uri, document: vscode.TextDocument) {
         this.currentDocument = document
         this._onDidChange.fire(uri);
-        this.timeUnit=this.getQueryVariable(uri.query,'timeUnit')
+        this.timeUnit = this.getQueryVariable(uri.query, 'timeUnit')
         vscode.commands.executeCommand('vscode.previewHtml', uri, vscode.ViewColumn.Two, 'GTS Preview')
             .then(() => {
                 // nothing
@@ -92,8 +92,12 @@ ${TimeUnitWarning}
                 vscode.window.showErrorMessage(reason)
             });
     }
-
-    public getQueryVariable(query:string, variable:string) {
+    /**
+     * 
+     * @param {string} query 
+     * @param {string} variable 
+     */
+    public getQueryVariable(query: string, variable: string): string {
         var vars = query.split('&');
         for (var i = 0; i < vars.length; i++) {
             var pair = vars[i].split('=');
@@ -101,6 +105,8 @@ ${TimeUnitWarning}
                 return decodeURIComponent(pair[1]);
             }
         }
+
         console.log('Query variable %s not found', variable);
+        return undefined;
     }
 }
