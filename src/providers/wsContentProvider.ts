@@ -20,6 +20,11 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
     public async provideTextDocumentContent(): Promise<string> {
         const theme = vscode.workspace.getConfiguration().get('warpscript.theme');
         let rootPath = this.context.asAbsolutePath('.').replace(/\\/g, '/');
+        let TimeUnitWarning : string = '';
+        if(this.timeUnit!='us') {
+            TimeUnitWarning=`<div class="timeunitwarning">(${this.timeUnit} time units)</div>`
+        }
+
         if (this.currentDocument) {
             const result = `
 <script src="file://${rootPath + '/bower_components/senx-warpview/dist/warpview.js'}"></script>
@@ -56,9 +61,13 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
         --warp-view-chart-tile-transform: hue-rotate(180deg) invert(100%);
       --warp-view-spinner-color: #5899DA;
     }
+    .timeunitwarning {
+        margin: 10px;
+    }
 </style>
 <div class="container ${theme}">
-<warp-view-plot responsive="true" data="${this.replaceAll(this.currentDocument.getText(), '"', '&#34;')}" showLegend="false" ></warp-view-plot>
+${TimeUnitWarning}
+<warp-view-plot responsive="true" data="${this.replaceAll(this.currentDocument.getText(), '"', '&#34;')}" showLegend="false" options="{&#34timeUnit&#34 : &#34${this.timeUnit}&#34 }" ></warp-view-plot>
 </div>`
     //console.log(result);
     return result;

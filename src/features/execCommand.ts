@@ -74,7 +74,7 @@ export default class ExecCommand {
                     break;
                   case "timeunit":
                     if (['us', 'ms', 'ns'].indexOf(parametervalue.trim()) > -1) {
-                      PreviewTimeUnit = parametervalue;
+                      PreviewTimeUnit = parametervalue.trim();
                     }
                     break;
                   default:
@@ -89,7 +89,6 @@ export default class ExecCommand {
             //
             // keep a simple suffix for the json filename (either n for nanosecond or m for millisecond. nothing for default.)
           let jsonSuffix :string = PreviewTimeUnit.substr(0,1);
-          if (jsonSuffix === 'u') { jsonSuffix = ''; }
             //
             //find the hostname in Warp10URL. 
             //

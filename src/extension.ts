@@ -41,7 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
 	StatusbarUi.Init();
 	//	context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('warpscript', new WSDocumentFormattingEditProvider()));
 
-	let jsonResultRegEx = new RegExp(os.tmpdir().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '[\/\\\\]' + '\\d{3}([nm]?)\\.json', 'gi');
+	let jsonResultRegEx = new RegExp(os.tmpdir().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '[\/\\\\]' + '\\d{3}([nmu]?)\\.json', 'gi');
 
 	let shouldRefresh = true;
 
@@ -55,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
 				timeUnit = timeUnit + 's';
 				if (shouldRefresh) {	
 				imagebase64provider.update(vscode.Uri.parse("imagebase64-preview://authority/imagebase64-preview"), textEditor.document);
-				wscontentprovider.update(vscode.Uri.parse(`gts-preview://authority/gts-preview?timeUnit=${timeUnit}&teub=big`), textEditor.document)
+				wscontentprovider.update(vscode.Uri.parse(`gts-preview://authority/gts-preview?timeUnit=${timeUnit}`), textEditor.document)
 				// Restore focus because the preview-html steals the focus.
 				vscode.window.showTextDocument(textEditor.document, { viewColumn: textEditor.viewColumn, preview: true, preserveFocus: false });
 			}
