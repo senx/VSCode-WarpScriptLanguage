@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { getUnpackedSettings } from 'http2';
 
 export default class WSContentProvider implements vscode.TextDocumentContentProvider {
     private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
@@ -94,7 +93,7 @@ ${TimeUnitWarning}
             });
     }
 
-    public getQueryVariable(query:string, variable:string):string {
+    public getQueryVariable(query:string, variable:string) {
         var vars = query.split('&');
         for (var i = 0; i < vars.length; i++) {
             var pair = vars[i].split('=');
