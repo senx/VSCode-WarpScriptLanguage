@@ -176,7 +176,7 @@ export default class ExecCommand {
               }
             }
 
-            console.log(request_options)
+            //console.lconsole.log(request_options)
 
             request.post(request_options, async (error: any, response: any, body: string) => {
               if (error) {
