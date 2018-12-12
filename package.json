@@ -121,6 +121,16 @@
 					"type": "boolean",
 					"default": true,
 					"description": "Show exec button"
+				},
+				"warpscript.DefaultTimeUnit": {
+					"enum": [
+						"us",
+						"ms",
+						"ns"
+					],
+					"scope": "window",
+					"default": "us",
+					"description": "Warp 10 Time Unit for GTS Preview"
 				}
 			}
 		}
@@ -136,7 +146,7 @@
 		"@types/js-yaml": "3.11.2",
 		"@types/mocha": "5.2.5",
 		"@types/node": "10.12.10",
-		"@types/request": "2.48.1",
+		"@types/request": "^2.48.1",
 		"js-yaml": "3.12.0",
 		"lodash": "4.17.11",
 		"plist": "3.0.1",

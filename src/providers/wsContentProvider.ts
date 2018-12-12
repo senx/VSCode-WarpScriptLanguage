@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { getUnpackedSettings } from 'http2';
 
 export default class WSContentProvider implements vscode.TextDocumentContentProvider {
     private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
@@ -6,6 +7,7 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
     private replaceAll(target: string, search: string, replacement: string) {
         return target.replace(new RegExp(search, 'g'), replacement);
     };
+    private timeUnit:string = 'us'; 
     /**
      * 
      * @param {ExtensionContext} context 
@@ -18,6 +20,11 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
     public async provideTextDocumentContent(): Promise<string> {
         const theme = vscode.workspace.getConfiguration().get('warpscript.theme');
         let rootPath = this.context.asAbsolutePath('.').replace(/\\/g, '/');
+        let TimeUnitWarning : string = '';
+        if(this.timeUnit!='us') {
+            TimeUnitWarning=`<div class="timeunitwarning">(${this.timeUnit} time units)</div>`
+        }
+
         if (this.currentDocument) {
             const result = `
 <script src="file://${rootPath + '/bower_components/senx-warpview/dist/warpview.js'}"></script>
@@ -54,11 +61,15 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
         --warp-view-chart-tile-transform: hue-rotate(180deg) invert(100%);
       --warp-view-spinner-color: #5899DA;
     }
+    .timeunitwarning {
+        margin: 10px;
+    }
 </style>
 <div class="container ${theme}">
-<warp-view-plot responsive="true" data="${this.replaceAll(this.currentDocument.getText(), '"', '&#34;')}" showLegend="false" ></warp-view-plot>
+${TimeUnitWarning}
+<warp-view-plot responsive="true" data="${this.replaceAll(this.currentDocument.getText(), '"', '&#34;')}" showLegend="false" options="{&#34timeUnit&#34 : &#34${this.timeUnit}&#34 }" ></warp-view-plot>
 </div>`
-    console.log(result);
+    //console.log(result);
     return result;
         } else return '';
     }
@@ -74,11 +85,23 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
     public update(uri: vscode.Uri, document: vscode.TextDocument) {
         this.currentDocument = document
         this._onDidChange.fire(uri);
+        this.timeUnit=this.getQueryVariable(uri.query,'timeUnit')
         vscode.commands.executeCommand('vscode.previewHtml', uri, vscode.ViewColumn.Two, 'GTS Preview')
             .then(() => {
                 // nothing
             }, (reason: any) => {
                 vscode.window.showErrorMessage(reason)
             });
+    }
+
+    public getQueryVariable(query:string, variable:string):string {
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split('=');
+            if (decodeURIComponent(pair[0]) === variable) {
+                return decodeURIComponent(pair[1]);
+            }
+        }
+        console.log('Query variable %s not found', variable);
     }
 }

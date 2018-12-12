@@ -48,6 +48,11 @@ export default class WSCompletionMacrosProvider
           item.detail="VSCode warpscript instruction"
           result.push(item);
 
+          item = new CompletionItem("timeunit", CompletionItemKind.Method)
+          item.documentation = "Change the time unit for GTS Preview. It could be us, ms, ns.  Usefull if you use a Warp 10 platform with a nanosecond or millisecond precision instead of default settings."
+          item.detail="VSCode warpscript instruction"
+          result.push(item);
+
           return resolve(result);
         }
       }
