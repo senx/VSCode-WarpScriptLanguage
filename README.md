@@ -29,6 +29,7 @@ More details on [warp10.io](https://www.warp10.io)
   - [EXEC_START_DATE] file:///os_temp_dir/executed_warpscript.mc2 => file:///os_temp_dir/result.json exec_time fetched_data op_count main_filename.mc2 endpoint
   - [EXEC_START_DATE] ERROR /path/to/script/in/error.mc2:error_line reason_of_failure
 - WarpScript and resulting JSON are sent gzipped between the client and the server
+- (experimental) You can close all the JSON result files to clean your workspace (command Ctrl+Shift+P > "Close all Warp 10 json output in the workspace" command)
 
 
 ## Tips
@@ -36,7 +37,9 @@ More details on [warp10.io](https://www.warp10.io)
 - To slow down autocompletion, you can use VSCode built in configuration `editor.quickSuggestionsDelay`
 - `// @endpoint http://xxx/api/v0/exec` at the beginning of the script change the remote execution endpoint
 - `// @localmacrosubstitution false` at the beginning of the script deactivate the local macro substitution
+- `// @timeunit ns` at the beginning of the script force the graph timeunit to nanosecond
 - In your settings.json you can add `"proxy.pac": "/path/to/your/proxy.pac"` for this extension to use proxy.pac rules to connect directly or through SOCKS proxies depending on the selected endpoint.
+- You can set the VSCode default language to warpscript (Ctrl+, search for default language settings). Every new file (Ctrl+N) will be a WarpScript.
 
 ## Graph interactions
 
