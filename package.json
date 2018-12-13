@@ -102,11 +102,12 @@
 			"properties": {
 				"warpscript.theme": {
 					"enum": [
+						"auto",
 						"light",
 						"dark"
 					],
 					"scope": "window",
-					"default": "light",
+					"default": "auto",
 					"description": "Data visualization theme"
 				},
 				"warpscript.Warp10URL": {
