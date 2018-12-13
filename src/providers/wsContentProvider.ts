@@ -13,11 +13,27 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
      */
     constructor(private context: vscode.ExtensionContext) { }
 
+    //dark themes : Default Dark+, Visual Studio Dark, Abyss, Kimbie Dark, Monokai, Monokai Dimmed, Red, Solarized Dark, Tomorrow Night Blue, Default High Contrast
+
+    LightThemesList: string[] = [
+        "Visual Studio Light",
+        "Default Light+",
+        "Quiet Light",
+        "Solarized Light"
+    ];
     /**
      * 
      */
     public async provideTextDocumentContent(): Promise<string> {
-        const theme = vscode.workspace.getConfiguration().get('warpscript.theme');
+        let theme = vscode.workspace.getConfiguration().get('warpscript.theme');
+        if (theme == "auto") {
+            let vscodetheme: string = vscode.workspace.getConfiguration().get("workbench.colorTheme");
+            if (this.LightThemesList.indexOf(vscodetheme) > -1) {
+                theme = "light";
+            }
+            else { theme = "dark"; }
+        }
+
         let rootPath = this.context.asAbsolutePath('.').replace(/\\/g, '/');
         let TimeUnitWarning: string = '';
         if (this.timeUnit != 'us') {
