@@ -47,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let jsonResultRegEx = new WarpScriptExtConstants().jsonResultRegEx;
 
 	let shouldRefresh = true;
-
+	
 	vscode.window.onDidChangeActiveTextEditor((textEditor: vscode.TextEditor) => {
 		if ( !WarpStriptExtGlobals.weAreClosingFilesFlag &&
 			typeof textEditor !== 'undefined' &&
@@ -59,13 +59,14 @@ export function activate(context: vscode.ExtensionContext) {
 				timeUnit = timeUnit + 's';
 				if (shouldRefresh) {	
 				imagebase64provider.update(vscode.Uri.parse("imagebase64-preview://authority/imagebase64-preview"), textEditor.document);
-				wscontentprovider.update(vscode.Uri.parse(`gts-preview://authority/gts-preview?timeUnit=${timeUnit}`), textEditor.document)
-				// Restore focus because the preview-html steals the focus.
-				vscode.window.showTextDocument(textEditor.document, { viewColumn: textEditor.viewColumn, preview: true, preserveFocus: false });
-			}
-			// The focus-stealing only appears when both the JSON and the preview-html are on the same view column (the number two).
-			if (textEditor.viewColumn == vscode.ViewColumn.Two) {
-				shouldRefresh = !shouldRefresh;
+				wscontentprovider.update(vscode.Uri.parse(`gts-preview://authority/gts-preview?timeUnit=${timeUnit}`), textEditor.document).then( () => {
+					console.log('pouet');
+					shouldRefresh=false;
+					vscode.window.showTextDocument(textEditor.document, { preview: true, preserveFocus: false });
+					setTimeout( () => {
+						shouldRefresh=true;
+					}, 1000);
+				});
 			}
 		}
 	});
