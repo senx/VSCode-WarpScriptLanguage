@@ -97,16 +97,11 @@ ${TimeUnitWarning}
      * 
      * @param uri 
      */
-    public update(uri: vscode.Uri, document: vscode.TextDocument) {
+    public update(uri: vscode.Uri, document: vscode.TextDocument):Thenable<{}> {
         this.currentDocument = document
         this._onDidChange.fire(uri);
         this.timeUnit = this.getQueryVariable(uri.query, 'timeUnit')
-        vscode.commands.executeCommand('vscode.previewHtml', uri, vscode.ViewColumn.Two, 'GTS Preview')
-            .then(() => {
-                // nothing
-            }, (reason: any) => {
-                vscode.window.showErrorMessage(reason)
-            });
+        return vscode.commands.executeCommand('vscode.previewHtml', uri, vscode.ViewColumn.Two, 'GTS Preview');
     }
     /**
      * 
