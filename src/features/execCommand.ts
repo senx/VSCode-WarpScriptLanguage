@@ -42,6 +42,7 @@ export default class ExecCommand {
         return new Promise(async (c, e) => {
           let executedWarpScript = "";
           let substitutionWithLocalMacros = true;
+          let displayPreviewOpt = '';
 
           if (selectiontext === "") {
             executedWarpScript = document.getText(); //if executed with empty string, take the full text
@@ -77,6 +78,14 @@ export default class ExecCommand {
                       PreviewTimeUnit = parametervalue.trim();
                     }
                     break;
+                  case "preview":
+                    switch (parametervalue.toLowerCase().substr(0,4)) {
+                      case "none" : displayPreviewOpt = 'X'; break;
+                      case "gts" : displayPreviewOpt = 'G'; break;
+                      case "imag" : displayPreviewOpt = 'I'; break;
+                      default: displayPreviewOpt=''; break;
+                    }
+                    break;
                   default:
                     break;
                 }
@@ -86,13 +95,15 @@ export default class ExecCommand {
               break; //no more comments at the beginning of the file
             }
           }
-            //
-            // keep a simple suffix for the json filename (either n for nanosecond or m for millisecond. nothing for default.)
-          let jsonSuffix :string = PreviewTimeUnit.substr(0,1);
-            //
-            //find the hostname in Warp10URL. 
-            //
-            let Warp10URLhostname = Warp10URL; //if regexp fail, keep the full URL
+          //
+          // keep a simple suffix for the json filename (either n for nanosecond or m for millisecond. nothing for default.)
+          let jsonSuffix: string = PreviewTimeUnit.substr(0, 1);
+          // add X after the suffix for no preview at all, add I for focus on images, add G for gts preview.
+          jsonSuffix = jsonSuffix + displayPreviewOpt 
+          //
+          //find the hostname in Warp10URL. 
+          //
+          let Warp10URLhostname = Warp10URL; //if regexp fail, keep the full URL
           let hostnamePattern = /https?\:\/\/((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9]))[\/\:].*/g;  // Captures the lines sections name
           let lineonMatch: RegExpMatchArray | null; // https://www.regextester.com/ for easy tests
           let re = RegExp(hostnamePattern)
@@ -136,7 +147,7 @@ export default class ExecCommand {
               headers['Content-Type'] = 'text/plain';
             }
 
-            var request_options = {              
+            var request_options = {
               headers: headers,
               url: Warp10URL,
               gzip: true,
