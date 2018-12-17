@@ -47,25 +47,25 @@ export function activate(context: vscode.ExtensionContext) {
 	let jsonResultRegEx = new WarpScriptExtConstants().jsonResultRegEx;
 
 	let shouldRefresh = true;
-	
+
 	vscode.window.onDidChangeActiveTextEditor((textEditor: vscode.TextEditor) => {
-		if ( !WarpStriptExtGlobals.weAreClosingFilesFlag &&
+		if (!WarpStriptExtGlobals.weAreClosingFilesFlag &&
 			typeof textEditor !== 'undefined' &&
 			typeof textEditor.document !== 'undefined' &&
 			textEditor.document.languageId === 'json' &&
 			textEditor.document.uri.fsPath.match(jsonResultRegEx)) {
-				//look for a timeUnit indication into the json name
-				let timeUnit:string = jsonResultRegEx.exec(textEditor.document.uri.fsPath)[1] || 'u';
-				timeUnit = timeUnit + 's';
-				if (shouldRefresh) {	
+			//look for a timeUnit indication into the json name
+			let timeUnit: string = jsonResultRegEx.exec(textEditor.document.uri.fsPath)[1] || 'u';
+			timeUnit = timeUnit + 's';
+			if (shouldRefresh) {
 				imagebase64provider.update(vscode.Uri.parse("imagebase64-preview://authority/imagebase64-preview"), textEditor.document);
-				wscontentprovider.update(vscode.Uri.parse(`gts-preview://authority/gts-preview?timeUnit=${timeUnit}`), textEditor.document).then( () => {
-					console.log('pouet');
-					shouldRefresh=false;
-					vscode.window.showTextDocument(textEditor.document, { preview: true, preserveFocus: false });
-					setTimeout( () => {
-						shouldRefresh=true;
-					}, 1000);
+				wscontentprovider.update(vscode.Uri.parse(`gts-preview://authority/gts-preview?timeUnit=${timeUnit}`), textEditor.document).then(() => {
+					shouldRefresh = false;
+					vscode.window.showTextDocument(textEditor.document, { preview: true, preserveFocus: false }).then(() => {
+						setTimeout(() => {
+							shouldRefresh = true;
+						}, 500);
+					});
 				});
 			}
 		}
