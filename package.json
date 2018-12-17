@@ -158,7 +158,6 @@
 		"plist": "3.0.1",
 		"showdown": "1.9.0",
 		"typescript": "3.1.6",
-		"vscode": "1.1.22",
 		"vscode-textmate": "4.0.1"
 	},
 	"dependencies": {
@@ -167,6 +166,7 @@
 		"socks-proxy-agent": "4.0.1",
 		"util.promisify": "^1.0.0",
 		"vsce": "1.53.2",
+		"vscode": "^1.1.26",
 		"vscode-languageclient": "5.1.1"
 	}
 }

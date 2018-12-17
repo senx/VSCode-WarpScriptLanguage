@@ -49,23 +49,24 @@ export function activate(context: vscode.ExtensionContext) {
 	let shouldRefresh = true;
 
 	vscode.window.onDidChangeActiveTextEditor((textEditor: vscode.TextEditor) => {
-		if ( !WarpStriptExtGlobals.weAreClosingFilesFlag &&
+		if (!WarpStriptExtGlobals.weAreClosingFilesFlag &&
 			typeof textEditor !== 'undefined' &&
 			typeof textEditor.document !== 'undefined' &&
 			textEditor.document.languageId === 'json' &&
 			textEditor.document.uri.fsPath.match(jsonResultRegEx)) {
-				//look for a timeUnit indication into the json name
-				let timeUnit:string = jsonResultRegEx.exec(textEditor.document.uri.fsPath)[1] || 'u';
-				timeUnit = timeUnit + 's';
-				if (shouldRefresh) {	
+			//look for a timeUnit indication into the json name
+			let timeUnit: string = jsonResultRegEx.exec(textEditor.document.uri.fsPath)[1] || 'u';
+			timeUnit = timeUnit + 's';
+			if (shouldRefresh) {
 				imagebase64provider.update(vscode.Uri.parse("imagebase64-preview://authority/imagebase64-preview"), textEditor.document);
-				wscontentprovider.update(vscode.Uri.parse(`gts-preview://authority/gts-preview?timeUnit=${timeUnit}`), textEditor.document)
-				// Restore focus because the preview-html steals the focus.
-				vscode.window.showTextDocument(textEditor.document, { viewColumn: textEditor.viewColumn, preview: true, preserveFocus: false });
-			}
-			// The focus-stealing only appears when both the JSON and the preview-html are on the same view column (the number two).
-			if (textEditor.viewColumn == vscode.ViewColumn.Two) {
-				shouldRefresh = !shouldRefresh;
+				wscontentprovider.update(vscode.Uri.parse(`gts-preview://authority/gts-preview?timeUnit=${timeUnit}`), textEditor.document).then(() => {
+					shouldRefresh = false;
+					vscode.window.showTextDocument(textEditor.document, { preview: true, preserveFocus: false }).then(() => {
+						setTimeout(() => {
+							shouldRefresh = true;
+						}, 500);
+					});
+				});
 			}
 		}
 	});
