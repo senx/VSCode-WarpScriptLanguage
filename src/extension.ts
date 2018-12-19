@@ -57,6 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let gtsPreviewWebview = new GTSPreviewWebview(context);
 	let imagePreviewWebview = new ImagePreviewWebview();
 	let jsonResultRegEx = new WarpScriptExtConstants().jsonResultRegEx;
+	let latestJSONdisplayed: string = '';
 
 	//each time focus change, we look at the file type and file name. Json + special name => stack preview.
 	vscode.window.onDidChangeActiveTextEditor((textEditor: vscode.TextEditor) => {
@@ -74,13 +75,17 @@ export function activate(context: vscode.ExtensionContext) {
 			let previewSetting: string = suffixes[2] || '';
 			console.log("preview=" + previewSetting);
 
-			if (previewSetting != 'X' && vscode.workspace.getConfiguration().get('warpscript.PreviewTabs') != 'none') {
+			// do not refresh preview when the preview window when selecting the json of the current preview
+			let alreadypreviewed: boolean = (latestJSONdisplayed == textEditor.document.fileName);
+			latestJSONdisplayed = textEditor.document.fileName;
+
+			if (previewSetting != 'X' && vscode.workspace.getConfiguration().get('warpscript.PreviewTabs') != 'none' && !alreadypreviewed) {
 
 				//gtsPreview panel
 				if (gtsPreviewPanel == null) {
 					gtsPreviewPanel = vscode.window.createWebviewPanel('gtspreview', 'GTS preview',
 						{ viewColumn: vscode.ViewColumn.Two, preserveFocus: true },
-						{ enableScripts: true });
+						{ enableScripts: true, retainContextWhenHidden: true });
 					//the first time the panel appears, it steals focus. restore the view 500ms later.
 					if (previewSetting == '') {
 						setTimeout(() => {
@@ -101,7 +106,7 @@ export function activate(context: vscode.ExtensionContext) {
 						if (imagePreviewPanel == null) {
 							imagePreviewPanel = vscode.window.createWebviewPanel('imagepreview', 'Images',
 								{ viewColumn: vscode.ViewColumn.Two, preserveFocus: true },
-								{ enableScripts: true });
+								{ enableScripts: true, retainContextWhenHidden: true });
 							//the first time the panel appears, it steals focus. restore the view 500ms later.
 							if (previewSetting == '') {
 								setTimeout(() => {
@@ -128,10 +133,6 @@ export function activate(context: vscode.ExtensionContext) {
 						imagePreviewPanel.reveal(vscode.ViewColumn.Two);
 					}, 200);
 				}
-			} else {
-				//preview none , close the existing previews.
-				if (imagePreviewPanel != null) { imagePreviewPanel.dispose(); }
-				if (gtsPreviewPanel != null) { gtsPreviewPanel.dispose(); }
 			}
 		}
 	});
