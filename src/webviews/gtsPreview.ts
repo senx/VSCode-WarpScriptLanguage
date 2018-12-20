@@ -40,10 +40,15 @@ export default class GTSPreviewWebview {
     let onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'bower_components', 'senx-warpview', 'dist', 'warpview.js'));
     let warpviewPath:string = onDiskPath.with({ scheme: 'vscode-resource' }).toString();
 
-    //build the webcomponent path, the webview way.
+    //build the logo path, the webview way.
     let LogoonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'images', 'logo.png'));
     let LogoPath:string = LogoonDiskPath.with({ scheme: 'vscode-resource' }).toString();
     
+    //build the spectre css path, the webview way.
+    let spectreCSSonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath,'bower_components','spectre.css','dist','spectre.min.css'));
+    let spectreCSSPath:string = spectreCSSonDiskPath.with({ scheme: 'vscode-resource' }).toString();
+
+
     //build a time unit warning
     let TimeUnitWarning: string = '';
     if (timeUnit != 'us') {
@@ -55,7 +60,8 @@ export default class GTSPreviewWebview {
 
 
     const result = `
-<script src="${warpviewPath}"></script>
+    <link href="${spectreCSSPath}" rel="stylesheet">
+    <script src="${warpviewPath}"></script>
 <style>
     body { 
         background-color: ${theme === 'light' ? '#fff' : '#222'}; 
