@@ -40,6 +40,10 @@ export default class GTSPreviewWebview {
     let onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'bower_components', 'senx-warpview', 'dist', 'warpview.js'));
     let warpviewPath:string = onDiskPath.with({ scheme: 'vscode-resource' }).toString();
 
+    //build the webcomponent path, the webview way.
+    let LogoonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'images', 'logo.png'));
+    let LogoPath:string = LogoonDiskPath.with({ scheme: 'vscode-resource' }).toString();
+    
     //build a time unit warning
     let TimeUnitWarning: string = '';
     if (timeUnit != 'us') {
@@ -50,14 +54,31 @@ export default class GTSPreviewWebview {
 <script src="${warpviewPath}"></script>
 <style>
     body { 
-        background-color: ${theme == 'light' ? '#fff' : '#222'}; 
+        background-color: ${theme === 'light' ? '#fff' : '#222'}; 
         color: #000; 
         padding: 0;
         --warp-view-switch-width: 50px;
         --warp-view-switch-height: 20px;
         --warp-view-switch-radius: 10px;
         --warp-view-switch-inset-checked-color: #1e7e34;
-        --warp-view-switch-handle-checked-color: #28a745;
+        --warp-view-switch-handle-checked-color: #28a745; 
+    }
+    header {
+        background-color: ${theme !== 'light' ? '#fff' : '#222'}; 
+        color: ${theme === 'light' ? '#fff' : '#222'}; 
+        padding: 5px;
+    }
+
+    .navbar-section a, .navbar-section a:hover, .navbar-section a:visited {
+        color: ${theme === 'light' ? '#fff' : '#004eff'} !important; 
+    }
+
+    img.logo {
+        height: 50px;
+        width: auto;
+    }
+    .links {
+        widht: auto;
     }
     .container {
         pading: 10px;
@@ -78,13 +99,21 @@ export default class GTSPreviewWebview {
         --gts-stack-font-color: #ffffff;
         --warp-view-switch-inset-color: #545b62;
         --warp-view-switch-handle-color: #6c757d;
-        --warp-view-chart-tile-transform: hue-rotate(180deg) invert(100%);
-      --warp-view-spinner-color: #5899DA;
+        --warp-view-spinner-color: #5899DA;
     }
     .timeunitwarning {
         margin: 10px;
     }
 </style>
+<header class="navbar">
+    <section class="navbar-section">
+        <img src="${LogoPath}" class="logo">
+    </section>
+    <section class="navbar-section">
+            <a href="https://senx.io" target="_blank" class="btn btn-link">SenX</a>
+           <a href="https://www.warp10.io" target="_blank" class="btn btn-link">Warp 10</a>
+        </section>
+</header>
 <div class="container ${theme}">
 ${TimeUnitWarning}
 <warp-view-plot responsive="true" data="${this.replaceAll(data, '"', '&#34;')}" showLegend="false" options="{&#34timeUnit&#34 : &#34${timeUnit}&#34 }" ></warp-view-plot>
