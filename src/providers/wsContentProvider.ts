@@ -42,8 +42,7 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
 
         if (this.currentDocument) {
             const result = `
-           <!--  <link href="file://${rootPath + '/bower_components/tent-css/dist/tent.min.css'}" rel="stylesheet"> -->
-            <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+<link href="file://${rootPath + '/bower_components/spectre.css/dist/spectre.min.css'}" rel="stylesheet">
 <script src="file://${rootPath + '/bower_components/senx-warpview/dist/warpview.js'}"></script>
 <style>
     body { 
