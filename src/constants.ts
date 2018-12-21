@@ -10,6 +10,6 @@ export default class WarpScriptExtConstants {
   /**
    * This regexp identifies the output files of the WarpScript execution
    */
-  public jsonResultRegEx: RegExp = new RegExp(os.tmpdir().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '[\/\\\\]' + '\\d{3}([nmu]?)\\.json', 'gi');
+  public jsonResultRegEx: RegExp = new RegExp(os.tmpdir().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '[\/\\\\]' + '\\d{3}([nmu])([XGI]?)\\.json', 'gi');
 
 }

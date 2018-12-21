@@ -1,49 +1,64 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 
-export default class WSContentProvider implements vscode.TextDocumentContentProvider {
-    private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
-    private currentDocument: vscode.TextDocument | undefined;
-    private replaceAll(target: string, search: string, replacement: string) {
-        return target.replace(new RegExp(search, 'g'), replacement);
-    };
-    private timeUnit: string = 'us';
-    /**
-     * 
-     * @param {ExtensionContext} context 
-     */
-    constructor(private context: vscode.ExtensionContext) { }
+export default class GTSPreviewWebview {
 
-    //dark themes : Default Dark+, Visual Studio Dark, Abyss, Kimbie Dark, Monokai, Monokai Dimmed, Red, Solarized Dark, Tomorrow Night Blue, Default High Contrast
 
-    LightThemesList: string[] = [
-        "Visual Studio Light",
-        "Default Light+",
-        "Quiet Light",
-        "Solarized Light"
-    ];
-    /**
-     * 
-     */
-    public async provideTextDocumentContent(): Promise<string> {
-        let theme = vscode.workspace.getConfiguration().get('warpscript.theme');
-        if (theme == "auto") {
-            let vscodetheme: string = vscode.workspace.getConfiguration().get("workbench.colorTheme");
-            if (this.LightThemesList.indexOf(vscodetheme) > -1) {
-                theme = "light";
-            }
-            else { theme = "dark"; }
-        }
+  private replaceAll(target: string, search: string, replacement: string) {
+    return target.replace(new RegExp(search, 'g'), replacement);
+  };
 
-        let rootPath = this.context.asAbsolutePath('.').replace(/\\/g, '/');
-        let TimeUnitWarning: string = '';
-        if (this.timeUnit != 'us') {
-            TimeUnitWarning = `<div class="timeunitwarning">(${this.timeUnit} time units)</div>`
-        }
+  /**
+   * 
+   * @param {ExtensionContext} context 
+   */
+  constructor(private context: vscode.ExtensionContext) { }
+  //dark themes : Default Dark+, Visual Studio Dark, Abyss, Kimbie Dark, Monokai, Monokai Dimmed, Red, Solarized Dark, Tomorrow Night Blue, Default High Contrast
 
-        if (this.currentDocument) {
-            const result = `
-<link href="file://${rootPath + '/bower_components/spectre.css/dist/spectre.min.css'}" rel="stylesheet">
-<script src="file://${rootPath + '/bower_components/senx-warpview/dist/warpview.js'}"></script>
+  LightThemesList: string[] = [
+    "Visual Studio Light",
+    "Default Light+",
+    "Quiet Light",
+    "Solarized Light"
+  ];
+  /**
+   * 
+   */
+  public async getHtmlContent(data: string, timeUnit: string): Promise<string> {
+
+    //define the theme
+    let theme = vscode.workspace.getConfiguration().get('warpscript.theme');
+    if (theme == "auto") {
+      let vscodetheme: string = vscode.workspace.getConfiguration().get("workbench.colorTheme");
+      if (this.LightThemesList.indexOf(vscodetheme) > -1) {
+        theme = "light";
+      }
+      else { theme = "dark"; }
+    }
+
+    //build the webcomponent path, the webview way.
+    let onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'bower_components', 'senx-warpview', 'dist', 'warpview.js'));
+    let warpviewPath:string = onDiskPath.with({ scheme: 'vscode-resource' }).toString();
+
+    //build the logo path, the webview way.
+    let LogoonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'images', 'logo.png'));
+    let LogoPath:string = LogoonDiskPath.with({ scheme: 'vscode-resource' }).toString();
+    
+    //build the spectre css path, the webview way.
+    let spectreCSSonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath,'bower_components','spectre.css','dist','spectre.min.css'));
+    let spectreCSSPath:string = spectreCSSonDiskPath.with({ scheme: 'vscode-resource' }).toString();
+
+
+    //build a time unit warning
+    let TimeUnitWarning: string = '';
+    if (timeUnit != 'us') {
+      TimeUnitWarning = `<div class="timeunitwarning">(${timeUnit} time units)</div>`
+    }
+
+
+    const result = `
+    <link href="${spectreCSSPath}" rel="stylesheet">
+    <script src="${warpviewPath}"></script>
 <style>
     body { 
         background-color: ${theme === 'light' ? '#fff' : '#222'}; 
@@ -99,7 +114,7 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
 </style>
 <header class="navbar">
     <section class="navbar-section">
-        <img src="file://${rootPath + '/images/logo.png'}" class="logo">
+        <img src="${LogoPath}" class="logo">
     </section>
     <section class="navbar-section">
             <a href="https://senx.io" target="_blank" class="btn btn-link">SenX</a>
@@ -107,43 +122,12 @@ export default class WSContentProvider implements vscode.TextDocumentContentProv
         </section>
 </header>
 <div class="container ${theme}">
-    ${TimeUnitWarning}
-    <warp-view-plot responsive="true" data="${this.replaceAll(this.currentDocument.getText(), '"', '&#34;')}" showLegend="false" options="{&#34timeUnit&#34 : &#34${this.timeUnit}&#34 }" ></warp-view-plot>
+${TimeUnitWarning}
+<warp-view-plot responsive="true" data="${this.replaceAll(data, '"', '&#34;')}" showLegend="false" options="{&#34timeUnit&#34 : &#34${timeUnit}&#34 }" ></warp-view-plot>
 </div>`
-            //console.log(result);
-            return result;
-        } else return '';
-    }
+    //console.log(result);
+    return result;
 
-    get onDidChange(): vscode.Event<vscode.Uri> {
-        return this._onDidChange.event;
-    }
+  }
 
-    /**
-     * 
-     * @param uri 
-     */
-    public update(uri: vscode.Uri, document: vscode.TextDocument):Thenable<{}> {
-        this.currentDocument = document
-        this._onDidChange.fire(uri);
-        this.timeUnit = this.getQueryVariable(uri.query, 'timeUnit')
-        return vscode.commands.executeCommand('vscode.previewHtml', uri, vscode.ViewColumn.Two, 'GTS Preview');
-    }
-    /**
-     * 
-     * @param {string} query 
-     * @param {string} variable 
-     */
-    public getQueryVariable(query: string, variable: string): string {
-        const vars = query.split('&');
-        for (let i = 0; i < vars.length; i++) {
-            const pair = vars[i].split('=');
-            if (decodeURIComponent(pair[0]) === variable) {
-                return decodeURIComponent(pair[1]);
-            }
-        }
-
-        console.log('Query variable %s not found', variable);
-        return undefined;
-    }
 }
