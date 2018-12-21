@@ -28,7 +28,7 @@ export default class ExecCommand {
       StatusbarUi.Working('loading...');
 
       let Warp10URL: string = vscode.workspace.getConfiguration('warpscript', null).get('Warp10URL');
-      let PreviewTimeUnit: string = vscode.workspace.getConfiguration('warpscript', null).get('DefaultTimeUnit');
+      let PreviewTimeUnit: string = 'us'; // vscode.workspace.getConfiguration('warpscript', null).get('DefaultTimeUnit');
 
       const useGZIP = vscode.workspace.getConfiguration('warpscript', null).get('useGZIP');
       const execDate: string = new Date().toLocaleTimeString();

@@ -28,6 +28,7 @@ export default class GTSPreviewWebview {
 
     //define the theme
     let theme = vscode.workspace.getConfiguration().get('warpscript.theme');
+    let showDots = vscode.workspace.getConfiguration().get('warpscript.showDots');
     if (theme == "auto") {
       let vscodetheme: string = vscode.workspace.getConfiguration().get("workbench.colorTheme");
       if (this.LightThemesList.indexOf(vscodetheme) > -1) {
@@ -69,6 +70,7 @@ export default class GTSPreviewWebview {
         --warp-view-switch-radius: 10px;
         --warp-view-switch-inset-checked-color: #1e7e34;
         --warp-view-switch-handle-checked-color: #28a745; 
+        padding-bottom: 20px;
     }
     header {
         background-color: ${theme !== 'light' ? '#fff' : '#222'}; 
@@ -123,7 +125,7 @@ export default class GTSPreviewWebview {
 </header>
 <div class="container ${theme}">
 ${TimeUnitWarning}
-<warp-view-plot responsive="true" data="${this.replaceAll(data, '"', '&#34;')}" showLegend="false" options="{&#34timeUnit&#34 : &#34${timeUnit}&#34 }" ></warp-view-plot>
+<warp-view-plot responsive="true" data="${this.replaceAll(data, '"', '&#34;')}" showLegend="false" options="{&#34timeUnit&#34 : &#34${timeUnit}&#34, &#34showDots&#34: ${showDots} }" ></warp-view-plot>
 </div>`
     //console.log(result);
     return result;

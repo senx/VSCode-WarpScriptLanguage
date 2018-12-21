@@ -11,7 +11,7 @@
 	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
 	"license": "Apache-2.0",
-	"version": "0.0.29",
+	"version": "0.0.28",
 	"publisher": "senx",
 	"engines": {
 		"vscode": "^1.24.0"
@@ -128,15 +128,11 @@
 					"default": true,
 					"description": "Show exec button"
 				},
-				"warpscript.DefaultTimeUnit": {
-					"enum": [
-						"us",
-						"ms",
-						"ns"
-					],
-					"scope": "window",
-					"default": "us",
-					"description": "Warp 10 Time Unit for GTS Preview"
+				"warpscript.showDots": {
+					"scope": "resource",
+					"type": "boolean",
+					"default": false,
+					"description": "Show dots on graph"
 				},
 				"warpscript.PreviewTabs": {
 					"enum": [
