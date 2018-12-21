@@ -9,7 +9,7 @@
   "homepage": "https://github.com/SenX/VSCode-WarpScriptLangage",
   "private": true,
   "dependencies": {
-    "senx-warpview": "1.0.22",
+    "senx-warpview": "1.0.23",
     "spectre.css": "^0.5.7"
   },
   "ignore": [
