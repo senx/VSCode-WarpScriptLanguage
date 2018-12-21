@@ -55,9 +55,6 @@ export default class GTSPreviewWebview {
       TimeUnitWarning = `<div class="timeunitwarning">(${timeUnit} time units)</div>`
     }
 
-    //wtf is that ?
-//    <link href="file://${rootPath + '/bower_components/spectre.css/dist/spectre.min.css'}" rel="stylesheet">
-
 
     const result = `
     <link href="${spectreCSSPath}" rel="stylesheet">
