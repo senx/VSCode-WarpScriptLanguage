@@ -48,12 +48,12 @@ export default class WSCompletionMacrosProvider
           item.documentation = new MarkdownString().appendMarkdown("When true or undefined, VSCode will try to substitute macro calls with macros in your current working directory. Set to false to force WarpScript server macros use.\n\nEx:").appendCodeblock("// @localmacrosubstitution false");
           item.detail="VSCode warpscript instruction";
           result.push(item);
-
+/*
           item = new CompletionItem("timeunit", CompletionItemKind.Method)
           item.documentation =  new MarkdownString().appendMarkdown("Change the time unit for GTS Preview. It could be `us`, `ms`, `ns`.  Usefull if you use a Warp 10 platform with a nanosecond or millisecond precision instead of default settings.")
           item.detail="VSCode warpscript instruction";
           result.push(item);
-
+*/
           item = new CompletionItem("preview", CompletionItemKind.Method)
           item.documentation = new MarkdownString().appendMarkdown("When true or not defined, GTS preview and Images Tabs are opened in the background. \n- Set to `none` for no preview at all.\n- Set to `gts` to focus on GTS Preview.\n- Set to `image` to focus on the Images tab.\n\nEx:").appendCodeblock("// @preview none");
           item.detail="VSCode warpscript instruction";

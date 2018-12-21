@@ -37,7 +37,6 @@ More details on [warp10.io](https://www.warp10.io)
 - To slow down autocompletion, you can use VSCode built in configuration `editor.quickSuggestionsDelay`
 - `// @endpoint http://xxx/api/v0/exec` at the beginning of the script change the remote execution endpoint
 - `// @localmacrosubstitution false` at the beginning of the script deactivate the local macro substitution
-- `// @timeunit ns` at the beginning of the script force the graph timeunit to nanosecond
 - `// @preview none` at the beginning of the script disable the preview. `gts` or `image` force the focus to the gts or image preview after execution.
 - In your settings.json you can add `"proxy.pac": "/path/to/your/proxy.pac"` for this extension to use proxy.pac rules to connect directly or through SOCKS proxies depending on the selected endpoint.
 - You can set the VSCode default language to warpscript (Ctrl+, search for default language settings). Every new file (Ctrl+N) will be a WarpScript.
