@@ -61,7 +61,7 @@ export default class ExecCommand {
               let extraparamsPattern = /\/\/\s*@(\w*)\s*(.*)$/g;
               let lineonMatch: RegExpMatchArray | null;
               let re = RegExp(extraparamsPattern);
-              while (lineonMatch = re.exec(currentline)) {
+              while (lineonMatch = re.exec(currentline.replace('\r',''))) {  //think about windows... \r\n in mc2 files !
                 let parametername = lineonMatch[1];
                 let parametervalue = lineonMatch[2];
                 switch (parametername) {
