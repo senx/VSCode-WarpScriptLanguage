@@ -62,7 +62,7 @@ export default class GTSPreviewWebview {
 <style>
     body { 
         background-color: ${theme === 'light' ? '#fff' : '#222'}; 
-        color: #000; 
+        color: #000;
         padding: 0;
         --warp-view-switch-width: 50px;
         --warp-view-switch-height: 20px;
@@ -127,7 +127,5 @@ ${TimeUnitWarning}
 </div>`
     //console.log(result);
     return result;
-
   }
-
 }
