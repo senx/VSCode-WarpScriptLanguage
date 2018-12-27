@@ -53,9 +53,9 @@ export default class WSCompletionVariablesProvider
   private ListVariables(document: TextDocument): string[] {
     let varlist: string[] = [];
 
-    let warpscriptlines = document.getText().split('\n');
+    let warpscriptlines = document.getText().split('\n'); //think about windows... \r\n in mc2 files !
     for (let l = 0; l < warpscriptlines.length; l++) {
-      let currentline = warpscriptlines[l];
+      let currentline = warpscriptlines[l].replace('\r','');
 
       //find and extract variable name can have dots or underscores or dash. 
       //the line must end with STORE (followed by spaces or an // comment)
