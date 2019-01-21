@@ -55,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let imagePreviewPanel: vscode.WebviewPanel = null;
 
 	let gtsPreviewWebview = new GTSPreviewWebview(context);
-	let imagePreviewWebview = new ImagePreviewWebview();
+	let imagePreviewWebview = new ImagePreviewWebview(context);
 	let jsonResultRegEx = new WarpScriptExtConstants().jsonResultRegEx;
 	let latestJSONdisplayed: string = '';
 
