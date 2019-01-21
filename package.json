@@ -166,6 +166,7 @@
 		"vscode-textmate": "4.0.1"
 	},
 	"dependencies": {
+		"file-saver": "^2.0.0",
 		"pac-resolver": "3.0.0",
 		"request": "2.88.0",
 		"socks-proxy-agent": "4.0.1",
