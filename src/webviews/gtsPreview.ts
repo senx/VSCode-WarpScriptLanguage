@@ -109,6 +109,7 @@ export default class GTSPreviewWebview {
         --warp-view-switch-inset-color: #545b62;
         --warp-view-switch-handle-color: #6c757d;
         --warp-view-spinner-color: #5899DA;
+        --gts-separator-font-color: #8e8e8e;
     }
     .timeunitwarning {
         margin: 10px;
