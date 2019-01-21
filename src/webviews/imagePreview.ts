@@ -101,7 +101,7 @@ export default class ImagePreviewWebview {
       function saveimg(base64image) {
         b=dataURItoBlob(base64image);
         d=new Date();
-        saveAs(b,"Warp10-Processing Image-" + d.toISOString() + ".png")
+        saveAs(b,"Warp 10-Processing Image-" + d.toISOString() + ".png")
       }
     
     </script>
