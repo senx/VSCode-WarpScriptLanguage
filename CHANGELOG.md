@@ -1,6 +1,83 @@
 VSCode WarpScript Extension
 ---
 
+## 1.0.3
+
+> +  2019/01/21  | WarpView version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d5b046111108666176fa248fd342d695cc2e6d93)*)
+
+## 1.0.2
+
+> +  2019/01/11  | WarpView version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/7b595e2e049218afaaacf50d76edf220b548fd87)*)
+
+## 1.0.1
+
+> +  2019/01/07  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/738e539204d3f9b04d4d9e1e062798c9bb0725f3)*)
+> +  2018/12/27  | warp-view version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/a064e320c581b50af5b06b554c53453c45a35b10)*)
+> +  2018/12/21  | fix variable completion for windows end of line  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/236ae38ffb0f9b51b826000c4e2d731fc051cf19)*)
+
+## 1.0.0
+
+> +  2018/12/21  | version  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/63a65efe9bad0987ed1d0c2a8c48af6e88db1f46)*)
+> +  2018/12/21  | some fixes  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/6e30b53ec1d9fd66c82d679de729c1e1e3e56ac9)*)
+> +  2018/12/21  | warp-view version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/83fdd1f96b5828a4fb1e034596a4442644082fae)*)
+> +  2018/12/21  | fix preview with Xavier header and css  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/b232d0eb835ef328b2901137a10a52e577760d33)*)
+> +  2018/12/21  | patch windows eol problem  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/ffee44a86cd69e8373c35f822bb7ee8a4649cb91)*)
+> +  2018/12/20  | spectre css integration  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/c65a6cb941f033d749c5710fa3069469b8c498b7)*)
+> +  2018/12/20  | merge with a funky commit which should not be there  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/06b2a45014eb7ee0a5b9421aa8e6230a24956bf4)*)
+> +  2018/12/20  | fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/b84e80c8a3375622208b44edf083d6bcf38b93fc)*)
+> +  2018/12/20  | cleanup  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/73c88d4bcb880ce5555ebea09bb02593c4ba1c9f)*)
+> +  2018/12/20  | add banner to dataviz  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/a9adf08effd604df87ede89ca5e5eafd8012293f)*)
+> +  2018/12/19  | warpview update  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/005ba75433478880333803970bc020c6a5207693)*)
+> +  2018/12/19  | warpview version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/b1d54fee05c05323b015f17dab33c1d5c6f79287)*)
+> +  2018/12/19  | do not refresh when selecting the preview json and keep preview content when hidden  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/362bf5acf046e8bc7a216725873a119808c9fa02)*)
+> +  2018/12/19  | removed older content provider  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/b5b0a2a2becfbefa93f272208540f58a13e79162)*)
+> +  2018/12/17  | New way to implement preview tabs in vscode. introduction of @preview modifier  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/4447541a44c8b36ac6ec85adff415f8d8c369628)*)
+> +  2018/12/17  | New way to implement preview tabs in vscode. introduction of @preview modifier  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/70dad1d2c2e82004a3b1a13be69ad20dec8404a8)*)
+> +  2018/12/17  | fix the gts preview focus stealing  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/0b2c2a28526b5dd969a0b76898dfa80facf6e114)*)
+> +  2018/12/17  | fix the preview focus stealth  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/4cfc530477c93e5bf1f904421184c0bab82b5aff)*)
+> +  2018/12/13  | Theme automagically follow vscode theme  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/3916150db55ac7b639450d5cf839e3c50fbb87a6)*)
+> +  2018/12/13  | Theme automagically follow vscode theme  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8df583c0963e19e7bf1d7077a73e86b0efc88e6a)*)
+> +  2018/12/13  | update the README with new features  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/87bd5cd97a48c8e08abb77609d4a44572fccdfd3)*)
+> +  2018/12/13  | workaround behavior difference between vscode dev host and vscode  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f038cbc20655039ab43246994b2a3f6322013389)*)
+> +  2018/12/12  | fix firstloop while closing json files  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/fe4637c02a01de27f94831f54e91e558b2e68b5e)*)
+> +  2018/12/12  | new function Close all Warp 10 json output in the workspace  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/420132ce5b7e05df58559f0c717959ab5538113a)*)
+> +  2018/12/12  | introduction of CloseEveryOpenedJsonOutput function  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/69ed30d253e7a5abc6963bf676ef1be241f937f8)*)
+> +  2018/12/12  | Remove file scheme  (*[Fabien Tencé](fabien.tence@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/4b17db77135c162c4932a9e4804b74a76d6f43d1)*)
+> +  2018/12/12  | fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/5767261a6439629e23e7518016f5f8211b1cc0fb)*)
+> +  2018/12/12  | fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/42ba4a851e6a9d68ecdd0694eb985a7eab2db9b7)*)
+> +  2018/12/12  | fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f38a139cc1702da7f6289f521ea20f3f1e4b8328)*)
+> +  2018/12/12  | warpview version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/b943d3ca1fd5cb1d00feded73058fcdeffaea696)*)
+> +  2018/12/12  | timeunit feature added  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/1ea630d50f585d09f9576dbba43da3140a01c1e7)*)
+> +  2018/12/11  | prepared for // @timeunit xx, wait for webcomponent  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/b1a2d2fe3d5a5ec3bbcd95c57a8fdcdc0e63d9a7)*)
+> +  2018/12/11  | warpview version bump  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/7982f1a66664ceb8d7852d6d06649c8cfacc56f1)*)
+> +  2018/12/10  | exec command fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f7073405961303af6377e38274810a9ee43dfd01)*)
+> +  2018/12/10  | warpview version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/c30f46bb0b529bd7eba35a052ea10931fd9a745f)*)
+> +  2018/12/10  | warpview version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/1138860787a238d13b5cd79881a7757914b4018a)*)
+> +  2018/12/10  | fix [#14](https://github.com/Giwi/VSCode-WarpScriptLangage//issues/14) : some special chars in strings on the stack crash vscode new plugin  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/51276025c75ae5d127a7b1b838c35b39a4b0cae0)*)
+> +  2018/12/10  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/24237c562fdda40f70fad05a8f90d94431a47135)*)
+> +  2018/12/06  | Fix snippet for future VSCode versions and makes completion faster for new unsaved files  (*[Fabien Tencé](fabien.tence@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/a9aedbaf7d8ea1a76b892103da28907bae503266)*)
+> +  2018/12/05  | remaining "loading" on failure  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/2567ac05df312bf4a9ba31ac99f3ccc31bfd094a)*)
+> +  2018/12/03  | Add doc for prox.pac setting.  (*[Fabien Tencé](fabien.tence@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/dcdfb7fd1b82d451bcffc9d3f01aafa90c9c148f)*)
+> +  2018/12/02  | single quote escape  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d9cb734fa79edd424c4844be84a0b91a47452367)*)
+> +  2018/12/02  | backward compatibility for oldest VSCode  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d83545933d5629f5ff0992d279621a48605a0b0e)*)
+> +  2018/11/30  | add polyfill for promesify  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/441481ba47c96d0f4c9c9e9ac90d44024560da99)*)
+> +  2018/11/30  | doc update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/a978718e7d09bd88406993744cbba892d0bdf3c6)*)
+> +  2018/11/30  | update doc  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/e8811222a33318dd76be89d1e195f06779751330)*)
+> +  2018/11/28  | bower fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/80e91919512ce504a6dd1c4f6c7ac1ae252df8b3)*)
+> +  2018/11/28  | warview version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/2700aa6a269d77e6c5b4b2f14efcc19c1e57c507)*)
+> +  2018/11/28  | dark theme fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/b68155661bdb1dad3ca57da8a0d5a723353e5bf0)*)
+> +  2018/11/28  | build  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/c289ccd963bf3ca30a230735b2ed24670c29d1f1)*)
+> +  2018/11/28  | WarpView version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/0bc95f223b19409320d4e7a2de158e28d1ffa551)*)
+> +  2018/11/28  | Fix ssl cert issues  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/4eb18798b43f0007635b0221bb042054392d2e75)*)
+> +  2018/11/28  | add scheme  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/7e70ff13b533f710d7505d22c19f6f5df13e6244)*)
+> +  2018/11/28  | snipets fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/00a81a58f4c162bfe8aac055a93366d3b491ca11)*)
+> +  2018/11/23  | Cleaner access to conf, avoid warnings  (*[Fabien Tencé](fabien.tence@senx.io) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/76500e4db3a43e1f0e59c0076907570aa5460db3)*)
+> +  2018/11/22  | doc update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/30a00f9d246d33d4951b76a3ca31caf1803ddca6)*)
+> +  2018/11/13  | bower integration  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/c69587c793bac9e0f1bab205273f9eb245fa0d44)*)
+> +  2018/11/13  | using warpview  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/88b10b83bba5a7cd3bea29b206fedf536eb933d3)*)
+> +  2018/11/12  | repo migration  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/498fa651ad7a68289abc798d57683bfbaf050a49)*)
+> +  2018/11/06  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/02c492e48e1f58962432e2bd9e676092b2b4066b)*)
+
 ## v0.0.27
 
 > +  2018/11/06  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/9bd83ac2492e172201316e6903d67996c6f83596)*)
@@ -41,53 +118,5 @@ VSCode WarpScript Extension
 > +  2018/09/17  | Wider character range for variable name autocompletion  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/eabd3fb768ff553d17074ff098076a164c50ead4)*)
 > +  2018/08/29  | Adding Gzip compression switch parameter  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/bb52fba449fc7e6b9ecb79a2fece94cdf7bd3b67)*)
 > +  2018/08/10  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/34f49ed2fa6d1afadc7c1e7a75daf6bceaee7b69)*)
-
-## v0.0.22
-
-> +  2018/08/10  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/64d2c9a7eecef16cc9a61c785187fac69f7b7292)*)
-> +  2018/08/10  | Doc update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8f3ae32ccaeae2a8a28e9d3dbb319b2b8ab5bfc0)*)
-> +  2018/08/10  | lineComment fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/6a8a0c2e6593f490e56e04855546a7397338507b)*)
-> +  2018/08/09  | need a 19957 for $ in snippet syntax  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/dae2f80e106b473ab747e6b768d1e2861e01c63b)*)
-> +  2018/08/09  | vsce version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/63dc697ee174f7d10129dc729d6fda75329f4293)*)
-> +  2018/08/09  | npm  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/632a436ef2acd408b928e262bcf09f86dea8a5fb)*)
-> +  2018/08/09  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/c92729f1c3ca492a0ec17da55bdaf73015baa874)*)
-
-## v0.0.21
-
-> +  2018/08/09  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/70dccf3c047876bee3880eaf5cdee0498017737d)*)
-> +  2018/08/09  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/88a56ee227f8bd8d949c0de1ddcce0acb3df90a0)*)
-> +  2018/08/03  | add tips to readme  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/57a4f12e889398b0bf42d823a54747f834d3ab5b)*)
-> +  2018/08/03  | add tips to readme  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/51f54fd13fe7a06030763800547942e1ceb9a7e0)*)
-> +  2018/08/03  | add tips to readme  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/c1d2a502c92d5affdaa8801f284fc1a0dd2e7a99)*)
-> +  2018/07/31  | # as comment  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/df5828959bb73a71d7d7207119e28f897bfbcce5)*)
-> +  2018/07/26  | doc  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/3de10da5b37e4f3d0b09c576f7402539a9422b6d)*)
-> +  2018/07/20  | Dedup the autocompletion variable list  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/2b3cb6af19c461d752fcd213c67b223953ab7542)*)
-> +  2018/07/05  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/4ca3ddccfbd559c60379208e279236419e40f59a)*)
-
-## v0.0.20
-
-> +  2018/07/05  | bug fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/85bc84dde208c23aff5debf2ed205f30ca676983)*)
-> +  2018/07/05  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/744ca51116ce79c5a123168c5500faa20db8f619)*)
-> +  2018/07/05  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/42384efae6b6cb8bcfb37bedfc90f32666561a13)*)
-> +  2018/07/05  | wip  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/8c82033116659f82008c7b99f5335bd139a05d5b)*)
-> +  2018/07/03  | Autocompletion for variables  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/0f261d34676ed7b0a12f76243e496ea256b6dc02)*)
-> +  2018/07/02  | Added internal doc for @parameters  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/7c21afff8f314b55bc068bf0d50a6e427857b36d)*)
-> +  2018/07/02  | Add a parameter to deactivate inline substitution of macros  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/25176f4ebf2f2364e67e94704feb8e15537a0163)*)
-> +  2018/06/27  | Add a way to override Warp 10 URL in the file comments  (*[PAP1](pierre.papin@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/645458135bbb070d7e13769351224b7a8dd07962)*)
-> +  2018/06/05  | doc update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/c772a262a701cc8efcb47ad52744b91a97081cee)*)
-> +  2018/06/05  | merge  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f37371420ffa4abe3391aad2bb4706bcebaa51df)*)
-> +  2018/06/05  | snipets  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/10c16a05263ff556cc9a63e1005a8db2fff70151)*)
-> +  2018/06/04  | Add snippets for 'FOR', 'FOREACH', 'FORSTEP'  (*[Steven GUEGUEN](steven.gueguen@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/13efccf9f743dd09d1be77c5251560501caf54fa)*)
-> +  2018/06/04  | Add categories and keywords  (*[Steven GUEGUEN](steven.gueguen@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/bcf48f8cf327fedc0ae28b2f65902f977bb14331)*)
-> +  2018/06/04  | Typo  (*[Steven GUEGUEN](steven.gueguen@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/fbdda95fb3c8999526f66a08e7b58739642536c0)*)
-> +  2018/06/04  | Add snippets for 'IFT', 'IFTE', 'SWITCH', 'WHILE', 'UNTIL',  (*[Steven GUEGUEN](steven.gueguen@cityzendata.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/d525df4acc845cb2ebbd6524524b92742cd4fe06)*)
-> +  2018/05/31  | changelog  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/becc5ae7fdcf7ccca91e210f96f71c5830db3f55)*)
-
-## v0.0.19
-
-> +  2018/05/31  | version bump  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/9681b5fe1d8baf5183f0bbabeecca6481cce90db)*)
-> +  2018/05/31  | changelog  (*[Xavier MARIN](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/f1273d61484e9e0dab1b2eb3f3d8e56b23987dfc)*)
-> +  2018/05/31  | Dataviz not displayed on windows OS  (*[Giwi](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/3ca662dfbd3e6f9d71d4afcd1e0cfcaccddc1cbf)*)
-> +  2018/05/30  | changelog  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/Giwi/VSCode-WarpScriptLangage//commit/7c8fa924bef77ee75ce72a0f45f438d3528bbd90)*)
 
 
