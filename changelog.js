@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const { execSync } = require('child_process');
-let repo = 'https://github.com/Giwi/VSCode-WarpScriptLangage/';
+let repo = 'https://github.com/senx/VSCode-WarpScriptLanguage/';
 let md =
   `VSCode WarpScript Extension
 ---
