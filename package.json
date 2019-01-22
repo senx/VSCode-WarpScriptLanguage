@@ -150,29 +150,30 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+		"postinstall": "node ./node_modules/vscode/bin/install && bower install",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test",
+		"changelog": "node changelog.js > CHANGELOG.md"
 	},
 	"devDependencies": {
-		"@types/js-yaml": "3.11.2",
+		"@types/js-yaml": "3.12.0",
 		"@types/mocha": "5.2.5",
-		"@types/node": "10.12.10",
-		"@types/request": "^2.48.1",
-		"js-yaml": "3.12.0",
+		"@types/node": "10.12.18",
+		"@types/request": "2.48.1",
+		"js-yaml": "3.12.1",
 		"lodash": "4.17.11",
 		"plist": "3.0.1",
 		"showdown": "1.9.0",
-		"typescript": "3.1.6",
+		"typescript": "3.2.4",
 		"vscode-textmate": "4.0.1"
 	},
 	"dependencies": {
-		"file-saver": "^2.0.0",
+		"file-saver": "2.0.0",
 		"pac-resolver": "3.0.0",
 		"request": "2.88.0",
 		"socks-proxy-agent": "4.0.1",
-		"util.promisify": "^1.0.0",
-		"vsce": "1.53.2",
-		"vscode": "^1.1.26",
-		"vscode-languageclient": "5.1.1"
+		"util.promisify": "1.0.0",
+		"vsce": "1.54.0",
+		"vscode": "1.1.27",
+		"vscode-languageclient": "5.2.1"
 	}
 }
