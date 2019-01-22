@@ -55,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let imagePreviewPanel: vscode.WebviewPanel = null;
 
 	let gtsPreviewWebview = new GTSPreviewWebview(context);
-	let imagePreviewWebview = new ImagePreviewWebview();
+	let imagePreviewWebview = new ImagePreviewWebview(context);
 	let jsonResultRegEx = new WarpScriptExtConstants().jsonResultRegEx;
 	let latestJSONdisplayed: string = '';
 
@@ -101,8 +101,8 @@ export function activate(context: vscode.ExtensionContext) {
 				})
 
 				//imagePreview panel, if one image found
-				imagePreviewWebview.imagesFound(textEditor.document.getText()).then(images => {
-					if (images) {
+				imagePreviewWebview.findImages(textEditor.document.getText(),textEditor.document.getText().length > 500000).then(imageList => {
+					if (imageList.length > 0) {
 						if (imagePreviewPanel == null) {
 							imagePreviewPanel = vscode.window.createWebviewPanel('imagepreview', 'Images',
 								{ viewColumn: vscode.ViewColumn.Two, preserveFocus: true },
@@ -116,7 +116,7 @@ export function activate(context: vscode.ExtensionContext) {
 							//when closed by the user
 							imagePreviewPanel.onDidDispose(() => { imagePreviewPanel = null; })
 						}
-						imagePreviewWebview.getHtmlContent(textEditor.document.getText()).then(htmlcontent => {
+						imagePreviewWebview.getHtmlContent(imageList).then(htmlcontent => {
 							imagePreviewPanel.webview.html = htmlcontent;
 						})
 					}
