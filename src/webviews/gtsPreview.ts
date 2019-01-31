@@ -42,8 +42,10 @@ export default class GTSPreviewWebview {
     let warpviewPath:string = onDiskPath.with({ scheme: 'vscode-resource' }).toString();
 
     //build the logo path, the webview way.
-    let LogoonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'images', 'logo.png'));
+    let LogoonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'images', 'warpstudio.png'));
     let LogoPath:string = LogoonDiskPath.with({ scheme: 'vscode-resource' }).toString();
+    let LogoWhiteonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'images', 'warpstudio-white.png'));
+    let LogoWhitePath:string = LogoWhiteonDiskPath.with({ scheme: 'vscode-resource' }).toString();
     
     //build the spectre css path, the webview way.
     let spectreCSSonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath,'bower_components','spectre.css','dist','spectre.min.css'));
@@ -73,13 +75,13 @@ export default class GTSPreviewWebview {
         padding-bottom: 20px;
     }
     header {
-        background-color: ${theme !== 'light' ? '#fff' : '#222'}; 
-        color: ${theme === 'light' ? '#fff' : '#222'}; 
+        background-color: ${theme === 'light' ? '#fff' : '#222'}; 
+        color: ${theme !== 'light' ? '#fff' : '#222'}; 
         padding: 5px;
     }
 
     .navbar-section a, .navbar-section a:hover, .navbar-section a:visited {
-        color: ${theme === 'light' ? '#fff' : '#004eff'} !important; 
+        color: ${theme !== 'light' ? '#fff' : '#004eff'} !important; 
     }
 
     img.logo {
@@ -117,7 +119,7 @@ export default class GTSPreviewWebview {
 </style>
 <header class="navbar">
     <section class="navbar-section">
-        <img src="${LogoPath}" class="logo">
+        <img src="${theme === 'light' ? LogoPath : LogoWhitePath}" class="logo">
     </section>
     <section class="navbar-section">
             <a href="https://senx.io" target="_blank" class="btn btn-link">SenX</a>
@@ -126,7 +128,7 @@ export default class GTSPreviewWebview {
 </header>
 <div class="container ${theme}">
 ${TimeUnitWarning}
-<warp-view-plot responsive="true" data="${this.replaceAll(data, '"', '&#34;')}" showLegend="false" options="{&#34timeUnit&#34 : &#34${timeUnit}&#34, &#34showDots&#34: ${showDots} }" ></warp-view-plot>
+<warp-view-plot responsive="true" is-alone="true" data="${this.replaceAll(data, '"', '&#34;')}" showLegend="false" options="{&#34timeUnit&#34 : &#34${timeUnit}&#34, &#34showDots&#34: ${showDots} }" ></warp-view-plot>
 </div>`
     //console.log(result);
     return result;
