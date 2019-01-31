@@ -89,16 +89,17 @@ export default class GTSPreviewWebview {
         width: auto;
     }
     .links {
-        widht: auto;
+        width: auto;
     }
     .container {
-        pading: 10px;
+        padding: 10px;
     }
     .light {
         background-color: #fff; 
         color: #000; 
         --warp-view-tile-height: 500px;
         --warp-view-chart-legend-bg: #000;
+        --warp-view-switch-inset-checked-color: #00cd00;
     }
     .dark {
         background-color: #222; 
