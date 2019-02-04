@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import WarpScriptExtConstants from '../constants';
 import WarpStriptExtGlobals = require('../globals')
+import { isNullOrUndefined } from 'util';
 /**
  * This functions browse all the opened documents.
  * If the filename match the /tmp/xxxx.json pattern used for the WarpScript output, it close them without any confirmation.
@@ -19,7 +20,7 @@ export default class CloseJsonResults {
 
 
 
-  public exec(): any {
+  public exec(previewPanels: { 'image': vscode.WebviewPanel, 'gts': vscode.WebviewPanel }): any {
 
     //the current opened file. usefull to detect the end of "nextEditor" loop.
     let activefilepath: string = vscode.window.activeTextEditor.document.uri.toString();
@@ -30,7 +31,7 @@ export default class CloseJsonResults {
     let closeIfOutputJson: Function = (editor: vscode.TextEditor) => {
       console.log(editor.document);
       let filename: string = editor.document.fileName;
-      if (filename.match(new WarpScriptExtConstants().jsonResultRegEx) || editor.document.uri.scheme === "output") {
+      if (filename.match(new WarpScriptExtConstants().jsonResultRegEx)) {
         console.log(filename + ' could be closed ! closing...');
         vscode.commands.executeCommand("workbench.action.revertAndCloseActiveEditor");
       }
@@ -62,6 +63,14 @@ export default class CloseJsonResults {
 
     //set the flag to disable the content provider update
     WarpStriptExtGlobals.weAreClosingFilesFlag = true;
+
+    //close any opened webview.
+    if (!isNullOrUndefined(previewPanels.gts)) {
+      previewPanels.gts.dispose();
+    }
+    if (!isNullOrUndefined(previewPanels.image)) {
+      previewPanels.image.dispose();
+    }
 
     //initiate the loop
     closeIfOutputJson(vscode.window.activeTextEditor);
