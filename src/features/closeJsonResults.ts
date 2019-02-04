@@ -28,8 +28,9 @@ export default class CloseJsonResults {
 
 
     let closeIfOutputJson: Function = (editor: vscode.TextEditor) => {
+      console.log(editor.document);
       let filename: string = editor.document.fileName;
-      if (filename.match(new WarpScriptExtConstants().jsonResultRegEx)) {
+      if (filename.match(new WarpScriptExtConstants().jsonResultRegEx) || editor.document.uri.scheme === "output") {
         console.log(filename + ' could be closed ! closing...');
         vscode.commands.executeCommand("workbench.action.revertAndCloseActiveEditor");
       }
