@@ -58,6 +58,8 @@ export default class GTSPreviewWebview {
       TimeUnitWarning = `<div class="timeunitwarning">(${timeUnit} time units)</div>`
     }
 
+    const dataEscaped : string = this.replaceAll(data, '"', '&#34;')
+
 
     const result = `
     <link href="${spectreCSSPath}" rel="stylesheet">
@@ -73,6 +75,7 @@ export default class GTSPreviewWebview {
         --warp-view-switch-inset-checked-color: #1e7e34;
         --warp-view-switch-handle-checked-color: #28a745; 
         padding-bottom: 20px;
+        --warp-view-resize-handle-color: antiquewhite;
     }
     header {
         background-color: ${theme === 'light' ? '#fff' : '#222'}; 
@@ -97,7 +100,6 @@ export default class GTSPreviewWebview {
     .light {
         background-color: #fff; 
         color: #000; 
-        --warp-view-tile-height: 500px;
         --warp-view-chart-legend-bg: #000;
         --warp-view-switch-inset-checked-color: #00cd00;
     }
@@ -113,6 +115,7 @@ export default class GTSPreviewWebview {
         --warp-view-switch-handle-color: #6c757d;
         --warp-view-spinner-color: #5899DA;
         --gts-separator-font-color: #8e8e8e;
+        --warp-view-resize-handle-color: #111111;
     }
     .timeunitwarning {
         margin: 10px;
@@ -129,7 +132,7 @@ export default class GTSPreviewWebview {
 </header>
 <div class="container ${theme}">
 ${TimeUnitWarning}
-<warp-view-plot responsive="true" is-alone="true" data="${this.replaceAll(data, '"', '&#34;')}" showLegend="false" options="{&#34timeUnit&#34 : &#34${timeUnit}&#34, &#34showDots&#34: ${showDots} }" ></warp-view-plot>
+<warp-view-plot responsive="true" is-alone="true" data="${dataEscaped}" showLegend="false" options="{&#34timeUnit&#34 : &#34${timeUnit}&#34, &#34showDots&#34: ${showDots} }" ></warp-view-plot>
 </div>`
     //console.log(result);
     return result;
