@@ -142,6 +142,16 @@
 					"scope": "window",
 					"default": "auto",
 					"description": "Prevent the GTS Preview and Image tabs to pop up after execution"
+				},
+				"warpscript.DefaultTimeUnit": {
+					"enum": [
+						"us",
+						"ms",
+						"ns"
+					],
+					"scope": "window",
+					"default": "us",
+					"description": "Warp 10 Time Unit for GTS Preview"
 				}
 			}
 		}
