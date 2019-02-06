@@ -28,7 +28,7 @@ export default class ExecCommand {
       StatusbarUi.Working('loading...');
 
       let Warp10URL: string = vscode.workspace.getConfiguration('warpscript', null).get('Warp10URL');
-      let PreviewTimeUnit: string = 'us'; // vscode.workspace.getConfiguration('warpscript', null).get('DefaultTimeUnit');
+      let PreviewTimeUnit: string = vscode.workspace.getConfiguration('warpscript', null).get('DefaultTimeUnit');
 
       const useGZIP = vscode.workspace.getConfiguration('warpscript', null).get('useGZIP');
       const execDate: string = new Date().toLocaleTimeString();
@@ -61,7 +61,7 @@ export default class ExecCommand {
               let extraparamsPattern = /\/\/\s*@(\w*)\s*(.*)$/g;
               let lineonMatch: RegExpMatchArray | null;
               let re = RegExp(extraparamsPattern);
-              while (lineonMatch = re.exec(currentline.replace('\r',''))) {  //think about windows... \r\n in mc2 files !
+              while (lineonMatch = re.exec(currentline.replace('\r', ''))) {  //think about windows... \r\n in mc2 files !
                 let parametername = lineonMatch[1];
                 let parametervalue = lineonMatch[2];
                 switch (parametername) {
@@ -79,11 +79,11 @@ export default class ExecCommand {
                     }
                     break;
                   case "preview":
-                    switch (parametervalue.toLowerCase().substr(0,4)) {
-                      case "none" : displayPreviewOpt = 'X'; break;
-                      case "gts" : displayPreviewOpt = 'G'; break;
-                      case "imag" : displayPreviewOpt = 'I'; break;
-                      default: displayPreviewOpt=''; break;
+                    switch (parametervalue.toLowerCase().substr(0, 4)) {
+                      case "none": displayPreviewOpt = 'X'; break;
+                      case "gts": displayPreviewOpt = 'G'; break;
+                      case "imag": displayPreviewOpt = 'I'; break;
+                      default: displayPreviewOpt = ''; break;
                     }
                     break;
                   default:
@@ -99,7 +99,7 @@ export default class ExecCommand {
           // keep a simple suffix for the json filename (either n for nanosecond or m for millisecond. nothing for default.)
           let jsonSuffix: string = PreviewTimeUnit.substr(0, 1);
           // add X after the suffix for no preview at all, add I for focus on images, add G for gts preview.
-          jsonSuffix = jsonSuffix + displayPreviewOpt 
+          jsonSuffix = jsonSuffix + displayPreviewOpt
           //
           //find the hostname in Warp10URL. 
           //
