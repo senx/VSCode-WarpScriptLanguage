@@ -38,7 +38,7 @@ export default class GTSPreviewWebview {
     }
 
     //get the default values for GTSPreview
-    let alwaysShowMap = vscode.workspace.getConfiguration().get('warpscript.PreviewAlwaysShowMap');
+    //let alwaysShowMap = vscode.workspace.getConfiguration().get('warpscript.PreviewAlwaysShowMap');
     let chartHeight = vscode.workspace.getConfiguration().get('warpscript.PreviewDefaultChartHeight');
     let mapHeight = vscode.workspace.getConfiguration().get('warpscript.PreviewDefaultMapHeight');
     
