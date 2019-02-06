@@ -48,6 +48,41 @@
 		],
 		"description": "Macro"
     },
+    "macro(empty)": {
+		"prefix": "macro",
+		"body": [
+            "{",
+            "    'name' ''",
+            "    'desc' ",
+            "    <'",
+            "",
+            "    '>",
+            "    'sig' [ [ [   ] [   ] ] ] // Signature",
+            "    'params' {",
+            "      // Signature params description",
+            "    }",
+            "    'examples' [",
+            "      <'",
+            "",
+            "      '>",
+            "    ]",
+            "} 'info' STORE",
+            "",
+            "<%",
+            "  !$$info INFO",
+            "  SAVE 'context' STORE",
+            "    // Code of the actual macro",
+            "    ",
+            "  $$context RESTORE",
+            "%>",
+            "'macro' STORE",
+            "",
+            "// Unit tests",
+            "",
+            "$$macro"
+		],
+		"description": "Macro"
+    },
     "fetch": {
         "prefix": "fetch",
         "body": [
