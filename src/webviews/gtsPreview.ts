@@ -41,20 +41,20 @@ export default class GTSPreviewWebview {
     //let alwaysShowMap = vscode.workspace.getConfiguration().get('warpscript.PreviewAlwaysShowMap');
     let chartHeight = vscode.workspace.getConfiguration().get('warpscript.PreviewDefaultChartHeight');
     let mapHeight = vscode.workspace.getConfiguration().get('warpscript.PreviewDefaultMapHeight');
-    
+
     //build the webcomponent path, the webview way.
     let onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'bower_components', 'senx-warpview', 'dist', 'warpview.js'));
-    let warpviewPath:string = onDiskPath.with({ scheme: 'vscode-resource' }).toString();
+    let warpviewPath: string = onDiskPath.with({ scheme: 'vscode-resource' }).toString();
 
     //build the logo path, the webview way.
     let LogoonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'images', 'warpstudio.png'));
-    let LogoPath:string = LogoonDiskPath.with({ scheme: 'vscode-resource' }).toString();
+    let LogoPath: string = LogoonDiskPath.with({ scheme: 'vscode-resource' }).toString();
     let LogoWhiteonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'images', 'warpstudio-white.png'));
-    let LogoWhitePath:string = LogoWhiteonDiskPath.with({ scheme: 'vscode-resource' }).toString();
-    
+    let LogoWhitePath: string = LogoWhiteonDiskPath.with({ scheme: 'vscode-resource' }).toString();
+
     //build the spectre css path, the webview way.
-    let spectreCSSonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath,'bower_components','spectre.css','dist','spectre.min.css'));
-    let spectreCSSPath:string = spectreCSSonDiskPath.with({ scheme: 'vscode-resource' }).toString();
+    let spectreCSSonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'bower_components', 'spectre.css', 'dist', 'spectre.min.css'));
+    let spectreCSSPath: string = spectreCSSonDiskPath.with({ scheme: 'vscode-resource' }).toString();
 
 
     //build a time unit warning
@@ -63,7 +63,7 @@ export default class GTSPreviewWebview {
       TimeUnitWarning = `<div class="timeunitwarning">(${timeUnit} time units)</div>`
     }
 
-    const dataEscaped : string = this.replaceAll(data, '"', '&#34;')
+    const dataEscaped: string = this.replaceAll(data, '"', '&#34;')
 
 
     const result = `
