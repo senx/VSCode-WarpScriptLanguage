@@ -37,6 +37,11 @@ export default class GTSPreviewWebview {
       else { theme = "dark"; }
     }
 
+    //get the default values for GTSPreview
+    let alwaysShowMap = vscode.workspace.getConfiguration().get('warpscript.PreviewAlwaysShowMap');
+    let chartHeight = vscode.workspace.getConfiguration().get('warpscript.PreviewDefaultChartHeight');
+    let mapHeight = vscode.workspace.getConfiguration().get('warpscript.PreviewDefaultMapHeight');
+    
     //build the webcomponent path, the webview way.
     let onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'bower_components', 'senx-warpview', 'dist', 'warpview.js'));
     let warpviewPath:string = onDiskPath.with({ scheme: 'vscode-resource' }).toString();
@@ -132,7 +137,14 @@ export default class GTSPreviewWebview {
 </header>
 <div class="container ${theme}">
 ${TimeUnitWarning}
-<warp-view-plot responsive="true" is-alone="true" data="${dataEscaped}" showLegend="false" options="{&#34timeUnit&#34 : &#34${timeUnit}&#34, &#34showDots&#34: ${showDots} }" ></warp-view-plot>
+<warp-view-plot 
+  responsive="true" 
+  is-alone="true" 
+  initial-chart-height="${chartHeight}" 
+  initial-map-height="${mapHeight}" 
+  data="${dataEscaped}" 
+  showLegend="false" 
+  options="{&#34timeUnit&#34 : &#34${timeUnit}&#34, &#34showDots&#34: ${showDots} }" ></warp-view-plot>
 </div>`
     //console.log(result);
     return result;
