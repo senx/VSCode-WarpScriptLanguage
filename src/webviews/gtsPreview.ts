@@ -37,19 +37,24 @@ export default class GTSPreviewWebview {
       else { theme = "dark"; }
     }
 
+    //get the default values for GTSPreview
+    //let alwaysShowMap = vscode.workspace.getConfiguration().get('warpscript.PreviewAlwaysShowMap');
+    let chartHeight = vscode.workspace.getConfiguration().get('warpscript.PreviewDefaultChartHeight');
+    let mapHeight = vscode.workspace.getConfiguration().get('warpscript.PreviewDefaultMapHeight');
+
     //build the webcomponent path, the webview way.
     let onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'bower_components', 'senx-warpview', 'dist', 'warpview.js'));
-    let warpviewPath:string = onDiskPath.with({ scheme: 'vscode-resource' }).toString();
+    let warpviewPath: string = onDiskPath.with({ scheme: 'vscode-resource' }).toString();
 
     //build the logo path, the webview way.
     let LogoonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'images', 'warpstudio.png'));
-    let LogoPath:string = LogoonDiskPath.with({ scheme: 'vscode-resource' }).toString();
+    let LogoPath: string = LogoonDiskPath.with({ scheme: 'vscode-resource' }).toString();
     let LogoWhiteonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'images', 'warpstudio-white.png'));
-    let LogoWhitePath:string = LogoWhiteonDiskPath.with({ scheme: 'vscode-resource' }).toString();
-    
+    let LogoWhitePath: string = LogoWhiteonDiskPath.with({ scheme: 'vscode-resource' }).toString();
+
     //build the spectre css path, the webview way.
-    let spectreCSSonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath,'bower_components','spectre.css','dist','spectre.min.css'));
-    let spectreCSSPath:string = spectreCSSonDiskPath.with({ scheme: 'vscode-resource' }).toString();
+    let spectreCSSonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'bower_components', 'spectre.css', 'dist', 'spectre.min.css'));
+    let spectreCSSPath: string = spectreCSSonDiskPath.with({ scheme: 'vscode-resource' }).toString();
 
 
     //build a time unit warning
@@ -57,6 +62,8 @@ export default class GTSPreviewWebview {
     if (timeUnit != 'us') {
       TimeUnitWarning = `<div class="timeunitwarning">(${timeUnit} time units)</div>`
     }
+
+    const dataEscaped: string = this.replaceAll(data, '"', '&#34;')
 
 
     const result = `
@@ -73,6 +80,7 @@ export default class GTSPreviewWebview {
         --warp-view-switch-inset-checked-color: #1e7e34;
         --warp-view-switch-handle-checked-color: #28a745; 
         padding-bottom: 20px;
+        --warp-view-resize-handle-color: antiquewhite;
     }
     header {
         background-color: ${theme === 'light' ? '#fff' : '#222'}; 
@@ -97,7 +105,6 @@ export default class GTSPreviewWebview {
     .light {
         background-color: #fff; 
         color: #000; 
-        --warp-view-tile-height: 500px;
         --warp-view-chart-legend-bg: #000;
         --warp-view-switch-inset-checked-color: #00cd00;
     }
@@ -113,6 +120,7 @@ export default class GTSPreviewWebview {
         --warp-view-switch-handle-color: #6c757d;
         --warp-view-spinner-color: #5899DA;
         --gts-separator-font-color: #8e8e8e;
+        --warp-view-resize-handle-color: #111111;
     }
     .timeunitwarning {
         margin: 10px;
@@ -129,7 +137,14 @@ export default class GTSPreviewWebview {
 </header>
 <div class="container ${theme}">
 ${TimeUnitWarning}
-<warp-view-plot responsive="true" is-alone="true" data="${this.replaceAll(data, '"', '&#34;')}" showLegend="false" options="{&#34timeUnit&#34 : &#34${timeUnit}&#34, &#34showDots&#34: ${showDots} }" ></warp-view-plot>
+<warp-view-plot 
+  responsive="true" 
+  is-alone="true" 
+  initial-chart-height="${chartHeight}" 
+  initial-map-height="${mapHeight}" 
+  data="${dataEscaped}" 
+  showLegend="false" 
+  options="{&#34timeUnit&#34 : &#34${timeUnit}&#34, &#34showDots&#34: ${showDots} }" ></warp-view-plot>
 </div>`
     //console.log(result);
     return result;

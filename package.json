@@ -142,6 +142,26 @@
 					"scope": "window",
 					"default": "auto",
 					"description": "Prevent the GTS Preview and Image tabs to pop up after execution"
+				},
+				"warpscript.DefaultTimeUnit": {
+					"enum": [
+						"us",
+						"ms",
+						"ns"
+					],
+					"scope": "window",
+					"default": "us",
+					"description": "Warp 10 Time Unit for GTS Preview"
+				},
+				"warpscript.PreviewDefaultChartHeight": {
+					"type": "integer",
+					"default": 400,
+					"description": "Default height in pixels of the GTS Preview chart"
+				},
+				"warpscript.PreviewDefaultMapHeight": {
+					"type": "integer",
+					"default": 500,
+					"description": "Default height in pixels of the GTS Preview map"
 				}
 			}
 		}
