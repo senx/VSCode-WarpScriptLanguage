@@ -80,7 +80,7 @@ export default class GTSPreviewWebview {
         --warp-view-switch-inset-checked-color: #1e7e34;
         --warp-view-switch-handle-checked-color: #28a745; 
         padding-bottom: 20px;
-        --warp-view-resize-handle-color: antiquewhite;
+        --warp-view-resize-handle-color: #e6e6e6;
     }
     header {
         background-color: ${theme === 'light' ? '#fff' : '#222'}; 
@@ -107,6 +107,13 @@ export default class GTSPreviewWebview {
         color: #000; 
         --warp-view-chart-legend-bg: #000;
         --warp-view-switch-inset-checked-color: #00cd00;
+        
+        --warp-view-chart-legend-bg: #fafafa;  /*#fffbef;*/
+        --gts-labelvalue-font-color: #666;
+        --gts-separator-font-color: #000;
+        --gts-labelname-font-color: rgb(17, 141, 100);
+        --gts-classname-font-color: rgb(0, 137, 255);
+        --warp-view-chart-legend-color: #000;
     }
     .dark {
         background-color: #222; 
@@ -121,6 +128,13 @@ export default class GTSPreviewWebview {
         --warp-view-spinner-color: #5899DA;
         --gts-separator-font-color: #8e8e8e;
         --warp-view-resize-handle-color: #111111;
+
+        --warp-view-chart-legend-bg: #000;
+        --gts-labelvalue-font-color: #ccc;
+        --gts-separator-font-color: #fff;
+        --gts-labelname-font-color: rgb(105, 223, 184);
+        --gts-classname-font-color: rgb(126, 189, 245);
+        --warp-view-chart-legend-color: #fff;
     }
     .timeunitwarning {
         margin: 10px;
