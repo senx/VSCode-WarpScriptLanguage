@@ -208,5 +208,31 @@
       "FORSTEP"
     ],
     "description": "Forstep loop"
+  },
+  "shm": {
+    "prefix": "shm",
+    "body": [
+      "<%",
+      "  <%",
+      "    //try to read data from SHared Memory",
+      "    'gtsList' SHMLOAD DROP",
+      "  %>",
+      "  <%",
+      "    //when not found, store data in SHM",
+      "    ${1:[ $$token 'classname' \\{\\} NOW 365 d ] FETCH} 'gtsList' SHMSTORE",
+      "  %>",
+      "  <%",
+      "    //finally, load the reference from SHM and store it ",
+      "    'gtsList' SHMLOAD 'gtsList' STORE",
+      "  %> TRY",
+      "",
+      "  //analytics on $$gtsList",
+      "  ${2:$$gtsList}",
+      "",
+      "",
+      "",
+      "%> 'myMutex' MUTEX //prevent a concurrent execution on the same SHM data"
+    ],
+    "description": "Keep fetched data in RAM. You need to enable the SHM extension."
   }
 }
