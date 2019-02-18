@@ -1190,7 +1190,7 @@ export class Monarch {
                 "@brackets"
             ],
             [
-                "\\d*\\.\\d+([eE][\\-+]?\\d+)?[fFdD]?",
+                "\\d*\\.\\d+([eE][-+]?\\d+)?[fFdD]?",
                 "number.float"
             ],
             [
