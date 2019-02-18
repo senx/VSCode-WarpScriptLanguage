@@ -23,7 +23,8 @@ export default class WSHoverProvider implements HoverProvider {
 		var entry = wsGlobals.globalfunctions[name];
 		if (entry && entry.description) {
 			let signature = (entry.signature || '');
-			let contents: MarkedString[] = ['### ' + name, { language: 'warpscript', value: signature }, entry.description];
+			let contents: MarkedString[] = ['### ' + name, { language: 'warpscript', value: signature }, 
+			entry.description.replace(/(\/doc\/\w+)/g, x => `https://www.warp10.io${x}`)];
 			return new Hover(contents, wordRange);
 		}
 
