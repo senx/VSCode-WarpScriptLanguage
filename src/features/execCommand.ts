@@ -123,6 +123,8 @@ export default class ExecCommand {
             await WSDocumentLinksProvider.getMacroURI(macroName).then(
               async (uri) => {
                 if (uris.indexOf(uri.toString()) === -1) {
+                  outputWin.show();
+                  outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
                   let tdoc: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
                   let macroCode: string = tdoc.getText()
                   // Prepend the macro, store it and then append the rest of the script.
