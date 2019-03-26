@@ -196,8 +196,7 @@
   "for": {
     "prefix": "for",
     "body": [
-      "<% ${1:initial_value} %>",
-      "<% ${2:final_value} %>",
+      "${1:initial_value} ${2:final_value}",
       "<% ${3:action} %>",
       "FOR"
     ],
@@ -207,7 +206,11 @@
     "prefix": "foreach",
     "body": [
       "${1:object}",
-      "<% ${2:action} %>",
+      "<% ",
+      "  //[ 'key' 'value' ] STORE // object is a map",
+      "  //[ 'value' ] STORE // object is a list",
+      "  ${2:action}",
+      "%>",
       "FOREACH"
     ],
     "description": "Foreach loop"
@@ -215,9 +218,7 @@
   "forstep": {
     "prefix": "forstep",
     "body": [
-      "<% ${1:initial_value} %>",
-      "<% ${2:final_value} %>",
-      "<% ${3:step} %>",
+      "${1:initial_value} ${2:final_value} <% ${3:1 +} %>",
       "<% ${4:action} %>",
       "FORSTEP"
     ],
