@@ -38,7 +38,7 @@ More details on [warp10.io](https://www.warp10.io)
 - `// @endpoint http://xxx/api/v0/exec` at the beginning of the script change the remote execution endpoint
 - `// @localmacrosubstitution false` at the beginning of the script deactivate the local macro substitution
 - `// @preview none` at the beginning of the script disable the preview. `gts` or `image` force the focus to the gts or image preview after execution.
-- In your settings.json you can add `"proxy.pac": "/path/to/your/proxy.pac"` for this extension to use proxy.pac rules to connect directly or through SOCKS proxies depending on the selected endpoint.
+- In your settings.json you can add `"proxy.pac": "/path/to/your/proxy.pac"` for this extension to use proxy.pac rules to connect directly or through SOCKS proxies depending on the selected endpoint. Make sure to set `http.proxySupport` to `on` in your settings.
 - You can set the VSCode default language to warpscript (Ctrl+, search for default language settings). Every new file (Ctrl+N) will be a WarpScript.
 
 ## Graph interactions
