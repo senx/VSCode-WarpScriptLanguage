@@ -113,31 +113,33 @@ export default class ExecCommand {
 
           progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
 
-          let macroPattern = /@([^\s]+)/g;  // Captures the macro name
+          let macroURIPattern = /@([^\s]+)/g;  // Captures the macro name
           let match: RegExpMatchArray | null;
           let lines: number[] = [document.lineCount]
           let uris: string[] = [document.uri.toString()]
 
-          while (substitutionWithLocalMacros && (match = macroPattern.exec(executedWarpScript))) {
-            const macroName = match[1];
-            await WSDocumentLinksProvider.getMacroURI(macroName).then(
-              async (uri) => {
-                if (uris.indexOf(uri.toString()) === -1) {
-                  //outputWin.show();
-                  //outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
-                  let tdoc: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
-                  let macroCode: string = tdoc.getText()
-                  // Prepend the macro, store it and then append the rest of the script.
-                  executedWarpScript = macroCode + '\n\'' + macroName + '\' STORE\n\n' + executedWarpScript
-                  // Update lines and uris references
-                  lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
-                  uris.unshift(uri.toString());
-                  macroPattern.lastIndex = 0; // Restart the regex matching at the start of the string.
+          if(substitutionWithLocalMacros) {
+            while ((match = macroURIPattern.exec(executedWarpScript))) {
+              const macroName = match[1];
+              await WSDocumentLinksProvider.getMacroURI(macroName).then(
+                async (uri) => {
+                  if (uris.indexOf(uri.toString()) === -1) {
+                    //outputWin.show();
+                    //outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
+                    let tdoc: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
+                    let macroCode: string = tdoc.getText()
+                    // Prepend the macro, store it and then append the rest of the script.
+                    executedWarpScript = macroCode + '\n\'' + macroName + '\' STORE\n\n' + executedWarpScript
+                    // Update lines and uris references
+                    lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
+                    uris.unshift(uri.toString());
+                    macroURIPattern.lastIndex = 0; // Restart the regex matching at the start of the string.
+                  }
                 }
-              }
-            ).catch(
-              () => { /* Ignore missing macros */ }
-            );
+              ).catch(
+                () => { /* Ignore missing macros */ }
+              );
+            }
           }
           // Gzip the script before sending it.
           zlib.gzip(executedWarpScript, async function (err, gzipWarpScript) {
@@ -189,7 +191,7 @@ export default class ExecCommand {
               }
             }
 
-            //console.lconsole.log(request_options)
+            //console.log(request_options)
 
             request.post(request_options, async (error: any, response: any, body: string) => {
               if (error) {
