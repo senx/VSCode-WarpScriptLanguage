@@ -22,8 +22,8 @@ export default class ImagePreviewWebview {
     let imageList: String[] = [];
     if (doNotCheckBase64) {
       //fast method. parse the json, look for strings starting with data:image/png;base64,
-      let objlist = ImagePreviewWebview.flatDeep(JSON.parse(data));
-      imageList = objlist.filter(v => {
+      let objlist = JSON.parse(data);
+      imageList = objlist.filter((v: any) => {
         return ((typeof (v) === 'string') && (String(v).startsWith("data:image/png;base64,")));
       })
     } else {
