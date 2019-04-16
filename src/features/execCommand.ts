@@ -142,13 +142,14 @@ export default class ExecCommand {
             }
           }
           // Gzip the script before sending it.
-          zlib.gzip(executedWarpScript, async function (err, gzipWarpScript) {
+
+          zlib.gzip(new Buffer(executedWarpScript,'utf8'), async function (err, gzipWarpScript) {
             if (err) {
               console.error(err);
             }
             let headers = { 'Content-Type': 'application/gzip', 'Transfer-Encoding': 'chunked' };
             if (!useGZIP) {
-              headers['Content-Type'] = 'text/plain';
+              headers['Content-Type'] = 'text/plain; charset=UTF-8';
             }
 
             var request_options = {
@@ -254,6 +255,10 @@ export default class ExecCommand {
 
                   // Save resulting JSON
                   fs.unlink(jsonFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
+                    //if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
+                    if (body.length <1000000) {
+                      body = unescape(body.replace(/\\u([0-9A-Fa-f]{4})/g,"%u\$1"))
+                    }
                     fs.writeFile(jsonFilename, body, { mode: 0o0400 }, function (err) {
                       if (err) {
                         vscode.window.showErrorMessage(err.message);
