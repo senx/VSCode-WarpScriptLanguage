@@ -8,6 +8,7 @@ import WSDocumentLinksProvider from './providers/wsDocumentLinksProvider'
 import WSDocumentFormattingEditProvider from './providers/wsDocumentFormattingEditProvider'
 import ExecCommand from './features/execCommand'
 import CloseJsonResults from './features/closeJsonResults'
+import UnicodeJsonConversion from './features/unicodeJsonConversion'
 //import WSImagebase64Provider from './providers/wsImagebase64Provider'
 import WSCompletionItemProvider from './providers/wsCompletionItemProvider'
 import WSCompletionVariablesProvider from './providers/wsCompletionVariablesProvider'
@@ -34,6 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionMacrosProvider(), "@", "/"));
   context.subscriptions.push(vscode.languages.registerDocumentLinkProvider({ language: 'warpscript' }, new WSDocumentLinksProvider()));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(previewPanels); }));
+  context.subscriptions.push(vscode.commands.registerCommand('extension.execConvertUnicodeInJson', () => { new UnicodeJsonConversion().exec(); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(""); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execWSOnSelection', () => {
     let editor = vscode.window.activeTextEditor;
