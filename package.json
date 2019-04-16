@@ -74,7 +74,12 @@
 				"command": "extension.execCloseJsonResults",
 				"title": "Close all Warp 10 json output in the workspace",
 				"category": "WarpScript"
-			}
+      },
+			{
+				"command": "extension.execConvertUnicodeInJson",
+				"title": "Unescape unicode characters in Json output",
+				"category": "WarpScript"
+      }
 		],
 		"languages": [
 			{
