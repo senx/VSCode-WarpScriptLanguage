@@ -167,6 +167,11 @@
 					"type": "integer",
 					"default": 500,
 					"description": "Default height in pixels of the GTS Preview map"
+        },
+        "warpscript.maxFileSizeForAutomaticUnicodeEscape": {
+					"type": "integer",
+					"default": 1000000,
+					"description": "Maximum json file size for automatic unicode unescape. Set to 0 to disable the feature."
 				}
 			}
 		}
