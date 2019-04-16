@@ -29,7 +29,7 @@ export default class ExecCommand {
 
       let Warp10URL: string = vscode.workspace.getConfiguration('warpscript', null).get('Warp10URL');
       let PreviewTimeUnit: string = vscode.workspace.getConfiguration('warpscript', null).get('DefaultTimeUnit');
-
+      let jsonMaxSizeForAutoUnescape: number = Number(vscode.workspace.getConfiguration('warpscript',null).get('maxFileSizeForAutomaticUnicodeEscape'));
       const useGZIP = vscode.workspace.getConfiguration('warpscript', null).get('useGZIP');
       const execDate: string = new Date().toLocaleTimeString();
       const document = vscode.window.activeTextEditor.document;
@@ -256,7 +256,7 @@ export default class ExecCommand {
                   // Save resulting JSON
                   fs.unlink(jsonFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
                     //if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
-                    if (body.length <1000000) {
+                    if (body.length < jsonMaxSizeForAutoUnescape) {
                       body = unescape(body.replace(/\\u([0-9A-Fa-f]{4})/g,"%u\$1"))
                     }
                     fs.writeFile(jsonFilename, body, { mode: 0o0400 }, function (err) {
