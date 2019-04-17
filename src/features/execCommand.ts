@@ -30,6 +30,7 @@ export default class ExecCommand {
       let Warp10URL: string = vscode.workspace.getConfiguration('warpscript', null).get('Warp10URL');
       let PreviewTimeUnit: string = vscode.workspace.getConfiguration('warpscript', null).get('DefaultTimeUnit');
       let jsonMaxSizeForAutoUnescape: number = Number(vscode.workspace.getConfiguration('warpscript',null).get('maxFileSizeForAutomaticUnicodeEscape'));
+      let jsonMaxSizeBeforeWarning: number = Number(vscode.workspace.getConfiguration('warpscript',null).get('maxFileSizeBeforeJsonWarning'));
       const useGZIP = vscode.workspace.getConfiguration('warpscript', null).get('useGZIP');
       const execDate: string = new Date().toLocaleTimeString();
       const document = vscode.window.activeTextEditor.document;
@@ -142,8 +143,7 @@ export default class ExecCommand {
             }
           }
           // Gzip the script before sending it.
-
-          zlib.gzip(new Buffer(executedWarpScript,'utf8'), async function (err, gzipWarpScript) {
+          zlib.gzip(Buffer.from(executedWarpScript,'utf8'), async function (err, gzipWarpScript) {
             if (err) {
               console.error(err);
             }
@@ -252,13 +252,32 @@ export default class ExecCommand {
                     });
                   });
 
+                  //will be called later
+                  function displayJson() {
+                    vscode.workspace.openTextDocument(jsonFilename).then((doc: vscode.TextDocument) => {
+                      vscode.window.showTextDocument(doc, { viewColumn: vscode.ViewColumn.Two, preview: true, preserveFocus: false }).then(
+                        () => {
+                          progress.report({ message: 'Done' });
+                          StatusbarUi.Execute();
+                        },
+                        (err: any) => {
+                          console.error(err)
+                          vscode.window.showErrorMessage(err.message);
+                          errorParam = err;
+                          StatusbarUi.Execute();
+                        });
+                    });
+                  }
 
                   // Save resulting JSON
                   fs.unlink(jsonFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
-                    //if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
-                    if (body.length < jsonMaxSizeForAutoUnescape) {
+                    //if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10                    
+                    let sizeMB:number = Math.round(body.length / 1024 / 1024);
+                    if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
                       body = unescape(body.replace(/\\u([0-9A-Fa-f]{4})/g,"%u\$1"))
-                    }
+                    }                    
+                    let noDisplay:boolean = jsonMaxSizeBeforeWarning > 0 && sizeMB > jsonMaxSizeBeforeWarning;
+                    //file must be saved whatever its size... but not displayed if too big.
                     fs.writeFile(jsonFilename, body, { mode: 0o0400 }, function (err) {
                       if (err) {
                         vscode.window.showErrorMessage(err.message);
@@ -266,33 +285,33 @@ export default class ExecCommand {
                         StatusbarUi.Execute();
                       }
                       else {
-                        // Display JSON result
-                        vscode.workspace.openTextDocument(jsonFilename).then((doc: vscode.TextDocument) => {
-                          vscode.window.showTextDocument(doc, { viewColumn: vscode.ViewColumn.Two, preview: true, preserveFocus: false }).then(
-                            () => {
-                              progress.report({ message: 'Done' });
-                              StatusbarUi.Execute();
-                            },
-                            (err: any) => {
-                              console.error(err)
-                              vscode.window.showErrorMessage(err.message);
-                              errorParam = err;
-                              StatusbarUi.Execute();
-                            });
-                        });
+                        StatusbarUi.Execute();
+                        outputWin.show();
+                        outputWin.append('[' + execDate + '] ');
+                        outputWin.append('file://' + wsFilename);
+                        outputWin.append(' => ' + 'file://' + jsonFilename);
+                        outputWin.append(' ' + ExecCommand.formatElapsedTime(response.headers['x-warp10-elapsed']));
+                        outputWin.append(' ' + ExecCommand.pad(response.headers['x-warp10-fetched'], 10, ' ') + ' fetched ');
+                        outputWin.append(ExecCommand.pad(response.headers['x-warp10-ops'], 10, ' ') + ' ops ');
+                        outputWin.append(ExecCommand.pad(baseFilename, 23, ' '));
+                        outputWin.appendLine(' @' + Warp10URLhostname.substr(0, 30));
+                        if (noDisplay) {
+                          outputWin.appendLine(`file://${wsFilename} is over ${jsonMaxSizeBeforeWarning}MB and was not opened. See Max File Size Before JSON Warning preference.`);
+                          vscode.window.showWarningMessage(`WarpScript: please confirm you really want to parse a ${sizeMB}MB file, esc to cancel`,"I am sure", "Nooooo !").then(
+                            (answer) => { 
+                              if (answer==="I am sure"){
+                                //size warning confirmed, display the json.
+                                displayJson();
+                              } 
+                            }
+                          );
+                        } else {
+                          displayJson();
+                        }
                       }
                     });
                   });
 
-                  outputWin.show();
-                  outputWin.append('[' + execDate + '] ');
-                  outputWin.append('file://' + wsFilename);
-                  outputWin.append(' => ' + 'file://' + jsonFilename);
-                  outputWin.append(' ' + ExecCommand.formatElapsedTime(response.headers['x-warp10-elapsed']));
-                  outputWin.append(' ' + ExecCommand.pad(response.headers['x-warp10-fetched'], 10, ' ') + ' fetched ');
-                  outputWin.append(ExecCommand.pad(response.headers['x-warp10-ops'], 10, ' ') + ' ops ');
-                  outputWin.append(ExecCommand.pad(baseFilename, 23, ' '));
-                  outputWin.appendLine(' @' + Warp10URLhostname.substr(0, 30));
                 }
                 if (errorParam) {
                   e(errorParam)

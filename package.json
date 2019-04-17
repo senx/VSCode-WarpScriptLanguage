@@ -170,8 +170,13 @@
         },
         "warpscript.maxFileSizeForAutomaticUnicodeEscape": {
 					"type": "integer",
-					"default": 1000000,
-					"description": "Maximum json file size for automatic unicode unescape. Set to 0 to disable the feature."
+					"default": 2,
+					"description": "Maximum json file size in MB for automatic unicode unescape. Set to 0 to disable the feature."
+				},
+        "warpscript.maxFileSizeBeforeJsonWarning": {
+					"type": "integer",
+					"default": 20,
+					"description": "Maximum json file size in MB. If the result is greater than this size, you will be asked for a confirmation before parsing. Set to 0 to disable the feature."
 				}
 			}
 		}
