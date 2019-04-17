@@ -272,11 +272,11 @@ export default class ExecCommand {
                   // Save resulting JSON
                   fs.unlink(jsonFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
                     //if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10                    
-                    if (body.length < jsonMaxSizeForAutoUnescape) {
-                      body = unescape(body.replace(/\\u([0-9A-Fa-f]{4})/g,"%u\$1"))
-                    }
                     let sizeMB:number = Math.round(body.length / 1024 / 1024);
-                    let nodisplay:boolean = jsonMaxSizeBeforeWarning > 0 && sizeMB > jsonMaxSizeBeforeWarning;
+                    if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
+                      body = unescape(body.replace(/\\u([0-9A-Fa-f]{4})/g,"%u\$1"))
+                    }                    
+                    let noDisplay:boolean = jsonMaxSizeBeforeWarning > 0 && sizeMB > jsonMaxSizeBeforeWarning;
                     //file must be saved whatever its size... but not displayed if too big.
                     fs.writeFile(jsonFilename, body, { mode: 0o0400 }, function (err) {
                       if (err) {
@@ -295,11 +295,10 @@ export default class ExecCommand {
                         outputWin.append(ExecCommand.pad(response.headers['x-warp10-ops'], 10, ' ') + ' ops ');
                         outputWin.append(ExecCommand.pad(baseFilename, 23, ' '));
                         outputWin.appendLine(' @' + Warp10URLhostname.substr(0, 30));
-                        if (nodisplay) {
+                        if (noDisplay) {
                           outputWin.appendLine(`file://${wsFilename} is over ${jsonMaxSizeBeforeWarning}MB and was not opened. See Max File Size Before JSON Warning preference.`);
                           vscode.window.showWarningMessage(`WarpScript: please confirm you really want to parse a ${sizeMB}MB file, esc to cancel`,"I am sure", "Nooooo !").then(
                             (answer) => { 
-                              console.log("answer" + answer);
                               if (answer==="I am sure"){
                                 //size warning confirmed, display the json.
                                 displayJson();
