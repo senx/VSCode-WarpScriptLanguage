@@ -234,7 +234,7 @@
       "  %>",
       "  <%",
       "    //when not found, store data in SHM",
-      "    ${1:[ $$token 'classname' \\{\\} NOW 365 d ] FETCH} 'gtsList' SHMSTORE",
+      "    ${1:[ $$token 'classname' {\\} NOW 365 d ] FETCH} 'gtsList' SHMSTORE",
       "  %>",
       "  <%",
       "    //finally, load the reference from SHM and store it ",
