@@ -204,7 +204,7 @@ export default class ExecCommand {
               (request_options as any).agent = new ProxyAgent(proxy_directUrl); //tested with authentication, OK.
             }
 
-            console.log(request_options)
+            //console.log(request_options)
             
             request.post(request_options, async (error: any, response: any, body: string) => {
               if (error) {
