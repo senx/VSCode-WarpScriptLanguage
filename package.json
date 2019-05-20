@@ -74,12 +74,12 @@
 				"command": "extension.execCloseJsonResults",
 				"title": "Close all Warp 10 json output in the workspace",
 				"category": "WarpScript"
-      },
+			},
 			{
 				"command": "extension.execConvertUnicodeInJson",
 				"title": "Unescape unicode characters in Json output",
 				"category": "WarpScript"
-      }
+			}
 		],
 		"languages": [
 			{
@@ -120,6 +120,18 @@
 					"type": "string",
 					"default": "http://127.0.0.1:8080/api/v0/exec",
 					"description": "Warp 10 URL"
+				},
+				"warpscript.ProxyPac": {
+					"scope": "resource",
+					"type": "string",
+					"default": "",
+					"description": "Local path of your proxy.pac file. It supports SOCKS5. Make sure `Http: Proxy Support` configuration is `OFF`."
+				},
+				"warpscript.ProxyURL": {
+					"scope": "resource",
+					"type": "string",
+					"default": "",
+					"description": "When defined, this proxy URL will override `Proxy Pac` setting. Use `http://user:pass@host:port`. It may support `pac+http://pathto/proxy.pac`, but without authentication. Make sure `Http: Proxy Support` configuration is `OFF`."
 				},
 				"warpscript.useGZIP": {
 					"scope": "resource",
@@ -167,13 +179,13 @@
 					"type": "integer",
 					"default": 500,
 					"description": "Default height in pixels of the GTS Preview map"
-        },
-        "warpscript.maxFileSizeForAutomaticUnicodeEscape": {
+				},
+				"warpscript.maxFileSizeForAutomaticUnicodeEscape": {
 					"type": "integer",
 					"default": 2,
 					"description": "Maximum json file size in MB for automatic unicode unescape. Set to 0 to disable the feature."
 				},
-        "warpscript.maxFileSizeBeforeJsonWarning": {
+				"warpscript.maxFileSizeBeforeJsonWarning": {
 					"type": "integer",
 					"default": 20,
 					"description": "Maximum json file size in MB. If the result is greater than this size, you will be asked for a confirmation before parsing. Set to 0 to disable the feature."
@@ -205,10 +217,12 @@
 	"dependencies": {
 		"file-saver": "2.0.0",
 		"pac-resolver": "3.0.0",
+		"proxy-agent": "^3.1.0",
 		"request": "2.88.0",
 		"socks-proxy-agent": "4.0.1",
 		"util.promisify": "1.0.0",
 		"vsce": "1.54.0",
-		"vscode-languageclient": "5.2.1"
+		"vscode-languageclient": "5.2.1",
+		"vscode-proxy-agent": "^0.4.0"
 	}
 }
