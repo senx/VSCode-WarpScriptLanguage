@@ -8,7 +8,6 @@ import os = require('os');
 import zlib = require("zlib");
 const SocksProxyAgent = require('socks-proxy-agent');
 const ProxyAgent = require('proxy-agent');
-//const ProxyAgent = require('vscode-proxy-agent');
 const pac = require('pac-resolver');
 const dns = require('dns');
 const promisify = require('util.promisify');
@@ -167,9 +166,9 @@ export default class ExecCommand {
             let proxy_pac: string = vscode.workspace.getConfiguration().get('warpscript.ProxyPac');
             let proxy_directUrl: string = vscode.workspace.getConfiguration().get('warpscript.ProxyURL');
 
-            // If a proxy.pac is define, use it
+            // If a local proxy.pac is define, use it
             if (proxy_pac !== "") {
-              // so simple... if only it was supporting socks5.
+              // so simple... if only it was supporting socks5. Ends up with an error for SOCKS5 lines.
               //(request_options as any).agent = new ProxyAgent("pac+" + proxy_pac);
 
               let proxy_pac_resp: string = 'DIRECT'; // Fallback
@@ -193,7 +192,7 @@ export default class ExecCommand {
               }
 
               if ('PROXY' == proxy_split[0]) {
-                (request_options as any).agent = new ProxyAgent('http://' + proxy_split[1]);  //not tested
+                (request_options as any).agent = new ProxyAgent('http://' + proxy_split[1]);  //not really tested, should do the job.
               } else if ('SOCKS' == proxy_split[0] || 'SOCKS5' == proxy_split[0] || 'SOCKS4' == proxy_split[0]) {
                 (request_options as any).agent = new SocksProxyAgent('socks://' + proxy_split[1]);
               }
@@ -202,14 +201,13 @@ export default class ExecCommand {
             //if ProxyURL is defined, override the proxy setting. may support pac+file:// syntax too, or pac+http://  
             //  see https://www.npmjs.com/package/proxy-agent
             if (proxy_directUrl !== "") {
-              (request_options as any).agent = new ProxyAgent(proxy_directUrl);
+              (request_options as any).agent = new ProxyAgent(proxy_directUrl); //tested with authentication, OK.
             }
 
             console.log(request_options)
             
             request.post(request_options, async (error: any, response: any, body: string) => {
               if (error) {
-                console.log("dafuck")
                 vscode.window.showErrorMessage(error.message)
                 console.error(error)
                 StatusbarUi.Execute();
