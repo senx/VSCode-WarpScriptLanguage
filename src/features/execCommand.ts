@@ -32,10 +32,10 @@ export default class ExecCommand {
       let PreviewTimeUnit: string = vscode.workspace.getConfiguration('warpscript', null).get('DefaultTimeUnit');
       let jsonMaxSizeForAutoUnescape: number = Number(vscode.workspace.getConfiguration('warpscript',null).get('maxFileSizeForAutomaticUnicodeEscape'));
       let jsonMaxSizeBeforeWarning: number = Number(vscode.workspace.getConfiguration('warpscript',null).get('maxFileSizeBeforeJsonWarning'));
-      const useGZIP = vscode.workspace.getConfiguration('warpscript', null).get('useGZIP');
+      const useGZIP: boolean = vscode.workspace.getConfiguration('warpscript', null).get('useGZIP');
       const execDate: string = new Date().toLocaleTimeString();
-      const document = vscode.window.activeTextEditor.document;
-      const baseFilename = document.fileName.split('\\').pop().split('/').pop();
+      const document: vscode.TextDocument = vscode.window.activeTextEditor.document;
+      const baseFilename: string = document.fileName.split('\\').pop().split('/').pop();
 
       vscode.window.withProgress<boolean>({
         location: vscode.ProgressLocation.Window,
@@ -157,7 +157,7 @@ export default class ExecCommand {
               headers: headers,
               method:"POST",
               url: Warp10URL,
-              gzip: true,
+              gzip: useGZIP,
               timeout: 3600000, // 1 hour
               body: useGZIP ? gzipWarpScript : executedWarpScript,
               rejectUnauthorized: false
@@ -286,7 +286,8 @@ export default class ExecCommand {
                     //if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10                    
                     let sizeMB:number = Math.round(body.length / 1024 / 1024);
                     if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
-                      body = unescape(body.replace(/\\u([0-9A-Fa-f]{4})/g,"%u\$1"))
+                      // Do not unescape \\u nor control characters. 
+                      body = unescape(body.replace(/(?<!\\)\\u(?!000)(?!001)([0-9A-Fa-f]{4})/g,"%u\$1"))
                     }                    
                     let noDisplay:boolean = jsonMaxSizeBeforeWarning > 0 && sizeMB > jsonMaxSizeBeforeWarning;
                     //file must be saved whatever its size... but not displayed if too big.
