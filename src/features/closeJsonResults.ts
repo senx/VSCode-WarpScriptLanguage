@@ -16,10 +16,10 @@ import { isNullOrUndefined } from 'util';
  */
 
 export default class CloseJsonResults {
-
-
-
-
+  /**
+   * 
+   * @param previewPanels 
+   */
   public exec(previewPanels: { 'image': vscode.WebviewPanel, 'gts': vscode.WebviewPanel }): any {
 
     //the current opened file. usefull to detect the end of "nextEditor" loop.

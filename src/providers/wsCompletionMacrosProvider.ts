@@ -61,6 +61,7 @@ export default class WSCompletionMacrosProvider
 
           return resolve(result);
         }
+        return resolve();
       }
 
 

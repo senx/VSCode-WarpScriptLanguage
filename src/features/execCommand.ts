@@ -115,7 +115,7 @@ export default class ExecCommand {
 
           progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
 
-          let macroURIPattern = /@([^\s]+)/g;  // Captures the macro name
+          let macroURIPattern = /\s@([^\s]+)/g;  // Captures the macro name
           let match: RegExpMatchArray | null;
           let lines: number[] = [document.lineCount]
           let uris: string[] = [document.uri.toString()]
@@ -123,6 +123,7 @@ export default class ExecCommand {
           if(substitutionWithLocalMacros) {
             while ((match = macroURIPattern.exec(executedWarpScript))) {
               const macroName = match[1];
+              console.log('-'+macroName+'-');
               await WSDocumentLinksProvider.getMacroURI(macroName).then(
                 async (uri) => {
                   if (uris.indexOf(uri.toString()) === -1) {
