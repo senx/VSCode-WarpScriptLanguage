@@ -11,7 +11,7 @@
 	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
 	"license": "Apache-2.0",
-	"version": "1.1.9",
+	"version": "1.1.10",
 	"publisher": "senx",
 	"engines": {
 		"vscode": "^1.24.0"
