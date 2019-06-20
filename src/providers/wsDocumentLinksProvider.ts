@@ -3,7 +3,7 @@
 import { TextDocument, CancellationToken, workspace, DocumentLinkProvider, DocumentLink, Uri, Range } from 'vscode';
 
 export default class WSDocumentLinksProvider implements DocumentLinkProvider {
-  private _linkPattern = /@([^\s]+)/g;
+  private _linkPattern = /\s@([^\s]+)/g;
 
   public async provideDocumentLinks(document: TextDocument, _token: CancellationToken): Promise<DocumentLink[]> {
     const results: DocumentLink[] = []
