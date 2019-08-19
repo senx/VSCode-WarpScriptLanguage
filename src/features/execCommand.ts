@@ -149,14 +149,12 @@ export default class ExecCommand {
             if (err) {
               console.error(err);
             }
-            let headers = { 'Content-Type': 'application/gzip', 'Transfer-Encoding': 'chunked' };
-            if (!useGZIP) {
-              headers['Content-Type'] = 'text/plain; charset=UTF-8';
-            }
 
-            var request_options = {
-              headers: headers,
-              method:"POST",
+            var request_options:request.Options = {
+              headers: { 
+                'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8' 
+              },
+              method: "POST",
               url: Warp10URL,
               gzip: useGZIP,
               timeout: 3600000, // 1 hour
@@ -208,11 +206,16 @@ export default class ExecCommand {
             //console.log(request_options)
             
             request.post(request_options, async (error: any, response: any, body: string) => {
-              if (error) {
+              console.log("fion", error, response,body);
+              if (error) { // error is set if server is unreachable
                 vscode.window.showErrorMessage(error.message)
                 console.error(error)
                 StatusbarUi.Execute();
                 return e(error)
+              } else if (response.statusCode!=200) { // manage non 200 answers here
+                vscode.window.showErrorMessage("Error, server answered: " + response.statusCode + (String)(response.body).slice(0,1000));
+                console.error(response.body);
+                StatusbarUi.Execute();
               } else {
                 // console.log(error, response, body)
                 let errorParam: any = null
