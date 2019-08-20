@@ -212,7 +212,7 @@ export default class ExecCommand {
                 console.error(error)
                 StatusbarUi.Execute();
                 return e(error)
-              } else if (response.statusCode!=200) { // manage non 200 answers here
+              } else if (response.statusCode >= 400 && response.statusCode !== 500) { // manage non 200 answers here
                 vscode.window.showErrorMessage("Error, server answered: " + response.statusCode + (String)(response.body).slice(0,1000));
                 console.error(response.body);
                 StatusbarUi.Execute();
