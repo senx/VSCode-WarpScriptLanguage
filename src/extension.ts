@@ -3,6 +3,9 @@ import { StatusbarUi } from './statusbarUi';
 
 import * as vscode from 'vscode';
 import WSHoverProvider from './providers/wsHoverProvider'
+//import WSFoldingRangeProvider from './providers/wsFoldingRangeProvider'
+import WSCodeLensProvider from './providers/wsCodeLensProvider'
+import WSDocumentHighlightsProvider from './providers/wsDocumentHighlightsProviders'
 import WSDocumentLinksProvider from './providers/wsDocumentLinksProvider'
 //import WSContentProvider from './providers/wsContentProvider'
 import WSDocumentFormattingEditProvider from './providers/wsDocumentFormattingEditProvider'
@@ -33,6 +36,12 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionItemProvider()));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionVariablesProvider(), "'", "$"));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionMacrosProvider(), "@", "/"));
+  //context.subscriptions.push(vscode.languages.registerFoldingRangeProvider({ language: 'warpscript' }, new WSFoldingRangeProvider()));
+  // these providers could be disabled:
+  if (vscode.workspace.getConfiguration().get("warpscript.enableInlineHelpers")) {
+    context.subscriptions.push(vscode.languages.registerCodeLensProvider({ language: 'warpscript' }, new WSCodeLensProvider()));
+    context.subscriptions.push(vscode.languages.registerDocumentHighlightProvider({ language: 'warpscript' }, new WSDocumentHighlightsProvider()));
+  }
   context.subscriptions.push(vscode.languages.registerDocumentLinkProvider({ language: 'warpscript' }, new WSDocumentLinksProvider()));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(previewPanels); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execConvertUnicodeInJson', () => { new UnicodeJsonConversion().exec(); }));
@@ -45,6 +54,19 @@ export function activate(context: vscode.ExtensionContext) {
       new ExecCommand().exec(outputWin)(text);
     }
   }));
+  context.subscriptions.push(vscode.commands.registerCommand('extension.jumptoWSoffset', (offset: number) => {
+    //console.log("try to jump to offset ", offset)
+    //this short command allow to do links inside the document. it jumps to the required text offset, if a word is found. it selects the word.
+    let editor = vscode.window.activeTextEditor;
+    if (editor) {
+      let wordRange: vscode.Range = editor.document.getWordRangeAtPosition(editor.document.positionAt(offset));
+      if (wordRange !== undefined) {
+        editor.selections = [new vscode.Selection(wordRange.start, wordRange.end)];
+        editor.revealRange(wordRange, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
+      }
+    }
+  }));
+
   new WSDocumentFormattingEditProvider();
   StatusbarUi.Init();
 
