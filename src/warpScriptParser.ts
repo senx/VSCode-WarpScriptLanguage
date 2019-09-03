@@ -86,7 +86,6 @@ export default class WarpScriptParser {
   private static parseWarpScriptMacros(ws: String, startPosition: number, doc: TextDocument, cancelToken: CancellationToken): any {
 
     let i: number = startPosition;
-    let macroStart: number = startPosition;
     let result: any[] = [];
     let justAfterMacro: boolean = false;
 
@@ -128,7 +127,6 @@ export default class WarpScriptParser {
 
       if (ws.charAt(i) == '<' && ws.charAt(i + 1) == '%') { //start of a macro.
         // console.log(i, 'start of macro');
-        macroStart = i;
         result.push([i].concat(this.parseWarpScriptMacros(ws, i + 1, doc, cancelToken)));
         let flattened = [].concat.apply([], result);
         i = flattened[flattened.length - 1] + 1;
