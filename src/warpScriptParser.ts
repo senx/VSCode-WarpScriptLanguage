@@ -25,10 +25,10 @@ export default class WarpScriptParser {
     console.log("start to parse ws doc");
 
     let macrosPositions: any = this.parseWarpScriptMacros(doc.getText(), 0, doc, cancelToken);
-
+    //console.log("look for statement at offset" + doc.offsetAt(doc.getWordRangeAtPosition(beforePosition).start))
     let rawRanges = this.findMacrosBeforePosition(macrosPositions, doc.offsetAt(doc.getWordRangeAtPosition(beforePosition).start), numberOfMacros, cancelToken);
     // console.log(macrosPositions)
-    // console.log(rawRanges)
+    //console.log(rawRanges)
     return rawRanges.map(r => new Range(doc.positionAt(r[0] + 2), doc.positionAt(r[1] - 1)));
   }
 
@@ -54,13 +54,15 @@ export default class WarpScriptParser {
           if (macroPositions[pidx] instanceof wsStatement) {
             break;
           } else {
-            startEndList.push([macroPositions[pidx][0], macroPositions[pidx][macroPositions[pidx].length - 1]]);
-            c++;
+            if (typeof (macroPositions[pidx]) !== "number") {
+              startEndList.push([macroPositions[pidx][0], macroPositions[pidx][macroPositions[pidx].length - 1]]);
+              c++;
+            }
           }
           pidx--;
         }
         return startEndList;
-      } else if (macroPositions[idx] instanceof Number) {
+      } else if (typeof (macroPositions[idx]) === "number") {
         // console.log("not in this block")
       } else {
         let r = this.findMacrosBeforePosition(macroPositions[idx], offset, numberOfMacros, cancelToken);
@@ -68,7 +70,7 @@ export default class WarpScriptParser {
       }
 
     }
-    return [];
+    return null;
   }
 
 
@@ -147,7 +149,7 @@ export default class WarpScriptParser {
           result.push(new wsStatement(st, i))
           i += st.length;
         } else {
-          result.push(new wsStatement('',i))
+          result.push(new wsStatement('', i))
         }
         justAfterMacro = false;
       }
@@ -159,13 +161,18 @@ export default class WarpScriptParser {
   }
 
 
-
   private static codeLensStatements: { [key: string]: string[] } = {
     'IFT': ['then...', 'if...'],
     'IFTE': ['else...', 'then...', 'if...'],
     'FOREACH': ['for each...'],
-    'LMAP':['lmap...'],
-    'TRY' :['finally...','catch...','try...']
+    'LMAP': ['lmap...'],
+    'WHILE': ['while...'],
+    'FOR': ['for...'],
+    'GROUPBY':['group by...'],
+    'FILTERBY':['filter by...'],
+    'TRY': ['finally...', 'catch...', 'try...'],
+    'UNTIL':['until...'],
+    'FORSTEP':['for...', 'FORSTEP step...']
   }
 
   /**
@@ -176,13 +183,13 @@ export default class WarpScriptParser {
    * @param doc current warpscript doc
    * @param cancelToken 
    */
-  public static getCodeLenses(doc: TextDocument, cancelToken: CancellationToken): CodeLens[] {
+  public static getCodeLenses(doc: TextDocument, minimumLineNumber: number, cancelToken: CancellationToken): CodeLens[] {
 
     //parse the doc
     let macrosPositions: any = this.parseWarpScriptMacros(doc.getText(), 0, doc, cancelToken);
-    console.log("RAW DATA",macrosPositions);
-    let lenses: CodeLens[] = this.searchForLongMacros(macrosPositions, 4, doc, cancelToken);
-    console.log("final array", lenses);
+    //console.log("RAW DATA",macrosPositions);
+    let lenses: CodeLens[] = this.searchForLongMacros(macrosPositions, minimumLineNumber, doc, cancelToken);
+    //console.log("final lenses array", lenses);
 
     return lenses;
   }
@@ -221,9 +228,9 @@ export default class WarpScriptParser {
             pidx--;
           }
         }
-      } else if (typeof(macroPositions[idx])==="number") {
+      } else if (typeof (macroPositions[idx]) === "number") {
       } else {
-        rangesResult=rangesResult.concat(this.searchForLongMacros(macroPositions[idx], minimumLineCount, doc, cancelToken));
+        rangesResult = rangesResult.concat(this.searchForLongMacros(macroPositions[idx], minimumLineCount, doc, cancelToken));
       }
     }
     return rangesResult;
