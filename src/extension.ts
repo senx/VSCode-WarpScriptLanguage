@@ -3,7 +3,7 @@ import { StatusbarUi } from './statusbarUi';
 
 import * as vscode from 'vscode';
 import WSHoverProvider from './providers/wsHoverProvider'
-import WSFoldingRangeProvider from './providers/wsFoldingRangeProvider'
+//import WSFoldingRangeProvider from './providers/wsFoldingRangeProvider'
 import WSCodeLensProvider from './providers/wsCodeLensProvider'
 import WSDocumentHighlightsProvider from './providers/wsDocumentHighlightsProviders'
 import WSDocumentLinksProvider from './providers/wsDocumentLinksProvider'

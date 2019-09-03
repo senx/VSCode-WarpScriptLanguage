@@ -1,6 +1,6 @@
 'use strict';
 
-import { TextDocument, CancellationToken, workspace, FoldingRangeProvider, Uri, Range, Position, FoldingContext, FoldingRange, FoldingRangeKind, DocumentHighlightProvider, DocumentHighlight, DocumentHighlightKind } from 'vscode';
+import { TextDocument, CancellationToken, Range, Position, DocumentHighlightProvider, DocumentHighlight, DocumentHighlightKind } from 'vscode';
 
 import WarpScriptParser from '../warpScriptParser';
 
@@ -31,6 +31,7 @@ export default class WSDocumentHighlightsProvider implements DocumentHighlightPr
       console.log("try to highlight macros before " + currentWord);
       let r: Range[] = WarpScriptParser.getPreviousMacros(document, this.statementsMacrosSig[currentWord].length, document.getWordRangeAtPosition(position).start,cancelToken);
       //highlight color change with Highlight kind...
+      //console.log("found " + r.length + " ranges")
       return r.map((range, i) => new DocumentHighlight(range, this.statementsMacrosSig[currentWord][i] as DocumentHighlightKind));
     }
     return undefined;
