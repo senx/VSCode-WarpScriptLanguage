@@ -19,7 +19,9 @@ export default class WSDocumentHighlightsProvider implements DocumentHighlightPr
     'FOR': [1],
     'GROUPBY': [1],
     'FILTERBY': [1],
-    'TRY': [0, 2, 1]
+    'TRY': [0, 2, 1],
+    'UNTIL':[1],
+    'FORSTEP':[1,0]    
   }
 
   public async provideDocumentHighlights(document: TextDocument, position: Position, cancelToken: CancellationToken): Promise<DocumentHighlight[]> {
