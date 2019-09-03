@@ -37,8 +37,11 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionVariablesProvider(), "'", "$"));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionMacrosProvider(), "@", "/"));
   //context.subscriptions.push(vscode.languages.registerFoldingRangeProvider({ language: 'warpscript' }, new WSFoldingRangeProvider()));
-  context.subscriptions.push(vscode.languages.registerCodeLensProvider({ language: 'warpscript' }, new WSCodeLensProvider()));
-  context.subscriptions.push(vscode.languages.registerDocumentHighlightProvider({ language: 'warpscript' }, new WSDocumentHighlightsProvider()));
+  // these providers could be disabled:
+  if (vscode.workspace.getConfiguration().get("warpscript.enableInlineHelpers")) {
+    context.subscriptions.push(vscode.languages.registerCodeLensProvider({ language: 'warpscript' }, new WSCodeLensProvider()));
+    context.subscriptions.push(vscode.languages.registerDocumentHighlightProvider({ language: 'warpscript' }, new WSDocumentHighlightsProvider()));
+  }
   context.subscriptions.push(vscode.languages.registerDocumentLinkProvider({ language: 'warpscript' }, new WSDocumentLinksProvider()));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(previewPanels); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execConvertUnicodeInJson', () => { new UnicodeJsonConversion().exec(); }));
