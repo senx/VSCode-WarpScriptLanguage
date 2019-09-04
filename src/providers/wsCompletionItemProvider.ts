@@ -53,6 +53,7 @@ export default class WSCompletionItemProvider
           item.range = wordAtPosition;
           item.documentation = new MarkdownString()
             .appendText("Since : " + keyword.since)
+            .appendMarkdown(`\n\n[Online documentation](https://www.warp10.io/doc/${keyword.OPB64name})`)
             .appendCodeblock(keyword.detail, "warpscript")
             .appendMarkdown(keyword.documentation);
 
