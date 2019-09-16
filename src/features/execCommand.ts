@@ -144,6 +144,9 @@ export default class ExecCommand {
               );
             }
           }
+
+          // log the beginning of the warpscript
+          console.log("sending WarpScript...",executedWarpScript.slice(0,10000));
           // Gzip the script before sending it.
           zlib.gzip(Buffer.from(executedWarpScript,'utf8'), async function (err, gzipWarpScript) {
             if (err) {
@@ -206,7 +209,6 @@ export default class ExecCommand {
             //console.log(request_options)
             
             request.post(request_options, async (error: any, response: any, body: string) => {
-              console.log("fion", error, response,body);
               if (error) { // error is set if server is unreachable
                 vscode.window.showErrorMessage(error.message)
                 console.error(error)
