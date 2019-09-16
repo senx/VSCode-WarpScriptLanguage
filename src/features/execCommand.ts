@@ -146,7 +146,7 @@ export default class ExecCommand {
           }
 
           // log the beginning of the warpscript
-          console.log("sending WarpScript...",executedWarpScript.slice(0,10000));
+          console.log("about to send this WarpScript:", executedWarpScript.slice(0, 10000));
           // Gzip the script before sending it.
           zlib.gzip(Buffer.from(executedWarpScript,'utf8'), async function (err, gzipWarpScript) {
             if (err) {
