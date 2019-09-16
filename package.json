@@ -11,7 +11,7 @@
 	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
 	"license": "Apache-2.0",
-	"version": "1.1.14",
+	"version": "1.1.15",
 	"publisher": "senx",
 	"engines": {
 		"vscode": "^1.24.0"
@@ -189,12 +189,12 @@
 					"type": "integer",
 					"default": 20,
 					"description": "Maximum json file size in MB. If the result is greater than this size, you will be asked for a confirmation before parsing. Set to 0 to disable the feature."
-        },
-        "warpscript.enableInlineHelpers": {
-          "type":"boolean",
-          "default":true,
-          "description": "For small files, macros are parsed to allow inline helpers such as code lenses at the beginning of big macros (more than 20 lines) or the automatic highlight when you click on a control statement such as IFT. This feature could be disabled."
-        }
+				},
+				"warpscript.enableInlineHelpers": {
+					"type": "boolean",
+					"default": true,
+					"description": "For small files, macros are parsed to allow inline helpers such as code lenses at the beginning of big macros (more than 20 lines) or the automatic highlight when you click on a control statement such as IFT. This feature could be disabled."
+				}
 			}
 		}
 	},
