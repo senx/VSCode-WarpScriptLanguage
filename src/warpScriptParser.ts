@@ -1,6 +1,16 @@
 import { TextDocument, Range, Position, CancellationToken, CodeLens } from 'vscode';
 
 /**
+ * Parsing result of // @command parameter  in the beginning of the WarpScript
+ */
+export interface specialCommentCommands {
+  endpoint?: string;
+  timeunit?: string;
+  localmacrosubstitution?: boolean,
+  displayPreviewOpt?: string
+}
+
+/**
  * Little class to store statement and its offset in the text
  */
 export class wsStatement {
@@ -166,11 +176,11 @@ export default class WarpScriptParser {
     'LMAP': ['lmap...'],
     'WHILE': ['while...'],
     'FOR': ['for...'],
-    'GROUPBY':['group by...'],
-    'FILTERBY':['filter by...'],
+    'GROUPBY': ['group by...'],
+    'FILTERBY': ['filter by...'],
     'TRY': ['finally...', 'catch...', 'try...'],
-    'UNTIL':['until...'],
-    'FORSTEP':['for...', 'FORSTEP step...']
+    'UNTIL': ['until...', 'do...'],
+    'FORSTEP': ['for...', 'FORSTEP step...']
   }
 
   /**
@@ -234,4 +244,50 @@ export default class WarpScriptParser {
     return rangesResult;
   }
 
+
+
+  public static extractSpecialComments(executedWarpScript: string): specialCommentCommands {
+    let result: specialCommentCommands = {};
+    let warpscriptlines = executedWarpScript.split('\n');
+    for (let l = 0; l < warpscriptlines.length; l++) {
+      let currentline = warpscriptlines[l];
+      if (currentline.startsWith("//")) {
+        //find and extract // @paramname parameters
+        let extraparamsPattern = /\/\/\s*@(\w*)\s*(.*)$/g;
+        let lineonMatch: RegExpMatchArray | null;
+        let re = RegExp(extraparamsPattern);
+        while (lineonMatch = re.exec(currentline.replace('\r', ''))) {  //think about windows... \r\n in mc2 files !
+          let parametername = lineonMatch[1];
+          let parametervalue = lineonMatch[2];
+          switch (parametername) {
+            case "endpoint":        //        // @endpoint http://mywarp10server/api/v0/exec
+              result.endpoint = parametervalue;   // overrides the Warp10URL configuration
+              break;
+            case "localmacrosubstitution":
+              result.localmacrosubstitution = ("true" === parametervalue.toLowerCase());   // overrides the substitutionWithLocalMacros
+              break;
+            case "timeunit":
+              if (['us', 'ms', 'ns'].indexOf(parametervalue.trim()) > -1) {
+                result.timeunit = parametervalue.trim();
+              }
+              break;
+            case "preview":
+              switch (parametervalue.toLowerCase().substr(0, 4)) {
+                case "none": result.displayPreviewOpt = 'X'; break;
+                case "gts": result.displayPreviewOpt = 'G'; break;
+                case "imag": result.displayPreviewOpt = 'I'; break;
+                default: result.displayPreviewOpt = ''; break;
+              }
+              break;
+            default:
+              break;
+          }
+        }
+      }
+      else {
+        break; //no more comments at the beginning of the file
+      }
+    }
+    return result;
+  }
 }
