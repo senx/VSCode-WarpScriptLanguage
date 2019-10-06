@@ -112,7 +112,8 @@ export default class WarpScriptParser {
       if (ws.charAt(i) == '/' && ws.charAt(i + 1) == '*') { //start one multiline comment, seek for end of line
         // console.log(i, 'start of multiline comment');
         i++;
-        while (i < ws.length - 1 && !(ws.charAt(i) != '*' && ws.charAt(i + 1) == '/')) { i++; }
+        while (i < ws.length - 1 && !(ws.charAt(i) == '*' && ws.charAt(i + 1) == '/')) { i++; }
+        i += 2;
         // console.log(i, 'end of multiline comment');
       }
       if (ws.charAt(i) == '/' && ws.charAt(i + 1) == '/') { //start single line comment, seek for end of line
@@ -167,6 +168,82 @@ export default class WarpScriptParser {
 
     return result;
   }
+
+
+  /**
+   * Unlike parseWarpScriptMacros, this function return a very simple list of statements (as strings), ignoring comments. 
+   * [ '"HELLO"' '"WORLD"' '+' '2' '2' '*' ]
+   */
+  public static parseWarpScriptStatements(ws: String, cancelToken: CancellationToken): string[] {
+
+    let i: number = 0;
+    let result: string[] = [];
+
+    while (i < ws.length - 1 && !cancelToken.isCancellationRequested) { //often test 2 characters
+      if (ws.charAt(i) == '<' && ws.charAt(i + 1) == "'") { //start of a multiline, look for end
+        // console.log(i, 'start of multiline');
+        let lines: string[] = ws.substring(i, ws.length).split('\n');
+        let lc = 0;
+        while (lc < lines.length && lines[lc].trim() != "'>") { i += lines[lc].length + 1; lc++; }
+        i += lines[lc].length + 1;
+        // console.log(i, 'end of multiline');
+      }
+      if (ws.charAt(i) == '/' && ws.charAt(i + 1) == '*') { //start one multiline comment, seek for end of comment
+        // console.log(i, 'start of multiline comment');
+        i++;
+        while (i < ws.length - 1 && !(ws.charAt(i) == '*' && ws.charAt(i + 1) == '/')) { i++; }
+        i += 2;
+        // console.log(i, 'end of multiline comment');
+      }
+      if (ws.charAt(i) == '/' && ws.charAt(i + 1) == '/') { //start single line comment, seek for end of line
+        // console.log(i, 'start of a comment');
+        i++;
+        while (i < ws.length - 1 && (ws.charAt(i) != '\n')) { i++; }
+        // console.log(i, 'end of a comment');
+      }
+
+      if (ws.charAt(i) == "'") { //start of string, seek for end
+        // console.log(i, 'start of string');
+        let start = i;
+        i++;
+        while (i < ws.length && ws.charAt(i) != "'" && ws.charAt(i) != '\n') { i++; }
+        i++;
+        result.push(ws.substring(start, i));
+        // console.log(i, 'end of string');
+      }
+      if (ws.charAt(i) == '"') { //start of string, seek for end
+        // console.log(i, 'start of string');
+        let start = i;
+        i++;
+        while (i < ws.length && ws.charAt(i) != '"' && ws.charAt(i) != '\n') { i++; }
+        // console.log(i, 'end of string');
+        i++;
+        result.push(ws.substring(start, i));
+      }
+
+      if (ws.charAt(i) == '<' && ws.charAt(i + 1) == '%') { //start of a macro.
+        // console.log(i, 'start of macro');
+        result.push("<%");
+        i += 2;
+      }
+
+      if (ws.charAt(i) == '%' && ws.charAt(i + 1) == '>') { //end of a macro.
+        // console.log(i, 'end of macro');
+        result.push("%>");
+        i += 2;
+      }
+
+      if (ws.charAt(i) != ' ' && ws.charAt(i) != '\n') {
+        let start = i;
+        while (i < ws.length && ws.charAt(i) != ' ' && ws.charAt(i) != '\n') { i++; }
+        result.push(ws.substring(start, i));
+      }
+      i++;
+    }
+
+    return result;
+  }
+
 
 
   private static codeLensStatements: { [key: string]: string[] } = {
