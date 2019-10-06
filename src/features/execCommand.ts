@@ -6,6 +6,8 @@ import { Uri } from 'vscode';
 import fs = require('fs');
 import os = require('os');
 import zlib = require("zlib");
+import { specialCommentCommands } from '../warpScriptParser';
+import WarpScriptParser from '../warpScriptParser';
 const SocksProxyAgent = require('socks-proxy-agent');
 const ProxyAgent = require('proxy-agent');
 const pac = require('pac-resolver');
@@ -30,8 +32,8 @@ export default class ExecCommand {
 
       let Warp10URL: string = vscode.workspace.getConfiguration('warpscript', null).get('Warp10URL');
       let PreviewTimeUnit: string = vscode.workspace.getConfiguration('warpscript', null).get('DefaultTimeUnit');
-      let jsonMaxSizeForAutoUnescape: number = Number(vscode.workspace.getConfiguration('warpscript',null).get('maxFileSizeForAutomaticUnicodeEscape'));
-      let jsonMaxSizeBeforeWarning: number = Number(vscode.workspace.getConfiguration('warpscript',null).get('maxFileSizeBeforeJsonWarning'));
+      let jsonMaxSizeForAutoUnescape: number = Number(vscode.workspace.getConfiguration('warpscript', null).get('maxFileSizeForAutomaticUnicodeEscape'));
+      let jsonMaxSizeBeforeWarning: number = Number(vscode.workspace.getConfiguration('warpscript', null).get('maxFileSizeBeforeJsonWarning'));
       const useGZIP: boolean = vscode.workspace.getConfiguration('warpscript', null).get('useGZIP');
       const execDate: string = new Date().toLocaleTimeString();
       const document: vscode.TextDocument = vscode.window.activeTextEditor.document;
@@ -55,48 +57,12 @@ export default class ExecCommand {
           //
           //analyse the first warpscript lines starting with //
           // 
-          let warpscriptlines = executedWarpScript.split('\n');
-          for (let l = 0; l < warpscriptlines.length; l++) {
-            let currentline = warpscriptlines[l];
-            if (currentline.startsWith("//")) {
-              //find and extract // @paramname parameters
-              let extraparamsPattern = /\/\/\s*@(\w*)\s*(.*)$/g;
-              let lineonMatch: RegExpMatchArray | null;
-              let re = RegExp(extraparamsPattern);
-              while (lineonMatch = re.exec(currentline.replace('\r', ''))) {  //think about windows... \r\n in mc2 files !
-                let parametername = lineonMatch[1];
-                let parametervalue = lineonMatch[2];
-                switch (parametername) {
-                  case "endpoint":        //        // @endpoint http://mywarp10server/api/v0/exec
-                    Warp10URL = parametervalue;   // overrides the Warp10URL configuration
-                    console.log(Warp10URL);
-                    break;
-                  case "localmacrosubstitution":
-                    substitutionWithLocalMacros = ("true" === parametervalue.toLowerCase());   // overrides the substitutionWithLocalMacros
-                    console.log("substitutionWithLocalMacros=" + substitutionWithLocalMacros);
-                    break;
-                  case "timeunit":
-                    if (['us', 'ms', 'ns'].indexOf(parametervalue.trim()) > -1) {
-                      PreviewTimeUnit = parametervalue.trim();
-                    }
-                    break;
-                  case "preview":
-                    switch (parametervalue.toLowerCase().substr(0, 4)) {
-                      case "none": displayPreviewOpt = 'X'; break;
-                      case "gts": displayPreviewOpt = 'G'; break;
-                      case "imag": displayPreviewOpt = 'I'; break;
-                      default: displayPreviewOpt = ''; break;
-                    }
-                    break;
-                  default:
-                    break;
-                }
-              }
-            }
-            else {
-              break; //no more comments at the beginning of the file
-            }
-          }
+          let commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(executedWarpScript);
+          Warp10URL = commentsCommands.endpoint || Warp10URL;
+          substitutionWithLocalMacros = commentsCommands.localmacrosubstitution || substitutionWithLocalMacros;
+          PreviewTimeUnit = commentsCommands.timeunit || PreviewTimeUnit;
+          displayPreviewOpt = commentsCommands.displayPreviewOpt || displayPreviewOpt;
+
           //
           // keep a simple suffix for the json filename (either n for nanosecond or m for millisecond. nothing for default.)
           let jsonSuffix: string = PreviewTimeUnit.substr(0, 1);
@@ -120,10 +86,10 @@ export default class ExecCommand {
           let lines: number[] = [document.lineCount]
           let uris: string[] = [document.uri.toString()]
 
-          if(substitutionWithLocalMacros) {
+          if (substitutionWithLocalMacros) {
             while ((match = macroURIPattern.exec(executedWarpScript))) {
               const macroName = match[1];
-              console.log('-'+macroName+'-');
+              console.log('-' + macroName + '-');
               await WSDocumentLinksProvider.getMacroURI(macroName).then(
                 async (uri) => {
                   if (uris.indexOf(uri.toString()) === -1) {
@@ -148,14 +114,14 @@ export default class ExecCommand {
           // log the beginning of the warpscript
           console.log("about to send this WarpScript:", executedWarpScript.slice(0, 10000));
           // Gzip the script before sending it.
-          zlib.gzip(Buffer.from(executedWarpScript,'utf8'), async function (err, gzipWarpScript) {
+          zlib.gzip(Buffer.from(executedWarpScript, 'utf8'), async function (err, gzipWarpScript) {
             if (err) {
               console.error(err);
             }
 
-            var request_options:request.Options = {
-              headers: { 
-                'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8' 
+            var request_options: request.Options = {
+              headers: {
+                'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8'
               },
               method: "POST",
               url: Warp10URL,
@@ -207,7 +173,7 @@ export default class ExecCommand {
             }
 
             //console.log(request_options)
-            
+
             request.post(request_options, async (error: any, response: any, body: string) => {
               if (error) { // error is set if server is unreachable
                 vscode.window.showErrorMessage(error.message)
@@ -215,7 +181,7 @@ export default class ExecCommand {
                 StatusbarUi.Execute();
                 return e(error)
               } else if (response.statusCode >= 400 && response.statusCode !== 500) { // manage non 200 answers here
-                vscode.window.showErrorMessage("Error, server answered: " + response.statusCode + (String)(response.body).slice(0,1000));
+                vscode.window.showErrorMessage("Error, server answered: " + response.statusCode + (String)(response.body).slice(0, 1000));
                 console.error(response.body);
                 StatusbarUi.Execute();
               } else {
@@ -290,12 +256,12 @@ export default class ExecCommand {
                   // Save resulting JSON
                   fs.unlink(jsonFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
                     //if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10                    
-                    let sizeMB:number = Math.round(body.length / 1024 / 1024);
+                    let sizeMB: number = Math.round(body.length / 1024 / 1024);
                     if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
                       // Do not unescape \\u nor control characters. 
-                      body = unescape(body.replace(/(?<!\\)\\u(?!000)(?!001)([0-9A-Fa-f]{4})/g,"%u\$1"))
-                    }                    
-                    let noDisplay:boolean = jsonMaxSizeBeforeWarning > 0 && sizeMB > jsonMaxSizeBeforeWarning;
+                      body = unescape(body.replace(/(?<!\\)\\u(?!000)(?!001)([0-9A-Fa-f]{4})/g, "%u\$1"))
+                    }
+                    let noDisplay: boolean = jsonMaxSizeBeforeWarning > 0 && sizeMB > jsonMaxSizeBeforeWarning;
                     //file must be saved whatever its size... but not displayed if too big.
                     fs.writeFile(jsonFilename, body, { mode: 0o0400 }, function (err) {
                       if (err) {
@@ -316,12 +282,12 @@ export default class ExecCommand {
                         outputWin.appendLine(' @' + Warp10URLhostname.substr(0, 30));
                         if (noDisplay) {
                           outputWin.appendLine(`file://${wsFilename} is over ${jsonMaxSizeBeforeWarning}MB and was not opened. See Max File Size Before JSON Warning preference.`);
-                          vscode.window.showWarningMessage(`WarpScript: please confirm you really want to parse a ${sizeMB}MB file, esc to cancel`,"I am sure", "Nooooo !").then(
-                            (answer) => { 
-                              if (answer==="I am sure"){
+                          vscode.window.showWarningMessage(`WarpScript: please confirm you really want to parse a ${sizeMB}MB file, esc to cancel`, "I am sure", "Nooooo !").then(
+                            (answer) => {
+                              if (answer === "I am sure") {
                                 //size warning confirmed, display the json.
                                 displayJson();
-                              } 
+                              }
                             }
                           );
                         } else {
