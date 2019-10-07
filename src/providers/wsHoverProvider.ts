@@ -107,10 +107,7 @@ export default class WSHoverProvider implements HoverProvider {
       ws += name;
       //console.log("warpscript to send:", ws);
 
-
-
       // do the request and return a promise of hover
-
       return new Promise(async (resolve) => {
 
         var request_options: request.Options = {
