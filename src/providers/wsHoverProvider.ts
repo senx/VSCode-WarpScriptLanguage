@@ -90,7 +90,6 @@ export default class WSHoverProvider implements HoverProvider {
       // find the repos, if any (added with WF.ADDREPO). 
       let repos: string[] = [];
       let statements: string[] = WarpScriptParser.parseWarpScriptStatements(document.getText(), _token);
-      //console.log(statements)
       statements.forEach((st, i) => {
         if (st == "WF.ADDREPO" && i > 0) {
           let previousstatement = statements[i - 1];
@@ -100,13 +99,13 @@ export default class WSHoverProvider implements HoverProvider {
           }
         }
       })
-      console.log("WarpFleet repositories added:", repos, "endpoint:", endpointURL);
+      //console.log("WarpFleet repositories added:", repos, "endpoint:", endpointURL);
 
       //forge a WarpScript to ask for macro documentation
       let ws: string = 'INFOMODE\n'
       repos.forEach((r) => ws += '"' + r + '" WF.ADDREPO\n')
       ws += name;
-      console.log("warpscript to send:", ws);
+      //console.log("warpscript to send:", ws);
 
 
 
@@ -169,11 +168,11 @@ export default class WSHoverProvider implements HoverProvider {
 
         request.post(request_options, async (error: any, response: any, body: string) => {
           if (error) { // error is set if server is unreachable
-            console.log("server unreachable");
+            //console.log("server unreachable");
             let contents: MarkedString[] = ['### Error', 'Unable to find help for this macro on server : ' + endpointURL + ' (server unreachable in 10 seconds)'];
             resolve(new Hover(contents, wordRange));
           } else if (response.statusCode >= 400 && response.statusCode !== 500) { // manage non 200 answers here
-            console.log("server error " + response.statusCode);
+            //console.log("server error " + response.statusCode);
             let contents: MarkedString[] = ['### Error', 'Unable to find help for this macro on server : ' + endpointURL, 'server replied ' + response.statusCode + (String)(response.body).slice(0, 1000)];
             resolve(new Hover(contents, wordRange));
           } else { //manage success and other errors here.
@@ -183,10 +182,9 @@ export default class WSHoverProvider implements HoverProvider {
               resolve(new Hover(contents, wordRange));
             }
             if (!response.headers['content-type'] || "application/json" === response.headers['content-type']) {
-              //body = unescape(body.replace(/(?<!\\)\\u(?!000)(?!001)([0-9A-Fa-f]{4})/g, "%u\$1"))
               let doc = JSON.parse(body);
-              console.log("found doc for macro " + name, doc);
-              //let's parse the json... that may contains lots of holes.
+              //console.log("found doc for macro " + name, doc);
+              // parse the json... that may contains lots of holes.
               if (doc.length == 0) {
                 let contents: MarkdownString = new MarkdownString().appendMarkdown(`### ${name}\n`)
                   .appendCodeblock('signature is not documented', 'warpscript')
