@@ -193,7 +193,7 @@ export default class WSHoverProvider implements HoverProvider {
               } else {
                 let onlineDocGenerationParams: docGenerationParams = { endpoint: endpointURL, macroName: name, wfRepos: repos };
                 let contents: MarkdownString = new MarkdownString().appendMarkdown(`### ${name}\n`)
-                  .appendMarkdown(`\n\n[Online documentation](http://studio.senx.io/doc/${this.b64encode(JSON.stringify(onlineDocGenerationParams))})\n\n`);
+                  .appendMarkdown(`\n\n[Online documentation](http://studio.senx.io/#/doc/${this.b64encode(JSON.stringify(onlineDocGenerationParams))})\n\n`);
                 if (doc[0]['sig']) {
                   let signature = this.generateSig(doc[0], name);
                   contents.appendCodeblock(signature, 'warpscript');
