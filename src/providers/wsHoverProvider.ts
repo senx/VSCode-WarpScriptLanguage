@@ -13,6 +13,11 @@ const pac = require('pac-resolver');
 const dns = require('dns');
 const promisify = require('util.promisify');
 var lookupAsync = promisify(dns.lookup);
+
+/**
+ * Parameters needed to generate doc locally with studio
+ */
+export interface docGenerationParams { macroName: string; wfRepos: string[], endpoint: string }
 /**
  * Profive addition informations
  */
@@ -184,15 +189,15 @@ export default class WSHoverProvider implements HoverProvider {
               //let's parse the json... that may contains lots of holes.
               if (doc.length == 0) {
                 let contents: MarkdownString = new MarkdownString().appendMarkdown(`### ${name}\n`)
-                .appendMarkdown(`\n\n[Generated Online documentation](https://www.warp10.io/doc/)\n\n`)
-                .appendCodeblock('signature is not documented', 'warpscript')
-                .appendMarkdown('macro documentation is empty. look at macro documentation [here](https://www.warp10.io/doc/INFO), and try the macro snippet in VSCode to get a documented macro skeleton.');
+                  .appendCodeblock('signature is not documented', 'warpscript')
+                  .appendMarkdown('macro documentation is empty. look at macro documentation [here](https://www.warp10.io/doc/INFO), and try the macro snippet in VSCode to get a documented macro skeleton.');
                 resolve(new Hover(contents, wordRange));
               } else {
+                let onlineDocGenerationParams: docGenerationParams = { endpoint: endpointURL, macroName: name, wfRepos: repos };
                 let contents: MarkdownString = new MarkdownString().appendMarkdown(`### ${name}\n`)
-                .appendMarkdown(`\n\n[Generated Online documentation](https://www.warp10.io/doc/)\n\n`);
+                  .appendMarkdown(`\n\n[Online documentation](http://studio.senx.io/doc/${this.b64encode(JSON.stringify(onlineDocGenerationParams))})\n\n`);
                 if (doc[0]['sig']) {
-                  let signature=this.generateSig(doc[0],name);
+                  let signature = this.generateSig(doc[0], name);
                   contents.appendCodeblock(signature, 'warpscript');
                 } else {
                   contents.appendCodeblock('signature is not documented', 'warpscript');
@@ -201,8 +206,8 @@ export default class WSHoverProvider implements HoverProvider {
                   contents.appendMarkdown(doc[0]['desc']);
                 } else {
                   contents.appendMarkdown('desc is empty in macro INFO. look at macro documentation [here](https://www.warp10.io/doc/INFO), and try the macro snippet in VSCode to get a documented macro skeleton.');
-                }                
-                
+                }
+
                 resolve(new Hover(contents, wordRange));
               }
 
@@ -223,9 +228,9 @@ export default class WSHoverProvider implements HoverProvider {
    * Explicit warning : these function are imported from another js and are not typed.
    * 
    */
-  private generateSig(fn:any, macroname:string) {
+  private generateSig(fn: any, macroname: string) {
     let sig = "";
-    fn.sig.forEach((sigItem:any) => {
+    fn.sig.forEach((sigItem: any) => {
       if (sigItem[0] && sigItem[1]) {
         sig +=
           this.populateInput(sigItem[0]) +
@@ -242,13 +247,13 @@ export default class WSHoverProvider implements HoverProvider {
   }
 
 
-  private prepend(source:any, data:any) {
+  private prepend(source: any, data: any) {
     return data + source;
   }
 
-  private populateInput(sigItem:any) {
+  private populateInput(sigItem: any) {
     let sigArea = "";
-    sigItem.forEach((s:any, i:any) => {
+    sigItem.forEach((s: any, i: any) => {
       if (typeof s === "string" && s.indexOf("|") > 0) {
         var p = "(";
         s.split("|").forEach(function (i) {
@@ -259,7 +264,7 @@ export default class WSHoverProvider implements HoverProvider {
       } else {
         if (_.isPlainObject(s)) {
           sigArea = this.prepend(sigArea, " }");
-          _.forIn(s, (key:any) => {
+          _.forIn(s, (key: any) => {
             sigArea = this.prepend(
               sigArea,
               key.split(":")[0] + "<" + key.split(":")[1] + "> "
@@ -269,7 +274,7 @@ export default class WSHoverProvider implements HoverProvider {
         } else {
           if (_.isArray(s)) {
             sigArea = this.prepend(sigArea, "] ");
-            s.forEach((value:any) => {
+            s.forEach((value: any) => {
               sigArea = this.prepend(
                 sigArea,
                 value.split(":")[0] + "<" + value.split(":")[1] + "> "
@@ -289,9 +294,9 @@ export default class WSHoverProvider implements HoverProvider {
   }
 
 
-  private populateOutput(sigItem:any) {
+  private populateOutput(sigItem: any) {
     let sigArea = "";
-    sigItem.reverse().forEach((s:any, i:any) => {
+    sigItem.reverse().forEach((s: any, i: any) => {
       if (typeof s === "string" && s.indexOf("|") > 0) {
         var p = "(";
         s.split("|").forEach(i => {
@@ -302,7 +307,7 @@ export default class WSHoverProvider implements HoverProvider {
       } else {
         if (_.isPlainObject(s)) {
           sigArea += " {";
-          s.forEach((key:any, value:any) => {
+          s.forEach((key: any, value: any) => {
             sigArea +=
               " " +
               key +
@@ -316,7 +321,7 @@ export default class WSHoverProvider implements HoverProvider {
         } else {
           if (_.isArray(s)) {
             sigArea += " [ ";
-            s.forEach((value:any) => {
+            s.forEach((value: any) => {
               sigArea +=
                 " " + value.split(":")[0] + "<" + value.split(":")[1] + "> ";
             });
@@ -328,6 +333,11 @@ export default class WSHoverProvider implements HoverProvider {
       }
     });
     return sigArea;
+  }
+
+  private b64encode(s: string) {
+    let b: Buffer = new Buffer(s, 'utf8');
+    return b.toString('base64')
   }
 
 }
