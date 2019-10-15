@@ -45,7 +45,6 @@ export default class ExecCommand {
       }, (progress: vscode.Progress<{ message?: string; }>) => {
         return new Promise(async (c, e) => {
           let executedWarpScript = "";
-          let substitutionWithLocalMacros = true;
           let displayPreviewOpt = '';
 
           if (selectiontext === "") {
@@ -56,10 +55,10 @@ export default class ExecCommand {
           }
           //
           //analyse the first warpscript lines starting with //
-          // 
+          //
           let commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(executedWarpScript);
           Warp10URL = commentsCommands.endpoint || Warp10URL;
-          substitutionWithLocalMacros = commentsCommands.localmacrosubstitution || substitutionWithLocalMacros;
+          let substitutionWithLocalMacros = !(commentsCommands.localmacrosubstitution === false);
           PreviewTimeUnit = commentsCommands.timeunit || PreviewTimeUnit;
           displayPreviewOpt = commentsCommands.displayPreviewOpt || displayPreviewOpt;
 
@@ -69,7 +68,7 @@ export default class ExecCommand {
           // add X after the suffix for no preview at all, add I for focus on images, add G for gts preview.
           jsonSuffix = jsonSuffix + displayPreviewOpt
           //
-          //find the hostname in Warp10URL. 
+          //find the hostname in Warp10URL.
           //
           let Warp10URLhostname = Warp10URL; //if regexp fail, keep the full URL
           let hostnamePattern = /https?\:\/\/((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9]))[\/\:].*/g;  // Captures the lines sections name
@@ -166,7 +165,7 @@ export default class ExecCommand {
               }
             }
 
-            //if ProxyURL is defined, override the proxy setting. may support pac+file:// syntax too, or pac+http://  
+            //if ProxyURL is defined, override the proxy setting. may support pac+file:// syntax too, or pac+http://
             //  see https://www.npmjs.com/package/proxy-agent
             if (proxy_directUrl !== "") {
               (request_options as any).agent = new ProxyAgent(proxy_directUrl); //tested with authentication, OK.
@@ -255,10 +254,10 @@ export default class ExecCommand {
 
                   // Save resulting JSON
                   fs.unlink(jsonFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
-                    //if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10                    
+                    //if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
                     let sizeMB: number = Math.round(body.length / 1024 / 1024);
                     if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
-                      // Do not unescape \\u nor control characters. 
+                      // Do not unescape \\u nor control characters.
                       body = unescape(body.replace(/(?<!\\)\\u(?!000)(?!001)([0-9A-Fa-f]{4})/g, "%u\$1"))
                     }
                     let noDisplay: boolean = jsonMaxSizeBeforeWarning > 0 && sizeMB > jsonMaxSizeBeforeWarning;
