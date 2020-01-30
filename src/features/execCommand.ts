@@ -280,7 +280,7 @@ export default class ExecCommand {
                         outputWin.append(ExecCommand.pad(baseFilename, 23, ' '));
                         outputWin.appendLine(' @' + Warp10URLhostname.substr(0, 30));
                         if (noDisplay) {
-                          outputWin.appendLine(`file://${wsFilename} is over ${jsonMaxSizeBeforeWarning}MB and was not opened. See Max File Size Before JSON Warning preference.`);
+                          outputWin.appendLine(`file://${jsonFilename} is over ${jsonMaxSizeBeforeWarning}MB and was not opened. See Max File Size Before JSON Warning preference.`);
                           vscode.window.showWarningMessage(`WarpScript: please confirm you really want to parse a ${sizeMB}MB file, esc to cancel`, "I am sure", "Nooooo !").then(
                             (answer) => {
                               if (answer === "I am sure") {
