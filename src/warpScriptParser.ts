@@ -35,7 +35,7 @@ export default class WarpScriptParser {
     console.log("start to parse ws doc");
 
     let macrosPositions: any = this.parseWarpScriptMacros(doc.getText(), 0, doc, cancelToken);
-    //console.log("look for statement at offset" + doc.offsetAt(doc.getWordRangeAtPosition(beforePosition).start))
+    console.log("look for statement at offset" + doc.offsetAt(doc.getWordRangeAtPosition(beforePosition).start))
     let rawRanges = this.findMacrosBeforePosition(macrosPositions, doc.offsetAt(doc.getWordRangeAtPosition(beforePosition).start), numberOfMacros, cancelToken);
     // console.log(macrosPositions)
     //console.log(rawRanges)
@@ -151,7 +151,7 @@ export default class WarpScriptParser {
       }
 
       //try to find the next statement after each macro, to help for construction
-      if (justAfterMacro && ws.charAt(i) != ' ' && ws.charAt(i) != '\n') {
+      if (justAfterMacro && ws.charAt(i) != ' ' && ws.charAt(i) != '"' && ws.charAt(i) != "'" && ws.charAt(i) != '\n') {
         // console.log('statement', ws.charAt(i), doc.getText(doc.getWordRangeAtPosition(doc.positionAt(i))));
         if (undefined !== doc.getWordRangeAtPosition(doc.positionAt(i))) {
           let st = doc.getText(doc.getWordRangeAtPosition(doc.positionAt(i)))
