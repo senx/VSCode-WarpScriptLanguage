@@ -120,7 +120,8 @@ export default class ExecCommand {
 
             var request_options: request.Options = {
               headers: {
-                'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8'
+                'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8',
+                'Accept': 'application/json'
               },
               method: "POST",
               url: Warp10URL,
@@ -218,7 +219,7 @@ export default class ExecCommand {
                   outputWin.appendLine(' ' + response.headers['x-warp10-error-message']);
                 }
                 // If no content-type is specified, response is the JSON representation of the stack
-                if (!response.headers['content-type'] || "application/json" === response.headers['content-type']) {
+                if (response.body.startsWith('[')) {
 
                   // Generate unique filenames, ordered by execution order.
                   let uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
@@ -295,13 +296,16 @@ export default class ExecCommand {
                       }
                     });
                   });
-
+                } else {
+                  console.debug(response.body)
+                  vscode.window.showErrorMessage('Error: ' + response.body);
                 }
                 if (errorParam) {
                   e(errorParam)
                 } else {
                   c(true)
                 }
+                StatusbarUi.Execute();
               }
             });
           });
