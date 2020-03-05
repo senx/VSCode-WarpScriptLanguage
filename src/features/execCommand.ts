@@ -102,7 +102,8 @@ export default class ExecCommand {
                     // Prepend the macro, store it and then append the rest of the script.
                     let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
                     executedWarpScript = prepend + executedWarpScript;
-                    linesOfMacrosPrepended += prepend.split('\n').length;
+                    linesOfMacrosPrepended += prepend.split('\n').length - 1;
+                    console.log(prepend.split('\n'))
                     // Update lines and uris references
                     lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
                     uris.unshift(uri.toString());
@@ -185,7 +186,7 @@ export default class ExecCommand {
                 if (error.aborted) {
                   console.log("request aborted");
                   StatusbarUi.Execute();
-                  progress.report({ message: 'Aborted' });               
+                  progress.report({ message: 'Aborted' });
                   return c(true)
                 } else {
                   vscode.window.showErrorMessage("Cannot find or reach server, check your Warp 10 server endpoint:" + error.message)
@@ -239,12 +240,16 @@ export default class ExecCommand {
                   }
                   errorParam = 'Error in file ' + fileInError + ' at line ' + lineInError + ' : ' + response.headers['x-warp10-error-message'];
                   StatusbarUi.Execute();
-                  outputWin.show();
-                  
+
+                  let errorMessage: string = response.headers['x-warp10-error-message'];
+                  // We must substract the number of lines added by prepended macros in the error message.
+                  errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (match, group1) => '[Line #' + (Number.parseInt(group1) - lineOffset).toString() + ']');
+
+                  outputWin.show();                  
                   outputWin.append('[' + execDate + '] ');
-                  outputWin.append('ERROR ');
-                  outputWin.append(Uri.parse(uris[i]).fsPath + ':' + lineInError);
-                  outputWin.appendLine(' ' + response.headers['x-warp10-error-message']);
+                  outputWin.append('ERROR file://');
+                  outputWin.append(Uri.parse(uris[i]).fsPath + '#' + lineInError );
+                  outputWin.appendLine(' ' + errorMessage);
                 }
                 // If no content-type is specified, response is the JSON representation of the stack
                 if (response.body.startsWith('[')) {
@@ -325,8 +330,8 @@ export default class ExecCommand {
                     });
                   });
                 } else {
-                  console.debug(response.body)
-                  vscode.window.showErrorMessage('Error: ' + response.body);
+                  // not a json, or empty body (in case of warpscript error)
+                  console.debug("requests did not return anything intesting in the body")
                 }
                 if (errorParam) {
                   e(errorParam)
@@ -354,7 +359,7 @@ export default class ExecCommand {
         req.callback({ 'aborted': 'true' }, undefined, undefined);
       });
       ExecCommand.currentRunningRequests = [];
-      outputWin.appendLine("Done.")
+      outputWin.appendLine("Done. WarpScripts are still running on the server, but VSCode close every connections.")
     }
   }
 
