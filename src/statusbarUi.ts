@@ -26,8 +26,8 @@ export class StatusbarUi {
 
     static Working(workingMsg: string = 'Working on it...') {
         StatusbarUi.statusbar.text = `$(sync~spin) ${workingMsg}`;
-        StatusbarUi.statusbar.tooltip = '...';
-        StatusbarUi.statusbar.command = null;
+        StatusbarUi.statusbar.tooltip = 'click to abort all running WarpScripts';
+        StatusbarUi.statusbar.command = 'extension.abortAllWS';
     }
 
     public static Execute() {
