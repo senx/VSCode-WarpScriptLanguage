@@ -19,6 +19,8 @@ export default class ExecCommand {
 
   private static execNumber: number = 0;
 
+  public static currentRunningRequests: request.Request[] = [];
+
   static pad(str: any, size: number, padder: string) { return (padder.repeat(30) + str).substr(-size); }
 
   public exec(outputWin: vscode.OutputChannel): any {
@@ -84,6 +86,7 @@ export default class ExecCommand {
           let match: RegExpMatchArray | null;
           let lines: number[] = [document.lineCount]
           let uris: string[] = [document.uri.toString()]
+          let linesOfMacrosPrepended: number = 0;
 
           if (substitutionWithLocalMacros) {
             while ((match = macroURIPattern.exec(executedWarpScript))) {
@@ -97,7 +100,9 @@ export default class ExecCommand {
                     let tdoc: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
                     let macroCode: string = tdoc.getText()
                     // Prepend the macro, store it and then append the rest of the script.
-                    executedWarpScript = macroCode + '\n\'' + macroName + '\' STORE\n\n' + executedWarpScript
+                    let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
+                    executedWarpScript = prepend + executedWarpScript;
+                    linesOfMacrosPrepended += prepend.split('\n').length;
                     // Update lines and uris references
                     lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
                     uris.unshift(uri.toString());
@@ -121,7 +126,8 @@ export default class ExecCommand {
             var request_options: request.Options = {
               headers: {
                 'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'x-warp10-line-count-offset': linesOfMacrosPrepended.toString()
               },
               method: "POST",
               url: Warp10URL,
@@ -174,21 +180,42 @@ export default class ExecCommand {
 
             //console.log(request_options)
 
-            request.post(request_options, async (error: any, response: any, body: string) => {
-              if (error) { // error is set if server is unreachable
-                vscode.window.showErrorMessage(error.message)
-                console.error(error)
-                StatusbarUi.Execute();
-                return e(error)
-              } else if (response.statusCode >= 400 && response.statusCode !== 500) { // manage non 200 answers here
-                vscode.window.showErrorMessage("Error, server answered: " + response.statusCode + (String)(response.body).slice(0, 1000));
+            let req: request.Request = request.post(request_options, async (error: any, response: any, body: string) => {
+              if (error) { // error is set if server is unreachable or if the request is aborted
+                if (error.aborted) {
+                  console.log("request aborted");
+                  StatusbarUi.Execute();
+                  progress.report({ message: 'Aborted' });               
+                  return c(true)
+                } else {
+                  vscode.window.showErrorMessage("Cannot find or reach server, check your Warp 10 server endpoint:" + error.message)
+                  console.error(error)
+                  StatusbarUi.Execute();
+                  progress.report({ message: 'Done' });
+                  return e(error)
+                }
+              } else if (response.statusCode == 301) {
+                vscode.window.showErrorMessage("Check your Warp 10 server endpoint (" + response.request.uri.href + "), you may have forgotten the api/v0/exec in the URL");
                 console.error(response.body);
                 StatusbarUi.Execute();
+                return e(true)
+              } else if (response.statusCode != 200 && response.statusCode != 500) { // manage non 200 answers here
+                vscode.window.showErrorMessage("Error, server answered code " + response.statusCode + " :" + (String)(response.body).slice(0, 1000));
+                console.error(response.body);
+                StatusbarUi.Execute();
+                return e(true)
+              } else if (response.statusCode == 500 && !response.headers['x-warp10-error-message']) {
+                //received a 500 error without any x-warp10-error-message. Could also be a endpoint error.
+                vscode.window.showErrorMessage("Error, error 500 without any WarpScript error. Are you sure you are using a WarpScript exec endpoint ? Endpoint: " + response.request.uri.href + " :" + (String)(response.body).slice(0, 1000));
+                console.error(response.body);
+                StatusbarUi.Execute();
+                return e(true)
               } else {
                 // console.log(error, response, body)
                 let errorParam: any = null
                 progress.report({ message: 'Parsing response' });
-
+                let lineOffset: number = parseInt(response.request.headers['x-warp10-line-count-offset']);
+                console.log('lineoffset', lineOffset);
                 if (response.headers['x-warp10-error-message']) {
                   let line = parseInt(response.headers['x-warp10-error-line'])
 
@@ -213,6 +240,7 @@ export default class ExecCommand {
                   errorParam = 'Error in file ' + fileInError + ' at line ' + lineInError + ' : ' + response.headers['x-warp10-error-message'];
                   StatusbarUi.Execute();
                   outputWin.show();
+                  
                   outputWin.append('[' + execDate + '] ');
                   outputWin.append('ERROR ');
                   outputWin.append(Uri.parse(uris[i]).fsPath + ':' + lineInError);
@@ -308,12 +336,27 @@ export default class ExecCommand {
                 StatusbarUi.Execute();
               }
             });
+            ExecCommand.currentRunningRequests.push(req);
           });
         })
       })
     }
   }
 
+  public abortAllRequests(outputWin: vscode.OutputChannel) {
+    return () => {
+      outputWin.show();
+      outputWin.append('[' + new Date().toLocaleTimeString() + '] ');
+      outputWin.append("Aborting all running WarpScript requests... ")
+      // abort all requests, execute the callback with an error manually set. 
+      ExecCommand.currentRunningRequests.forEach(req => {
+        req.abort();
+        req.callback({ 'aborted': 'true' }, undefined, undefined);
+      });
+      ExecCommand.currentRunningRequests = [];
+      outputWin.appendLine("Done.")
+    }
+  }
 
   private static formatElapsedTime(elapsed: number) {
     if (elapsed < 1000) {
