@@ -59,7 +59,7 @@ export default class WSCompletionVariablesProvider
 
       //find and extract variable name can have dots or underscores or dash. 
       //the line must end with STORE (followed by spaces or an // comment)
-      let varPattern = /[\'\"]([A-Za-z0-9-_\.]+)[\'\"]\s+STORE\s/g;
+      let varPattern = /[\'\"]([A-Za-z0-9-_\.]+)[\'\"]\s+STORE\s*/g;
       let lineonMatch: RegExpMatchArray | null;
       let re = RegExp(varPattern);
       while (lineonMatch = re.exec(currentline)) {
@@ -72,7 +72,7 @@ export default class WSCompletionVariablesProvider
       //find and extract variable with the new [ 'x' 'y' ] STORE syntax. 
       // A repeated capturing group will only capture the last iteration. 
       // Put a capturing group around the repeated group to capture all iterations
-      let multipleVarPattern = /\[((\s+[\'\"]([A-Za-z0-9-_\.]+)[\'\"])+)\s+\]\s+STORE\s/g;
+      let multipleVarPattern = /\[((\s+[\'\"]([A-Za-z0-9-_\.]+)[\'\"])+)\s+\]\s+STORE\s*/g;
       re = RegExp(multipleVarPattern, 'g');
       while (lineonMatch = re.exec(currentline)) {
         let listContent: string = lineonMatch[1];
