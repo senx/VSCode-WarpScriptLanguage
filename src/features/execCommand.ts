@@ -243,7 +243,7 @@ export default class ExecCommand {
 
                   let errorMessage: string = response.headers['x-warp10-error-message'];
                   // We must substract the number of lines added by prepended macros in the error message.
-                  errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (match, group1) => '[Line #' + (Number.parseInt(group1) - lineOffset).toString() + ']');
+                  errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, group1) => '[Line #' + (Number.parseInt(group1) - lineOffset).toString() + ']');
 
                   outputWin.show();                  
                   outputWin.append('[' + execDate + '] ');
