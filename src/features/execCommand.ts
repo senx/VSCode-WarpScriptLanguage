@@ -380,6 +380,7 @@ export default class ExecCommand {
           req.callback({ 'aborted': 'true' }, undefined, undefined);
         });
         ExecCommand.currentRunningRequests = [];
+        WarpScriptExtGlobals.endpointsForThisSession = {};
         outputWin.appendLine("Done. WarpScripts may be still running on the server, but VSCode closed every connections.")
 
       }, 10000)
