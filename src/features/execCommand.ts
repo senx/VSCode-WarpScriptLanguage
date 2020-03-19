@@ -248,7 +248,7 @@ export default class ExecCommand {
                   outputWin.show();                  
                   outputWin.append('[' + execDate + '] ');
                   outputWin.append('ERROR file://');
-                  outputWin.append(Uri.parse(uris[i]).fsPath + '#' + lineInError );
+                  outputWin.append(Uri.parse(uris[i]).fsPath + ':' + lineInError );
                   outputWin.appendLine(' ' + errorMessage);
                 }
                 // If no content-type is specified, response is the JSON representation of the stack
