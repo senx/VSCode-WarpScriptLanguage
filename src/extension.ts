@@ -17,10 +17,10 @@ import WSCompletionItemProvider from './providers/wsCompletionItemProvider'
 import WSCompletionVariablesProvider from './providers/wsCompletionVariablesProvider'
 import WSCompletionMacrosProvider from './providers/wsCompletionMacrosProvider' //TODO
 import WarpScriptExtConstants from './constants'
-import WarpStriptExtGlobals = require('./globals')
+import WarpScriptExtGlobals = require('./globals')
 import GTSPreviewWebview from './webviews/gtsPreview'
 import ImagePreviewWebview from './webviews/imagePreview'
-
+import { v1 as uuidv1 } from 'uuid';
 
 /**
  * Main extension's entrypoint
@@ -46,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(previewPanels); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execConvertUnicodeInJson', () => { new UnicodeJsonConversion().exec(); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(""); }));
-  context.subscriptions.push(vscode.commands.registerCommand('extension.abortAllWS',() => { new ExecCommand().abortAllRequests(outputWin)(); }))
+  context.subscriptions.push(vscode.commands.registerCommand('extension.abortAllWS', () => { new ExecCommand().abortAllRequests(outputWin)(); }))
   context.subscriptions.push(vscode.commands.registerCommand('extension.execWSOnSelection', () => {
     let editor = vscode.window.activeTextEditor;
     if (editor) {
@@ -85,7 +85,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   //each time focus change, we look at the file type and file name. Json + special name => stack preview.
   vscode.window.onDidChangeActiveTextEditor((textEditor: vscode.TextEditor) => {
-    if (!WarpStriptExtGlobals.weAreClosingFilesFlag &&
+    if (!WarpScriptExtGlobals.weAreClosingFilesFlag &&
       typeof textEditor !== 'undefined' &&
       typeof textEditor.document !== 'undefined' &&
       textEditor.document.languageId === 'json' &&
@@ -160,4 +160,13 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
   });
+
+  // define a session name as user name + uuid.
+  // remains the same until extension reload, or vscode reload.
+  const username = require('username');
+  (async () => {
+    let user: string = await username();
+    WarpScriptExtGlobals.sessionName = user + '-' + uuidv1();
+    outputWin.appendLine("Session Name for WarpScript execution: '" + WarpScriptExtGlobals.sessionName + "'");
+  })();
 }
