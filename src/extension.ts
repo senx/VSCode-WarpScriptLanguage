@@ -20,7 +20,7 @@ import WarpScriptExtConstants from './constants'
 import WarpScriptExtGlobals = require('./globals')
 import GTSPreviewWebview from './webviews/gtsPreview'
 import ImagePreviewWebview from './webviews/imagePreview'
-import { v1 as uuidv1 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Main extension's entrypoint
@@ -166,7 +166,7 @@ export function activate(context: vscode.ExtensionContext) {
   const username = require('username');
   (async () => {
     let user: string = await username();
-    WarpScriptExtGlobals.sessionName = user + '-' + uuidv1();
+    WarpScriptExtGlobals.sessionName = user + '-' + uuidv4();
     outputWin.appendLine("Session Name for WarpScript execution: '" + WarpScriptExtGlobals.sessionName + "'");
   })();
 }
