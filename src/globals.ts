@@ -8,3 +8,7 @@
  * The content providers won't be updated as long as this flag is true.
  */
 export let weAreClosingFilesFlag:boolean = false;
+
+export let sessionName:string = "";
+
+export let endpointsForThisSession:{[key: string]: number} = {};

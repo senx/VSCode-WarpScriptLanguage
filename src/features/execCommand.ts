@@ -8,6 +8,8 @@ import os = require('os');
 import zlib = require("zlib");
 import { specialCommentCommands } from '../warpScriptParser';
 import WarpScriptParser from '../warpScriptParser';
+import WarpScriptExtGlobals = require('../globals')
+import { Warp10 } from "@senx/warp10";
 const SocksProxyAgent = require('socks-proxy-agent');
 const ProxyAgent = require('proxy-agent');
 const pac = require('pac-resolver');
@@ -128,6 +130,7 @@ export default class ExecCommand {
               headers: {
                 'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8',
                 'Accept': 'application/json',
+                'X-Warp10-WarpScriptSession': WarpScriptExtGlobals.sessionName,
                 'x-warp10-line-count-offset': linesOfMacrosPrepended.toString()
               },
               method: "POST",
@@ -245,10 +248,10 @@ export default class ExecCommand {
                   // We must substract the number of lines added by prepended macros in the error message.
                   errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, group1) => '[Line #' + (Number.parseInt(group1) - lineOffset).toString() + ']');
 
-                  outputWin.show();                  
+                  outputWin.show();
                   outputWin.append('[' + execDate + '] ');
                   outputWin.append('ERROR file://');
-                  outputWin.append(Uri.parse(uris[i]).fsPath + '#' + lineInError );
+                  outputWin.append(Uri.parse(uris[i]).fsPath + ':' + lineInError);
                   outputWin.appendLine(' ' + errorMessage);
                 }
                 // If no content-type is specified, response is the JSON representation of the stack
@@ -340,8 +343,15 @@ export default class ExecCommand {
                 }
                 StatusbarUi.Execute();
               }
+              // decrease request count on this endpoint
+              WarpScriptExtGlobals.endpointsForThisSession[req.uri.href]--;
+              console.log(WarpScriptExtGlobals.endpointsForThisSession)
             });
             ExecCommand.currentRunningRequests.push(req);
+            // increase request count on this endpoint, to use it later for session abort
+            WarpScriptExtGlobals.endpointsForThisSession[req.uri.href] = (WarpScriptExtGlobals.endpointsForThisSession[req.uri.href] || 0) + 1;
+
+            StatusbarUi.Working(`${WarpScriptExtGlobals.endpointsForThisSession[req.uri.href]} WarpScripts running...`);
           });
         })
       })
@@ -352,14 +362,30 @@ export default class ExecCommand {
     return () => {
       outputWin.show();
       outputWin.append('[' + new Date().toLocaleTimeString() + '] ');
-      outputWin.append("Aborting all running WarpScript requests... ")
-      // abort all requests, execute the callback with an error manually set. 
-      ExecCommand.currentRunningRequests.forEach(req => {
-        req.abort();
-        req.callback({ 'aborted': 'true' }, undefined, undefined);
-      });
-      ExecCommand.currentRunningRequests = [];
-      outputWin.appendLine("Done. WarpScripts are still running on the server, but VSCode close every connections.")
+      outputWin.appendLine("Sending WSABORT to endpoints... 10s before killing every connections.");
+
+      // 3 seconds to abort on every endpoints
+      Object.keys(WarpScriptExtGlobals.endpointsForThisSession).forEach(endpoint => {
+        let req = new Warp10(endpoint, 3000, 3000, 1); // 3 second timeout
+        req.exec(` "${WarpScriptExtGlobals.sessionName}" WSABORT `).then(answer => {
+          outputWin.appendLine(` Send abortion signal successfully to ${answer.result[0]} script${answer.result[0] > 1 ? 's' : ''} on ${endpoint}`);
+        }, _error => {
+          outputWin.appendLine(" Unable to WSABORT on " + endpoint + " Did you activate StackPSWarpScriptExtension ?");
+        });
+      })
+
+      // 10 seconds to kill every remaining connections
+      setTimeout(() => {
+        // abort all requests, execute the callback with an error manually set. 
+        ExecCommand.currentRunningRequests.forEach(req => {
+          req.abort();
+          req.callback({ 'aborted': 'true' }, undefined, undefined);
+        });
+        ExecCommand.currentRunningRequests = [];
+        WarpScriptExtGlobals.endpointsForThisSession = {};
+        outputWin.appendLine("Done. WarpScripts may be still running on the server, but VSCode closed every connections.")
+
+      }, 10000)
     }
   }
 
