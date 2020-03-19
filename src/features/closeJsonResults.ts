@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import WarpScriptExtConstants from '../constants';
-import WarpStriptExtGlobals = require('../globals')
+import WarpScriptExtGlobals = require('../globals')
 import { isNullOrUndefined } from 'util';
 /**
  * This functions browse all the opened documents.
@@ -43,7 +43,7 @@ export default class CloseJsonResults {
             vscode.commands.executeCommand("workbench.action.nextEditor");
           } else {
             if (onchangecallback) { onchangecallback.dispose(); }
-            WarpStriptExtGlobals.weAreClosingFilesFlag = false;
+            WarpScriptExtGlobals.weAreClosingFilesFlag = false;
           }
         } else {
           vscode.commands.executeCommand("workbench.action.nextEditor");
@@ -58,11 +58,11 @@ export default class CloseJsonResults {
     //security : if endless loop (not seen), end all.
     setTimeout(function () {
       if (onchangecallback) { onchangecallback.dispose(); }
-      WarpStriptExtGlobals.weAreClosingFilesFlag = false;
+      WarpScriptExtGlobals.weAreClosingFilesFlag = false;
     }, 5000);
 
     //set the flag to disable the content provider update
-    WarpStriptExtGlobals.weAreClosingFilesFlag = true;
+    WarpScriptExtGlobals.weAreClosingFilesFlag = true;
 
     //close any opened webview.
     if (!isNullOrUndefined(previewPanels.gts)) {
