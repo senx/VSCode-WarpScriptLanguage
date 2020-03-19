@@ -350,6 +350,8 @@ export default class ExecCommand {
             ExecCommand.currentRunningRequests.push(req);
             // increase request count on this endpoint, to use it later for session abort
             WarpScriptExtGlobals.endpointsForThisSession[req.uri.href] = (WarpScriptExtGlobals.endpointsForThisSession[req.uri.href] || 0) + 1;
+
+            StatusbarUi.Working(`${WarpScriptExtGlobals.endpointsForThisSession[req.uri.href]} WarpScripts running...`);
           });
         })
       })
@@ -365,7 +367,7 @@ export default class ExecCommand {
       // 3 seconds to abort on every endpoints
       Object.keys(WarpScriptExtGlobals.endpointsForThisSession).forEach(endpoint => {
         let req = new Warp10(endpoint, 3000, 3000, 1); // 3 second timeout
-        req.exec(` "${WarpScriptExtGlobals.sessionName}" WSABORTE `).then(answer => {
+        req.exec(` "${WarpScriptExtGlobals.sessionName}" WSABORT `).then(answer => {
           outputWin.appendLine(` Send abortion signal successfully to ${answer.result[0]} script${answer.result[0] > 1 ? 's' : ''} on ${endpoint}`);
         }, _error => {
           outputWin.appendLine(" Unable to WSABORT on " + endpoint + " Did you activate StackPSWarpScriptExtension ?");
