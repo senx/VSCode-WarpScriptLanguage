@@ -203,7 +203,8 @@
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"postinstall": "node ./node_modules/vscode/bin/install && bower install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test",
+    "docupdate" : "git add src/wsGlobals.ts && git add src/ref.ts && git add monarch.ts && git add syntaxes/warpscript.tmLanguage.json && git commit -m 'doc Update'",
 		"changelog": "node changelog.js > CHANGELOG.md"
 	},
 	"devDependencies": {
