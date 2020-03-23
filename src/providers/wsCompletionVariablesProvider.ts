@@ -38,12 +38,12 @@ export default class WSCompletionVariablesProvider
       if (currentWord.length > 2 && currentWord.endsWith("'")) { //end of a valid string, propose " STORE"
         return resolve([new CompletionItem("\ STORE", CompletionItemKind.Event)]);
       }
-      //console.log(currentWord);
-      if (currentWord.startsWith('$') || currentWord.startsWith("'")) { //beginning of a string, or $, list all variables in file and propose them
+      const firstLetter = currentWord.charAt(0);
+      if ('$' == firstLetter || "'" == firstLetter) { //beginning of a string, or $, list all variables in file and propose them
         let listvar = this.ListVariables(document);
         listvar.forEach(v => {
-          //console.log("found varname:" + v);
-          result.push(new CompletionItem(v, CompletionItemKind.Variable))
+          console.log("found varname:" + v);
+          result.push(new CompletionItem(firstLetter == '$' ? '$' + v : v, CompletionItemKind.Variable))
         })
       }
       return resolve(result);
