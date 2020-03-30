@@ -370,7 +370,7 @@ export default class ExecCommand {
         req.exec(` "${WarpScriptExtGlobals.sessionName}" WSABORT `).then(answer => {
           outputWin.appendLine(` Send abortion signal successfully to ${answer.result[0]} script${answer.result[0] > 1 ? 's' : ''} on ${endpoint}`);
         }, _error => {
-          outputWin.appendLine(" Unable to WSABORT on " + endpoint + " Did you activate StackPSWarpScriptExtension ?");
+          outputWin.appendLine(" Unable to WSABORT on " + endpoint + " Did you activate StackPSWarpScriptExtension?");
         });
       })
 
