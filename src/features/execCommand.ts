@@ -15,7 +15,7 @@ const ProxyAgent = require('proxy-agent');
 const pac = require('pac-resolver');
 const dns = require('dns');
 const promisify = require('util.promisify');
-var lookupAsync = promisify(dns.lookup);
+const lookupAsync = promisify(dns.lookup);
 
 export default class ExecCommand {
 
@@ -97,8 +97,8 @@ export default class ExecCommand {
               await WSDocumentLinksProvider.getMacroURI(macroName).then(
                 async (uri) => {
                   if (uris.indexOf(uri.toString()) === -1) {
-                    //outputWin.show();
-                    //outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
+                    // outputWin.show();
+                    // outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
                     let tdoc: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
                     let macroCode: string = tdoc.getText()
                     // Prepend the macro, store it and then append the rest of the script.
@@ -120,6 +120,7 @@ export default class ExecCommand {
 
           // log the beginning of the warpscript
           console.log("about to send this WarpScript:", executedWarpScript.slice(0, 10000));
+
           // Gzip the script before sending it.
           zlib.gzip(Buffer.from(executedWarpScript, 'utf8'), async function (err, gzipWarpScript) {
             if (err) {
@@ -147,7 +148,7 @@ export default class ExecCommand {
             // If a local proxy.pac is define, use it
             if (proxy_pac !== "") {
               // so simple... if only it was supporting socks5. Ends up with an error for SOCKS5 lines.
-              //(request_options as any).agent = new ProxyAgent("pac+" + proxy_pac);
+              // (request_options as any).agent = new ProxyAgent("pac+" + proxy_pac);
 
               let proxy_pac_resp: string = 'DIRECT'; // Fallback
               try {
@@ -176,13 +177,13 @@ export default class ExecCommand {
               }
             }
 
-            //if ProxyURL is defined, override the proxy setting. may support pac+file:// syntax too, or pac+http://
+            // if ProxyURL is defined, override the proxy setting. may support pac+file:// syntax too, or pac+http://
             //  see https://www.npmjs.com/package/proxy-agent
             if (proxy_directUrl !== "") {
               (request_options as any).agent = new ProxyAgent(proxy_directUrl); //tested with authentication, OK.
             }
 
-            //console.log(request_options)
+            // console.log(request_options)
 
             let req: request.Request = request.post(request_options, async (error: any, response: any, body: string) => {
               if (error) { // error is set if server is unreachable or if the request is aborted
@@ -272,7 +273,7 @@ export default class ExecCommand {
                     });
                   });
 
-                  //will be called later
+                  // will be called later
                   function displayJson() {
                     vscode.workspace.openTextDocument(jsonFilename).then((doc: vscode.TextDocument) => {
                       vscode.window.showTextDocument(doc, { viewColumn: vscode.ViewColumn.Two, preview: true, preserveFocus: false }).then(
@@ -291,14 +292,14 @@ export default class ExecCommand {
 
                   // Save resulting JSON
                   fs.unlink(jsonFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
-                    //if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
+                    // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
                     let sizeMB: number = Math.round(body.length / 1024 / 1024);
                     if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
                       // Do not unescape \\u nor control characters.
                       body = unescape(body.replace(/(?<!\\)\\u(?!000)(?!001)([0-9A-Fa-f]{4})/g, "%u\$1"))
                     }
                     let noDisplay: boolean = jsonMaxSizeBeforeWarning > 0 && sizeMB > jsonMaxSizeBeforeWarning;
-                    //file must be saved whatever its size... but not displayed if too big.
+                    // file must be saved whatever its size... but not displayed if too big.
                     fs.writeFile(jsonFilename, body, { mode: 0o0400 }, function (err) {
                       if (err) {
                         vscode.window.showErrorMessage(err.message);
@@ -362,15 +363,23 @@ export default class ExecCommand {
     return () => {
       outputWin.show();
       outputWin.append('[' + new Date().toLocaleTimeString() + '] ');
-      outputWin.appendLine("Sending WSABORT to endpoints... 10s before killing every connections.");
+      outputWin.appendLine("Sending WSKILLSESSION to endpoints... 10s before killing every connections.");
 
       // 3 seconds to abort on every endpoints
       Object.keys(WarpScriptExtGlobals.endpointsForThisSession).forEach(endpoint => {
         let req = new Warp10(endpoint, 3000, 3000, 1); // 3 second timeout
-        req.exec(` "${WarpScriptExtGlobals.sessionName}" WSABORT `).then(answer => {
-          outputWin.appendLine(` Send abortion signal successfully to ${answer.result[0]} script${answer.result[0] > 1 ? 's' : ''} on ${endpoint}`);
+        req.exec(`<% "${WarpScriptExtGlobals.sessionName}" 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`).then(answer => {
+          if(answer.result[0]) {
+              if(answer.result[0] === 0) {
+                outputWin.appendLine(` It appears that ${endpoint} is running on multiple backend`);      
+              } else if(answer.result[0] === -1) {
+                outputWin.appendLine(` Unable to WSKILLSESSION on ${endpoint}. Did you activate StackPSWarpScriptExtension?`);
+              } else {
+                outputWin.appendLine(` Send abortion signal successfully to ${answer.result[0]} script${answer.result[0] > 1 ? 's' : ''} on ${endpoint}`);
+              }
+          }
         }, _error => {
-          outputWin.appendLine(" Unable to WSABORT on " + endpoint + " Did you activate StackPSWarpScriptExtension?");
+          outputWin.appendLine(` Unable to WSKILLSESSION on ${endpoint}. Did you activate StackPSWarpScriptExtension?`);
         });
       })
 

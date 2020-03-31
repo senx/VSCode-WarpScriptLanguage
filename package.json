@@ -203,26 +203,27 @@
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"postinstall": "node ./node_modules/vscode/bin/install && bower install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test",
-    "docupdate" : "git add src/wsGlobals.ts && git add src/ref.ts && git add monarch.ts && git add syntaxes/warpscript.tmLanguage.json && git commit -m 'doc Update'",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test",
+		"docupdate": "git add src/wsGlobals.ts && git add src/ref.ts && git add monarch.ts && git add syntaxes/warpscript.tmLanguage.json && git commit -m 'doc Update'",
 		"changelog": "node changelog.js > CHANGELOG.md"
 	},
 	"devDependencies": {
-		"@types/uuid": "^7.0.2",
 		"@types/js-yaml": "3.12.1",
 		"@types/mocha": "5.2.7",
 		"@types/node": "12.0.4",
 		"@types/request": "2.48.1",
+		"@types/uuid": "^7.0.2",
 		"js-yaml": "3.13.1",
 		"plist": "3.0.1",
-		"showdown": "1.9.0",
+		"showdown": "^1.9.1",
 		"typescript": "3.5.1",
-		"vsce": "^1.66.0",
-		"vscode": "1.1.34",
+		"vsce": "1.74.0",
+		"vscode": "1.1.36",
 		"vscode-textmate": "4.1.1"
 	},
 	"dependencies": {
 		"@senx/warp10": "^1.0.2",
+		"bower": "^1.8.8",
 		"file-saver": "2.0.0",
 		"lodash": "^4.17.15",
 		"pac-resolver": "3.0.0",
@@ -231,8 +232,8 @@
 		"socks-proxy-agent": "4.0.1",
 		"username": "^5.1.0",
 		"util.promisify": "1.0.0",
-		"uuid": "^7.0.2",
-		"vscode-languageclient": "5.2.1",
-		"vscode-proxy-agent": "^0.4.0"
+		"uuid": "7.0.2",
+		"vscode-languageclient": "6.1.3",
+		"vscode-proxy-agent": "0.5.2"
 	}
 }
