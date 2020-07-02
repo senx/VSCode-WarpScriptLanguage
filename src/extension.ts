@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionItemProvider()));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionVariablesProvider(), "'", "$"));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionMacrosProvider(), "@", "/"));
-  //context.subscriptions.push(vscode.languages.registerFoldingRangeProvider({ language: 'warpscript' }, new WSFoldingRangeProvider()));
+  // context.subscriptions.push(vscode.languages.registerFoldingRangeProvider({ language: 'warpscript' }, new WSFoldingRangeProvider()));
   // these providers could be disabled:
   if (vscode.workspace.getConfiguration().get("warpscript.enableInlineHelpers")) {
     context.subscriptions.push(vscode.languages.registerCodeLensProvider({ language: 'warpscript' }, new WSCodeLensProvider()));
@@ -45,7 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.languages.registerDocumentLinkProvider({ language: 'warpscript' }, new WSDocumentLinksProvider()));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(previewPanels); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execConvertUnicodeInJson', () => { new UnicodeJsonConversion().exec(); }));
-  context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(""); }));
+  context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(''); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.abortAllWS', () => { new ExecCommand().abortAllRequests(outputWin)(); }))
   context.subscriptions.push(vscode.commands.registerCommand('extension.execWSOnSelection', () => {
     let editor = vscode.window.activeTextEditor;
@@ -74,7 +74,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 
-  //webview panels for dataviz. will be created only when needed.
+  // webview panels for dataviz. will be created only when needed.
   // let previewPanels.gts: vscode.WebviewPanel = null;
   // let previewPanels.image: vscode.WebviewPanel = null;
 

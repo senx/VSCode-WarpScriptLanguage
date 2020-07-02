@@ -5,3 +5,4 @@ client/server
 bower_components
 *.vsix
 generate-doc.js
+assets
