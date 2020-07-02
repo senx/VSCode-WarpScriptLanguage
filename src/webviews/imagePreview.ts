@@ -42,8 +42,6 @@ export default class ImagePreviewWebview {
   }
 
   public async getHtmlContent(imageList: String[]): Promise<string> {
-
-    //build the spectre css path, the webview way.
     let fileSaveronDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'node_modules', 'file-saver', 'dist', 'FileSaver.min.js'));
     let fileSaverPath: string = fileSaveronDiskPath.with({ scheme: 'vscode-resource' }).toString();
 

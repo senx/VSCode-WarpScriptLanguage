@@ -9,7 +9,7 @@ import zlib = require("zlib");
 import { specialCommentCommands } from '../warpScriptParser';
 import WarpScriptParser from '../warpScriptParser';
 import WarpScriptExtGlobals = require('../globals')
-import { Warp10 } from "@senx/warp10";
+import { Warp10 } from '@senx/warp10/dist';
 const SocksProxyAgent = require('socks-proxy-agent');
 const ProxyAgent = require('proxy-agent');
 const pac = require('pac-resolver');
@@ -368,7 +368,8 @@ export default class ExecCommand {
       // 3 seconds to abort on every endpoints
       Object.keys(WarpScriptExtGlobals.endpointsForThisSession).forEach(endpoint => {
         let req = new Warp10(endpoint, 3000, 3000, 1); // 3 second timeout
-        req.exec(`<% "${WarpScriptExtGlobals.sessionName}" 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`).then(answer => {
+        req.exec(`<% "${WarpScriptExtGlobals.sessionName}" 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`)
+        .then((answer: any) => {
           if(answer.result[0]) {
               if(answer.result[0] === 0) {
                 outputWin.appendLine(` It appears that ${endpoint} is running on multiple backend`);      
@@ -378,7 +379,7 @@ export default class ExecCommand {
                 outputWin.appendLine(` Send abortion signal successfully to ${answer.result[0]} script${answer.result[0] > 1 ? 's' : ''} on ${endpoint}`);
               }
           }
-        }, _error => {
+        }, (_error: any) => {
           outputWin.appendLine(` Unable to WSKILLSESSION on ${endpoint}. Did you activate StackPSWarpScriptExtension?`);
         });
       })
