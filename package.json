@@ -217,15 +217,15 @@
 		"plist": "3.0.1",
 		"showdown": "^1.9.1",
 		"typescript": "3.5.1",
-		"vsce": "1.74.0",
-		"vscode": "1.1.36",
-		"vscode-textmate": "4.1.1"
+		"vsce": "1.78.0",
+		"vscode": "1.1.37",
+		"vscode-textmate": "5.2.0"
 	},
 	"dependencies": {
-		"@senx/warp10": "^1.0.2",
-		"bower": "^1.8.8",
-		"file-saver": "2.0.0",
-		"lodash": "^4.17.15",
+		"@senx/warp10": "1.0.10",
+		"bower": "1.8.8",
+		"file-saver": "2.0.2",
+		"lodash": "4.17.20",
 		"pac-resolver": "3.0.0",
 		"proxy-agent": "^3.1.0",
 		"request": "2.88.0",
