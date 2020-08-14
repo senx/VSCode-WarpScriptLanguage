@@ -1,0 +1,30 @@
+import { EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import { Param } from '../../../model/param';
+import { Observable, Subject } from 'rxjs';
+export declare class WarpViewTreeViewComponent implements OnInit, OnDestroy {
+    debug: boolean;
+    hiddenData: number[];
+    options: Param;
+    gtsFilter: string;
+    gtsList: any[];
+    params: Param[];
+    branch: boolean;
+    hidden: boolean;
+    events: Observable<void>;
+    kbdLastKeyPressed: string[];
+    warpViewSelectedGTS: EventEmitter<any>;
+    hide: any;
+    initOpen: Subject<void>;
+    private LOG;
+    private _debug;
+    private _hiddenData;
+    private eventsSubscription;
+    constructor();
+    ngOnInit(): void;
+    ngOnDestroy(): void;
+    toggleVisibility(index: number): void;
+    isHidden(index: number): any;
+    isGts(node: any): boolean;
+    warpViewSelectedGTSHandler(event: any): void;
+    open(): void;
+}
