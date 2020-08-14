@@ -1,12 +1,13 @@
 {
 	"name": "warpscript-language",
-	"displayName": "WarpScript language support",
-	"description": "WarpScript support",
+	"displayName": "WarpScript & Flows language support",
+	"description": "WarpScript & Flows support",
 	"keywords": [
 		"Warp 10",
 		"WarpScript",
 		"Geo Times Series",
-		"Times Series"
+		"Times Series",
+		"Flows"
 	],
 	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
@@ -33,7 +34,8 @@
 		"theme": "dark"
 	},
 	"activationEvents": [
-		"onLanguage:warpscript"
+		"onLanguage:warpscript",
+		"onLanguage:flows"
 	],
 	"main": "./out/extension",
 	"contributes": {
@@ -91,7 +93,19 @@
 				"extensions": [
 					"mc2"
 				],
-				"configuration": "./syntaxes/language-configuration.json"
+				"configuration": "./syntaxes/warpscript.language-configuration.json"
+			},
+
+			{
+				"id": "flows",
+				"aliases": [
+					"FLoWS",
+					"flows"
+				],
+				"extensions": [
+					"flows"
+				],
+				"configuration": "./syntaxes/flows.language-configuration.json"
 			}
 		],
 		"grammars": [
@@ -99,6 +113,11 @@
 				"language": "warpscript",
 				"scopeName": "source.warpscript",
 				"path": "./syntaxes/warpscript.tmLanguage.json"
+			},
+			{
+				"language": "flows",
+				"scopeName": "source.flows",
+				"path": "./syntaxes/flows.tmLanguage.json"
 			}
 		],
 		"configuration": {
