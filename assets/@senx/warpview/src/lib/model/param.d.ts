@@ -1,0 +1,64 @@
+export declare class Param {
+    scheme: string;
+    bgColor?: string;
+    datasetColor?: string;
+    fontColor?: string;
+    borderColor?: string;
+    gridLineColor?: string;
+    showLegend?: boolean;
+    responsive?: boolean;
+    horizontal: boolean;
+    stacked: boolean;
+    key?: string;
+    unit?: string;
+    interpolate?: string;
+    type?: string;
+    showRangeSelector?: boolean;
+    autoRefresh?: number;
+    showControls: boolean;
+    showErrors: boolean;
+    showStatus: boolean;
+    showGTSTree?: boolean;
+    foldGTSTree?: boolean;
+    timeMode?: 'timestamp' | 'date' | 'custom' | 'duration';
+    showDots: boolean;
+    delta?: number;
+    timeUnit: 'us' | 'ms' | 'ns';
+    minColor?: string;
+    maxColor?: string;
+    split?: 'Y' | 'M' | 'D' | 'h' | 'm' | 's';
+    popupButtonValidateClass?: string;
+    popupButtonValidateLabel?: string;
+    timeZone: string;
+    properties?: any;
+    map?: {
+        tiles?: string[];
+        heatRadius?: number;
+        heatBlur?: number;
+        heatOpacity?: number;
+        heatControls?: boolean;
+        dotsLimit?: number;
+        mapType?: string;
+        showTimeSlider?: boolean;
+        showTimeRange?: boolean;
+        timeSliderMin?: number;
+        timeSliderMax?: number;
+        timeSliderStep?: number;
+        timeSliderMode?: 'timestamp' | 'date' | 'custom';
+        timeStart?: number;
+        timeSpan?: number;
+        startLat?: number;
+        startLong?: number;
+        startZoom?: number;
+        timeSpanList?: any[];
+    };
+    bounds: {
+        minDate?: number;
+        maxDate?: number;
+        yRanges?: [number, number];
+    };
+    histo?: {
+        histnorm: 'percent' | 'probability' | 'density' | 'probability density';
+        histfunc: 'count' | 'sum' | 'avg' | 'min' | 'max';
+    };
+}
