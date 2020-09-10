@@ -2,7 +2,7 @@ import { StatusbarUi } from './statusbarUi';
 'use strict';
 
 import * as vscode from 'vscode';
-import WSHoverProvider from './providers/wsHoverProvider'
+import { WSHoverProvider } from './providers/hover/WSHoverProvider'
 //import WSFoldingRangeProvider from './providers/wsFoldingRangeProvider'
 import WSCodeLensProvider from './providers/wsCodeLensProvider'
 import WSDocumentHighlightsProvider from './providers/wsDocumentHighlightsProviders'
@@ -13,7 +13,7 @@ import ExecCommand from './features/execCommand'
 import CloseJsonResults from './features/closeJsonResults'
 import UnicodeJsonConversion from './features/unicodeJsonConversion'
 //import WSImagebase64Provider from './providers/wsImagebase64Provider'
-import WSCompletionItemProvider from './providers/wsCompletionItemProvider'
+import WSCompletionItemProvider from './providers/completion/WSCompletionItemProvider'
 import WSCompletionVariablesProvider from './providers/wsCompletionVariablesProvider'
 import WSCompletionMacrosProvider from './providers/wsCompletionMacrosProvider' //TODO
 import WarpScriptExtConstants from './constants'
@@ -21,6 +21,8 @@ import WarpScriptExtGlobals = require('./globals')
 import GTSPreviewWebview from './webviews/gtsPreview'
 import ImagePreviewWebview from './webviews/imagePreview'
 import { v4 as uuidv4 } from 'uuid';
+import FlowsCompletionItemProvider from './providers/completion/FlowsCompletionItemProvider';
+import { FlowsHoverProvider } from './providers/hover/FlowsHoverProvider';
 
 /**
  * Main extension's entrypoint
@@ -28,14 +30,23 @@ import { v4 as uuidv4 } from 'uuid';
  * @param context
  */
 export function activate(context: vscode.ExtensionContext) {
-
+  StatusbarUi.Init();
   let outputWin = vscode.window.createOutputChannel('Warp10');
-  let previewPanels: { 'image': vscode.WebviewPanel, 'gts': vscode.WebviewPanel } = { 'image': null, 'gts': null }; //constant object ref to pass to closeOpenedWebviews
+  // constant object ref to pass to closeOpenedWebviews
+  let previewPanels: { 'image': vscode.WebviewPanel, 'gts': vscode.WebviewPanel } = { 'image': null, 'gts': null }; 
 
+  // Hover providers
   context.subscriptions.push(vscode.languages.registerHoverProvider({ language: 'warpscript' }, new WSHoverProvider()));
+  context.subscriptions.push(vscode.languages.registerHoverProvider({ language: 'flows' }, new FlowsHoverProvider()));
+
+  // Completion providers
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionItemProvider()));
+  context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'flows' }, new FlowsCompletionItemProvider()));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionVariablesProvider(), "'", "$"));
+  context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'flows' }, new WSCompletionVariablesProvider(), "'"));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionMacrosProvider(), "@", "/"));
+  context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'flows' }, new WSCompletionMacrosProvider(), "@", "/"));
+  
   // context.subscriptions.push(vscode.languages.registerFoldingRangeProvider({ language: 'warpscript' }, new WSFoldingRangeProvider()));
   // these providers could be disabled:
   if (vscode.workspace.getConfiguration().get("warpscript.enableInlineHelpers")) {
@@ -46,6 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(previewPanels); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execConvertUnicodeInJson', () => { new UnicodeJsonConversion().exec(); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(''); }));
+  context.subscriptions.push(vscode.commands.registerCommand('extension.execFlows', () => { new ExecCommand().exec(outputWin)(''); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.abortAllWS', () => { new ExecCommand().abortAllRequests(outputWin)(); }))
   context.subscriptions.push(vscode.commands.registerCommand('extension.execWSOnSelection', () => {
     let editor = vscode.window.activeTextEditor;
@@ -69,7 +81,6 @@ export function activate(context: vscode.ExtensionContext) {
   }));
 
   new WSDocumentFormattingEditProvider();
-  StatusbarUi.Init();
 
 
 
@@ -85,6 +96,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   //each time focus change, we look at the file type and file name. Json + special name => stack preview.
   vscode.window.onDidChangeActiveTextEditor((textEditor: vscode.TextEditor) => {
+    StatusbarUi.Init();
     if (!WarpScriptExtGlobals.weAreClosingFilesFlag &&
       typeof textEditor !== 'undefined' &&
       typeof textEditor.document !== 'undefined' &&

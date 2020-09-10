@@ -4,7 +4,7 @@ export class StatusbarUi {
 
     private static _statusBarItem: StatusBarItem;
 
-    private static get statusbar() {
+    public static get statusbar() {
         if (!StatusbarUi._statusBarItem) {
             StatusbarUi._statusBarItem = window
                 .createStatusBarItem(StatusBarAlignment.Right, 100);
@@ -18,10 +18,23 @@ export class StatusbarUi {
     }
 
     static Init() {
-        StatusbarUi.Working('loading...');
-        setTimeout(function () {
-            StatusbarUi.Execute();
-        }, 1000);
+        if (!window.activeTextEditor.document) {
+            setTimeout(() => StatusbarUi.Init(), 100);
+        } else {
+            switch (window.activeTextEditor.document.languageId) {
+                case 'flows':
+                    StatusbarUi.statusbar.show();
+                    StatusbarUi.ExecuteFlows();
+                    break;
+                case 'warpscript':
+                    StatusbarUi.statusbar.show();
+                    StatusbarUi.Execute();
+                    break;
+                default:
+                    StatusbarUi.statusbar.hide();
+                    break;
+            }
+        }
     }
 
     static Working(workingMsg: string = 'Working on it...') {
@@ -34,6 +47,12 @@ export class StatusbarUi {
         StatusbarUi.statusbar.text = '$(triangle-right) Exec WS';
         StatusbarUi.statusbar.command = 'extension.execWS';
         StatusbarUi.statusbar.tooltip = 'Click execute your WarpScript';
+    }
+
+    public static ExecuteFlows() {
+        StatusbarUi.statusbar.text = '$(triangle-right) Exec FLoWS';
+        StatusbarUi.statusbar.command = 'extension.execFlows';
+        StatusbarUi.statusbar.tooltip = 'Click execute your FLoWS';
     }
 
 

@@ -9,7 +9,7 @@ import zlib = require("zlib");
 import { specialCommentCommands } from '../warpScriptParser';
 import WarpScriptParser from '../warpScriptParser';
 import WarpScriptExtGlobals = require('../globals')
-import { Warp10 } from '@senx/warp10/dist';
+import { Warp10 } from '@senx/warp10';
 const SocksProxyAgent = require('socks-proxy-agent');
 const ProxyAgent = require('proxy-agent');
 const pac = require('pac-resolver');
@@ -28,7 +28,12 @@ export default class ExecCommand {
   public exec(outputWin: vscode.OutputChannel): any {
     return (selectiontext: string) => {
       // Check current active document is a warpcript
-      if (typeof vscode.window.activeTextEditor === 'undefined' || vscode.window.activeTextEditor.document.languageId !== 'warpscript') {
+      if (typeof vscode.window.activeTextEditor === 'undefined'
+        || (
+          vscode.window.activeTextEditor.document.languageId !== 'warpscript'
+          && vscode.window.activeTextEditor.document.languageId !== 'flows'
+        )
+      ) {
         // Not a warpscript, exit early.
         return;
       }
@@ -45,7 +50,7 @@ export default class ExecCommand {
 
       vscode.window.withProgress<boolean>({
         location: vscode.ProgressLocation.Window,
-        title: 'WarpScript'
+        title: vscode.window.activeTextEditor.document.languageId === 'warpscript' ? 'WarpScript' : 'FLoWS'
       }, (progress: vscode.Progress<{ message?: string; }>) => {
         return new Promise(async (c, e) => {
           let executedWarpScript = "";
@@ -56,6 +61,13 @@ export default class ExecCommand {
           }
           else {
             executedWarpScript = selectiontext;
+          }
+          if (vscode.window.activeTextEditor.document.languageId === 'flows') {
+            executedWarpScript = `<'
+${executedWarpScript} 
+'>
+FLOWS
+`;
           }
           //
           //analyse the first warpscript lines starting with //
@@ -211,7 +223,7 @@ export default class ExecCommand {
                 return e(true)
               } else if (response.statusCode == 500 && !response.headers['x-warp10-error-message']) {
                 //received a 500 error without any x-warp10-error-message. Could also be a endpoint error.
-                vscode.window.showErrorMessage("Error, error 500 without any WarpScript error. Are you sure you are using a WarpScript exec endpoint ? Endpoint: " + response.request.uri.href + " :" + (String)(response.body).slice(0, 1000));
+                vscode.window.showErrorMessage("Error, error 500 without any error. Are you sure you are using an exec endpoint ? Endpoint: " + response.request.uri.href + " :" + (String)(response.body).slice(0, 1000));
                 console.error(response.body);
                 StatusbarUi.Execute();
                 return e(true)
@@ -279,13 +291,13 @@ export default class ExecCommand {
                       vscode.window.showTextDocument(doc, { viewColumn: vscode.ViewColumn.Two, preview: true, preserveFocus: false }).then(
                         () => {
                           progress.report({ message: 'Done' });
-                          StatusbarUi.Execute();
+                          StatusbarUi.Init();
                         },
                         (err: any) => {
                           console.error(err)
                           vscode.window.showErrorMessage(err.message);
                           errorParam = err;
-                          StatusbarUi.Execute();
+                          StatusbarUi.Init();
                         });
                     });
                   }
@@ -369,19 +381,19 @@ export default class ExecCommand {
       Object.keys(WarpScriptExtGlobals.endpointsForThisSession).forEach(endpoint => {
         let req = new Warp10(endpoint, 3000, 3000, 1); // 3 second timeout
         req.exec(`<% "${WarpScriptExtGlobals.sessionName}" 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`)
-        .then((answer: any) => {
-          if(answer.result[0]) {
-              if(answer.result[0] === 0) {
-                outputWin.appendLine(` It appears that ${endpoint} is running on multiple backend`);      
-              } else if(answer.result[0] === -1) {
+          .then((answer: any) => {
+            if (answer.result[0]) {
+              if (answer.result[0] === 0) {
+                outputWin.appendLine(` It appears that ${endpoint} is running on multiple backend`);
+              } else if (answer.result[0] === -1) {
                 outputWin.appendLine(` Unable to WSKILLSESSION on ${endpoint}. Did you activate StackPSWarpScriptExtension?`);
               } else {
                 outputWin.appendLine(` Send abortion signal successfully to ${answer.result[0]} script${answer.result[0] > 1 ? 's' : ''} on ${endpoint}`);
               }
-          }
-        }, (_error: any) => {
-          outputWin.appendLine(` Unable to WSKILLSESSION on ${endpoint}. Did you activate StackPSWarpScriptExtension?`);
-        });
+            }
+          }, (_error: any) => {
+            outputWin.appendLine(` Unable to WSKILLSESSION on ${endpoint}. Did you activate StackPSWarpScriptExtension?`);
+          });
       })
 
       // 10 seconds to kill every remaining connections
