@@ -12,7 +12,7 @@
 	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
 	"license": "Apache-2.0",
-	"version": "1.2.0",
+	"version": "1.2.0-flows",
 	"publisher": "senx",
 	"engines": {
 		"vscode": "^1.38.0"
@@ -108,7 +108,6 @@
 				],
 				"configuration": "./syntaxes/warpscript.language-configuration.json"
 			},
-
 			{
 				"id": "flows",
 				"aliases": [
@@ -260,7 +259,7 @@
 	"dependencies": {
 		"@senx/warp10": "1.0.10",
 		"file-saver": "2.0.0",
-		"lodash": "^4.17.15",
+		"lodash": "^4.17.20",
 		"pac-resolver": "3.0.0",
 		"proxy-agent": "^3.1.1",
 		"request": "2.88.0",
