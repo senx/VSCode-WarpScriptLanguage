@@ -1,13 +1,13 @@
 {
 	"name": "warpscript-language",
-	"displayName": "WarpScript & Flows language support",
-	"description": "WarpScript & Flows support",
+	"displayName": "WarpScript & FLoWS language support",
+	"description": "WarpScript & FLoWS support",
 	"keywords": [
 		"Warp 10",
 		"WarpScript",
 		"Geo Times Series",
 		"Times Series",
-		"Flows"
+		"FLoWS"
 	],
 	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
@@ -61,6 +61,15 @@
 			{
 				"command": "extension.execWS",
 				"title": "Run WarpScript",
+				"category": "WarpScript",
+				"icon": {
+					"light": "./image/run.svg",
+					"dark": "./image/run_inverse.svg"
+				}
+			},
+			{
+				"command": "extension.execFlows",
+				"title": "Run FLoWS",
 				"category": "WarpScript",
 				"icon": {
 					"light": "./image/run.svg",
@@ -228,7 +237,7 @@
 		"changelog": "node scripts/changelog.js > CHANGELOG.md"
 	},
 	"devDependencies": {
-		"@senx/warpview": "^2.0.0-rc79",
+		"@senx/warpview": "2.0.6",
 		"@types/js-yaml": "3.12.1",
 		"@types/mocha": "5.2.7",
 		"@types/node": "12.0.4",
@@ -245,7 +254,7 @@
 		"vscode-textmate": "5.1.1"
 	},
 	"dependencies": {
-		"@senx/warp10": "1.0.7",
+		"@senx/warp10": "1.0.10",
 		"file-saver": "2.0.0",
 		"lodash": "^4.17.15",
 		"pac-resolver": "3.0.0",
