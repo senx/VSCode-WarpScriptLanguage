@@ -57,7 +57,6 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(previewPanels); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execConvertUnicodeInJson', () => { new UnicodeJsonConversion().exec(); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(''); }));
-  context.subscriptions.push(vscode.commands.registerCommand('extension.execFlows', () => { new ExecCommand().exec(outputWin)(''); }));
   context.subscriptions.push(vscode.commands.registerCommand('extension.abortAllWS', () => { new ExecCommand().abortAllRequests(outputWin)(); }))
   context.subscriptions.push(vscode.commands.registerCommand('extension.execWSOnSelection', () => {
     let editor = vscode.window.activeTextEditor;

@@ -39,8 +39,8 @@ export abstract class W10CompletionItemProvider implements CompletionItemProvide
             if (lineText.match(/^\s*\/\//)) {
                 return resolve([]);
             }
-            let wordAtPosition = document.getWordRangeAtPosition(position, /(\->|\$|\@)?[A-Za-z]+\.?[A-Za-z]*/);
-            let currentWord = "";
+            let wordAtPosition = document.getWordRangeAtPosition(position, /(\->|\$|\@)?[a-zA-Z]+(\.[a-zA-Z\-]+)?/);
+            let currentWord ="";
             if (wordAtPosition && wordAtPosition.start.character < position.character) {
                 let word = document.getText(wordAtPosition);
                 currentWord = word.substr(0, position.character - wordAtPosition.start.character);

@@ -43,6 +43,10 @@
 			{
 				"language": "warpscript",
 				"path": "./snippets/snippets.json"
+			},
+			{
+				"language": "flows",
+				"path": "./snippets/snippets-flows.json"
 			}
 		],
 		"keybindings": [
