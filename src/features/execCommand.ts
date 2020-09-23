@@ -62,13 +62,6 @@ export default class ExecCommand {
           else {
             executedWarpScript = selectiontext;
           }
-          if (vscode.window.activeTextEditor.document.languageId === 'flows') {
-            executedWarpScript = `<'
-${executedWarpScript} 
-'>
-FLOWS
-`;
-          }
           //
           //analyse the first warpscript lines starting with //
           //
@@ -130,8 +123,15 @@ FLOWS
             }
           }
 
+          if (vscode.window.activeTextEditor.document.languageId === 'flows') {
+            executedWarpScript = `<'
+${executedWarpScript} 
+'>
+FLOWS
+`;
+          }
           // log the beginning of the warpscript
-          console.log("about to send this WarpScript:", executedWarpScript.slice(0, 10000));
+          console.log("about to send this WarpScript:", executedWarpScript.slice(0, 10000), 'on', Warp10URL);
 
           // Gzip the script before sending it.
           zlib.gzip(Buffer.from(executedWarpScript, 'utf8'), async function (err, gzipWarpScript) {
