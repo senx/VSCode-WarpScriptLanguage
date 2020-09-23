@@ -72,9 +72,9 @@
 				}
 			},
 			{
-				"command": "extension.execFlows",
+				"command": "extension.execWS",
 				"title": "Run FLoWS",
-				"category": "WarpScript",
+				"category": "FLoWS",
 				"icon": {
 					"light": "./image/run.svg",
 					"dark": "./image/run_inverse.svg"

@@ -51,7 +51,7 @@ export class StatusbarUi {
 
     public static ExecuteFlows() {
         StatusbarUi.statusbar.text = '$(triangle-right) Exec FLoWS';
-        StatusbarUi.statusbar.command = 'extension.execFlows';
+        StatusbarUi.statusbar.command = 'extension.execWS';
         StatusbarUi.statusbar.tooltip = 'Click execute your FLoWS';
     }
 
