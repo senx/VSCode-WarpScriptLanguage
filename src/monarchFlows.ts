@@ -1,4 +1,4 @@
-export class Monarch {
+export class MonarchFlows {
         public static rules:any =  {
     "keywords": [
         "!",
@@ -792,6 +792,7 @@ export class Monarch {
         "mapper.finite",
         "mapper.geo.approximate",
         "mapper.geo.clear",
+        "mapper.geo.fence",
         "mapper.geo.outside",
         "mapper.geo.within",
         "mapper.hdist",
@@ -951,6 +952,7 @@ export class Monarch {
         "mapper.ge.tick",
         "mapper.geo.approximate",
         "mapper.geo.clear",
+        "mapper.geo.fence",
         "mapper.geo.outside",
         "mapper.geo.within",
         "mapper.gt",
