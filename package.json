@@ -240,7 +240,7 @@
 		"changelog": "node scripts/changelog.js > CHANGELOG.md"
 	},
 	"devDependencies": {
-		"@senx/warpview": "2.0.6",
+		"@senx/warpview": "2.0.14",
 		"@types/js-yaml": "3.12.1",
 		"@types/mocha": "5.2.7",
 		"@types/node": "12.0.4",
@@ -249,24 +249,24 @@
 		"fs-extra": "^9.0.1",
 		"js-yaml": "3.13.1",
 		"plist": "3.0.1",
-		"showdown": "^1.9.1",
+		"showdown": "1.9.1",
 		"spectre.css": "^0.5.8",
-		"typescript": "3.5.1",
-		"vsce": "1.77.0",
+		"typescript": "4.0.3",
+		"vsce": "1.81.1",
 		"vscode": "1.1.37",
-		"vscode-textmate": "5.1.1"
+		"vscode-textmate": "5.2.0"
 	},
 	"dependencies": {
 		"@senx/warp10": "1.0.10",
-		"file-saver": "2.0.0",
+		"file-saver": "2.0.2",
 		"lodash": "^4.17.20",
 		"pac-resolver": "3.0.0",
 		"proxy-agent": "^3.1.1",
-		"request": "2.88.0",
-		"socks-proxy-agent": "4.0.1",
+		"request": "2.88.2",
+		"socks-proxy-agent": "5.0.0",
 		"username": "^5.1.0",
 		"util.promisify": "1.0.0",
-		"uuid": "7.0.2",
+		"uuid": "8.3.1",
 		"vscode-languageclient": "6.1.3",
 		"vscode-proxy-agent": "0.5.2"
 	}
