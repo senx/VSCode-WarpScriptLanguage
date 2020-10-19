@@ -76,6 +76,20 @@ export default class GTSPreviewWebview {
       chartOptions.map = { mapType: 'CARTODB_DARK' };
     }
 
+    const  chartTypes = [
+      'histogram2dcontour', 'histogram2d', 'line', 'spline', 'step', 'step-after', 'step-before', 'area',
+      'scatter', 'pie', 'donut', 'polar', 'radar', 'bar', 'bubble', 'annotation', 'datagrid', 'display',
+      'drilldown', 'image', 'map', 'gauge', 'bullet', 'plot', 'box', 'box-date', 'line3d', 'drops',
+    ].sort().map(t => {
+      return {value: t, label: t};
+    });
+
+    let chartSelector = '<div class="form-group"><select id="chartTypes" class="form-select select-sm" onchange="changeChartType(this)">';
+    chartTypes.forEach(c => {
+      chartSelector += `<option value="${c.value}" ${c.value === 'plot'? 'selected': '' }>${c.label}</option>`;
+    });
+    chartSelector += '</select></div>';
+
     return `<link href="${spectreCSSPath}" rel="stylesheet">
 <style>
     body { 
@@ -151,6 +165,9 @@ export default class GTSPreviewWebview {
         --gts-classname-font-color: rgb(126, 189, 245);
         --warp-view-chart-legend-color: #fff;
     }
+    .form-select {
+      color: #000 !important;
+    }
     .timeunitwarning {
         margin: 10px;
     }
@@ -160,6 +177,7 @@ export default class GTSPreviewWebview {
         <img src="${theme === 'light' ? LogoPath : LogoWhitePath}" class="logo">
     </section>
     <section class="navbar-section">
+      ${chartSelector}
       <a href="https://senx.io" target="_blank" class="btn btn-link">SenX</a>
       <a href="https://www.warp10.io" target="_blank" class="btn btn-link">Warp 10</a>
     </section>
@@ -174,10 +192,16 @@ ${TimeUnitWarning}
     initial-chart-height="${chartHeight}" 
     initial-map-height="${mapHeight}" 
     data="${dataEscaped}" 
-    showLegend="false" 
+    showLegend="false"
+    id="viewer"
     options='${JSON.stringify(chartOptions)}' ></warp-view-result-tile>
   </div>
   <script src="${warpviewPath}"></script>
+  <script language="javascript">
+    function changeChartType(option) {
+      document.querySelector('#viewer').setAttribute('type', option.value);
+    };
+  </script>
 </div>`;
   }
 }
