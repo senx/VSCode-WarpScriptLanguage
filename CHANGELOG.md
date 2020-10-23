@@ -1,10 +1,10 @@
 VSCode WarpScript Extension
 ---
 
-## v1.1.26
-
-
 ## 1.1.25
+
+
+## v1.1.26
 
 > +  2020/09/01  | version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/d299fa79f77a6cc90fdd290d4b5f65a0d5562d47)*)
 > +  2020/09/01  | fix <% <% %> parsing loop  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/598e2e226ff3c4a0739905d135ddc1b780bdddfd)*)
@@ -45,10 +45,10 @@ VSCode WarpScript Extension
 > +  2020/03/03  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/9b3399b0064a414b52c113d164af9ca4d1c4094f)*)
 > +  2020/03/03  | fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c1599766762e4b00955e8b0a1485265ce22dff78)*)
 
-## 1.1.21
-
-
 ## 1.1.20
+
+
+## 1.1.21
 
 > +  2020/02/13  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/bae0d3f916482cebd7daaec8d9efd4ba610a3c6f)*)
 > +  2020/02/12  | doc update  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/1ba4fc77af0556be6564d6c3d2e6640079d8edc0)*)
@@ -59,10 +59,10 @@ VSCode WarpScript Extension
 > +  2019/12/16  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/4b694bb9caab31df6528229d7ce72117fe05cd43)*)
 > +  2019/12/15  | doc for Warp 10 2.3  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/caf8016ab539062e2255e43b8a0e497cbfdfbb88)*)
 
-## 1.1.19
-
-
 ## 1.1.18
+
+
+## 1.1.19
 
 > +  2019/10/15  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/a102bbeaff1c2eac18e3cb781c8264578e57d139)*)
 > +  2019/10/15  | Fix substitutionWithLocalMacros initialisation  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/db27f10423a13469966f258b0480380911e3204f)*)
