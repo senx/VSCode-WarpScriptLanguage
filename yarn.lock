@@ -111,10 +111,10 @@
     got "^9.6.0"
     moment "^2.24.0"
 
-"@senx/warpview@2.0.17":
-  version "2.0.17"
-  resolved "https://registry.yarnpkg.com/@senx/warpview/-/warpview-2.0.17.tgz#05a4a3399bf184d02467c60570a28c6867af2016"
-  integrity sha512-XYoGf/RT89/sl2N8jYSYN6VBhfvvjKl25IShdZusw+IzTboOYr8Ry/EgtlTpApBLDcYa0K5infSV5r7FTGXtOQ==
+"@senx/warpview@2.0.18":
+  version "2.0.18"
+  resolved "https://registry.yarnpkg.com/@senx/warpview/-/warpview-2.0.18.tgz#d88d7c06f1ac2d1da5798a65fb812243c8b63fb9"
+  integrity sha512-V/fIb5PnHAEe5gDJBrLfxWr+4t4TNDF+trRDc7VNHseYZ8gL2W3ZoI7nEAwNFTd5KLaG4ZizwVvZ0WUoytHATQ==
   dependencies:
     angular-resize-event "^2.0.0"
     canvas-gauges "^2.1.7"
