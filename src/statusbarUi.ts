@@ -6,9 +6,7 @@ export class StatusbarUi {
 
     public static get statusbar() {
         if (!StatusbarUi._statusBarItem) {
-            StatusbarUi._statusBarItem = window
-                .createStatusBarItem(StatusBarAlignment.Right, 100);
-
+            StatusbarUi._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Right, 100);
             // Show status bar only if user wants :)
             if (workspace.getConfiguration('warpscript', null).get('showButton'))
                 this.statusbar.show();
@@ -18,7 +16,7 @@ export class StatusbarUi {
     }
 
     static Init() {
-        if (!window.activeTextEditor.document) {
+        if (!window.activeTextEditor || !window.activeTextEditor.document) {
             setTimeout(() => StatusbarUi.Init(), 100);
         } else {
             switch (window.activeTextEditor.document.languageId) {
