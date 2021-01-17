@@ -24,6 +24,8 @@ import { v4 as uuidv4 } from 'uuid';
 import FlowsCompletionItemProvider from './providers/completion/FlowsCompletionItemProvider';
 import { FlowsHoverProvider } from './providers/hover/FlowsHoverProvider';
 
+import js_beautify = require('./flows-beautify-typescript/js_beautify');
+
 /**
  * Main extension's entrypoint
  *
@@ -78,6 +80,24 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
   }));
+
+  context.subscriptions.push(
+    vscode.languages.registerDocumentFormattingEditProvider('flows', {
+      provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
+    
+        let firstLine: vscode.TextLine = document.lineAt(0);
+        let lastLine: vscode.TextLine = document.lineAt(document.lineCount - 1);
+        let textRange: vscode.Range = new vscode.Range(firstLine.range.start, lastLine.range.end);
+
+        let newCode: string = js_beautify.js_beautify(document.getText(), {
+          'indent_size': 2,
+          'indent_char': ' '
+        });
+        // brutal replace all.
+        return [vscode.TextEdit.replace(textRange,newCode)];
+      }
+    })
+  );
 
   new WSDocumentFormattingEditProvider();
 

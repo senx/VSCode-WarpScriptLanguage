@@ -171,6 +171,7 @@ declare var js_beautify: {
         var handlers, MODE, opt;
         var preindent_string = '';
 
+        var simpleArrowPlaceHolder = 'NoONEwilllEwervriteSuchGarBaGeForArrrrow';
 
 
         whitespace = "\n\r\t ".split('');
@@ -302,6 +303,9 @@ declare var js_beautify: {
             indent_string += opt.indent_char;
             opt.indent_size -= 1;
         }
+        // PP before parsing text, replace all the WarpScript function that contains -> by something else
+        js_source_text = js_source_text.replace(/->(?=[A-Z0-9])/g, simpleArrowPlaceHolder);
+        js_source_text = js_source_text.replace(/(?<=[A-Z0-9])->/g, simpleArrowPlaceHolder);
 
         while (js_source_text && (js_source_text.charAt(0) === ' ' || js_source_text.charAt(0) === '\t')) {
             preindent_string += js_source_text.charAt(0);
@@ -392,6 +396,10 @@ declare var js_beautify: {
                 sweet_code += '\n' + output_lines[lineIndex].text.join('');
             }
             sweet_code = sweet_code.replace(/[\r\n ]+$/, '');
+
+            // PP after beautify, replace the simple arrow placeholder with ->
+            sweet_code = sweet_code.replace(new RegExp(simpleArrowPlaceHolder,"g"), '->');
+            
             return sweet_code;
         };
 
@@ -1736,6 +1744,7 @@ declare var js_beautify: {
     }
 
 
+    //comment by PP
     // if (typeof define === "function" && define.amd) {
     //     // Add support for AMD ( https://github.com/amdjs/amdjs-api/wiki/AMD#defineamd-property- )
     //     define([], function () {
