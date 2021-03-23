@@ -19,7 +19,7 @@ export class FlowsHoverProvider extends W10HoverProvider {
 	 * @param {CancellationToken} _token 
 	 */
   public provideHover(document: TextDocument, position: Position, _token: CancellationToken): Hover | undefined | Promise<Hover> {
-    return super.getHover(document, position, _token, 'flows',  /[^\s(]+/);
+    return super.getHover(document, position, _token, 'flows',  /((->)?(((\w+[\w\d])+\.(\w+[\w\d])+)|(\w+[\w\d]+))(->)?)|(((\!=)|(\!)|(%)|(&&)|(&)|(\*\*)|(\*)|(\+\!)|(\+)|(>>>)|(>>)|(\-)|(\/)|(<<)|(<=)|(==)|(>=)|(>)|(<)|(\^)|(\|\|)|(\|)|(~=)|(~)))/); 
   }
 
   /**

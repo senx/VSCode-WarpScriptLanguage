@@ -24,6 +24,8 @@ import { v4 as uuidv4 } from 'uuid';
 import FlowsCompletionItemProvider from './providers/completion/FlowsCompletionItemProvider';
 import { FlowsHoverProvider } from './providers/hover/FlowsHoverProvider';
 
+import { FLoWSBeautifier } from '@senx/flows-beautifier';
+
 /**
  * Main extension's entrypoint
  *
@@ -33,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
   StatusbarUi.Init();
   let outputWin = vscode.window.createOutputChannel('Warp10');
   // constant object ref to pass to closeOpenedWebviews
-  let previewPanels: { 'image': vscode.WebviewPanel, 'gts': vscode.WebviewPanel } = { 'image': null, 'gts': null }; 
+  let previewPanels: { 'image': vscode.WebviewPanel, 'gts': vscode.WebviewPanel } = { 'image': null, 'gts': null };
 
   // Hover providers
   context.subscriptions.push(vscode.languages.registerHoverProvider({ language: 'warpscript' }, new WSHoverProvider()));
@@ -46,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'flows' }, new WSCompletionVariablesProvider(), "'"));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionMacrosProvider(), "@", "/"));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'flows' }, new WSCompletionMacrosProvider(), "@", "/"));
-  
+
   // context.subscriptions.push(vscode.languages.registerFoldingRangeProvider({ language: 'warpscript' }, new WSFoldingRangeProvider()));
   // these providers could be disabled:
   if (vscode.workspace.getConfiguration().get("warpscript.enableInlineHelpers")) {
@@ -78,6 +80,21 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
   }));
+
+  context.subscriptions.push(
+    vscode.languages.registerDocumentFormattingEditProvider('flows', {
+      provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
+
+        let firstLine: vscode.TextLine = document.lineAt(0);
+        let lastLine: vscode.TextLine = document.lineAt(document.lineCount - 1);
+        let textRange: vscode.Range = new vscode.Range(firstLine.range.start, lastLine.range.end);
+        let beautifier: FLoWSBeautifier = new FLoWSBeautifier();
+        let newCode: string = beautifier.flowsBeautify(document.getText());
+        // brutal replace all.
+        return [vscode.TextEdit.replace(textRange, newCode)];
+      }
+    })
+  );
 
   new WSDocumentFormattingEditProvider();
 
