@@ -19,6 +19,10 @@
 		"node_modules",
 		".vscode-test",
 		"monarch.ts",
-		"assets"
+		"assets",
+		"src/flows-beautify-typescript/js_beautify.d.ts",
+		"src/flows-beautify-typescript/js_beautify.ts",
+		"src/flowsGlobals.ts",
+		"src/wsGlobals.ts"
 	]
 }
