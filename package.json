@@ -240,11 +240,6 @@
 		"changelog": "node scripts/changelog.js > CHANGELOG.md"
 	},
 	"devDependencies": {
-<<<<<<< HEAD
-=======
-		"@senx/flows-beautifier": "^1.0.4",
-		"@senx/warpview": "2.0.61",
->>>>>>> 12629fbeee7e6f1d53f624569a2eef7d4533f9b4
 		"@types/js-yaml": "4.0.0",
 		"@types/mocha": "5.2.7",
 		"@types/node": "14.14.20",
@@ -262,7 +257,7 @@
 	},
 	"dependencies": {
 		"@senx/warp10": "1.0.14",
-		"@senx/flows-beautifier": "^1.0.4",	
+		"@senx/flows-beautifier": "^1.0.4",
 		"@senx/warpview": "2.0.61",
 		"at-least-node": "1.0.0",
 		"file-saver": "2.0.5",
