@@ -103,6 +103,11 @@
     parse-rect "^1.2.0"
     pick-by-alias "^1.2.0"
 
+"@senx/flows-beautifier@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@senx/flows-beautifier/-/flows-beautifier-1.0.4.tgz#3368b5c174f4dd51955368dc180d4c8546a57d81"
+  integrity sha512-T3m7vKHQvZWXXLCOknt5KU6WVHJVPYSdPvL78qup9MTLk6OuDhrJgOl/IYc63es0ojPa+Tb0v9EEHY8M2LT6FA==
+
 "@senx/warp10@1.0.14":
   version "1.0.14"
   resolved "https://registry.yarnpkg.com/@senx/warp10/-/warp10-1.0.14.tgz#9a25007786b3dbc050f9a545a88291a6180fff8f"
@@ -111,10 +116,10 @@
     dayjs "^1.10.1"
     got "^11.8.1"
 
-"@senx/warpview@2.0.49":
-  version "2.0.49"
-  resolved "https://registry.yarnpkg.com/@senx/warpview/-/warpview-2.0.49.tgz#d3e1cceae83909525c237fc6cfe7655b49d9b170"
-  integrity sha512-KGJ0hBldgDqZRq5DBGbowgKCl8PD4tm/6jmmysXqfZ0spHhbp2gCwywXeAN6G9gby6Xf6IlL8LHm92oqzYFajA==
+"@senx/warpview@2.0.61":
+  version "2.0.61"
+  resolved "https://registry.yarnpkg.com/@senx/warpview/-/warpview-2.0.61.tgz#75d5be20f3dc1f36573befffac8f4447eb75b559"
+  integrity sha512-H6cDtIf8iZGz3wuQorMEXYfNJbEtxSWfoEqG0JG/kUF5ZDRVv9ZJlgueTd2syBvm4PD3riqwqtnoe/Zd5cr0pA==
   dependencies:
     angular-resize-event "^2.0.1"
     d3 "^5.15.0"
@@ -129,8 +134,8 @@
     moment "^2.29.1"
     moment-timezone "^0.5.32"
     nouislider "^14.6.3"
-    plotly.js "^1.58.2"
-    plotly.js-dist "^1.58.2"
+    plotly.js "^1.58.4"
+    plotly.js-dist "^1.58.4"
     tslib "^2.0.3"
 
 "@sindresorhus/is@^4.0.0":
@@ -222,6 +227,11 @@
   integrity sha512-MPtoySlAZQ37VoLaPcTHCu1RWJ4llDkULYZIzOYxlhxBqYPB0RsRlmMU0R6tahtFe27mIdkHV+551ZWV4PLmVw==
   dependencies:
     "@types/node" "*"
+
+"@types/mocha@5.2.7":
+  version "5.2.7"
+  resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-5.2.7.tgz#315d570ccb56c53452ff8638738df60726d5b6ea"
+  integrity sha512-NYrtPht0wGzhwe9+/idPaBB+TqkY9AhTvOLMkThm0IoEfLaiVQZwBwyJ5puCkO3AUCWrmcoePjp2mbFocKy4SQ==
 
 "@types/node@*":
   version "10.0.0"
@@ -4060,12 +4070,12 @@ plist@3.0.1:
     xmlbuilder "^9.0.7"
     xmldom "0.1.x"
 
-plotly.js-dist@^1.58.2:
+plotly.js-dist@^1.58.4:
   version "1.58.4"
   resolved "https://registry.yarnpkg.com/plotly.js-dist/-/plotly.js-dist-1.58.4.tgz#d57b73d27af57a0d6cd2cf9428a001962889cf5b"
   integrity sha512-oXCTRJFN8FBsHZSQPYoM3LuJQchPUrf6sOXFC0EFdvcr5lmJmLcAsW74jDy9PkRpm3PB+A+2oY1hsUMmk2eZbw==
 
-plotly.js@^1.58.2:
+plotly.js@^1.58.4:
   version "1.58.4"
   resolved "https://registry.yarnpkg.com/plotly.js/-/plotly.js-1.58.4.tgz#9aa9cab814b8ae4fef11fac995157b3bb94dfdd6"
   integrity sha512-hdt/aEvkPjS1HJ7tJKcPqsqi9ErEZPhUFs4d2ANTLeBim+AmVcHzS1rtwr7ZrVCINgliW/+92u81omJoy+lbUw==
