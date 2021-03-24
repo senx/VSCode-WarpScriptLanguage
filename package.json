@@ -240,14 +240,15 @@
 		"changelog": "node scripts/changelog.js > CHANGELOG.md"
 	},
 	"devDependencies": {
+		"@senx/flows-beautifier": "^1.0.4",
 		"@senx/warpview": "2.0.61",
 		"@types/js-yaml": "4.0.0",
+		"@types/mocha": "5.2.7",
 		"@types/node": "14.14.20",
 		"@types/request": "2.48.5",
 		"@types/uuid": "8.3.0",
 		"fs-extra": "9.0.1",
 		"js-yaml": "4.0.0",
-		"@types/mocha": "5.2.7",
 		"plist": "3.0.1",
 		"showdown": "1.9.1",
 		"spectre.css": "0.5.9",
