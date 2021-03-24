@@ -67,6 +67,7 @@ export default class GTSPreviewWebview {
 
     const dataEscaped: string = this.replaceAll(data, '"', '&#34;')
     const chartOptions = {
+      showGTSTree: true,
       timeUnit: timeUnit,
       showDots: showDots,
       foldGTSTree: true,
