@@ -45,10 +45,12 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionItemProvider()));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'flows' }, new FlowsCompletionItemProvider()));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionVariablesProvider(), "'", "$"));
-  context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'flows' }, new WSCompletionVariablesProvider(), "'"));
+  // TODO
+  // context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'flows' }, new WSCompletionVariablesProvider(), "'"));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionMacrosProvider(), "@", "/"));
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'flows' }, new WSCompletionMacrosProvider(), "@", "/"));
 
+  // TODO
   // context.subscriptions.push(vscode.languages.registerFoldingRangeProvider({ language: 'warpscript' }, new WSFoldingRangeProvider()));
   // these providers could be disabled:
   if (vscode.workspace.getConfiguration().get("warpscript.enableInlineHelpers")) {
