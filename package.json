@@ -258,7 +258,7 @@
 	"dependencies": {
 		"@senx/warp10": "1.0.14",
 		"@senx/flows-beautifier": "^1.0.4",
-		"@senx/warpview": "2.0.61",
+		"@senx/warpview": "2.0.62",
 		"at-least-node": "1.0.0",
 		"file-saver": "2.0.5",
 		"lodash": "4.17.20",
