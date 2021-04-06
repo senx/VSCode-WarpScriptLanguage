@@ -93,6 +93,7 @@ export default class GTSPreviewWebview {
 
     return `<link href="${spectreCSSPath}" rel="stylesheet">
 <style>
+
     body { 
         background-color: ${theme === 'light' ? '#fff' : '#222'}; 
         color: #000;
@@ -124,16 +125,7 @@ export default class GTSPreviewWebview {
     .links {
         width: auto;
     }
-    .warpview-container {
-        margin: 5px;
-        padding: 5px;
-        min-height: 600px;
-        height: calc(100vh - 80px);
-        resize: vertical;
-    }
-    warp-view-result-tile {
-      height: 100%;
-    }
+
     .light {
         background-color: #fff; 
         color: #000; 
@@ -188,7 +180,6 @@ ${TimeUnitWarning}
 <div class="warpview-container">
   <warp-view-result-tile
     responsive="true" 
-    is-alone="true" 
     type="plot"
     initial-chart-height="${chartHeight}" 
     initial-map-height="${mapHeight}" 
