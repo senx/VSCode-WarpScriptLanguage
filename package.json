@@ -121,6 +121,12 @@
 					"default": "http://127.0.0.1:8080/api/v0/exec",
 					"description": "Warp 10 URL"
 				},
+				"warpscript.http.timeout": {
+					"scope": "resource",
+					"type": "number",
+					"default": 3600000,
+					"description": "Http timeout in ms."
+				},
 				"warpscript.ProxyPac": {
 					"scope": "resource",
 					"type": "string",
@@ -193,7 +199,7 @@
 				"warpscript.enableInlineHelpers": {
 					"type": "boolean",
 					"default": true,
-					"description": "For small files, macros are parsed to allow inline helpers such as code lenses at the beginning of big macros (more than 20 lines) or the automatic highlight when you click on a control statement such as IFT. This feature could be disabled."
+					"description": "For small files, macros are parsed to allow inline helpers such as code lenses at the beginning of big macros (more than 20 lines) or automatic highlight when you click on a control statement such as IFT."
 				}
 			}
 		}
