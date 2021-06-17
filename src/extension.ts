@@ -20,6 +20,7 @@ import WarpScriptExtConstants from './constants'
 import WarpScriptExtGlobals = require('./globals')
 import GTSPreviewWebview from './webviews/gtsPreview'
 import ImagePreviewWebview from './webviews/imagePreview'
+import DiscoveryPreviewWebview from './webviews/discoveryPreview'
 import { v4 as uuidv4 } from 'uuid';
 import FlowsCompletionItemProvider from './providers/completion/FlowsCompletionItemProvider';
 import { FlowsHoverProvider } from './providers/hover/FlowsHoverProvider';
@@ -35,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
   StatusbarUi.Init();
   let outputWin = vscode.window.createOutputChannel('Warp10');
   // constant object ref to pass to closeOpenedWebviews
-  let previewPanels: { 'image': vscode.WebviewPanel, 'gts': vscode.WebviewPanel } = { 'image': null, 'gts': null };
+  let previewPanels: { 'image': vscode.WebviewPanel, 'gts': vscode.WebviewPanel, 'discovery': vscode.WebviewPanel } = { 'image': null, 'gts': null, 'discovery': null };
 
   // Hover providers
   context.subscriptions.push(vscode.languages.registerHoverProvider({ language: 'warpscript' }, new WSHoverProvider()));
@@ -108,6 +109,7 @@ export function activate(context: vscode.ExtensionContext) {
   // let previewPanels.image: vscode.WebviewPanel = null;
 
   let gtsPreviewWebview = new GTSPreviewWebview(context);
+  let discoveryPreviewWebview = new DiscoveryPreviewWebview(context);
   let imagePreviewWebview = new ImagePreviewWebview(context);
   let jsonResultRegEx = new WarpScriptExtConstants().jsonResultRegEx;
   let latestJSONdisplayed: string = '';
@@ -174,6 +176,28 @@ export function activate(context: vscode.ExtensionContext) {
               previewPanels.image.webview.html = htmlcontent;
             })
           }
+        })
+
+        //discoveryPreview panel, if html found
+        discoveryPreviewWebview.findDiscoveryHtml(textEditor.document.getText()).then(rawhtml => {
+          if (rawhtml !== "") {
+            if (previewPanels.discovery == null) {
+              previewPanels.discovery = vscode.window.createWebviewPanel('discoverypreview', 'Discovery',
+                { viewColumn: vscode.ViewColumn.Two, preserveFocus: true },
+                { enableScripts: true, retainContextWhenHidden: true });
+            }
+            if (previewSetting == '') {
+              setTimeout(() => {
+                previewPanels.discovery.reveal(vscode.ViewColumn.Two);
+              }, 500);
+            }
+            
+            //when closed by the user
+            previewPanels.discovery.onDidDispose(() => { previewPanels.discovery = null; })
+          }
+          discoveryPreviewWebview.getHtmlContent(rawhtml).then(htmlcontent => {
+            previewPanels.discovery.webview.html = htmlcontent;
+          })
         })
 
         //focus if focus forced by option
