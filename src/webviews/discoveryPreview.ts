@@ -1,9 +1,7 @@
-import * as vscode from 'vscode';
-import * as path from 'path';
 
 export default class DiscoveryPreviewWebview {
 
-  constructor(private context: vscode.ExtensionContext) { }
+  constructor() { }
 
   public async findDiscoveryHtml(data: string): Promise<String> {
     let discoveryHtml: String = "";
