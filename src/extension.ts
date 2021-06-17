@@ -109,7 +109,7 @@ export function activate(context: vscode.ExtensionContext) {
   // let previewPanels.image: vscode.WebviewPanel = null;
 
   let gtsPreviewWebview = new GTSPreviewWebview(context);
-  let discoveryPreviewWebview = new DiscoveryPreviewWebview(context);
+  let discoveryPreviewWebview = new DiscoveryPreviewWebview();
   let imagePreviewWebview = new ImagePreviewWebview(context);
   let jsonResultRegEx = new WarpScriptExtConstants().jsonResultRegEx;
   let latestJSONdisplayed: string = '';
