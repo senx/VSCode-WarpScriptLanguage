@@ -191,13 +191,14 @@ export function activate(context: vscode.ExtensionContext) {
                 previewPanels.discovery.reveal(vscode.ViewColumn.Two);
               }, 500);
             }
+
+            discoveryPreviewWebview.getHtmlContent(rawhtml).then(htmlcontent => {
+              previewPanels.discovery.webview.html = htmlcontent;
+            })
             
             //when closed by the user
             previewPanels.discovery.onDidDispose(() => { previewPanels.discovery = null; })
           }
-          discoveryPreviewWebview.getHtmlContent(rawhtml).then(htmlcontent => {
-            previewPanels.discovery.webview.html = htmlcontent;
-          })
         })
 
         //focus if focus forced by option
