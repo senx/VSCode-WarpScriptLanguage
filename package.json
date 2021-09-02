@@ -221,7 +221,7 @@
 		}
 	},
 	"scripts": {
-		"vsce": "./node_modules/vscode/bin/vsce",
+		"vsce": "./node_modules/vsce/out/vsce",
 		"vscode:prepublish": "yarn changelog && yarn compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
