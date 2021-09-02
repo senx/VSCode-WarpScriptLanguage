@@ -179,7 +179,7 @@ export function activate(context: vscode.ExtensionContext) {
         })
 
         //discoveryPreview panel, if html found
-        discoveryPreviewWebview.findDiscoveryHtml(textEditor.document.getText()).then(rawhtml => {
+        discoveryPreviewWebview.findDiscoveryHtml(textEditor.document.getText(), outputWin).then(rawhtml => {
           if (rawhtml !== "") {
             if (previewPanels.discovery == null) {
               previewPanels.discovery = vscode.window.createWebviewPanel('discoverypreview', 'Discovery',
