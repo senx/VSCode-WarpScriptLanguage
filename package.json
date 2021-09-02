@@ -64,17 +64,8 @@
 		"commands": [
 			{
 				"command": "extension.execWS",
-				"title": "Run WarpScript",
+				"title": "Run WarpScript or Flows",
 				"category": "WarpScript",
-				"icon": {
-					"light": "./image/run.svg",
-					"dark": "./image/run_inverse.svg"
-				}
-			},
-			{
-				"command": "extension.execWS",
-				"title": "Run FLoWS",
-				"category": "FLoWS",
 				"icon": {
 					"light": "./image/run.svg",
 					"dark": "./image/run_inverse.svg"
@@ -258,7 +249,7 @@
 	"dependencies": {
 		"@senx/warp10": "1.0.14",
 		"@senx/flows-beautifier": "^1.0.4",
-		"@senx/warpview": "2.0.67",
+		"@senx/warpview": "2.0.79",
 		"at-least-node": "1.0.0",
 		"file-saver": "2.0.5",
 		"lodash": "4.17.20",
