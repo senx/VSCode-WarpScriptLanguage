@@ -379,7 +379,7 @@ FLOWS
 
       // 3 seconds to abort on every endpoints
       Object.keys(WarpScriptExtGlobals.endpointsForThisSession).forEach(endpoint => {
-        let req = new Warp10(endpoint, 3000, 3000, 1); // 3 second timeout
+        let req = new Warp10(endpoint); // 3 second timeout
         req.exec(`<% "${WarpScriptExtGlobals.sessionName}" 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`)
           .then((answer: any) => {
             if (answer.result[0]) {
