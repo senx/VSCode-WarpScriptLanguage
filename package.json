@@ -247,7 +247,7 @@
 		"vscode-textmate": "5.2.0"
 	},
 	"dependencies": {
-		"@senx/warp10": "1.0.14",
+		"@senx/warp10": "1.1.2",
 		"@senx/flows-beautifier": "^1.0.4",
 		"@senx/warpview": "2.0.79",
 		"at-least-node": "1.0.0",
