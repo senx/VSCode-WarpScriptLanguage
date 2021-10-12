@@ -5,3 +5,7 @@ client/server
 bower_components
 *.vsix
 generate-doc.js
+assets
+pat.txt
+package-lock.json
+yarn.lock

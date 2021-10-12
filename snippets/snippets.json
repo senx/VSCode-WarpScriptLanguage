@@ -249,5 +249,40 @@
       "%> 'myMutex' MUTEX //prevent a concurrent execution on the same SHM data"
     ],
     "description": "Keep fetched data in RAM. You need to enable the SHM extension."
+  },
+  "tokengen": {
+    "prefix": "tokengen",
+    "body": [
+      "'myapp' 'applicationName' STORE",
+      "NOW 1 ADDYEARS 'expiryDate' STORE",
+      "UUID 'ownerAndProducer' STORE",
+      "",
+      "{",
+      "  'id' 'TokenRead'",
+      "  'type' 'READ'",
+      "  'application' \\$applicationName ",
+      "  'owner'  \\$ownerAndProducer",
+      "  'issuance' NOW",
+      "  'expiry' \\$expiryDate",
+      "  'labels' { }   ",
+      "  'attributes' { } ",
+      "  'owners' [ \\$ownerAndProducer ]",
+      "  'producers' [ \\$ownerAndProducer ]",
+      "  'applications' [ \\$applicationName ]  ",
+      "} 'secret' TOKENGEN",
+      "",
+      "{",
+      "  'id' 'TokenWrite'",
+      "  'type' 'WRITE'",
+      "  'application' \\$applicationName ",
+      "  'owner'  \\$ownerAndProducer",
+      "  'producer' \\$ownerAndProducer",
+      "  'issuance' NOW",
+      "  'expiry' \\$expiryDate",
+      "  'labels' { }   ",
+      "  'attributes' { } ",
+      "} 'secret' TOKENGEN",
+      ""
+    ]
   }
 }
