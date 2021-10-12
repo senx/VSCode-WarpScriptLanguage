@@ -42,7 +42,7 @@ export default class WSCompletionVariablesProvider
       if ('$' == firstLetter || "'" == firstLetter) { //beginning of a string, or $, list all variables in file and propose them
         let listvar = this.ListVariables(document);
         listvar.forEach(v => {
-          console.log("found varname:" + v);
+          //console.log("found varname:" + v);
           result.push(new CompletionItem(firstLetter == '$' ? '$' + v : v, CompletionItemKind.Variable))
         })
       }

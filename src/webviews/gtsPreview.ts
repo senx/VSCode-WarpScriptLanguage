@@ -43,8 +43,10 @@ export default class GTSPreviewWebview {
     let mapHeight = vscode.workspace.getConfiguration().get('warpscript.PreviewDefaultMapHeight');
 
     //build the webcomponent path, the webview way.
-    let onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'bower_components', 'senx-warpview', 'dist', 'warpview.js'));
-    let warpviewPath: string = onDiskPath.with({ scheme: 'vscode-resource' }).toString();
+    //  let onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'bower_components', 'senx-warpview', 'dist', 'warpview.js'));
+
+    const onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'assets', '@senx', 'warpview', 'elements', 'warpview-elements.js'));
+    const warpviewPath: string = onDiskPath.with({ scheme: 'vscode-resource' }).toString();
 
     //build the logo path, the webview way.
     let LogoonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'images', 'warpstudio.png'));
@@ -53,7 +55,7 @@ export default class GTSPreviewWebview {
     let LogoWhitePath: string = LogoWhiteonDiskPath.with({ scheme: 'vscode-resource' }).toString();
 
     //build the spectre css path, the webview way.
-    let spectreCSSonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'bower_components', 'spectre.css', 'dist', 'spectre.min.css'));
+    let spectreCSSonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'assets', 'spectre.css', 'dist', 'spectre.min.css'));
     let spectreCSSPath: string = spectreCSSonDiskPath.with({ scheme: 'vscode-resource' }).toString();
 
 
@@ -64,22 +66,43 @@ export default class GTSPreviewWebview {
     }
 
     const dataEscaped: string = this.replaceAll(data, '"', '&#34;')
+    const chartOptions = {
+      showGTSTree: true,
+      timeUnit: timeUnit,
+      showDots: showDots,
+      foldGTSTree: true,
+      map: {}
+    }
+    if (theme === 'dark') {
+      chartOptions.map = { mapType: 'CARTODB_DARK' };
+    }
 
+    const  chartTypes = [
+      'histogram2dcontour', 'histogram2d', 'line', 'spline', 'step', 'step-after', 'step-before', 'area',
+      'scatter', 'pie', 'donut', 'polar', 'radar', 'bar', 'bubble', 'annotation', 'datagrid', 'display',
+      'drilldown', 'image', 'map', 'gauge', 'bullet', 'plot', 'box', 'box-date', 'line3d', 'drops',
+    ].sort().map(t => {
+      return {value: t, label: t};
+    });
 
-    const result = `
-    <link href="${spectreCSSPath}" rel="stylesheet">
-    <script src="${warpviewPath}"></script>
+    let chartSelector = '<div class="form-group"><select id="chartTypes" class="form-select select-sm" onchange="changeChartType(this)">';
+    chartTypes.forEach(c => {
+      chartSelector += `<option value="${c.value}" ${c.value === 'plot'? 'selected': '' }>${c.label}</option>`;
+    });
+    chartSelector += '</select></div>';
+
+    return `<link href="${spectreCSSPath}" rel="stylesheet">
 <style>
+
     body { 
         background-color: ${theme === 'light' ? '#fff' : '#222'}; 
         color: #000;
         padding: 0;
-        --warp-view-switch-width: 50px;
         --warp-view-switch-height: 20px;
+        --warp-view-switch-width: 40px;
         --warp-view-switch-radius: 10px;
         --warp-view-switch-inset-checked-color: #1e7e34;
         --warp-view-switch-handle-checked-color: #28a745; 
-        padding-bottom: 20px;
         --warp-view-resize-handle-color: #e6e6e6;
     }
     header {
@@ -92,6 +115,9 @@ export default class GTSPreviewWebview {
         color: ${theme !== 'light' ? '#fff' : '#004eff'} !important; 
     }
 
+    .bar { 
+      height: 100%;
+    }
     img.logo {
         height: 50px;
         width: auto;
@@ -99,15 +125,12 @@ export default class GTSPreviewWebview {
     .links {
         width: auto;
     }
-    .container {
-        padding: 10px;
-    }
+
     .light {
         background-color: #fff; 
         color: #000; 
         --warp-view-chart-legend-bg: #000;
-        --warp-view-switch-inset-checked-color: #00cd00;
-        
+        --warp-view-switch-inset-checked-color: #00cd00;        
         --warp-view-chart-legend-bg: #fafafa;  /*#fffbef;*/
         --gts-labelvalue-font-color: #666;
         --gts-separator-font-color: #000;
@@ -128,13 +151,18 @@ export default class GTSPreviewWebview {
         --warp-view-spinner-color: #5899DA;
         --gts-separator-font-color: #8e8e8e;
         --warp-view-resize-handle-color: #111111;
-
-        --warp-view-chart-legend-bg: #000;
-        --gts-labelvalue-font-color: #ccc;
-        --gts-separator-font-color: #fff;
-        --gts-labelname-font-color: rgb(105, 223, 184);
-        --gts-classname-font-color: rgb(126, 189, 245);
+        --warp-view-tooltip-bg: #333;
+        --warp-view-tooltip-color: #fff;
+        --warp-view-annotationtooltip-value-font-color: #fff;
+        --warp-view-chart-legend-bg:#333;
         --warp-view-chart-legend-color: #fff;
+        --gts-labelvalue-font-color: #fff;
+        --gts-separator-font-color: rgb(127, 225, 255);
+        --gts-labelname-font-color: rgb(127, 255, 185);
+        --gts-classname-font-color: rgb(127, 225, 255);
+    }
+    .form-select {
+      color: #000 !important;
     }
     .timeunitwarning {
         margin: 10px;
@@ -145,22 +173,30 @@ export default class GTSPreviewWebview {
         <img src="${theme === 'light' ? LogoPath : LogoWhitePath}" class="logo">
     </section>
     <section class="navbar-section">
-            <a href="https://senx.io" target="_blank" class="btn btn-link">SenX</a>
-           <a href="https://www.warp10.io" target="_blank" class="btn btn-link">Warp 10</a>
-        </section>
+      ${chartSelector}
+      <a href="https://senx.io" target="_blank" class="btn btn-link">SenX</a>
+      <a href="https://www.warp10.io" target="_blank" class="btn btn-link">Warp 10</a>
+    </section>
 </header>
-<div class="container ${theme}">
+<div class="${theme}">
 ${TimeUnitWarning}
-<warp-view-plot 
-  responsive="true" 
-  is-alone="true" 
-  initial-chart-height="${chartHeight}" 
-  initial-map-height="${mapHeight}" 
-  data="${dataEscaped}" 
-  showLegend="false" 
-  options="{&#34timeUnit&#34 : &#34${timeUnit}&#34, &#34showDots&#34: ${showDots} }" ></warp-view-plot>
-</div>`
-    //console.log(result);
-    return result;
+<div class="warpview-container">
+  <warp-view-result-tile
+    responsive="true" 
+    type="plot"
+    initial-chart-height="${chartHeight}" 
+    initial-map-height="${mapHeight}" 
+    data="${dataEscaped}" 
+    showLegend="false"
+    id="viewer"
+    options='${JSON.stringify(chartOptions)}' ></warp-view-result-tile>
+  </div>
+  <script src="${warpviewPath}"></script>
+  <script language="javascript">
+    function changeChartType(option) {
+      document.querySelector('#viewer').setAttribute('type', option.value);
+    };
+  </script>
+</div>`;
   }
 }
