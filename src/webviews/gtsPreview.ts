@@ -151,12 +151,15 @@ export default class GTSPreviewWebview {
         --warp-view-spinner-color: #5899DA;
         --gts-separator-font-color: #8e8e8e;
         --warp-view-resize-handle-color: #111111;
-        --warp-view-chart-legend-bg: #000;
-        --gts-labelvalue-font-color: #ccc;
-        --gts-separator-font-color: #fff;
-        --gts-labelname-font-color: rgb(105, 223, 184);
-        --gts-classname-font-color: rgb(126, 189, 245);
+        --warp-view-tooltip-bg: #333;
+        --warp-view-tooltip-color: #fff;
+        --warp-view-annotationtooltip-value-font-color: #fff;
+        --warp-view-chart-legend-bg:#333;
         --warp-view-chart-legend-color: #fff;
+        --gts-labelvalue-font-color: #fff;
+        --gts-separator-font-color: rgb(127, 225, 255);
+        --gts-labelname-font-color: rgb(127, 255, 185);
+        --gts-classname-font-color: rgb(127, 225, 255);
     }
     .form-select {
       color: #000 !important;
