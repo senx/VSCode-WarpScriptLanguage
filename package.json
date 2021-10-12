@@ -176,7 +176,7 @@
 				"warpscript.showDots": {
 					"scope": "resource",
 					"type": "boolean",
-					"default": false,
+					"default": true,
 					"description": "Show dots on graph"
 				},
 				"warpscript.PreviewTabs": {
@@ -210,7 +210,7 @@
 				},
 				"warpscript.maxFileSizeForAutomaticUnicodeEscape": {
 					"type": "integer",
-					"default": 2,
+					"default": 0,
 					"description": "Maximum json file size in MB for automatic unicode unescape. Set to 0 to disable the feature."
 				},
 				"warpscript.maxFileSizeBeforeJsonWarning": {
