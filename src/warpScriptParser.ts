@@ -38,7 +38,7 @@ export default class WarpScriptParser {
     console.log("look for statement at offset" + doc.offsetAt(doc.getWordRangeAtPosition(beforePosition).start))
     let rawRanges = this.findMacrosBeforePosition(macrosPositions, doc.offsetAt(doc.getWordRangeAtPosition(beforePosition).start), numberOfMacros, cancelToken);
     // console.log(macrosPositions)
-    //console.log(rawRanges)
+    // console.log(rawRanges)
     return rawRanges.map(r => new Range(doc.positionAt(r[0] + 2), doc.positionAt(r[1] - 1)));
   }
 
@@ -140,7 +140,18 @@ export default class WarpScriptParser {
         // console.log(i, 'start of macro');
         result.push([i].concat(this.parseWarpScriptMacros(ws, i + 1, doc, cancelToken)));
         let flattened = [].concat.apply([], result);
-        i = flattened[flattened.length - 1] + 1;
+        // if there is a non complete macro, the structure may not end with a position number, but with a statement, or nothing
+        if (typeof (flattened[flattened.length - 1]) == 'number') {
+          i = flattened[flattened.length - 1] + 1;
+          // console.log("End of macro found, skip to ", i)
+        } else if (flattened[flattened.length - 1] instanceof wsStatement) {
+          // console.log("Unbalanced macro structure, early return");
+          return result;
+        } else {
+          // should never happen
+          // console.log("Weird unbalanced macro structure, halt parsing at ", i);
+          return result;
+        }
         justAfterMacro = true;
       }
 

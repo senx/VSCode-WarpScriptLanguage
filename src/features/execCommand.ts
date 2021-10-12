@@ -39,11 +39,14 @@ export default class ExecCommand {
       }
       StatusbarUi.Working('loading...');
 
-      let Warp10URL: string = vscode.workspace.getConfiguration('warpscript', null).get('Warp10URL');
-      let PreviewTimeUnit: string = vscode.workspace.getConfiguration('warpscript', null).get('DefaultTimeUnit');
-      let jsonMaxSizeForAutoUnescape: number = Number(vscode.workspace.getConfiguration('warpscript', null).get('maxFileSizeForAutomaticUnicodeEscape'));
-      let jsonMaxSizeBeforeWarning: number = Number(vscode.workspace.getConfiguration('warpscript', null).get('maxFileSizeBeforeJsonWarning'));
-      const useGZIP: boolean = vscode.workspace.getConfiguration('warpscript', null).get('useGZIP');
+      let Warp10URL: string = vscode.workspace.getConfiguration().get('warpscript.Warp10URL');
+      let PreviewTimeUnit: string = vscode.workspace.getConfiguration().get('warpscript.DefaultTimeUnit');
+      const jsonMaxSizeForAutoUnescape: number = vscode.workspace.getConfiguration().get('warpscript.maxFileSizeForAutomaticUnicodeEscape');
+      const jsonMaxSizeBeforeWarning: number = vscode.workspace.getConfiguration().get('warpscript.maxFileSizeBeforeJsonWarning');
+      const useGZIP: boolean = vscode.workspace.getConfiguration().get('warpscript.useGZIP');
+      const timeout: number = vscode.workspace.getConfiguration().get('warpscript.http.timeout')
+      const proxy_pac: string = vscode.workspace.getConfiguration().get('warpscript.ProxyPac');
+      const proxy_directUrl: string = vscode.workspace.getConfiguration().get('warpscript.ProxyURL');
       const execDate: string = new Date().toLocaleTimeString();
       const document: vscode.TextDocument = vscode.window.activeTextEditor.document;
       const baseFilename: string = document.fileName.split('\\').pop().split('/').pop();
@@ -149,13 +152,10 @@ FLOWS
               method: "POST",
               url: Warp10URL,
               gzip: useGZIP,
-              timeout: 3600000, // 1 hour
+              timeout: timeout,
               body: useGZIP ? gzipWarpScript : executedWarpScript,
               rejectUnauthorized: false
             }
-
-            let proxy_pac: string = vscode.workspace.getConfiguration().get('warpscript.ProxyPac');
-            let proxy_directUrl: string = vscode.workspace.getConfiguration().get('warpscript.ProxyURL');
 
             // If a local proxy.pac is define, use it
             if (proxy_pac !== "") {
