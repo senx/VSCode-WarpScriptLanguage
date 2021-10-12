@@ -1,6 +1,12 @@
 VSCode WarpScript Extension
 ---
 
+## 1.1.27
+
+> +  2021/02/17  | cleanup  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/71bc700da0ea7947b93ac281b5f5ec8a0544c46c)*)
+> +  2021/02/17  | bump version  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/b7516392d409c8052f29659be34128bc80c52630)*)
+> +  2021/02/17  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/4ad427c97dd774474108654fe5c911a6a75e6f47)*)
+
 ## 1.1.25
 
 
@@ -61,10 +67,5 @@ VSCode WarpScript Extension
 
 ## 1.1.18
 
-
-## 1.1.19
-
-> +  2019/10/15  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/a102bbeaff1c2eac18e3cb781c8264578e57d139)*)
-> +  2019/10/15  | Fix substitutionWithLocalMacros initialisation  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/db27f10423a13469966f258b0480380911e3204f)*)
 
 
