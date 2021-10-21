@@ -1,9 +1,6 @@
 'use strict';
 
-import { DocumentLink } from 'vscode';
-import { DocumentLinkProvider } from 'vscode';
-import { TextDocument, CancellationToken, workspace, Uri, Range } from 'vscode';
-// import { DocumentLink } from 'vscode-languageclient';
+import { DocumentLink, DocumentLinkProvider, TextDocument, CancellationToken, workspace, Uri, Range } from 'vscode';
 
 export default class WSDocumentLinksProvider implements DocumentLinkProvider {
   private _linkPattern = /\s@([^\s]+)/g;

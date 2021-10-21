@@ -1,7 +1,7 @@
-import * as vscode from 'vscode';
+import { commands, TextEditor, WebviewPanel, window } from 'vscode';
+import { Disposable } from 'vscode-jsonrpc';
 import WarpScriptExtConstants from '../constants';
 import WarpScriptExtGlobals = require('../globals')
-import { isNullOrUndefined } from 'util';
 /**
  * This functions browse all the opened documents.
  * If the filename match the /tmp/xxxx.json pattern used for the WarpScript output, it close them without any confirmation.
@@ -20,60 +20,64 @@ export default class CloseJsonResults {
    * 
    * @param previewPanels 
    */
-  public exec(previewPanels: { 'image': vscode.WebviewPanel, 'gts': vscode.WebviewPanel }): any {
+  public exec(previewPanels: { 'image': WebviewPanel, 'gts': WebviewPanel }): any {
 
-    //the current opened file. usefull to detect the end of "nextEditor" loop.
-    let activefilepath: string = vscode.window.activeTextEditor.document.uri.toString();
-    //because one loop is not enough :(
+    // the current opened file. usefull to detect the end of "nextEditor" loop.
+    let activefilepath: string = window.activeTextEditor.document.uri.toString();
+    // because one loop is not enough :(
     let firstLoop: boolean = true;
 
 
-    let closeIfOutputJson: Function = (editor: vscode.TextEditor) => {
+    let closeIfOutputJson: Function = (editor: TextEditor) => {
       console.log(editor.document);
       let filename: string = editor.document.fileName;
       if (filename.match(new WarpScriptExtConstants().jsonResultRegEx)) {
-        console.log(filename + ' could be closed ! closing...');
-        vscode.commands.executeCommand("workbench.action.revertAndCloseActiveEditor");
+        console.log(`${filename} could be closed ! closing...`);
+        commands.executeCommand("workbench.action.revertAndCloseActiveEditor");
       }
       else {
         if (activefilepath === editor.document.uri.toString()) {
           console.log('end of close cycle?');
           if (firstLoop) {
             firstLoop = false;
-            vscode.commands.executeCommand("workbench.action.nextEditor");
+            commands.executeCommand("workbench.action.nextEditor");
           } else {
             if (onchangecallback) { onchangecallback.dispose(); }
             WarpScriptExtGlobals.weAreClosingFilesFlag = false;
           }
         } else {
-          vscode.commands.executeCommand("workbench.action.nextEditor");
+          commands.executeCommand("workbench.action.nextEditor");
         }
       }
     }
 
     // callback on change active editor (called after one is closed OR after nextEditor)
-    let onchangecallback: vscode.Disposable = vscode.window.onDidChangeActiveTextEditor(editor => { closeIfOutputJson(editor); });
+    let onchangecallback: Disposable = window.onDidChangeActiveTextEditor(editor => { closeIfOutputJson(editor); });
 
 
-    //security : if endless loop (not seen), end all.
-    setTimeout(function () {
+    // security : if endless loop (not seen), end all.
+    setTimeout(() => {
       if (onchangecallback) { onchangecallback.dispose(); }
       WarpScriptExtGlobals.weAreClosingFilesFlag = false;
     }, 5000);
 
-    //set the flag to disable the content provider update
+    // set the flag to disable the content provider update
     WarpScriptExtGlobals.weAreClosingFilesFlag = true;
 
-    //close any opened webview.
-    if (!isNullOrUndefined(previewPanels.gts)) {
+    // close any opened webview.
+    if (!this.isNullOrUndefined(previewPanels.gts)) {
       previewPanels.gts.dispose();
     }
-    if (!isNullOrUndefined(previewPanels.image)) {
+    if (!this.isNullOrUndefined(previewPanels.image)) {
       previewPanels.image.dispose();
     }
 
-    //initiate the loop
-    closeIfOutputJson(vscode.window.activeTextEditor);
+    // initiate the loop
+    closeIfOutputJson(window.activeTextEditor);
 
+  }
+
+  isNullOrUndefined(value: WebviewPanel) {
+    return value === undefined || value === null;
   }
 }

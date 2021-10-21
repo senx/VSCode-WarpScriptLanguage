@@ -1,13 +1,13 @@
-import { HoverProvider, Hover, MarkedString, TextDocument, CancellationToken, Position, MarkdownString } from 'vscode';
+import { HoverProvider, Hover, TextDocument, CancellationToken, Position, MarkdownString } from 'vscode';
 import { specialCommentCommands } from '../../warpScriptParser';
 import WarpScriptParser from '../../warpScriptParser';
 import * as vscode from 'vscode';
 import * as request from 'request';
-const SocksProxyAgent = require('socks-proxy-agent');
-const ProxyAgent = require('proxy-agent');
-const pac = require('pac-resolver');
-const dns = require('dns');
-const promisify = require('util.promisify');
+import { SocksProxyAgent } from 'socks-proxy-agent';
+import * as ProxyAgent from 'proxy-agent';
+import * as pac from 'pac-resolver';
+import * as  dns from 'dns';
+import { promisify } from 'util';
 var lookupAsync = promisify(dns.lookup);
 /**
  * Parameters needed to generate doc locally with studio
@@ -60,7 +60,7 @@ export abstract class W10HoverProvider  implements HoverProvider {
     
         let help = otherKeywordsDoc[name];
         if (help) {
-          let contents: MarkedString[] = ['### ' + name, { language: lang, value: help["sig"] }, help["help"]];
+          let contents: MarkdownString[] = ['### ' + name, { language: lang, value: help["sig"] }, help["help"]];
           return new Hover(contents, wordRange);
         }
     
@@ -90,13 +90,13 @@ export abstract class W10HoverProvider  implements HoverProvider {
               }
             }
           })
-          //console.log("WarpFleet repositories added:", repos, "endpoint:", endpointURL);
+          // console.log("WarpFleet repositories added:", repos, "endpoint:", endpointURL);
     
-          //forge a WarpScript to ask for macro documentation
+          // forge a WarpScript to ask for macro documentation
           let ws: string = 'INFOMODE\n'
           repos.forEach((r) => ws += '"' + r + '" WF.ADDREPO\n')
           ws += name;
-          //console.log("warpscript to send:", ws);
+          // console.log("warpscript to send:", ws);
     
           // do the request and return a promise of hover
           return new Promise(async (resolve) => {
@@ -118,7 +118,7 @@ export abstract class W10HoverProvider  implements HoverProvider {
             // If a local proxy.pac is define, use it
             if (proxy_pac !== "") {
               // so simple... if only it was supporting socks5. Ends up with an error for SOCKS5 lines.
-              //(request_options as any).agent = new ProxyAgent("pac+" + proxy_pac);
+              // (request_options as any).agent = new ProxyAgent("pac+" + proxy_pac);
     
               let proxy_pac_resp: string = 'DIRECT'; // Fallback
               try {
@@ -146,8 +146,8 @@ export abstract class W10HoverProvider  implements HoverProvider {
               }
             }
     
-            //if ProxyURL is defined, override the proxy setting. may support pac+file:// syntax too, or pac+http://  
-            //  see https://www.npmjs.com/package/proxy-agent
+            // if ProxyURL is defined, override the proxy setting. may support pac+file:// syntax too, or pac+http://  
+            // see https://www.npmjs.com/package/proxy-agent
             if (proxy_directUrl !== "") {
               (request_options as any).agent = new ProxyAgent(proxy_directUrl); //tested with authentication, OK.
             }
@@ -157,21 +157,21 @@ export abstract class W10HoverProvider  implements HoverProvider {
             request.post(request_options, async (error: any, response: any, body: string) => {
               if (error) { // error is set if server is unreachable
                 //console.log("server unreachable");
-                let contents: MarkedString[] = ['### Error', 'Unable to find help for this macro on server : ' + endpointURL + ' (server unreachable in 10 seconds)'];
+                let contents: MarkdownString = new MarkdownString().appendMarkdown('### Error \n\n Unable to find help for this macro on server : ' + endpointURL + ' (server unreachable in 10 seconds)');
                 resolve(new Hover(contents, wordRange));
               } else if (response.statusCode >= 400 && response.statusCode !== 500) { // manage non 200 answers here
                 //console.log("server error " + response.statusCode);
-                let contents: MarkedString[] = ['### Error', 'Unable to find help for this macro on server : ' + endpointURL, 'server replied ' + response.statusCode + (String)(response.body).slice(0, 1000)];
+                let contents: MarkdownString = new MarkdownString().appendMarkdown('### Error \n\n Unable to find help for this macro on server : ' + endpointURL + '\n\nserver replied ' + response.statusCode + (String)(response.body).slice(0, 1000));
                 resolve(new Hover(contents, wordRange));
               } else { //manage success and other errors here.
                 //console.log(error, response, body)
                 if (response.headers['x-warp10-error-message']) {
-                  let contents: MarkedString[] = ['### Error', 'This macro may not exist on server ' + endpointURL, 'server replied ' + response.headers['x-warp10-error-message']]
+                  let contents: MarkdownString = new MarkdownString().appendMarkdown('### Error \n\n This macro may not exist on server ' + endpointURL + '\n\nserver replied ' + response.headers['x-warp10-error-message']);
                   resolve(new Hover(contents, wordRange));
                 }
                 if (!response.headers['content-type'] || "application/json" === response.headers['content-type']) {
                   let doc = JSON.parse(body);
-                  //console.log("found doc for macro " + name, doc);
+                  // console.log("found doc for macro " + name, doc);
                   // parse the json... that may contains lots of holes.
                   if (doc.length == 0) {
                     let contents: MarkdownString = new MarkdownString().appendMarkdown(`### ${name}\n`)
@@ -193,7 +193,6 @@ export abstract class W10HoverProvider  implements HoverProvider {
                     } else {
                       contents.appendMarkdown('desc is empty in macro INFO. look at macro documentation [here](https://www.warp10.io/doc/INFO), and try the macro snippet in VSCode to get a documented macro skeleton.');
                     }
-    
                     resolve(new Hover(contents, wordRange));
                   }
     
@@ -211,7 +210,6 @@ export abstract class W10HoverProvider  implements HoverProvider {
       protected prepend(source: any, data: any) {
         return data + source;
       }
-    
     
       protected b64encode(s: string) {
         let b: Buffer = new Buffer(s, 'utf8');

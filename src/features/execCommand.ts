@@ -1,20 +1,20 @@
 import { StatusbarUi } from './../statusbarUi';
-import * as vscode from 'vscode';
 import * as request from 'request';
 import WSDocumentLinksProvider from '../providers/wsDocumentLinksProvider';
-import { Uri } from 'vscode';
-import fs = require('fs');
-import os = require('os');
-import zlib = require("zlib");
+import { OutputChannel, Progress, ProgressLocation, TextDocument, Uri, ViewColumn, window, workspace } from 'vscode';
 import { specialCommentCommands } from '../warpScriptParser';
 import WarpScriptParser from '../warpScriptParser';
-import WarpScriptExtGlobals = require('../globals')
 import { Warp10 } from '@senx/warp10';
-const SocksProxyAgent = require('socks-proxy-agent');
-const ProxyAgent = require('proxy-agent');
-const pac = require('pac-resolver');
-const dns = require('dns');
-const promisify = require('util.promisify');
+import { SocksProxyAgent } from 'socks-proxy-agent';
+import { unlink, writeFile } from 'fs';
+import * as  ProxyAgent from 'proxy-agent';
+import * as  pac from 'pac-resolver';
+import * as  dns from 'dns';
+import { promisify } from 'util';
+import { gzip } from 'zlib';
+import { endpointsForThisSession, sessionName } from '../globals';
+import { tmpdir } from 'os';
+
 const lookupAsync = promisify(dns.lookup);
 
 export default class ExecCommand {
@@ -25,13 +25,13 @@ export default class ExecCommand {
 
   static pad(str: any, size: number, padder: string) { return (padder.repeat(30) + str).substr(-size); }
 
-  public exec(outputWin: vscode.OutputChannel): any {
+  public exec(outputWin: OutputChannel): any {
     return (selectiontext: string) => {
       // Check current active document is a warpcript
-      if (typeof vscode.window.activeTextEditor === 'undefined'
+      if (typeof window.activeTextEditor === 'undefined'
         || (
-          vscode.window.activeTextEditor.document.languageId !== 'warpscript'
-          && vscode.window.activeTextEditor.document.languageId !== 'flows'
+          window.activeTextEditor.document.languageId !== 'warpscript'
+          && window.activeTextEditor.document.languageId !== 'flows'
         )
       ) {
         // Not a warpscript, exit early.
@@ -39,34 +39,34 @@ export default class ExecCommand {
       }
       StatusbarUi.Working('loading...');
 
-      let Warp10URL: string = vscode.workspace.getConfiguration().get('warpscript.Warp10URL');
-      let PreviewTimeUnit: string = vscode.workspace.getConfiguration().get('warpscript.DefaultTimeUnit');
-      const jsonMaxSizeForAutoUnescape: number = vscode.workspace.getConfiguration().get('warpscript.maxFileSizeForAutomaticUnicodeEscape');
-      const jsonMaxSizeBeforeWarning: number = vscode.workspace.getConfiguration().get('warpscript.maxFileSizeBeforeJsonWarning');
-      const useGZIP: boolean = vscode.workspace.getConfiguration().get('warpscript.useGZIP');
-      const timeout: number = vscode.workspace.getConfiguration().get('warpscript.http.timeout')
-      const proxy_pac: string = vscode.workspace.getConfiguration().get('warpscript.ProxyPac');
-      const proxy_directUrl: string = vscode.workspace.getConfiguration().get('warpscript.ProxyURL');
+      let Warp10URL: string = workspace.getConfiguration().get('warpscript.Warp10URL');
+      let PreviewTimeUnit: string = workspace.getConfiguration().get('warpscript.DefaultTimeUnit');
+      const jsonMaxSizeForAutoUnescape: number = workspace.getConfiguration().get('warpscript.maxFileSizeForAutomaticUnicodeEscape');
+      const jsonMaxSizeBeforeWarning: number = workspace.getConfiguration().get('warpscript.maxFileSizeBeforeJsonWarning');
+      const useGZIP: boolean = workspace.getConfiguration().get('warpscript.useGZIP');
+      const timeout: number = workspace.getConfiguration().get('warpscript.http.timeout')
+      const proxy_pac: string = workspace.getConfiguration().get('warpscript.ProxyPac');
+      const proxy_directUrl: string = workspace.getConfiguration().get('warpscript.ProxyURL');
       const execDate: string = new Date().toLocaleTimeString();
-      const document: vscode.TextDocument = vscode.window.activeTextEditor.document;
+      const document: TextDocument = window.activeTextEditor.document;
       const baseFilename: string = document.fileName.split('\\').pop().split('/').pop();
 
-      vscode.window.withProgress<boolean>({
-        location: vscode.ProgressLocation.Window,
-        title: vscode.window.activeTextEditor.document.languageId === 'warpscript' ? 'WarpScript' : 'FLoWS'
-      }, (progress: vscode.Progress<{ message?: string; }>) => {
+      window.withProgress<boolean>({
+        location: ProgressLocation.Window,
+        title: window.activeTextEditor.document.languageId === 'warpscript' ? 'WarpScript' : 'FLoWS'
+      }, (progress: Progress<{ message?: string; }>) => {
         return new Promise(async (c, e) => {
           let executedWarpScript = "";
           let displayPreviewOpt = '';
 
           if (selectiontext === "") {
-            executedWarpScript = document.getText(); //if executed with empty string, take the full text
+            executedWarpScript = document.getText(); // if executed with empty string, take the full text
           }
           else {
             executedWarpScript = selectiontext;
           }
           //
-          //analyse the first warpscript lines starting with //
+          // analyse the first warpscript lines starting with //
           //
           let commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(executedWarpScript);
           Warp10URL = commentsCommands.endpoint || Warp10URL;
@@ -80,7 +80,7 @@ export default class ExecCommand {
           // add X after the suffix for no preview at all, add I for focus on images, add G for gts preview.
           jsonSuffix = jsonSuffix + displayPreviewOpt
           //
-          //find the hostname in Warp10URL.
+          // find the hostname in Warp10URL.
           //
           let Warp10URLhostname = Warp10URL; //if regexp fail, keep the full URL
           let hostnamePattern = /https?\:\/\/((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9]))[\/\:].*/g;  // Captures the lines sections name
@@ -107,7 +107,7 @@ export default class ExecCommand {
                   if (uris.indexOf(uri.toString()) === -1) {
                     // outputWin.show();
                     // outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
-                    let tdoc: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
+                    let tdoc: TextDocument = await workspace.openTextDocument(uri);
                     let macroCode: string = tdoc.getText()
                     // Prepend the macro, store it and then append the rest of the script.
                     let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
@@ -126,7 +126,7 @@ export default class ExecCommand {
             }
           }
 
-          if (vscode.window.activeTextEditor.document.languageId === 'flows') {
+          if (window.activeTextEditor.document.languageId === 'flows') {
             executedWarpScript = `<'
 ${executedWarpScript} 
 '>
@@ -137,7 +137,7 @@ FLOWS
           console.log("about to send this WarpScript:", executedWarpScript.slice(0, 10000), 'on', Warp10URL);
 
           // Gzip the script before sending it.
-          zlib.gzip(Buffer.from(executedWarpScript, 'utf8'), async function (err, gzipWarpScript) {
+          gzip(Buffer.from(executedWarpScript, 'utf8'), async function (err, gzipWarpScript) {
             if (err) {
               console.error(err);
             }
@@ -146,7 +146,7 @@ FLOWS
               headers: {
                 'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8',
                 'Accept': 'application/json',
-                'X-Warp10-WarpScriptSession': WarpScriptExtGlobals.sessionName,
+                'X-Warp10-WarpScriptSession': sessionName,
                 'x-warp10-line-count-offset': linesOfMacrosPrepended.toString()
               },
               method: "POST",
@@ -164,7 +164,7 @@ FLOWS
 
               let proxy_pac_resp: string = 'DIRECT'; // Fallback
               try {
-                let proxy_pac_text: vscode.TextDocument = await vscode.workspace.openTextDocument(proxy_pac);
+                let proxy_pac_text: TextDocument = await workspace.openTextDocument(proxy_pac);
                 let FindProxyForURL = pac(proxy_pac_text.getText());
                 proxy_pac_resp = await FindProxyForURL(Warp10URL);
               } catch (e) {
@@ -190,12 +190,10 @@ FLOWS
             }
 
             // if ProxyURL is defined, override the proxy setting. may support pac+file:// syntax too, or pac+http://
-            //  see https://www.npmjs.com/package/proxy-agent
+            // see https://www.npmjs.com/package/proxy-agent
             if (proxy_directUrl !== "") {
               (request_options as any).agent = new ProxyAgent(proxy_directUrl); //tested with authentication, OK.
             }
-
-            // console.log(request_options)
 
             let req: request.Request = request.post(request_options, async (error: any, response: any, body: string) => {
               if (error) { // error is set if server is unreachable or if the request is aborted
@@ -205,25 +203,25 @@ FLOWS
                   progress.report({ message: 'Aborted' });
                   return c(true)
                 } else {
-                  vscode.window.showErrorMessage("Cannot find or reach server, check your Warp 10 server endpoint:" + error.message)
+                  window.showErrorMessage("Cannot find or reach server, check your Warp 10 server endpoint:" + error.message)
                   console.error(error)
                   StatusbarUi.Execute();
                   progress.report({ message: 'Done' });
                   return e(error)
                 }
               } else if (response.statusCode == 301) {
-                vscode.window.showErrorMessage("Check your Warp 10 server endpoint (" + response.request.uri.href + "), you may have forgotten the api/v0/exec in the URL");
+                window.showErrorMessage("Check your Warp 10 server endpoint (" + response.request.uri.href + "), you may have forgotten the api/v0/exec in the URL");
                 console.error(response.body);
                 StatusbarUi.Execute();
                 return e(true)
               } else if (response.statusCode != 200 && response.statusCode != 500) { // manage non 200 answers here
-                vscode.window.showErrorMessage("Error, server answered code " + response.statusCode + " :" + (String)(response.body).slice(0, 1000));
+                window.showErrorMessage("Error, server answered code " + response.statusCode + " :" + (String)(response.body).slice(0, 1000));
                 console.error(response.body);
                 StatusbarUi.Execute();
                 return e(true)
               } else if (response.statusCode == 500 && !response.headers['x-warp10-error-message']) {
                 //received a 500 error without any x-warp10-error-message. Could also be a endpoint error.
-                vscode.window.showErrorMessage("Error, error 500 without any error. Are you sure you are using an exec endpoint ? Endpoint: " + response.request.uri.href + " :" + (String)(response.body).slice(0, 1000));
+                window.showErrorMessage("Error, error 500 without any error. Are you sure you are using an exec endpoint ? Endpoint: " + response.request.uri.href + " :" + (String)(response.body).slice(0, 1000));
                 console.error(response.body);
                 StatusbarUi.Execute();
                 return e(true)
@@ -272,14 +270,14 @@ FLOWS
 
                   // Generate unique filenames, ordered by execution order.
                   let uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
-                  let wsFilename = os.tmpdir() + '/' + uuid + '.mc2';
-                  let jsonFilename = os.tmpdir() + '/' + uuid + jsonSuffix + '.json';
+                  let wsFilename = tmpdir() + '/' + uuid + '.mc2';
+                  let jsonFilename = tmpdir() + '/' + uuid + jsonSuffix + '.json';
 
                   // Save executed warpscript
-                  fs.unlink(wsFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
-                    fs.writeFile(wsFilename, executedWarpScript, { mode: 0o0400 }, function (err) {
+                  unlink(wsFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
+                    writeFile(wsFilename, executedWarpScript, { mode: 0o0400 }, err => {
                       if (err) {
-                        vscode.window.showErrorMessage(err.message);
+                        window.showErrorMessage(err.message);
                         StatusbarUi.Execute();
                       }
                     });
@@ -287,23 +285,23 @@ FLOWS
 
                   // will be called later
                   function displayJson() {
-                    vscode.workspace.openTextDocument(jsonFilename).then((doc: vscode.TextDocument) => {
-                      vscode.window.showTextDocument(doc, { viewColumn: vscode.ViewColumn.Two, preview: true, preserveFocus: false }).then(
-                        () => {
+                    workspace.openTextDocument(jsonFilename).then((doc: TextDocument) => {
+                      window.showTextDocument(doc, { viewColumn: ViewColumn.Two, preview: true, preserveFocus: false })
+                        .then(() => {
                           progress.report({ message: 'Done' });
                           StatusbarUi.Init();
                         },
-                        (err: any) => {
-                          console.error(err)
-                          vscode.window.showErrorMessage(err.message);
-                          errorParam = err;
-                          StatusbarUi.Init();
-                        });
+                          (err: any) => {
+                            console.error(err)
+                            window.showErrorMessage(err.message);
+                            errorParam = err;
+                            StatusbarUi.Init();
+                          });
                     });
                   }
 
                   // Save resulting JSON
-                  fs.unlink(jsonFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
+                  unlink(jsonFilename, () => { // Remove overwritten file. If file unexistent, fail silently.
                     // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
                     let sizeMB: number = Math.round(body.length / 1024 / 1024);
                     if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
@@ -312,9 +310,9 @@ FLOWS
                     }
                     let noDisplay: boolean = jsonMaxSizeBeforeWarning > 0 && sizeMB > jsonMaxSizeBeforeWarning;
                     // file must be saved whatever its size... but not displayed if too big.
-                    fs.writeFile(jsonFilename, body, { mode: 0o0400 }, function (err) {
+                    writeFile(jsonFilename, body, { mode: 0o0400 }, function (err) {
                       if (err) {
-                        vscode.window.showErrorMessage(err.message);
+                        window.showErrorMessage(err.message);
                         errorParam = err.message;
                         StatusbarUi.Execute();
                       }
@@ -331,7 +329,7 @@ FLOWS
                         outputWin.appendLine(' @' + Warp10URLhostname.substr(0, 30));
                         if (noDisplay) {
                           outputWin.appendLine(`file://${jsonFilename} is over ${jsonMaxSizeBeforeWarning}MB and was not opened. See Max File Size Before JSON Warning preference.`);
-                          vscode.window.showWarningMessage(`WarpScript: please confirm you really want to parse a ${sizeMB}MB file, esc to cancel`, "I am sure", "Nooooo !").then(
+                          window.showWarningMessage(`WarpScript: please confirm you really want to parse a ${sizeMB}MB file, esc to cancel`, "I am sure", "Nooooo !").then(
                             (answer) => {
                               if (answer === "I am sure") {
                                 //size warning confirmed, display the json.
@@ -357,30 +355,30 @@ FLOWS
                 StatusbarUi.Execute();
               }
               // decrease request count on this endpoint
-              WarpScriptExtGlobals.endpointsForThisSession[req.uri.href]--;
-              console.log(WarpScriptExtGlobals.endpointsForThisSession)
+              endpointsForThisSession[req.uri.href]--;
+              console.log(endpointsForThisSession)
             });
             ExecCommand.currentRunningRequests.push(req);
             // increase request count on this endpoint, to use it later for session abort
-            WarpScriptExtGlobals.endpointsForThisSession[req.uri.href] = (WarpScriptExtGlobals.endpointsForThisSession[req.uri.href] || 0) + 1;
+            endpointsForThisSession[req.uri.href] = (endpointsForThisSession[req.uri.href] || 0) + 1;
 
-            StatusbarUi.Working(`${WarpScriptExtGlobals.endpointsForThisSession[req.uri.href]} WarpScripts running...`);
+            StatusbarUi.Working(`${endpointsForThisSession[req.uri.href]} WarpScripts running...`);
           });
         })
       })
     }
   }
 
-  public abortAllRequests(outputWin: vscode.OutputChannel) {
+  public abortAllRequests(outputWin: OutputChannel) {
     return () => {
       outputWin.show();
       outputWin.append('[' + new Date().toLocaleTimeString() + '] ');
       outputWin.appendLine("Sending WSKILLSESSION to endpoints... 10s before killing every connections.");
 
       // 3 seconds to abort on every endpoints
-      Object.keys(WarpScriptExtGlobals.endpointsForThisSession).forEach(endpoint => {
+      Object.keys(endpointsForThisSession).forEach(endpoint => {
         let req = new Warp10(endpoint); // 3 second timeout
-        req.exec(`<% "${WarpScriptExtGlobals.sessionName}" 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`)
+        req.exec(`<% "${sessionName}" 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`)
           .then((answer: any) => {
             if (answer.result[0]) {
               if (answer.result[0] === 0) {
@@ -404,9 +402,10 @@ FLOWS
           req.callback({ 'aborted': 'true' }, undefined, undefined);
         });
         ExecCommand.currentRunningRequests = [];
-        WarpScriptExtGlobals.endpointsForThisSession = {};
-        outputWin.appendLine("Done. WarpScripts may be still running on the server, but VSCode closed every connections.")
-
+        for (let prop in endpointsForThisSession) {
+          delete endpointsForThisSession[prop];
+        }
+        outputWin.appendLine("Done. WarpScripts may be still running on the server, but VSCode closed every connections.");
       }, 10000)
     }
   }

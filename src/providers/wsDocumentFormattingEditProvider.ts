@@ -1,6 +1,6 @@
-import { DocumentRangeFormattingEditProvider, TextDocument, TextEdit, Range, CancellationToken, FormattingOptions } from "vscode";
-
 'use strict';
+
+import { DocumentRangeFormattingEditProvider, TextDocument, TextEdit, Range, CancellationToken, FormattingOptions } from "vscode";
 
 export default class WSDocumentFormattingEditProvider implements DocumentRangeFormattingEditProvider {
 

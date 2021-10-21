@@ -1,7 +1,7 @@
 import { CancellationToken, Hover, Position, TextDocument } from 'vscode';
 import { W10HoverProvider } from './W10HoverProvider';
-const _ = require("lodash");
-import wsGlobals = require('../../wsGlobals');
+import * as _ from 'lodash';
+import * as wsGlobals from'../../wsGlobals';
 
 /**
  * Profive addition informations

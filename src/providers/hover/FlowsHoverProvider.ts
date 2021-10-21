@@ -1,7 +1,7 @@
 import { CancellationToken, Hover, Position, TextDocument } from 'vscode';
 import { W10HoverProvider } from './W10HoverProvider';
-const _ = require("lodash");
-import flowsGlobals = require('../../flowsGlobals');
+import * as _ from 'lodash';
+import * as flowsGlobals from '../../flowsGlobals';
 
 export class FlowsHoverProvider extends W10HoverProvider {
   
