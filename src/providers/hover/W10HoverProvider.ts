@@ -8,7 +8,11 @@ import * as ProxyAgent from 'proxy-agent';
 import * as pac from 'pac-resolver';
 import * as  dns from 'dns';
 import { promisify } from 'util';
-var lookupAsync = promisify(dns.lookup);
+
+let lookupAsync: any;
+if(!!dns.lookup) {
+  lookupAsync = promisify(dns.lookup);
+}
 /**
  * Parameters needed to generate doc locally with studio
  */
@@ -136,7 +140,9 @@ export abstract class W10HoverProvider  implements HoverProvider {
               // If a proxy is defined, make sure it is specified as an IP because SocksProxyAgent does not DNS resolve
               if (1 < proxy_split.length) {
                 let host_port = proxy_split[1].split(':');
-                proxy_split[1] = (await lookupAsync(host_port[0])).address + ':' + host_port[1];
+                if(!!lookupAsync) {
+                  proxy_split[1] = (await lookupAsync(host_port[0])).address + ':' + host_port[1];
+                }
               }
     
               if ('PROXY' == proxy_split[0]) {
@@ -212,7 +218,7 @@ export abstract class W10HoverProvider  implements HoverProvider {
       }
     
       protected b64encode(s: string) {
-        let b: Buffer = new Buffer(s, 'utf8');
+        let b: Buffer = Buffer.from(s, 'utf8');
         return b.toString('base64')
       }
 }

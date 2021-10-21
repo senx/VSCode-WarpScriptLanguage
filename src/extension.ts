@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict';
 import { StatusbarUi } from './statusbarUi';
 import { WSHoverProvider } from './providers/hover/WSHoverProvider'
 import WSCodeLensProvider from './providers/wsCodeLensProvider'
@@ -29,7 +29,9 @@ import { userInfo } from 'os';
  * @param context
  */
 export function activate(context: ExtensionContext) {
+  console.log('About to load')
   StatusbarUi.Init();
+  console.log('StatusbarUi loaded')
   let outputWin = window.createOutputChannel('Warp10');
   // constant object ref to pass to closeOpenedWebviews
   let previewPanels: { 'image': WebviewPanel, 'gts': WebviewPanel, 'discovery': WebviewPanel } =
@@ -38,11 +40,13 @@ export function activate(context: ExtensionContext) {
   // Hover providers
   context.subscriptions.push(languages.registerHoverProvider({ language: 'warpscript' }, new WSHoverProvider()));
   context.subscriptions.push(languages.registerHoverProvider({ language: 'flows' }, new FlowsHoverProvider()));
+  console.log('Hover providers loaded');
 
   // Completion providers
   context.subscriptions.push(languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionItemProvider()));
   context.subscriptions.push(languages.registerCompletionItemProvider({ language: 'flows' }, new FlowsCompletionItemProvider()));
   context.subscriptions.push(languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionVariablesProvider(), "'", "$"));
+  console.log('Completion providers loaded');
   // TODO
   // context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'flows' }, new WSCompletionVariablesProvider(), "'"));
   context.subscriptions.push(languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionMacrosProvider(), "@", "/"));
@@ -56,6 +60,8 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(languages.registerDocumentHighlightProvider({ language: 'warpscript' }, new WSDocumentHighlightsProvider()));
   }
   context.subscriptions.push(languages.registerDocumentLinkProvider({ language: 'warpscript' }, new WSDocumentLinksProvider()));
+  console.log('Languages loaded');
+
   context.subscriptions.push(commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(previewPanels); }));
   context.subscriptions.push(commands.registerCommand('extension.execConvertUnicodeInJson', () => { new UnicodeJsonConversion().exec(); }));
   context.subscriptions.push(commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(''); }));
@@ -80,6 +86,7 @@ export function activate(context: ExtensionContext) {
       }
     }
   }));
+  console.log('Commands loaded');
 
   context.subscriptions.push(
     languages.registerDocumentFormattingEditProvider('flows', {
@@ -95,6 +102,7 @@ export function activate(context: ExtensionContext) {
       }
     })
   );
+  console.log('FLoWS loaded');
 
   new WSDocumentFormattingEditProvider();
   // webview panels for dataviz. will be created only when needed.
@@ -200,10 +208,15 @@ export function activate(context: ExtensionContext) {
       }
     }
   });
+  console.log('Preview loaded');
 
   // define a session name as user name + uuid.
   // remains the same until extension reload, or vscode reload.
-  const user: string = userInfo().username;
-  WarpScriptExtGlobals.sessionName = user + '-' + v4();
+  let user: string = 'vscode'
+  if (userInfo) {
+    user = userInfo().username;
+  }
+  WarpScriptExtGlobals.sessionName = `${user}-${v4()}`;
   outputWin.appendLine(`Session Name for WarpScript execution: '${WarpScriptExtGlobals.sessionName}'`);
+  console.log(WarpScriptExtGlobals.sessionName);
 }

@@ -10,3 +10,4 @@ pat.txt
 package-lock.json
 yarn.lock
 pat.txt
+.vscode-test-web
