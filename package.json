@@ -12,7 +12,7 @@
 	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
 	"license": "Apache-2.0",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"publisher": "senx",
 	"engines": {
 		"vscode": "^1.38.0"
@@ -37,7 +37,8 @@
 		"onLanguage:warpscript",
 		"onLanguage:flows"
 	],
-	"main": "./out/extension",
+	"main": "./out/extension.js",
+	"browser": "./out/extension.js",
 	"contributes": {
 		"snippets": [
 			{
@@ -239,8 +240,8 @@
 	"devDependencies": {
 		"@types/js-yaml": "4.0.0",
 		"@types/mocha": "5.2.7",
-		"@types/node": "14.14.20",
-		"@types/request": "2.48.5",
+		"@types/node": "16.11.1",
+		"@types/request": "2.48.7",
 		"@types/uuid": "8.3.0",
 		"fs-extra": "9.0.1",
 		"js-yaml": "4.0.0",
@@ -253,11 +254,12 @@
 		"vscode-textmate": "5.2.0"
 	},
 	"dependencies": {
-		"@senx/warp10": "1.1.2",
 		"@senx/flows-beautifier": "^1.0.4",
+		"@senx/warp10": "1.1.2",
 		"@senx/warpview": "2.0.83",
 		"at-least-node": "1.0.0",
 		"file-saver": "2.0.5",
+		"http-parser-js": "^0.5.3",
 		"lodash": "4.17.20",
 		"pac-resolver": "4.1.0",
 		"proxy-agent": "4.0.0",
