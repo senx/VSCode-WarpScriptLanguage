@@ -28,10 +28,10 @@ export default class CloseJsonResults {
     let firstLoop: boolean = true;
 
 
-    let closeIfOutputJson: Function = (editor: TextEditor) => {
+    let closeIfOutputJson: Function = async (editor: TextEditor) => {
       console.log(editor.document);
       let filename: string = editor.document.fileName;
-      if (filename.match(new WarpScriptExtConstants().jsonResultRegEx)) {
+      if (filename.match(await WarpScriptExtConstants.jsonResultRegEx())) {
         console.log(`${filename} could be closed ! closing...`);
         commands.executeCommand("workbench.action.revertAndCloseActiveEditor");
       }

@@ -12,7 +12,7 @@ import * as  dns from 'dns';
 import { promisify } from 'util';
 import { gzip } from 'zlib';
 import { endpointsForThisSession, sessionName } from '../globals';
-import { tmpdir } from 'os';
+import WarpScriptExtConstants from '../constants';
 
 let lookupAsync: any;
 if (!!dns.lookup) {
@@ -26,6 +26,22 @@ export default class ExecCommand {
   public static currentRunningRequests: request.Request[] = [];
 
   static pad(str: any, size: number, padder: string) { return (padder.repeat(30) + str).substr(-size); }
+
+  private async writeFile(path: string, content: any): Promise<void> {
+    if (WarpScriptExtConstants.isVirtualWorkspace) {
+      return await workspace.fs.writeFile(Uri.file(path).with({ scheme: workspace.workspaceFolders![0]!.uri.scheme }), Buffer.from(content, 'utf8'));
+    } else {
+      return await workspace.fs.writeFile(Uri.file(path), Buffer.from(content, 'utf8'));
+    }
+  }
+
+  private async deleteFile(path: string): Promise<void> {
+    if (WarpScriptExtConstants.isVirtualWorkspace) {
+      return await workspace.fs.delete(Uri.file(path).with({ scheme: workspace.workspaceFolders![0]!.uri.scheme }));
+    } else {
+      return await workspace.fs.delete(Uri.file(path));
+    }
+  }
 
   public exec(outputWin: OutputChannel): any {
     return (selectiontext: string) => {
@@ -85,7 +101,8 @@ export default class ExecCommand {
           // find the hostname in Warp10URL.
           //
           let Warp10URLhostname = Warp10URL; //if regexp fail, keep the full URL
-          let hostnamePattern = /https?\:\/\/((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9]))[\/\:].*/g;  // Captures the lines sections name
+          // Captures the lines sections name
+          let hostnamePattern = /https?\:\/\/((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9]))[\/\:].*/g;
           let lineonMatch: RegExpMatchArray | null; // https://www.regextester.com/ for easy tests
           let re = RegExp(hostnamePattern)
           while (lineonMatch = re.exec(Warp10URL)) {
@@ -98,8 +115,6 @@ export default class ExecCommand {
           let match: RegExpMatchArray | null;
           let lines: number[] = [document.lineCount]
           let uris: string[] = [document.uri.toString()]
-          //  let linesOfMacrosPrepended: number = 0;
-
           if (substitutionWithLocalMacros) {
             while ((match = macroURIPattern.exec(executedWarpScript))) {
               const macroName = match[1];
@@ -139,7 +154,7 @@ FLOWS
           console.log("about to send this WarpScript:", executedWarpScript.slice(0, 10000), 'on', Warp10URL);
 
           // Gzip the script before sending it.
-          gzip(Buffer.from(executedWarpScript, 'utf8'), async function (err, gzipWarpScript) {
+          gzip(Buffer.from(executedWarpScript, 'utf8'), async (err, gzipWarpScript) => {
             if (err) {
               console.error(err);
             }
@@ -149,7 +164,6 @@ FLOWS
                 'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8',
                 'Accept': 'application/json',
                 'X-Warp10-WarpScriptSession': sessionName,
-                //      'X-Warp10-line-count-offset': linesOfMacrosPrepended.toString()
               },
               method: "POST",
               url: Warp10URL,
@@ -232,8 +246,6 @@ FLOWS
                 // console.log(error, response, body)
                 let errorParam: any = null
                 progress.report({ message: 'Parsing response' });
-                let lineOffset: number = parseInt(response.request.headers['x-warp10-line-count-offset']);
-                console.log('lineoffset', lineOffset);
                 if (response.headers['x-warp10-error-message']) {
                   let line = parseInt(response.headers['x-warp10-error-line'])
 
@@ -250,8 +262,7 @@ FLOWS
                     if (lineInError <= lines[i]) {
                       fileInError = uris[i];
                       break;
-                    }
-                    else {
+                    } else {
                       lineInError -= lines[i];
                     }
                   }
@@ -260,7 +271,7 @@ FLOWS
 
                   let errorMessage: string = response.headers['x-warp10-error-message'];
                   // We must substract the number of lines added by prepended macros in the error message.
-                  errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, group1) => '[Line #' + (Number.parseInt(group1) - lineOffset).toString() + ']');
+                  errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, group1) => '[Line #' + (Number.parseInt(group1)).toString() + ']');
 
                   outputWin.show();
                   outputWin.append('[' + execDate + '] ');
@@ -273,48 +284,27 @@ FLOWS
 
                   // Generate unique filenames, ordered by execution order.
                   let uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
-                  let wsFilename = tmpdir() + '/' + uuid + '.mc2';
-                  let jsonFilename = tmpdir() + '/' + uuid + jsonSuffix + '.json';
+                  let wsFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}.mc2`;
+                  let jsonFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}${jsonSuffix}.json`;
 
                   // Save executed warpscript
                   try {
-                    await workspace.fs.delete(Uri.file(wsFilename)); //.then(() => { // Remove overwritten file. If file unexistent, fail silently.
+                    await this.deleteFile(wsFilename); // Remove overwritten file. If file unexistent, fail silently.
                   } catch (e) {
                   }
                   try {
-                    await workspace.fs.writeFile(Uri.file(wsFilename), Buffer.from(executedWarpScript, 'utf8')) //.then(() => {}, err => {
+                    await this.writeFile(wsFilename, executedWarpScript);
                     if (err) {
                       window.showErrorMessage(err.message);
                       StatusbarUi.Execute();
                     }
-
                   } catch (e) {
                     window.showErrorMessage(e.message || e);
                     StatusbarUi.Execute();
                   }
-                  //   });
-                  //   });
-
-                  // will be called later
-                  function displayJson() {
-                    workspace.openTextDocument(jsonFilename).then((doc: TextDocument) => {
-                      window.showTextDocument(doc, { viewColumn: ViewColumn.Two, preview: true, preserveFocus: false })
-                        .then(() => {
-                          progress.report({ message: 'Done' });
-                          StatusbarUi.Init();
-                        },
-                          (err: any) => {
-                            console.error(err)
-                            window.showErrorMessage(err.message);
-                            errorParam = err;
-                            StatusbarUi.Init();
-                          });
-                    });
-                  }
-
                   // Save resulting JSON
                   try {
-                    await workspace.fs.delete(Uri.file(jsonFilename)) //.then(() => { // Remove overwritten file. If file unexistent, fail silently.
+                    await this.deleteFile(jsonFilename); // Remove overwritten file. If file unexistent, fail silently.
                   } catch (e) { }
 
                   // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
@@ -325,38 +315,37 @@ FLOWS
                   }
                   let noDisplay: boolean = jsonMaxSizeBeforeWarning > 0 && sizeMB > jsonMaxSizeBeforeWarning;
                   // file must be saved whatever its size... but not displayed if too big.
-                  workspace.fs.writeFile(Uri.file(jsonFilename), Buffer.from(body, 'utf8'))
-                    .then(() => {
-                      StatusbarUi.Execute();
-                      outputWin.show();
-                      outputWin.append('[' + execDate + '] ');
-                      outputWin.append('file://' + wsFilename);
-                      outputWin.append(' => ' + 'file://' + jsonFilename);
-                      outputWin.append(' ' + ExecCommand.formatElapsedTime(response.headers['x-warp10-elapsed']));
-                      outputWin.append(' ' + ExecCommand.pad(response.headers['x-warp10-fetched'], 10, ' ') + ' fetched ');
-                      outputWin.append(ExecCommand.pad(response.headers['x-warp10-ops'], 10, ' ') + ' ops ');
-                      outputWin.append(ExecCommand.pad(baseFilename, 23, ' '));
-                      outputWin.appendLine(' @' + Warp10URLhostname.substr(0, 30));
-                      if (noDisplay) {
-                        outputWin.appendLine(`file://${jsonFilename} is over ${jsonMaxSizeBeforeWarning}MB and was not opened. See Max File Size Before JSON Warning preference.`);
-                        window.showWarningMessage(`WarpScript: please confirm you really want to parse a ${sizeMB}MB file, esc to cancel`, "I am sure", "Nooooo !").then(
-                          (answer) => {
-                            if (answer === "I am sure") {
-                              //size warning confirmed, display the json.
-                              displayJson();
-                            }
+                  this.writeFile(jsonFilename, body).then(() => {
+                    StatusbarUi.Execute();
+                    outputWin.show();
+                    outputWin.append('[' + execDate + '] ');
+                    outputWin.append((WarpScriptExtConstants.isVirtualWorkspace ? '' : 'file://') + wsFilename);
+                    outputWin.append(' => ' + (WarpScriptExtConstants.isVirtualWorkspace ? '' : 'file://') + jsonFilename);
+                    outputWin.append(' ' + ExecCommand.formatElapsedTime(response.headers['x-warp10-elapsed']));
+                    outputWin.append(' ' + ExecCommand.pad(response.headers['x-warp10-fetched'], 10, ' ') + ' fetched ');
+                    outputWin.append(ExecCommand.pad(response.headers['x-warp10-ops'], 10, ' ') + ' ops ');
+                    outputWin.append(ExecCommand.pad(baseFilename, 23, ' '));
+                    outputWin.appendLine(' @' + Warp10URLhostname.substr(0, 30));
+                    if (noDisplay) {
+                      outputWin.appendLine(`${(WarpScriptExtConstants.isVirtualWorkspace ? '' : 'file://')}${jsonFilename} is over ${jsonMaxSizeBeforeWarning}MB and was not opened. See Max File Size Before JSON Warning preference.`);
+                      window.showWarningMessage(`WarpScript: please confirm you really want to parse a ${sizeMB}MB file, esc to cancel`, "I am sure", "Nooooo !").then(
+                        (answer) => {
+                          if (answer === "I am sure") {
+                            //size warning confirmed, display the json.
+                            this.displayJson(jsonFilename, progress, errorParam);
                           }
-                        );
-                      } else {
-                        displayJson();
-                      }
-                    }, (err) => {
-                      if (err) {
-                        window.showErrorMessage(err.message);
-                        errorParam = err.message;
-                        StatusbarUi.Execute();
-                      }
-                    });
+                        }
+                      );
+                    } else {
+                      this.displayJson(jsonFilename, progress, errorParam);
+                    }
+                  }, (err) => {
+                    if (err) {
+                      window.showErrorMessage(err.message);
+                      errorParam = err.message;
+                      StatusbarUi.Execute();
+                    }
+                  });
                 } else {
                   // not a json, or empty body (in case of warpscript error)
                   console.debug("requests did not return anything intesting in the body")
@@ -378,9 +367,27 @@ FLOWS
 
             StatusbarUi.Working(`${endpointsForThisSession[req.uri.href]} WarpScripts running...`);
           });
-        })
+        });
       })
-    }
+    };
+  }
+
+  private displayJson(jsonFilename: string, progress: Progress<{ message?: string; }>, errorParam: any) {
+    console.debug(errorParam)
+    workspace.openTextDocument(Uri.file(jsonFilename).with({ scheme: workspace.workspaceFolders![0]!.uri.scheme }))
+      .then((doc: TextDocument) => {
+        window.showTextDocument(doc, { viewColumn: ViewColumn.Two, preview: true, preserveFocus: false })
+          .then(() => {
+            progress.report({ message: 'Done' });
+            StatusbarUi.Init();
+          },
+            (err: any) => {
+              console.error(err)
+              window.showErrorMessage(err.message);
+              errorParam = err;
+              StatusbarUi.Init();
+            });
+      });
   }
 
   public abortAllRequests(outputWin: OutputChannel) {

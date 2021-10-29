@@ -1,9 +1,11 @@
-import * as vscode from 'vscode';
-import * as path from 'path';
+import { join } from "path";
+import { ExtensionContext } from "vscode";
+import WarpScriptExtConstants from "../constants";
+
 
 export default class ImagePreviewWebview {
 
-  constructor(private context: vscode.ExtensionContext) { }
+  constructor(private context: ExtensionContext) { }
 
   static isArray(value: any) {
     return value && typeof value === 'object' && value instanceof Array && typeof value.length === 'number'
@@ -42,11 +44,8 @@ export default class ImagePreviewWebview {
   }
 
   public async getHtmlContent(imageList: String[]): Promise<string> {
-    let fileSaveronDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'node_modules', 'file-saver', 'dist', 'FileSaver.min.js'));
-    let fileSaverPath: string = fileSaveronDiskPath.with({ scheme: 'vscode-resource' }).toString();
-
+    let fileSaverPath: string = WarpScriptExtConstants.getRessource(this.context, join('node_modules', 'file-saver', 'dist', 'FileSaver.min.js'));
     let htmlContent = `<head>
-        
         <title>Stack images</title>
         <script src="${fileSaverPath}"></script>
         <style media="screen" type="text/css">

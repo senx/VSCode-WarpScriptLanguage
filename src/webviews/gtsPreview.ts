@@ -1,5 +1,6 @@
-import * as vscode from 'vscode';
-import * as path from 'path';
+import { join } from 'path';
+import { ExtensionContext, workspace } from 'vscode';
+import WarpScriptExtConstants from '../constants';
 
 export default class GTSPreviewWebview {
 
@@ -12,7 +13,9 @@ export default class GTSPreviewWebview {
    * 
    * @param {ExtensionContext} context 
    */
-  constructor(private context: vscode.ExtensionContext) { }
+  constructor(private context: ExtensionContext) {
+    console.log(context.extensionUri)
+  }
   //dark themes : Default Dark+, Visual Studio Dark, Abyss, Kimbie Dark, Monokai, Monokai Dimmed, Red, Solarized Dark, Tomorrow Night Blue, Default High Contrast
 
   LightThemesList: string[] = [
@@ -27,10 +30,10 @@ export default class GTSPreviewWebview {
   public async getHtmlContent(data: string, timeUnit: string): Promise<string> {
 
     //define the theme
-    let theme = vscode.workspace.getConfiguration().get('warpscript.theme');
-    let showDots = vscode.workspace.getConfiguration().get('warpscript.showDots');
+    let theme = workspace.getConfiguration().get('warpscript.theme');
+    let showDots = workspace.getConfiguration().get('warpscript.showDots');
     if (theme == "auto") {
-      let vscodetheme: string = vscode.workspace.getConfiguration().get("workbench.colorTheme");
+      let vscodetheme: string = workspace.getConfiguration().get("workbench.colorTheme");
       if (this.LightThemesList.indexOf(vscodetheme) > -1) {
         theme = "light";
       }
@@ -39,25 +42,16 @@ export default class GTSPreviewWebview {
 
     //get the default values for GTSPreview
     //let alwaysShowMap = vscode.workspace.getConfiguration().get('warpscript.PreviewAlwaysShowMap');
-    let chartHeight = vscode.workspace.getConfiguration().get('warpscript.PreviewDefaultChartHeight');
-    let mapHeight = vscode.workspace.getConfiguration().get('warpscript.PreviewDefaultMapHeight');
+    let chartHeight = workspace.getConfiguration().get('warpscript.PreviewDefaultChartHeight');
+    let mapHeight = workspace.getConfiguration().get('warpscript.PreviewDefaultMapHeight');
 
     //build the webcomponent path, the webview way.
-    //  let onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'bower_components', 'senx-warpview', 'dist', 'warpview.js'));
-
-    const onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'assets', '@senx', 'warpview', 'elements', 'warpview-elements.js'));
-    const warpviewPath: string = onDiskPath.with({ scheme: 'vscode-resource' }).toString();
-
+    const warpviewPath: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'warpview', 'elements', 'warpview-elements.js'));
     //build the logo path, the webview way.
-    let LogoonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'images', 'warpstudio.png'));
-    let LogoPath: string = LogoonDiskPath.with({ scheme: 'vscode-resource' }).toString();
-    let LogoWhiteonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'images', 'warpstudio-white.png'));
-    let LogoWhitePath: string = LogoWhiteonDiskPath.with({ scheme: 'vscode-resource' }).toString();
-
+    const LogoPath: string = WarpScriptExtConstants.getRessource(this.context, join('images', 'warpstudio.png'));
+    const LogoWhitePath: string = WarpScriptExtConstants.getRessource(this.context, join('images', 'warpstudio-white.png'));
     //build the spectre css path, the webview way.
-    let spectreCSSonDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'assets', 'spectre.css', 'dist', 'spectre.min.css'));
-    let spectreCSSPath: string = spectreCSSonDiskPath.with({ scheme: 'vscode-resource' }).toString();
-
+    const spectreCSSPath: string = WarpScriptExtConstants.getRessource(this.context, join('assets', 'spectre.css', 'dist', 'spectre.min.css'));
 
     //build a time unit warning
     let TimeUnitWarning: string = '';
@@ -77,18 +71,16 @@ export default class GTSPreviewWebview {
       chartOptions.map = { mapType: 'CARTODB_DARK' };
     }
 
-    const  chartTypes = [
+    const chartTypes = [
       'histogram2dcontour', 'histogram2d', 'line', 'spline', 'step', 'step-after', 'step-before', 'area',
       'scatter', 'pie', 'donut', 'polar', 'radar', 'bar', 'bubble', 'annotation', 'datagrid', 'display',
       'drilldown', 'image', 'map', 'gauge', 'bullet', 'plot', 'box', 'box-date', 'line3d', 'drops',
     ].sort().map(t => {
-      return {value: t, label: t};
+      return { value: t, label: t };
     });
 
     let chartSelector = '<div class="form-group"><select id="chartTypes" class="form-select select-sm" onchange="changeChartType(this)">';
-    chartTypes.forEach(c => {
-      chartSelector += `<option value="${c.value}" ${c.value === 'plot'? 'selected': '' }>${c.label}</option>`;
-    });
+    chartTypes.forEach(c => chartSelector += `<option value="${c.value}" ${c.value === 'plot' ? 'selected' : ''}>${c.label}</option>`);
     chartSelector += '</select></div>';
 
     return `<link href="${spectreCSSPath}" rel="stylesheet">

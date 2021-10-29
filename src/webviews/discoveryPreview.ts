@@ -1,9 +1,10 @@
-import * as vscode from 'vscode';
+import { OutputChannel } from "vscode";
+
 export default class DiscoveryPreviewWebview {
 
   constructor() { }
 
-  public async findDiscoveryHtml(data: string,outputWin:vscode.OutputChannel): Promise<String> {
+  public async findDiscoveryHtml(data: string, outputWin: OutputChannel): Promise<String> {
     let discoveryHtml: String = "";
     if (data.startsWith('["<!DOCTYPE html>') && data.endsWith('</body></html>"]')) {
       try {
@@ -12,7 +13,6 @@ export default class DiscoveryPreviewWebview {
       } catch (error) {
         outputWin.appendLine("Unable to parse json output for discovery. Try to disable unicode unescape feature: In the settings, set 'max File Size For Automatic Unicode Escape' to zero.")
       }
-
     }
 
     console.log("found html that could be a discovery dashboard")
@@ -20,10 +20,8 @@ export default class DiscoveryPreviewWebview {
   }
 
   public async getHtmlContent(discoveryHtml: String): Promise<string> {
-
     // manipulate html here if needed
     let htmlContent = ` ${discoveryHtml.toString()} `;
-
     return htmlContent;
   }
 
