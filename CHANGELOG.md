@@ -1,6 +1,19 @@
 VSCode WarpScript Extension
 ---
 
+## 2.0.6
+
+
+## 2.0.7
+
+> +  2021/10/29  | Version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/6eeaefc39aadedc77ddb9f185d90d20c5cfb8b34)*)
+> +  2021/10/29  | VSCodeWeb adaptations  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c9dc46a752786ce6d6cb0c82ee57e474a4949df8)*)
+> +  2021/10/21  | vscode-web adaptations  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c24b15900ba0932de7b8c6841170bb2558020366)*)
+> +  2021/10/21  | version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/11e9ffbe5bdbc116f829ecbb81061b6553d43872)*)
+> +  2021/10/21  | refactoring  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f3ba631a4cf9b537db7c3dc83c65d348a18c21f6)*)
+> +  2021/10/21  | prepare for vscode.dev  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/d018917e3c16467e2962c95ad17b4c01851324d3)*)
+> +  2021/10/15  | changelog  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/a67b0891c21db225e99bbbfabc93f09777127f16)*)
+
 ## 2.0.1
 
 > +  2021/10/15  | version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/20e7c96d848936d281eff10766b6e2f97c006953)*)
@@ -482,18 +495,5 @@ VSCode WarpScript Extension
 > +  2020/03/05  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/46db065da4151c22123a27f9f6e9acbce93be87b)*)
 > +  2020/03/05  | fix again STORE detection if nothing behind  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/68bf13d633fbe444a799de6f777ff52647822885)*)
 > +  2020/03/05  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/5d98853e38250bccce6be29e17b63fe8525447a1)*)
-
-## 1.1.22
-
-> +  2020/03/05  | removed warnings  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/974e9c17a9ec895ef7e27a3c41ca90fb44cd8269)*)
-> +  2020/03/05  | fix the line number in the detailed error message, if LINEON activated  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/b57fabaf03772f10a89cb7fd777d5c2dac6f7929)*)
-> +  2020/03/05  | added the abort all, clean the unresolved promises, detail errors  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c0e610b46da3a5556289fd65051bf829b2ec75de)*)
-> +  2020/03/05  | improve variable detection in code for  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/4780c66344f93024995b1b05bfde6008f7b7bb21)*)
-> +  2020/03/05  | doc update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/83548f3cf136d1f51d2783b80b46431fc75075bd)*)
-> +  2020/03/03  | version bump  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/9b3399b0064a414b52c113d164af9ca4d1c4094f)*)
-> +  2020/03/03  | fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c1599766762e4b00955e8b0a1485265ce22dff78)*)
-
-## 1.1.20
-
 
 
