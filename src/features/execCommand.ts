@@ -373,8 +373,14 @@ FLOWS
   }
 
   private displayJson(jsonFilename: string, progress: Progress<{ message?: string; }>, errorParam: any) {
-    console.debug(errorParam)
-    workspace.openTextDocument(Uri.file(jsonFilename).with({ scheme: workspace.workspaceFolders![0]!.uri.scheme }))
+    console.debug(workspace)
+    let jsonUri: Uri;
+    if (WarpScriptExtConstants.isVirtualWorkspace) {
+      jsonUri = Uri.file(jsonFilename).with({ scheme: workspace.workspaceFolders![0]!.uri.scheme });
+    } else {
+      jsonUri = Uri.file(jsonFilename);
+    }
+    workspace.openTextDocument(jsonUri)
       .then((doc: TextDocument) => {
         window.showTextDocument(doc, { viewColumn: ViewColumn.Two, preview: true, preserveFocus: false })
           .then(() => {
