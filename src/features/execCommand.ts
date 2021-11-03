@@ -373,7 +373,7 @@ FLOWS
   }
 
   private displayJson(jsonFilename: string, progress: Progress<{ message?: string; }>, errorParam: any) {
-    console.debug(workspace)
+    console.debug(errorParam)
     let jsonUri: Uri;
     if (WarpScriptExtConstants.isVirtualWorkspace) {
       jsonUri = Uri.file(jsonFilename).with({ scheme: workspace.workspaceFolders![0]!.uri.scheme });
