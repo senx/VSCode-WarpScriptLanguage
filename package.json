@@ -233,7 +233,7 @@
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"postinstall": "node scripts/build.js",
-		"docupdate": "git add src/wsGlobals.ts && git add src/ref.ts && git add monarch.ts && git add syntaxes/warpscript.tmLanguage.json && git commit -m 'doc Update'",
+		"docupdate": "git add src/wsGlobals.ts && git add src/flowsGlobals.ts && git add src/ref.ts && git add monarch.ts && git add syntaxes/warpscript.tmLanguage.json && git add syntaxes/flows.tmLanguage.json && git commit -m 'doc Update'",
 		"changelog": "node scripts/changelog.js > CHANGELOG.md",
 		"compile-web": "webpack",
 		"watch-web": "webpack --watch",
