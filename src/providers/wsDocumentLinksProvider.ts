@@ -1,24 +1,23 @@
 'use strict';
 
 import { DocumentLink, DocumentLinkProvider, TextDocument, CancellationToken, workspace, Uri, Range } from 'vscode';
+import WarpScriptParser from '../warpScriptParser';
 
 export default class WSDocumentLinksProvider implements DocumentLinkProvider {
-  private _linkPattern = /\s@([^\s]+)/g;
 
   public async provideDocumentLinks(document: TextDocument, _token: CancellationToken): Promise<DocumentLink[]> {
     const results: DocumentLink[] = []
     const text = document.getText();
-    this._linkPattern.lastIndex = 0;
-    let match: RegExpMatchArray | null;
-    while ((match = this._linkPattern.exec(text))) {
-      const macroLinkName = match[0];
-      const macroName = match[1];
-      const offset = match.index;
-      const linkStart = document.positionAt(offset);
-      const linkEnd = document.positionAt(offset + macroLinkName.length);
+    const macros = WarpScriptParser.getListOfMacroCallsWithPosition(text);
+    for (let i = 0;i<macros.length;i++) {
+      const macroLinkName = macros[i][0];
+      const macroName = macroLinkName.substring(1);
+      console.log("###" + macroName)
+      const linkStart = document.positionAt(macros[i][1]);
+      const linkEnd = document.positionAt(macros[i][2]);
       await WSDocumentLinksProvider.getMacroURI(macroName).then(
-        (uri) => results.push(new DocumentLink(new Range(linkStart, linkEnd), uri))
-      ).catch(() => { /* Ignore missing macros */ });
+             (uri) => results.push(new DocumentLink(new Range(linkStart, linkEnd), uri))
+           ).catch(() => { /* Ignore missing macros */ });
     }
     return Promise.resolve(results);
   }

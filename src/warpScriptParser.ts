@@ -1,4 +1,5 @@
 import { TextDocument, Range, Position, CancellationToken, CodeLens } from 'vscode';
+import { CancellationTokenSource } from 'vscode-languageclient';
 
 /**
  * Parsing result of // @command parameter  in the beginning of the WarpScript
@@ -7,7 +8,8 @@ export interface specialCommentCommands {
   endpoint?: string;
   timeunit?: string;
   localmacrosubstitution?: boolean,
-  displayPreviewOpt?: string
+  displayPreviewOpt?: string,
+  listOfMacroInclusion?: string[]
 }
 
 /**
@@ -184,11 +186,14 @@ export default class WarpScriptParser {
   /**
    * Unlike parseWarpScriptMacros, this function return a very simple list of statements (as strings), ignoring comments. 
    * [ '"HELLO"' '"WORLD"' '+' '2' '2' '*' ]
+   * 
+   * When called with withPosition true, it returns a list of list than include start and end position of the statement:
+   * [ [ '"HELLO"' 4 11 ] [ '"WORLD"' 22 29 ]  ]
    */
-  public static parseWarpScriptStatements(ws: String, cancelToken: CancellationToken): string[] {
+  public static parseWarpScriptStatements(ws: String, cancelToken: CancellationToken, withPosition = false): any[] {
 
     let i: number = 0;
-    let result: string[] = [];
+    let result: any[] = [];
 
     while (i < ws.length - 1 && !cancelToken.isCancellationRequested) { //often test 2 characters
       if (ws.charAt(i) == '<' && ws.charAt(i + 1) == "'") { //start of a multiline, look for end
@@ -247,7 +252,11 @@ export default class WarpScriptParser {
       if (ws.charAt(i) != ' ' && ws.charAt(i) != '\n') {
         let start = i;
         while (i < ws.length && ws.charAt(i) != ' ' && ws.charAt(i) != '\n') { i++; }
-        result.push(ws.substring(start, i));
+        if (withPosition) {
+          result.push([ws.substring(start, i), start, i]);
+        } else {
+          result.push(ws.substring(start, i));
+        }
       }
       i++;
     }
@@ -255,7 +264,15 @@ export default class WarpScriptParser {
     return result;
   }
 
+  public static getListOfMacroCallsWithPosition(ws: String): any[] {
+    let c = new CancellationTokenSource();
+    return this.parseWarpScriptStatements(ws, c.token, true).filter(s => { return s[0].startsWith('@') });
+  }
 
+  public static getListOfMacroCalls(ws: String): any[] {
+    let c = new CancellationTokenSource();
+    return this.parseWarpScriptStatements(ws, c.token).filter(s => { return s.startsWith('@') });
+  }
 
   private static codeLensStatements: { [key: string]: string[] } = {
     'IFT': ['then...', 'if...'],
@@ -337,6 +354,7 @@ export default class WarpScriptParser {
   public static extractSpecialComments(executedWarpScript: string): specialCommentCommands {
     let result: specialCommentCommands = {};
     let warpscriptlines = executedWarpScript.split('\n');
+    result.listOfMacroInclusion = [];
     for (let l = 0; l < warpscriptlines.length; l++) {
       let currentline = warpscriptlines[l];
       if (currentline.startsWith("//")) {
@@ -352,7 +370,7 @@ export default class WarpScriptParser {
               result.endpoint = parametervalue;   // overrides the Warp10URL configuration
               break;
             case "localmacrosubstitution":
-              result.localmacrosubstitution = ("true" === parametervalue.toLowerCase());   // overrides the substitutionWithLocalMacros
+              result.localmacrosubstitution = ("true" === parametervalue.trim().toLowerCase());   // overrides the substitutionWithLocalMacros
               break;
             case "timeunit":
               if (['us', 'ms', 'ns'].indexOf(parametervalue.trim()) > -1) {
@@ -366,6 +384,9 @@ export default class WarpScriptParser {
                 case "imag": result.displayPreviewOpt = 'I'; break;
                 default: result.displayPreviewOpt = ''; break;
               }
+              break;
+            case "includeLocalMacro":
+              result.listOfMacroInclusion.push(parametervalue.trim());
               break;
             default:
               break;

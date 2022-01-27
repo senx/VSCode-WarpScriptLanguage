@@ -46,7 +46,7 @@ export abstract class W10HoverProvider  implements HoverProvider {
         let otherKeywordsDoc = JSON.parse(`{
                 "@localmacrosubstitution": {
                     "sig": "@localmacrosubstitution true|false",
-                    "help": "When false, deactivate the inline macro substitution done by VSCode Warpscript plugin. "
+                    "help": "When false, deactivate the inline macro substitution done by VSCode Warpscript plugin, including @includeLocalMacro instructions. "
                 },
                 "@endpoint": {
                     "sig": "@endpoint URL:STRING",
@@ -59,6 +59,10 @@ export abstract class W10HoverProvider  implements HoverProvider {
                 "@timeunit": {
                     "sig": "@timeunit us|ms|ns",
                     "help": "Change the time unit for GTS Preview. It could be us, ms, ns.  Usefull if you use a Warp 10 platform with a nanosecond or millisecond precision instead of default settings."
+          },
+          "@includeLocalMacro": {
+              "sig": "@includeLocalMacro macroPath:STRING",
+              "help": "Force inclusion of the specified local macro in the script before execution. Allow to execute dynamic calls such as \`'macro' 'Path' + RUN\`.  Macros called with \`@macroPath\` are automatically substituted"
           }      
             }`);
     
