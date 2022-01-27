@@ -111,13 +111,18 @@ export default class ExecCommand {
 
           progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
 
-          let macroURIPattern = /\s@([^\s]+)/g;  // Captures the macro name
-          let match: RegExpMatchArray | null;
           let lines: number[] = [document.lineCount]
           let uris: string[] = [document.uri.toString()]
           if (substitutionWithLocalMacros) {
-            while ((match = macroURIPattern.exec(executedWarpScript))) {
-              const macroName = match[1];
+            console.log("liste macro");
+            console.log(WarpScriptParser.getListOfMacroCalls(executedWarpScript));
+            console.log("fin liste macro");
+
+            // first, prepend macros of the special comments "// @includeLocalMacro "
+            for (let macroName of commentsCommands.listOfMacroInclusion) {
+              if (macroName.startsWith('@')) {
+                macroName = macroName.substring(1);
+              }
               console.log('-' + macroName + '-');
               await WSDocumentLinksProvider.getMacroURI(macroName).then(
                 async (uri) => {
@@ -134,12 +139,59 @@ export default class ExecCommand {
                     // Update lines and uris references
                     lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
                     uris.unshift(uri.toString());
-                    macroURIPattern.lastIndex = 0; // Restart the regex matching at the start of the string.
                   }
                 }
               ).catch(
-                () => { /* Ignore missing macros */ }
+                () => {
+                  outputWin.show();
+                  outputWin.append('[' + execDate + '] ');
+                  outputWin.appendLine("warning '" + macroName + "' is explicitly included with // @includeLocalMacro, but was not found in the VSCode project. Warp 10 will try its internal resolvers.")
+                }
               );
+            }
+
+            let allMacroPrepended = false;
+
+            while (!allMacroPrepended) {
+              let listOfMacros = WarpScriptParser.getListOfMacroCalls(executedWarpScript);
+
+              if (listOfMacros.length > 0) {
+                for (const m of listOfMacros) {
+                  const macroName = m.substring(1);
+                  console.log('-' + macroName + '-');
+                  allMacroPrepended = true;
+                  await WSDocumentLinksProvider.getMacroURI(macroName).then(
+                    async (uri) => {
+                      if (uris.indexOf(uri.toString()) === -1) {
+                        // outputWin.show();
+                        // outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
+                        let tdoc: TextDocument = await workspace.openTextDocument(uri);
+                        let macroCode: string = tdoc.getText()
+                        // Prepend the macro, store it and then append the rest of the script.
+                        let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
+                        executedWarpScript = prepend + executedWarpScript;
+                        //          linesOfMacrosPrepended += prepend.split('\n').length - 1;
+                        console.log(prepend.split('\n'))
+                        // Update lines and uris references
+                        lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
+                        uris.unshift(uri.toString());
+                        allMacroPrepended = false;
+                      }
+                    }
+                  ).catch(
+                    () => { /* Ignore missing macros */ }
+                  );
+                }
+              } else {
+                allMacroPrepended = true;
+              }
+            }
+
+          } else {
+            if (commentsCommands.listOfMacroInclusion.length > 0) {
+              outputWin.show();
+              outputWin.append('[' + execDate + '] ');
+              outputWin.appendLine("warning '// @localmacrosubstitution false' also disables all the '// @includeLocalMacro' instructions")
             }
           }
 

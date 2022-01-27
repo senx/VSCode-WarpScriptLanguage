@@ -12,7 +12,7 @@
 	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
 	"license": "Apache-2.0",
-	"version": "2.0.8",
+	"version": "2.1.0",
 	"publisher": "senx",
 	"engines": {
 		"vscode": "^1.61.0"
@@ -233,7 +233,7 @@
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"postinstall": "node scripts/build.js",
-		"docupdate": "git add src/wsGlobals.ts && git add src/ref.ts && git add monarch.ts && git add syntaxes/warpscript.tmLanguage.json && git commit -m 'doc Update'",
+		"docupdate": "git add src/wsGlobals.ts && git add src/flowsGlobals.ts && git add src/ref.ts && git add monarch.ts && git add syntaxes/warpscript.tmLanguage.json && git add syntaxes/flows.tmLanguage.json && git commit -m 'doc Update'",
 		"changelog": "node scripts/changelog.js > CHANGELOG.md",
 		"compile-web": "webpack",
 		"watch-web": "webpack --watch",
@@ -249,7 +249,7 @@
 		"@types/vscode": "^1.61.0",
 		"@types/vscode-webview": "1.57.0",
 		"@types/webpack-env": "^1.16.2",
-		"@vscode/test-web": "^0.0.15",
+		"@vscode/test-web": "^0.0.19",
 		"assert": "^2.0.0",
 		"browserify-fs": "^1.0.0",
 		"browserify-zlib": "^0.2.0",
@@ -266,7 +266,7 @@
 		"path-browserify": "^1.0.1",
 		"plist": "3.0.4",
 		"process": "^0.11.10",
-		"showdown": "1.9.1",
+		"showdown": "^1.9.0",
 		"spectre.css": "0.5.9",
 		"stream-browserify": "^3.0.0",
 		"stream-http": "^3.2.0",
@@ -276,9 +276,9 @@
 		"url": "^0.11.0",
 		"util": "^0.12.4",
 		"vm-browserify": "^1.1.2",
-		"vsce": "1.100.1",
+		"vsce": "2.6.4",
 		"vscode-textmate": "5.4.0",
-		"webpack": "^5.52.1",
+		"webpack": "^5.67.0",
 		"webpack-cli": "^4.8.0"
 	},
 	"dependencies": {
@@ -289,12 +289,12 @@
 		"file-saver": "2.0.5",
 		"http-parser-js": "0.5.3",
 		"lodash": "4.17.21",
-		"pac-resolver": "4.1.0",
-		"proxy-agent": "4.0.0",
+		"pac-resolver": "^5.0.0",
+		"proxy-agent": "^5.0.0",
 		"request": "2.88.2",
 		"socks-proxy-agent": "5.0.0",
 		"uuid": "8.3.2",
 		"vscode-languageclient": "7.0.0",
-		"vscode-proxy-agent": "0.5.2"
+		"vscode-proxy-agent": "0.11.0"
 	}
 }
