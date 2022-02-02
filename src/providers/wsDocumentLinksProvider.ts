@@ -1,7 +1,7 @@
 'use strict';
 
 import { DocumentLink, DocumentLinkProvider, TextDocument, CancellationToken, workspace, Uri, Range } from 'vscode';
-import WarpScriptParser from '../warpScriptParser';
+import WarpScriptParser, { specialCommentCommands } from '../warpScriptParser';
 
 export default class WSDocumentLinksProvider implements DocumentLinkProvider {
 
@@ -9,16 +9,24 @@ export default class WSDocumentLinksProvider implements DocumentLinkProvider {
     const results: DocumentLink[] = []
     const text = document.getText();
     const macros = WarpScriptParser.getListOfMacroCallsWithPosition(text);
-    for (let i = 0;i<macros.length;i++) {
+    for (let i = 0; i < macros.length; i++) {
       const macroLinkName = macros[i][0];
       const macroName = macroLinkName.substring(1);
       console.log("###" + macroName)
       const linkStart = document.positionAt(macros[i][1]);
       const linkEnd = document.positionAt(macros[i][2]);
       await WSDocumentLinksProvider.getMacroURI(macroName).then(
-             (uri) => results.push(new DocumentLink(new Range(linkStart, linkEnd), uri))
-           ).catch(() => { /* Ignore missing macros */ });
+        (uri) => results.push(new DocumentLink(new Range(linkStart, linkEnd), uri))
+      ).catch(() => { /* Ignore missing macros */ });
     }
+    // also link @include macros when found, for clarity
+    let com: specialCommentCommands = WarpScriptParser.extractSpecialComments(text);
+    for (let i = 0; i < com.listOfMacroInclusion.length; i++) {
+      await WSDocumentLinksProvider.getMacroURI(com.listOfMacroInclusion[i]).then(
+        (uri) => results.push(new DocumentLink(com.listOfMacroInclusionRange[i], uri))
+      ).catch(() => { /* Ignore missing macros */ });
+    }
+
     return Promise.resolve(results);
   }
 

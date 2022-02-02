@@ -323,8 +323,7 @@ FLOWS
 
                   let errorMessage: string = response.headers['x-warp10-error-message'];
                   // We must substract the number of lines added by prepended macros in the error message.
-                  errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, group1) => '[Line #' + (Number.parseInt(group1)).toString() + ']');
-
+                  errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, _group1) => '[Line #' + lineInError.toString() + ']');
                   outputWin.show();
                   outputWin.append('[' + execDate + '] ');
                   outputWin.append('ERROR file://');

@@ -60,9 +60,9 @@ export abstract class W10HoverProvider  implements HoverProvider {
                     "sig": "@timeunit us|ms|ns",
                     "help": "Change the time unit for GTS Preview. It could be us, ms, ns.  Usefull if you use a Warp 10 platform with a nanosecond or millisecond precision instead of default settings."
           },
-          "@includeLocalMacro": {
-              "sig": "@includeLocalMacro macroPath:STRING",
-              "help": "Force inclusion of the specified local macro in the script before execution. Allow to execute dynamic calls such as \`'macro' 'Path' + RUN\`.  Macros called with \`@macroPath\` are automatically substituted"
+          "@include": {
+              "sig": "@include macro:macroPath",
+              "help": "When the argument starts with _macro:_ Force inclusion of the specified local macro in the script before execution. Allow to execute dynamic calls such as \`'macro' 'Path' + RUN\`.  Macros called with \`@macroPath\` are automatically substituted when found in the current project scope. A link is added to the path to check easily what will be included."
           }      
             }`);
     
