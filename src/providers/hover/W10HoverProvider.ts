@@ -203,6 +203,26 @@ export abstract class W10HoverProvider  implements HoverProvider {
                     } else {
                       contents.appendMarkdown('desc is empty in macro INFO. look at macro documentation [here](https://www.warp10.io/doc/INFO), and try the macro snippet in VSCode to get a documented macro skeleton.');
                     }
+                    if (doc[0]['params']) {
+                      for (const p in doc[0]['params']) {
+                        contents.appendMarkdown(`\n\n@param \`${p}\` ${doc[0]['params'][p]}\n\n`)
+                      }
+                    }
+                    if (doc[0]['related']) {
+                      if (doc[0]['related'].length > 0) {
+                        contents.appendMarkdown(`\n\n\n\nRelated: `)
+                        for (const r of doc[0]['related']) {
+                          contents.appendMarkdown(` ${r} `)
+                        }
+                      }
+                      contents.appendMarkdown('\n\n');
+                    }
+                    if (doc[0]['examples']) {
+                      for (const ex of doc[0]['examples']) {
+                        contents.appendMarkdown('\n\nExample:\n\n');
+                        contents.appendCodeblock(ex, 'warpscript');
+                      }
+                    }
                     resolve(new Hover(contents, wordRange));
                   }
     
