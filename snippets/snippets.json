@@ -116,6 +116,8 @@
       "${7:  'count' 1000 // optional: limit to 1000 points per gts}",
       "${8:  'boundary' 1 // optional: also fetch one point before and after required timerange}",
       "${9:  'timestep'  5 s // optional: one point every 5 second. see also 'sample' for faster random selection.}",
+      "${10:  'step'  10 // optional: returns one point out of 10}",
+      "${11:  // see documentation for pagination, gts pagination, and more fetch options}",
     "} FETCH"      
     ]
   },
