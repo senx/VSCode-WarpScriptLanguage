@@ -46,7 +46,7 @@ export abstract class W10HoverProvider  implements HoverProvider {
         let otherKeywordsDoc = JSON.parse(`{
                 "@localmacrosubstitution": {
                     "sig": "@localmacrosubstitution true|false",
-                    "help": "When false, deactivate the inline macro substitution done by VSCode Warpscript plugin, including @includeLocalMacro instructions. "
+                    "help": "When false, deactivate the inline macro substitution done by VSCode Warpscript plugin, including _include macro:_ instructions. "
                 },
                 "@endpoint": {
                     "sig": "@endpoint URL:STRING",
