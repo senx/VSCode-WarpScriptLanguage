@@ -118,7 +118,7 @@ export default class ExecCommand {
             console.log(WarpScriptParser.getListOfMacroCalls(executedWarpScript));
             console.log("fin liste macro");
 
-            // first, prepend macros of the special comments "// @includeLocalMacro "
+            // first, prepend macros of the special comments "// @include macro: "
             for (let macroName of commentsCommands.listOfMacroInclusion) {
               if (macroName.startsWith('@')) {
                 macroName = macroName.substring(1);
@@ -145,7 +145,7 @@ export default class ExecCommand {
                 () => {
                   outputWin.show();
                   outputWin.append('[' + execDate + '] ');
-                  outputWin.appendLine("warning '" + macroName + "' is explicitly included with // @includeLocalMacro, but was not found in the VSCode project. Warp 10 will try its internal resolvers.")
+                  outputWin.appendLine("warning '" + macroName + "' is explicitly included with // @include macro:, but was not found in the VSCode project. Warp 10 will try its internal resolvers.")
                 }
               );
             }
@@ -191,7 +191,7 @@ export default class ExecCommand {
             if (commentsCommands.listOfMacroInclusion.length > 0) {
               outputWin.show();
               outputWin.append('[' + execDate + '] ');
-              outputWin.appendLine("warning '// @localmacrosubstitution false' also disables all the '// @includeLocalMacro' instructions")
+              outputWin.appendLine("warning '// @localmacrosubstitution false' also disables all the '// @include macro:' instructions")
             }
           }
 
@@ -323,8 +323,7 @@ FLOWS
 
                   let errorMessage: string = response.headers['x-warp10-error-message'];
                   // We must substract the number of lines added by prepended macros in the error message.
-                  errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, group1) => '[Line #' + (Number.parseInt(group1)).toString() + ']');
-
+                  errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, _group1) => '[Line #' + lineInError.toString() + ']');
                   outputWin.show();
                   outputWin.append('[' + execDate + '] ');
                   outputWin.append('ERROR file://');

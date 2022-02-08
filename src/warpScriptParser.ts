@@ -9,7 +9,8 @@ export interface specialCommentCommands {
   timeunit?: string;
   localmacrosubstitution?: boolean,
   displayPreviewOpt?: string,
-  listOfMacroInclusion?: string[]
+  listOfMacroInclusion?: string[],
+  listOfMacroInclusionRange?: Range[]
 }
 
 /**
@@ -355,6 +356,7 @@ export default class WarpScriptParser {
     let result: specialCommentCommands = {};
     let warpscriptlines = executedWarpScript.split('\n');
     result.listOfMacroInclusion = [];
+    result.listOfMacroInclusionRange = [];
     for (let l = 0; l < warpscriptlines.length; l++) {
       let currentline = warpscriptlines[l];
       if (currentline.startsWith("//")) {
@@ -385,8 +387,14 @@ export default class WarpScriptParser {
                 default: result.displayPreviewOpt = ''; break;
               }
               break;
-            case "includeLocalMacro":
-              result.listOfMacroInclusion.push(parametervalue.trim());
+            case "include":
+              let p = parametervalue.trim();
+              if (p.startsWith("macro:")) {
+                p = p.substring(6).trim()
+                result.listOfMacroInclusion.push(p);
+                let r = new Range(new Position(l,3),new Position(l,currentline.trim().length))
+                result.listOfMacroInclusionRange.push(r);
+              }
               break;
             default:
               break;
@@ -394,7 +402,9 @@ export default class WarpScriptParser {
         }
       }
       else {
-        break; //no more comments at the beginning of the file
+        if (currentline.trim().length > 0) {
+          break; //no more comments at the beginning of the file
+        }
       }
     }
     return result;

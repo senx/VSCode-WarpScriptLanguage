@@ -46,7 +46,7 @@ export abstract class W10HoverProvider  implements HoverProvider {
         let otherKeywordsDoc = JSON.parse(`{
                 "@localmacrosubstitution": {
                     "sig": "@localmacrosubstitution true|false",
-                    "help": "When false, deactivate the inline macro substitution done by VSCode Warpscript plugin, including @includeLocalMacro instructions. "
+                    "help": "When false, deactivate the inline macro substitution done by VSCode Warpscript plugin, including _include macro:_ instructions. "
                 },
                 "@endpoint": {
                     "sig": "@endpoint URL:STRING",
@@ -60,9 +60,9 @@ export abstract class W10HoverProvider  implements HoverProvider {
                     "sig": "@timeunit us|ms|ns",
                     "help": "Change the time unit for GTS Preview. It could be us, ms, ns.  Usefull if you use a Warp 10 platform with a nanosecond or millisecond precision instead of default settings."
           },
-          "@includeLocalMacro": {
-              "sig": "@includeLocalMacro macroPath:STRING",
-              "help": "Force inclusion of the specified local macro in the script before execution. Allow to execute dynamic calls such as \`'macro' 'Path' + RUN\`.  Macros called with \`@macroPath\` are automatically substituted"
+          "@include": {
+              "sig": "@include macro:macroPath",
+              "help": "When the argument starts with _macro:_ Force inclusion of the specified local macro in the script before execution. Allow to execute dynamic calls such as \`'macro' 'Path' + RUN\`.  Macros called with \`@macroPath\` are automatically substituted when found in the current project scope. A link is added to the path to check easily what will be included."
           }      
             }`);
     
@@ -202,6 +202,26 @@ export abstract class W10HoverProvider  implements HoverProvider {
                       contents.appendMarkdown(doc[0]['desc']);
                     } else {
                       contents.appendMarkdown('desc is empty in macro INFO. look at macro documentation [here](https://www.warp10.io/doc/INFO), and try the macro snippet in VSCode to get a documented macro skeleton.');
+                    }
+                    if (doc[0]['params']) {
+                      for (const p in doc[0]['params']) {
+                        contents.appendMarkdown(`\n\n@param \`${p}\` ${doc[0]['params'][p]}\n\n`)
+                      }
+                    }
+                    if (doc[0]['related']) {
+                      if (doc[0]['related'].length > 0) {
+                        contents.appendMarkdown(`\n\n\n\nRelated: `)
+                        for (const r of doc[0]['related']) {
+                          contents.appendMarkdown(` ${r} `)
+                        }
+                      }
+                      contents.appendMarkdown('\n\n');
+                    }
+                    if (doc[0]['examples']) {
+                      for (const ex of doc[0]['examples']) {
+                        contents.appendMarkdown('\n\nExample:\n\n');
+                        contents.appendCodeblock(ex, 'warpscript');
+                      }
                     }
                     resolve(new Hover(contents, wordRange));
                   }
