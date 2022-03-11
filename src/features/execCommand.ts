@@ -114,9 +114,6 @@ export default class ExecCommand {
           let lines: number[] = [document.lineCount]
           let uris: string[] = [document.uri.toString()]
           if (substitutionWithLocalMacros) {
-            console.log("liste macro");
-            console.log(WarpScriptParser.getListOfMacroCalls(executedWarpScript));
-            console.log("fin liste macro");
 
             // first, prepend macros of the special comments "// @include macro: "
             for (let macroName of commentsCommands.listOfMacroInclusion) {
@@ -156,10 +153,10 @@ export default class ExecCommand {
               let listOfMacros = WarpScriptParser.getListOfMacroCalls(executedWarpScript);
 
               if (listOfMacros.length > 0) {
-                for (const m of listOfMacros) {
+                  allMacroPrepended = true;
+                  for (const m of listOfMacros) {
                   const macroName = m.substring(1);
                   console.log('-' + macroName + '-');
-                  allMacroPrepended = true;
                   await WSDocumentLinksProvider.getMacroURI(macroName).then(
                     async (uri) => {
                       if (uris.indexOf(uri.toString()) === -1) {
