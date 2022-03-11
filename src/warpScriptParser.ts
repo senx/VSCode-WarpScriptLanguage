@@ -225,7 +225,7 @@ export default class WarpScriptParser {
         i++;
         while (i < ws.length && ws.charAt(i) != "'" && ws.charAt(i) != '\n') { i++; }
         i++;
-        result.push(ws.substring(start, i));
+        result.push(ws.substring(start, i).replace('\r',''));
         // console.log(i, 'end of string');
       }
       if (ws.charAt(i) == '"') { //start of string, seek for end
@@ -235,7 +235,7 @@ export default class WarpScriptParser {
         while (i < ws.length && ws.charAt(i) != '"' && ws.charAt(i) != '\n') { i++; }
         // console.log(i, 'end of string');
         i++;
-        result.push(ws.substring(start, i));
+        result.push(ws.substring(start, i).replace('\r',''));
       }
 
       if (ws.charAt(i) == '<' && ws.charAt(i + 1) == '%') { //start of a macro.
@@ -254,9 +254,9 @@ export default class WarpScriptParser {
         let start = i;
         while (i < ws.length && ws.charAt(i) != ' ' && ws.charAt(i) != '\n') { i++; }
         if (withPosition) {
-          result.push([ws.substring(start, i), start, i]);
+          result.push([ws.substring(start, i).replace('\r',''), start, i]);
         } else {
-          result.push(ws.substring(start, i));
+          result.push(ws.substring(start, i).replace('\r',''));
         }
       }
       i++;
