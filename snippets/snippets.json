@@ -319,8 +319,8 @@
     ]
   },
   "discovery (simple chart)": {
-    "prefix": "discovery",
-    "description": "Discovery within WarpScript with render2 macro",
+    "prefix": "discovery autorefresh example",
+    "description": "Discovery within WarpScript with autorefresh with macros executed by the dashboard",
     "body": [
       "{",
       "  'title' 'Test'",
@@ -330,7 +330,8 @@
       "    'title' 'test'",
       "    'options' { 'autoRefresh' 1 }",
       "    'x' 0 'y' 0 'w' 12 'h' 2",
-      "    'type' 'area' 'macro' <%",
+      "    'type' 'area' ",
+      "    'macro' <%",
       "        1 4 <% DROP ",
       "          NEWGTS 'g' STORE",
       "          1 10 <% ",
