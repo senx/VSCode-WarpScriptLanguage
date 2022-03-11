@@ -317,5 +317,35 @@
       "} 'secret' TOKENGEN",
       ""
     ]
+  },
+  "discovery (simple chart)": {
+    "prefix": "discovery autorefresh example",
+    "description": "Discovery within WarpScript with autorefresh with macros executed by the dashboard",
+    "body": [
+      "{",
+      "  'title' 'Test'",
+      "  'description' 'Dashboard test'",
+      "  'tiles' [",
+      "  {",
+      "    'title' 'test'",
+      "    'options' { 'autoRefresh' 1 }",
+      "    'x' 0 'y' 0 'w' 12 'h' 2",
+      "    'type' 'area' ",
+      "    'macro' <%",
+      "        1 4 <% DROP ",
+      "          NEWGTS 'g' STORE",
+      "          1 10 <% ",
+      "            'ts' STORE \\$g \\$ts RAND + STU * NOW + NaN NaN NaN RAND ADDVALUE DROP ",
+      "          %> FOR",
+      "          \\$g ",
+      "        %> FOR ",
+      "      %>",
+      "    }",
+      "  ]",
+      "}",
+      "{ 'url' 'https://sandbox.senx.io/api/v0/exec'  } // endpoint ",
+      "@senx/discovery2/render // html output"
+      
+    ]
   }
 }
