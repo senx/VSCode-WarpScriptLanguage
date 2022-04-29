@@ -55,6 +55,7 @@ pipeline {
         nvm('version': 'v17.1.0') {
           sh 'yarn vsce publish patch -m "Release %s" -p $VSCODE_PAT'
           sh 'npx -y ovsx publish -p $OPENVSX_PAT'
+          sh 'git push --tags'
         }
       }
     }
