@@ -3,6 +3,8 @@ VSCode WarpScript Extension
 
 ## 2.1.5
 
+> +  2022/04/29  | Specify node version  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/b16334ad0d21bd80f4d397215a36ae6cfcfdae18)*)
+> +  2022/04/29  | Revert to the old tag detection  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/1e1268ae1bed749f2fc87e4b4e346d3fb6ea2cce)*)
 > +  2022/04/29  | Jenkins : abort previous build  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/74654d365a5cfd556733cbc6fb4b79bed58a750c)*)
 > +  2022/04/29  | Ignore input message if "when" condition is not meet  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/5ae9c5fb38e2dc2fc54f7886349f272d34c94004)*)
 > +  2022/04/29  | doc Update  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c837809e609411c72beea16cdebc61e83694f7df)*)
