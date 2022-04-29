@@ -1,6 +1,11 @@
 VSCode WarpScript Extension
 ---
 
+## v2.1.4
+
+> +  2022/03/11  | version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c8ecc177046c6a64163a9ec5071cc042ad6f6dab)*)
+> +  2022/03/11  | changelog  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2133943f0aa5bbbbe145a6b138f078df490f816d)*)
+
 ## v2.1.3
 
 > +  2022/03/11  | version bump  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/79a1cde18c17d4d3d8906f78293c4f8aea9639e2)*)
@@ -486,11 +491,5 @@ VSCode WarpScript Extension
 > +  2020/09/10  | completion, hover and exec  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/0545de00123819d9dc3fa17e9e9aa16e9171c15d)*)
 > +  2020/08/14  | flows init  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/57fea6b22ac9d537d570aff81560ea286f57d7ed)*)
 > +  2020/07/02  | warpview 2  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/675540c37e09095fed3e7669a8af82681d698c6b)*)
-
-## 1.1.27
-
-> +  2021/02/17  | cleanup  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/71bc700da0ea7947b93ac281b5f5ec8a0544c46c)*)
-> +  2021/02/17  | bump version  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/b7516392d409c8052f29659be34128bc80c52630)*)
-> +  2021/02/17  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/4ad427c97dd774474108654fe5c911a6a75e6f47)*)
 
 
