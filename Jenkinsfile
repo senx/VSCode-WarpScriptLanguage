@@ -47,32 +47,19 @@ pipeline {
       }
     }
 
-    stage("Deploy to Microsoft Marketplace") {
-      when {
-        expression { return isItATagCommit() }
-      }
+    stage("Deploy") {
       options {
-        timeout(time: 30, unit: 'DAYS')
+        timeout(time: 4, unit: 'DAYS')
+      }
+      when {
+        beforeInput true
+        buildingTag()
       }
       input {
-        message 'Deploy to Microsoft Marketplace?'
+        message 'Deploy to Microsoft Marketplace and Open VSX Registry?'
       }
       steps {
         sh 'yarn vsce publish -p $VSCODE_PAT'
-      }
-    }
-
-    stage("Deploy to Open VSX Registry") {
-      when {
-        expression { return isItATagCommit() }
-      }
-      options {
-        timeout(time: 30, unit: 'DAYS')
-      }
-      input {
-        message 'Deploy to Open VSX Registry?'
-      }
-      steps {
         sh 'npx -y ovsx publish -p $OPENVSX_PAT'
       }
     }
@@ -131,11 +118,4 @@ void notifySlack(String color, String message, String buildStatus) {
 
 String getVersion() {
   return sh(returnStdout: true, script: 'git describe --abbrev=0 --tags').trim()
-}
-
-
-boolean isItATagCommit() {
-  String lastCommit = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
-  String tag = sh(returnStdout: true, script: "git show-ref --tags -d | grep ^${lastCommit} | sed -e 's,.* refs/tags/,,' -e 's/\\^{}//'").trim()
-  return tag != ''
 }
