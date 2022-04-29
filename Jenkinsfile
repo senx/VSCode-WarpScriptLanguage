@@ -24,17 +24,14 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '3'))
   }
   environment {
-    version = "${getVersion()}"
     VSCODE_PAT = credentials('VSCode_Marketplace_PAT')
     OPENVSX_PAT = credentials('Open_VSX_Registry_PAT')
   }
   stages {
     stage('Checkout') {
       steps {
-        this.notifyBuild('STARTED', version)
-        git poll: false, url: 'git@gitlab.com:senx/vscode-warpscriptlanguage.git'
-        sh 'git fetch --tags'
-        echo "Building ${version}"
+        this.notifyBuild('STARTED', '')
+        checkout scm
       }
     }
 
@@ -51,16 +48,12 @@ pipeline {
       options {
         timeout(time: 4, unit: 'DAYS')
       }
-      when {
-        beforeInput true
-        expression { return isItATagCommit() }
-      }
       input {
         message 'Deploy to Microsoft Marketplace and Open VSX Registry?'
       }
       steps {
         nvm('version': 'v17.1.0') {
-          sh "yarn vsce publish ${version}" + ' -p $VSCODE_PAT'
+          sh 'yarn vsce publish patch -m "Release %s" -p $VSCODE_PAT'
           sh 'npx -y ovsx publish -p $OPENVSX_PAT'
         }
       }
@@ -68,16 +61,16 @@ pipeline {
   }
   post {
     success {
-      this.notifyBuild('SUCCESSFUL', version)
+      this.notifyBuild('SUCCESSFUL', '')
     }
     failure {
-      this.notifyBuild('FAILURE', version)
+      this.notifyBuild('FAILURE', '')
     }
     aborted {
-      this.notifyBuild('ABORTED', version)
+      this.notifyBuild('ABORTED', '')
     }
     unstable {
-      this.notifyBuild('UNSTABLE', version)
+      this.notifyBuild('UNSTABLE', '')
     }
   }
 }
@@ -115,15 +108,4 @@ void notifySlack(String color, String message, String buildStatus) {
   String slackURL = getParam('slackUrl')
   String payload = "{\"username\": \"${env.JOB_NAME}\",\"attachments\":[{\"title\": \"${env.JOB_NAME} ${buildStatus}\",\"color\": \"${color}\",\"text\": \"${message}\"}]}" as String
   sh "curl -X POST -H 'Content-type: application/json' --data '${payload}' ${slackURL}" as String
-}
-
-
-String getVersion() {
-  return sh(returnStdout: true, script: 'git describe --abbrev=0 --tags').trim()
-}
-
-boolean isItATagCommit() {
-  String lastCommit = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
-  String tag = sh(returnStdout: true, script: "git show-ref --tags -d | grep ^${lastCommit} | sed -e 's,.* refs/tags/,,' -e 's/\\^{}//'").trim()
-  return tag != ''
 }
