@@ -20,7 +20,7 @@ import hudson.model.*
 pipeline {
   agent any
   options {
-    disableConcurrentBuilds()
+    disableConcurrentBuilds(abortPrevious: true)
     buildDiscarder(logRotator(numToKeepStr: '3'))
   }
   environment {
