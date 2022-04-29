@@ -59,8 +59,10 @@ pipeline {
         message 'Deploy to Microsoft Marketplace and Open VSX Registry?'
       }
       steps {
-        sh 'yarn vsce publish -p $VSCODE_PAT'
-        sh 'npx -y ovsx publish -p $OPENVSX_PAT'
+        nvm('version': 'v17.1.0') {
+          sh "yarn vsce publish ${version}" + ' -p $VSCODE_PAT'
+          sh 'npx -y ovsx publish -p $OPENVSX_PAT'
+        }
       }
     }
   }

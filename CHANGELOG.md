@@ -1,6 +1,13 @@
 VSCode WarpScript Extension
 ---
 
+## 2.1.5
+
+> +  2022/04/29  | Jenkins : abort previous build  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/74654d365a5cfd556733cbc6fb4b79bed58a750c)*)
+> +  2022/04/29  | Ignore input message if "when" condition is not meet  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/5ae9c5fb38e2dc2fc54f7886349f272d34c94004)*)
+> +  2022/04/29  | doc Update  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c837809e609411c72beea16cdebc61e83694f7df)*)
+> +  2022/04/29  | fix deps  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/463623c903d7691fd876ee3b558c188d1eee9e1b)*)
+
 ## v2.1.4
 
 > +  2022/03/11  | version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c8ecc177046c6a64163a9ec5071cc042ad6f6dab)*)
@@ -441,55 +448,5 @@ VSCode WarpScript Extension
 > +  2018/03/20  | typo fix  (*[Xavier Marin](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/37d09cf4b00e195ff3be1be5e7cf36b0f3522473)*)
 > +  2018/03/19  | Fixed and enhanced the local referencing macros feature.  (*[Fabien Tencé](fabien.tence@cityzendata.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/28b8231c389c73468543ef6308fb5557fba56efb)*)
 > +  2018/03/19  | Fix to display the stack even if there is an error when DEBUGONit used.  (*[Fabien Tencé](fabien.tence@cityzendata.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/764d43b7bc9f2f4b71176c0d3cb7eda047be1a36)*)
-
-## 2.0.0
-
-> +  2021/10/12  | changelog  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/0adf8a13ccf426d287cb9f4f59b2911c76747db6)*)
-> +  2021/10/12  | warpview update  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ca864d06a4992e4eac7d4f267aff57516e5d084d)*)
-> +  2021/10/12  | dots by default. no json escape by default to avoid discovery webview conflicts  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/5e0aae2eada8447bd4d9d20267a7968bb662ed40)*)
-> +  2021/10/12  | update flows and ws doc  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/6464378400e87779ca944985284babb4e035eaef)*)
-> +  2021/10/12  | update flows and ws doc  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/d55cfb8805a4361e2e6bb8f20397e3e7956035d0)*)
-> +  2021/10/12  | fix colors of dark mode  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f2a48dd2a627906491e3b817e8023dcd7a526c06)*)
-> +  2021/10/11  | added tokengen snippet  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/e09fe6c2492d6554c9bfc283401f75d81feb9b13)*)
-> +  2021/09/08  | fix node Warp10 dep to fix wskillsession  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/5e792b27b6ba23650760604e04b65305858cbc15)*)
-> +  2021/09/08  | fix node Warp10 dep to fix wskillsession  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/99f57882be63e910e96cf37b0aade850fa10b397)*)
-> +  2021/09/02  | json autoescape feature may break discovery. add an explicit failure and advice for user.  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/a0f622c2b8c3bfd76a31888c577605fb0c4c8f32)*)
-> +  2021/09/02  | fix vsce path, use yarn vsce...  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/25658b7e699f46c86b5c03049d2808c1a7dbe7f5)*)
-> +  2021/09/02  | avoid brake keyboard shortcuts  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/eae9bd38bc1ea18afa9e33f478e46b3bd4a6d0c8)*)
-> +  2021/06/17  | fixed unused variable  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/31fe29b90960086ac2c594f43764de4671cea465)*)
-> +  2021/06/17  | added webview for discovery  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/246900f362e64e9f94aa523b20b63b92fc29f0ce)*)
-> +  2021/06/17  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/0e8ddb3c6b9889bfc27386bacecec9d9a11f3d37)*)
-> +  2021/04/12  | Add timeout config and small fixes  (*[Fabien Tencé](fabien.tence@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/6a056d0f1141fdaf451ff1436f56db45cc454376)*)
-> +  2021/04/06  | fix annotation and chart overlap  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/1af71deee7c507c29166349ea13cc65f2c7b011e)*)
-> +  2021/03/25  | warpview version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/d899e16aff33b968d05157553071604d40ccbcb6)*)
-> +  2021/03/24  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2d6b3b3532d5ab6d976953f8c5509a38c319b413)*)
-> +  2021/03/24  | remove lock files from git  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c95346c1af2194d814f62c7531f840cb8d3fc7ea)*)
-> +  2021/03/24  | remove pointless providers for Flows  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/4f227e7c784ebf41f575ea0a97d12e626c300738)*)
-> +  2021/03/24  | display GTSTree  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/12629fbeee7e6f1d53f624569a2eef7d4533f9b4)*)
-> +  2021/03/24  | add missing dependency  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2adb4474a11cb50e0dc9f8d811e6928877e9ca16)*)
-> +  2021/03/23  | flows doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/df12adfe18a65c8f1bb8c05a276d817f729c10fb)*)
-> +  2021/03/23  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/6262c88c6419d5f7231048df7e11bde11d287dba)*)
-> +  2021/03/23  | dep update  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/cead43295111ee871b661694693cd610697c10fa)*)
-> +  2021/01/26  | warpview as a dep  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/310194c4d840abb609dbf75cd189abeb448f5228)*)
-> +  2021/01/26  | fix macro snippets  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/18abe39c3339a83428ec4fa54446ad1285f9f970)*)
-> +  2021/01/19  | beautifier as a npm lib  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2cfd897cc73f4059df3cdaff3f2fceaacf401aed)*)
-> +  2021/01/17  | speed up by disabling ts checks on doc file  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/5a5d3fa7838fda9809d7db9508baf483e2076a85)*)
-> +  2021/01/17  | doc up to date  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f199505de1ee80ed5edadcc4445fc2a7a46c6a32)*)
-> +  2021/01/17  | FLoWS syntax config  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/da05fa997963744b0887821de1f65316647817b4)*)
-> +  2021/01/17  | FLoWS auto indent and co  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/8926babaef5adf03b6c95047603745397fd40cbf)*)
-> +  2021/01/17  | update the word pattern of FLoWS. ugly.  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/54cfb86c831983977f35530a62018f9167c3ebe6)*)
-> +  2021/01/07  | deps update  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/21c1e455f585d4e5d07338f133efbd0632a80053)*)
-> +  2021/01/07  | update snipets  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/281d3c3553ff257a5aca56add13b4f6e44d97ba4)*)
-> +  2020/10/23  | warpview version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/0ae5cfa6dd072f406b901da741e31253421ec0c0)*)
-> +  2020/10/23  | deps update  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/76a753b8d956262d1575cfab76c0a40dc306a47d)*)
-> +  2020/10/19  | deps update and chart change  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/1b30979968d90e1e71382e4e86a0da0aba7e0886)*)
-> +  2020/10/19  | doc update  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/1b432f381f0bb504e074ce1e385030eca307bbd4)*)
-> +  2020/10/19  | fix snipets  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/7d058ffd35e0a2dc34c5b5084e2a1759ff838b92)*)
-> +  2020/09/23  | wip  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/858f024c3e351869800c7fa0f71171a1e1b3b315)*)
-> +  2020/09/10  | npm audit fix  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2c150a7b2eaf3c4abab4593b24b8199a572dde70)*)
-> +  2020/09/10  | snippets  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/992b3ea6905b1f4721fe5d480e601580ff486b91)*)
-> +  2020/09/10  | completion, hover and exec  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/0545de00123819d9dc3fa17e9e9aa16e9171c15d)*)
-> +  2020/08/14  | flows init  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/57fea6b22ac9d537d570aff81560ea286f57d7ed)*)
-> +  2020/07/02  | warpview 2  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/675540c37e09095fed3e7669a8af82681d698c6b)*)
 
 
