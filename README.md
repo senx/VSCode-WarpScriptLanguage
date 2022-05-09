@@ -1,4 +1,4 @@
-# VSCode WarpScript Extension
+# VS Code WarpScript Extension
 
 WarpScript language support
 
@@ -29,35 +29,34 @@ More details on [warp10.io](https://www.warp10.io)
   - [EXEC_START_DATE] file:///os_temp_dir/executed_warpscript.mc2 => file:///os_temp_dir/result.json exec_time fetched_data op_count main_filename.mc2 endpoint
   - [EXEC_START_DATE] ERROR /path/to/script/in/error.mc2:error_line reason_of_failure
 - WarpScript and resulting JSON are sent gzipped between the client and the server
-- (experimental) You can close all the JSON result files to clean your workspace (command Ctrl+Shift+P > "Close all Warp 10 json output in the workspace" command)
+- (experimental) You can close all the JSON result files to clean your workspace (command Ctrl+Shift+P > "Close all Warp 10 JSON output in the workspace" command)
 
 
 ## Tips
 
-- To slow down autocompletion, you can use VSCode built in configuration `editor.quickSuggestionsDelay`
+- To slow down autocompletion, you can use VS Code built in configuration `editor.quickSuggestionsDelay`
 - `// @endpoint http://xxx/api/v0/exec` at the beginning of the script change the remote execution endpoint
 - `// @localmacrosubstitution false` at the beginning of the script deactivate the local macro substitution
-- `// @preview none` at the beginning of the script disable the preview. `gts` or `image` force the focus to the gts or image preview after execution.
-- You can set the VSCode default language to warpscript (Ctrl+, search for default language settings). Every new file (Ctrl+N) will be a WarpScript.
+- `// @preview none` at the beginning of the script disable the preview. `gts` or `image` force the focus to the GTS or image preview after execution.
+- You can set the VS Code default language to WarpScript (Ctrl+, search for default language settings). Every new file (Ctrl+N) will be a WarpScript.
 
 ## Graph interactions
 
 - Alt + Mouse wheel : Zoom
 - Click + Drag : Select to zoom
 - Shift + Click : Pan
-- Double Click : Restore zoom
+- Double-Click : Restore zoom
 - a : show all GTS
 - n : hide all GTS
-- b : select one GTS, then the other one. maj+b for reverse browsing
+- b : select one GTS, then the other one. Maj+b for reverse browsing
 - / : select by regular expression
 - t : generate a TIMECLIP from the current zoom
-- s : display gts selector
+- s : display GTS selector
 
 
 ## How to run
 
 ```bash
 yarn install
-bower install
 npm run compile
 ```
