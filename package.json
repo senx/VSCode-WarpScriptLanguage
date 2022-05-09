@@ -15,7 +15,7 @@
 	"version": "2.1.5",
 	"publisher": "senx",
 	"engines": {
-		"vscode": "1.66.0"
+		"vscode": "^1.22.0"
 	},
 	"repository": {
 		"type": "git",
@@ -245,7 +245,7 @@
 		"@types/node": "17.0.30",
 		"@types/request": "2.48.8",
 		"@types/uuid": "8.3.4",
-		"@types/vscode": "^1.66.0",
+		"@types/vscode": "^1.22.0",
 		"@types/vscode-webview": "1.57.0",
 		"@types/webpack-env": "^1.16.4",
 		"@vscode/test-web": "^0.0.24",
