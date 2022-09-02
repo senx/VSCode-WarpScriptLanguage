@@ -53,8 +53,8 @@ export abstract class W10HoverProvider  implements HoverProvider {
                     "help": "Override the _warpscript.Warp10URL_ settings in VSCode. Typical Warp 10 URL is http://127.0.0.1/api/v0/exec"
           },
                 "@preview": {
-                    "sig": "@preview none|gts|image",
-                    "help": "When undefined, GTS preview and Images Tabs are opened in the background. Set to none for no preview at all. Set to gts to focus on GTS Preview. Set to image to focus on the Images tab."
+                    "sig": "@preview none|gts|image|json",
+                    "help": "When undefined, GTS preview and Images Tabs are opened in the background. Set to none for no preview at all. Set to gts to focus on GTS Preview. Set to image to focus on the Images tab. Set to json to format json output automatically."
           },
                 "@timeunit": {
                     "sig": "@timeunit us|ms|ns",

@@ -135,6 +135,11 @@ export function activate(context: ExtensionContext) {
         latestJSONdisplayed = textEditor.document.fileName;
 
         if (previewSetting != 'X' && workspace.getConfiguration().get('warpscript.PreviewTabs') !== 'none' && !alreadypreviewed) {
+          
+          if (previewSetting == "J") {
+            console.log("format json !")
+             commands.executeCommand("editor.action.formatDocument");             
+          }
           // gtsPreview panel
           if (previewPanels.gts == null) {
             previewPanels.gts = window.createWebviewPanel('gtspreview', 'GTS preview',

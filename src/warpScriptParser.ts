@@ -384,6 +384,7 @@ export default class WarpScriptParser {
                 case "none": result.displayPreviewOpt = 'X'; break;
                 case "gts": result.displayPreviewOpt = 'G'; break;
                 case "imag": result.displayPreviewOpt = 'I'; break;
+                case "json": result.displayPreviewOpt = 'J'; break;
                 default: result.displayPreviewOpt = ''; break;
               }
               break;
