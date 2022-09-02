@@ -23,7 +23,7 @@ More details on [warp10.io](https://www.warp10.io)
   - reduce
   - filter
   - apply
-- Embedded Quantum Dataviz
+- Embedded WarpView Dataviz
 - Embedded base 64 image viewer (visible only if returned JSON contains at least one base64 image)
 - WarpScript execution history in output window using the format (files are clickable):
   - [EXEC_START_DATE] file:///os_temp_dir/executed_warpscript.mc2 => file:///os_temp_dir/result.json exec_time fetched_data op_count main_filename.mc2 endpoint

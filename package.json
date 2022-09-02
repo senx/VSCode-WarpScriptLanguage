@@ -12,7 +12,7 @@
 	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
 	"license": "Apache-2.0",
-	"version": "2.1.7",
+	"version": "2.1.10",
 	"publisher": "senx",
 	"engines": {
 		"vscode": "^1.61.0"
@@ -227,7 +227,7 @@
 		}
 	},
 	"scripts": {
-		"vsce": "./node_modules/vsce/out/vsce",
+		"vsce": "./node_modules/vsce/vsce",
 		"vscode:prepublish": "npm run changelog && npm run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
