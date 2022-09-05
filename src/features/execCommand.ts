@@ -13,6 +13,7 @@ import { promisify } from 'util';
 import { gzip } from 'zlib';
 import { endpointsForThisSession, sessionName } from '../globals';
 import WarpScriptExtConstants from '../constants';
+import DiscoveryPreviewWebview from '../webviews/discoveryPreview'
 
 let lookupAsync: any;
 if (!!dns.lookup) {
@@ -357,7 +358,7 @@ FLOWS
 
                   // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
                   let sizeMB: number = Math.round(body.length / 1024 / 1024);
-                  if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
+                  if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape && !DiscoveryPreviewWebview.seemsToBeDiscoveryHtml(body)) {
                     // Do not unescape \\u nor control characters.
                     body = unescape(body.replace(/(?<!\\)\\u(?!000)(?!001)([0-9A-Fa-f]{4})/g, "%u\$1"))
                   }

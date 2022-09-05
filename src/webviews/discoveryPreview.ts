@@ -4,9 +4,13 @@ export default class DiscoveryPreviewWebview {
 
   constructor() { }
 
+  public static seemsToBeDiscoveryHtml(data:string) {
+    return (data.startsWith('["<!DOCTYPE html>') && data.endsWith('</body></html>"]'));
+  }
+
   public async findDiscoveryHtml(data: string, outputWin: OutputChannel): Promise<String> {
     let discoveryHtml: String = "";
-    if (data.startsWith('["<!DOCTYPE html>') && data.endsWith('</body></html>"]')) {
+    if (DiscoveryPreviewWebview.seemsToBeDiscoveryHtml(data)) {
       try {
         let objlist = JSON.parse(data);
         discoveryHtml = objlist[0];
