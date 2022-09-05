@@ -328,7 +328,7 @@
       "  'tiles' [",
       "  {",
       "    'title' 'test'",
-      "    'options' { 'autoRefresh' 1 }",
+      "    'options' { 'autoRefresh' 1   'showErrors' true }",
       "    'x' 0 'y' 0 'w' 12 'h' 2",
       "    'type' 'area' ",
       "    'macro' <%",
