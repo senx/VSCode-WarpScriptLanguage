@@ -55,7 +55,7 @@ export default class WSCompletionMacrosProvider
           result.push(item);
 
           item = new CompletionItem("preview", CompletionItemKind.Method)
-          item.documentation = new MarkdownString().appendMarkdown("When undefined, GTS preview and Images Tabs are opened in the background. \n- Set to `none` for no preview at all.\n- Set to `gts` to focus on GTS Preview.\n- Set to `image` to focus on the Images tab.\n- Set to `json` to format json output.\n\nEx:").appendCodeblock("// @preview none");
+          item.documentation = new MarkdownString().appendMarkdown("When undefined, GTS preview and Images Tabs are opened in the background. \n- Set to `none` for no preview at all.\n- Set to `gts` to focus on GTS Preview.\n- Set to `image` to focus on the Images tab.\n- Set to `json` to format json output.\n- Set to `discovery` to render the layout with `@senx/discovery2/render` macro and display the dynamic dashboard output.\n\nEx:").appendCodeblock("// @preview none");
           item.detail = "VSCode warpscript instruction";
           result.push(item);
 

@@ -322,11 +322,12 @@
     "prefix": "discovery autorefresh example",
     "description": "Discovery within WarpScript with autorefresh with macros executed by the dashboard",
     "body": [
+      "// @preview discovery",
       "{",
       "  'title' 'Test'",
       "  'description' 'Dashboard test'",
       "  'tiles' [",
-      "  {",
+      "    {",
       "    'title' 'test'",
       "    'options' { 'autoRefresh' 1   'showErrors' true }",
       "    'x' 0 'y' 0 'w' 12 'h' 2",
@@ -343,8 +344,8 @@
       "    }",
       "  ]",
       "}",
-      "{ 'url' 'https://sandbox.senx.io/api/v0/exec'  } // endpoint ",
-      "@senx/discovery2/render // html output"
+      "// the `// @preview discovery` will append this line automatically to the code:",
+      "// { 'url' 'your Warp 10 exec endpoint'  } @senx/discovery2/render // html output"
       
     ]
   }

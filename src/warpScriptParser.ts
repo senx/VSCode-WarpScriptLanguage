@@ -380,11 +380,12 @@ export default class WarpScriptParser {
               }
               break;
             case "preview":
-              switch (parametervalue.toLowerCase().substr(0, 4)) {
+              switch (parametervalue.toLowerCase().substring(0, 4)) {
                 case "none": result.displayPreviewOpt = 'X'; break;
                 case "gts": result.displayPreviewOpt = 'G'; break;
                 case "imag": result.displayPreviewOpt = 'I'; break;
                 case "json": result.displayPreviewOpt = 'J'; break;
+                case "disc": result.displayPreviewOpt = 'D'; break;
                 default: result.displayPreviewOpt = ''; break;
               }
               break;

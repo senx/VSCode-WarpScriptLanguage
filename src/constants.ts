@@ -30,7 +30,7 @@ export default class WarpScriptExtConstants {
    */
   public static async jsonResultRegEx(): Promise<RegExp> {
     const tmp = await WarpScriptExtConstants.findTempFolder();
-    return new RegExp(tmp.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '[\/\\\\]' + '\\d{3}([nmu])([XGIJ]?)\\.json', 'gi');
+    return new RegExp(tmp.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '[\/\\\\]' + '\\d{3}([nmu])([XGIJD]?)\\.json', 'gi');
   }
 
   public static getRessource(context: ExtensionContext, path: string) {

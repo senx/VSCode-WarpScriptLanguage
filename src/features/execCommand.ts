@@ -110,6 +110,10 @@ export default class ExecCommand {
             Warp10URLhostname = lineonMatch[1]; //group 1
           }
 
+          //  for discovery preview, wrap the code to render as html
+          if (displayPreviewOpt=='D') { // discovery
+            executedWarpScript = ` ${executedWarpScript} \n { 'url' '${Warp10URL}' } @senx/discovery2/render `;
+          }
           progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
 
           let lines: number[] = [document.lineCount]
