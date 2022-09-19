@@ -59,9 +59,7 @@ export default class WSCompletionVariablesProvider
   }
 
   private ListVariables(document: TextDocument, _token: CancellationToken): string[] {
-    let varlist: string[] = [];
 
-    console.log("original varlist", varlist);
     let statements = WarpScriptParser.parseWarpScriptStatements(document.getText(), _token);
 
     // look for :
