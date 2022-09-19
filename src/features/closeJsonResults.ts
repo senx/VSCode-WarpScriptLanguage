@@ -20,7 +20,7 @@ export default class CloseJsonResults {
    * 
    * @param previewPanels 
    */
-  public exec(previewPanels: { 'image': WebviewPanel, 'gts': WebviewPanel }): any {
+  public exec(previewPanels: { 'image': WebviewPanel, 'gts': WebviewPanel, 'discovery': WebviewPanel }): any {
 
     // the current opened file. usefull to detect the end of "nextEditor" loop.
     let activefilepath: string = window.activeTextEditor.document.uri.toString();
@@ -29,26 +29,32 @@ export default class CloseJsonResults {
 
 
     let closeIfOutputJson: Function = async (editor: TextEditor) => {
-      console.log(editor.document);
-      let filename: string = editor.document.fileName;
-      if (filename.match(await WarpScriptExtConstants.jsonResultRegEx())) {
-        console.log(`${filename} could be closed ! closing...`);
-        commands.executeCommand("workbench.action.revertAndCloseActiveEditor");
-      }
-      else {
-        if (activefilepath === editor.document.uri.toString()) {
-          console.log('end of close cycle?');
-          if (firstLoop) {
-            firstLoop = false;
-            commands.executeCommand("workbench.action.nextEditor");
+      // unsaved document => unpredictable behavior of editor
+      if (editor.document === undefined) {
+        commands.executeCommand("workbench.action.nextEditor");
+      } else {
+        console.log(editor.document);
+        let filename: string = editor.document.fileName;
+        if (filename.match(await WarpScriptExtConstants.jsonResultRegEx())) {
+          console.log(`${filename} could be closed ! closing...`);
+          commands.executeCommand("workbench.action.revertAndCloseActiveEditor");
+        }
+        else {
+          if (activefilepath === editor.document.uri.toString()) {
+            console.log('end of close cycle?');
+            if (firstLoop) {
+              firstLoop = false;
+              commands.executeCommand("workbench.action.nextEditor");
+            } else {
+              if (onchangecallback) { onchangecallback.dispose(); }
+              WarpScriptExtGlobals.weAreClosingFilesFlag = false;
+            }
           } else {
-            if (onchangecallback) { onchangecallback.dispose(); }
-            WarpScriptExtGlobals.weAreClosingFilesFlag = false;
+            commands.executeCommand("workbench.action.nextEditor");
           }
-        } else {
-          commands.executeCommand("workbench.action.nextEditor");
         }
       }
+
     }
 
     // callback on change active editor (called after one is closed OR after nextEditor)
@@ -71,7 +77,9 @@ export default class CloseJsonResults {
     if (!this.isNullOrUndefined(previewPanels.image)) {
       previewPanels.image.dispose();
     }
-
+    if (!this.isNullOrUndefined(previewPanels.discovery)) {
+      previewPanels.discovery.dispose();
+    }
     // initiate the loop
     closeIfOutputJson(window.activeTextEditor);
 

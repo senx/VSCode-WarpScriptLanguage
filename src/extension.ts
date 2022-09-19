@@ -199,6 +199,9 @@ export function activate(context: ExtensionContext) {
           if (previewSetting == 'I' && previewPanels.image != null) {
             setTimeout(() => previewPanels.image.reveal(ViewColumn.Two), 200);
           }
+          if (previewSetting == 'D' && previewPanels.discovery != null) {
+            setTimeout(() => previewPanels.discovery.reveal(ViewColumn.Two), 200);
+          }
         }
       }
     });
