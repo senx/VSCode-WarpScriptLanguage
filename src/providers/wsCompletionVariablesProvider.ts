@@ -1,3 +1,4 @@
+//import { stat } from "fs";
 import {
   CompletionItemProvider,
   TextDocument,
@@ -6,6 +7,7 @@ import {
   CompletionItem
 } from "vscode";
 import { CompletionItemKind } from "vscode";
+import WarpScriptParser from '../warpScriptParser';
 
 
 /**
@@ -40,7 +42,7 @@ export default class WSCompletionVariablesProvider
       }
       const firstLetter = currentWord.charAt(0);
       if ('$' == firstLetter || "'" == firstLetter) { //beginning of a string, or $, list all variables in file and propose them
-        let listvar = this.ListVariables(document);
+        let listvar = this.ListVariables(document, _token);
         listvar.forEach(v => {
           //console.log("found varname:" + v);
           result.push(new CompletionItem(firstLetter == '$' ? '$' + v : v, CompletionItemKind.Variable))
@@ -50,42 +52,56 @@ export default class WSCompletionVariablesProvider
     });
   }
 
-  private ListVariables(document: TextDocument): string[] {
+
+  private IsWsLitteralString(s: String): boolean {
+    // up to MemoryWarpScriptStack, a valid string is:
+    return (s.length >= 2 && ((s.startsWith('"') && s.endsWith('"')) || (s.startsWith("'") && s.endsWith("'"))))
+  }
+
+  private ListVariables(document: TextDocument, _token: CancellationToken): string[] {
     let varlist: string[] = [];
 
-    let warpscriptlines = document.getText().split('\n'); //think about windows... \r\n in mc2 files !
-    for (let l = 0; l < warpscriptlines.length; l++) {
-      let currentline = warpscriptlines[l].replace('\r', '');
+    console.log("original varlist", varlist);
+    let statements = WarpScriptParser.parseWarpScriptStatements(document.getText(), _token);
 
-      //find and extract variable name can have dots or underscores or dash. 
-      //the line must end with STORE (followed by spaces or an // comment)
-      let varPattern = /[\'\"]([A-Za-z0-9-_\.]+)[\'\"]\s+STORE\s*/g;
-      let lineonMatch: RegExpMatchArray | null;
-      let re = RegExp(varPattern);
-      while (lineonMatch = re.exec(currentline)) {
-        let varname = lineonMatch[1];
-        if (varlist.indexOf(varname) < 0) {
-          varlist.push(varname);
+    // look for :
+    // STORE or CSTORE with a string before, or with a list before
+    // MSTORE or MCSTORE or LSTORE or LCSTORE with a list before, 
+
+    let varlist2: string[] = [];
+
+    for (var i = 0; i < statements.length; i++) {
+      if (i > 1 && (statements[i] == "STORE" || statements[i] == "CSTORE") && this.IsWsLitteralString(statements[i - 1])) {
+        let varname = statements[i - 1].slice(1, statements[i - 1].length - 1);
+        if (varname.length > 0 && varlist2.indexOf(varname) < 0) {
+          varlist2.push(varname);
         }
       }
-
-      //find and extract variable with the new [ 'x' 'y' ] STORE syntax. 
-      // A repeated capturing group will only capture the last iteration. 
-      // Put a capturing group around the repeated group to capture all iterations
-      let multipleVarPattern = /\[((\s+[\'\"]([A-Za-z0-9-_\.]+)[\'\"])+)\s+\]\s+[LM]?C?STORE\s*/g;
-      re = RegExp(multipleVarPattern, 'g');
-      while (lineonMatch = re.exec(currentline)) {
-        let listContent: string = lineonMatch[1];
-        listContent.split(' ').filter((s) => s !== '').map((s) => s.replace(/[\'\"]/g, '')).forEach((s) => {
-          if (varlist.indexOf(s) < 0) {
-            varlist.push(s);
+      if (i > 1 && (statements[i] == "STORE" || statements[i] == "CSTORE" || statements[i] == "LSTORE" || statements[i] == "LCSTORE"
+        || statements[i] == "MSTORE" || statements[i] == "MCSTORE") && statements[i - 1] == "]") {
+        // look for the index of list start
+        let startListidx = -1;
+        for (var j = i - 1; j >= 0; j--) {
+          if (statements[j] == "[") {
+            startListidx = j;
+            break;
           }
-        })
+        }
+        console.log(startListidx, i);
+        if (startListidx != -1) {
+          for (var j = startListidx + 1; j < i - 1; j++) {
+            if (this.IsWsLitteralString(statements[j])) {
+              let varname = statements[j].slice(1, statements[j].length - 1);
+              if (varname.length > 0 && varlist2.indexOf(varname) < 0) {
+                varlist2.push(varname);
+              }
+            }
+          }
+        }
       }
     }
 
-
-    return varlist;
+    return varlist2;
   }
 
 }
