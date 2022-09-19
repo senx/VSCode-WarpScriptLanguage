@@ -53,11 +53,6 @@ export default class WSCompletionVariablesProvider
   }
 
 
-  private IsWsLitteralString(s: String): boolean {
-    // up to MemoryWarpScriptStack, a valid string is:
-    return (s.length >= 2 && ((s.startsWith('"') && s.endsWith('"')) || (s.startsWith("'") && s.endsWith("'"))))
-  }
-
   private ListVariables(document: TextDocument, _token: CancellationToken): string[] {
 
     let statements = WarpScriptParser.parseWarpScriptStatements(document.getText(), _token);
@@ -69,7 +64,7 @@ export default class WSCompletionVariablesProvider
     let varlist2: string[] = [];
 
     for (var i = 0; i < statements.length; i++) {
-      if (i > 1 && (statements[i] == "STORE" || statements[i] == "CSTORE") && this.IsWsLitteralString(statements[i - 1])) {
+      if (i > 1 && (statements[i] == "STORE" || statements[i] == "CSTORE") && WarpScriptParser.IsWsLitteralString(statements[i - 1])) {
         let varname = statements[i - 1].slice(1, statements[i - 1].length - 1);
         if (varname.length > 0 && varlist2.indexOf(varname) < 0) {
           varlist2.push(varname);
@@ -88,7 +83,7 @@ export default class WSCompletionVariablesProvider
         console.log(startListidx, i);
         if (startListidx != -1) {
           for (var j = startListidx + 1; j < i - 1; j++) {
-            if (this.IsWsLitteralString(statements[j])) {
+            if (WarpScriptParser.IsWsLitteralString(statements[j])) {
               let varname = statements[j].slice(1, statements[j].length - 1);
               if (varname.length > 0 && varlist2.indexOf(varname) < 0) {
                 varlist2.push(varname);

@@ -12,6 +12,8 @@ import {
   CompletionItemKind,
   MarkdownString
 } from "vscode";
+import WarpScriptParser from '../warpScriptParser';
+
 
 
 
@@ -70,11 +72,41 @@ export default class WSCompletionMacrosProvider
       }
 
 
-      // TODO manage macro completion
+      // simple explicitly declared macro completion
+      let explicitMacroList: string[] = this.FindMacroExplicitNames(document, _token);
+      if (explicitMacroList.length > 0) {
+        let result: CompletionItem[] = [];
+        for (var i = 0; i < explicitMacroList.length; i++) {
+          let item: CompletionItem = new CompletionItem(explicitMacroList[i], CompletionItemKind.Method);
+          result.push(item);
+        }
+        return resolve(result);
+      }
+
 
       return resolve([]);
     });
   }
 
+
+  private FindMacroExplicitNames(document: TextDocument, _token: CancellationToken): string[] {
+
+    let macrolist: string[] = [];
+    let statements = WarpScriptParser.parseWarpScriptStatements(document.getText(), _token);
+
+    // find explicit macro names.
+    // %> 'xxx' STORE 
+
+    for (var i = 0; i < statements.length; i++) {
+      if (i > 2 && statements[i] == "STORE" && statements[i - 2] == "%>" && WarpScriptParser.IsWsLitteralString(statements[i - 1])) {
+        let varname = statements[i - 1].slice(1, statements[i - 1].length - 1);
+        if (varname.length > 0 && macrolist.indexOf(varname) < 0) {
+          macrolist.push(varname);
+        }
+      }
+    }
+
+    return macrolist;
+  }
 
 }

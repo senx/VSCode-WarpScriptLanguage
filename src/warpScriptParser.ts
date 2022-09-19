@@ -411,4 +411,10 @@ export default class WarpScriptParser {
     }
     return result;
   }
+
+  public static IsWsLitteralString(s: String): boolean {
+    // up to MemoryWarpScriptStack, a valid string is:
+    return (s.length >= 2 && ((s.startsWith('"') && s.endsWith('"')) || (s.startsWith("'") && s.endsWith("'"))))
+  }
+
 }
