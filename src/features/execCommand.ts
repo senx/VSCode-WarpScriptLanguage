@@ -14,6 +14,7 @@ import { gzip } from 'zlib';
 import { endpointsForThisSession, sessionName } from '../globals';
 import WarpScriptExtConstants from '../constants';
 import DiscoveryPreviewWebview from '../webviews/discoveryPreview'
+import { ExtensionContext } from "vscode";
 
 let lookupAsync: any;
 if (!!dns.lookup) {
@@ -44,7 +45,7 @@ export default class ExecCommand {
     }
   }
 
-  public exec(outputWin: OutputChannel): any {
+  public exec(outputWin: OutputChannel, context: ExtensionContext): any {
     return (selectiontext: string) => {
       // Check current active document is a warpcript
       if (typeof window.activeTextEditor === 'undefined'
@@ -111,8 +112,14 @@ export default class ExecCommand {
           }
 
           //  for discovery preview, wrap the code to render as html
-          if (displayPreviewOpt=='D') { // discovery
-            executedWarpScript = ` ${executedWarpScript} \n { 'url' '${Warp10URL}' } @senx/discovery2/render `;
+          let discoveryTheme = commentsCommands.theme || "";
+          if (displayPreviewOpt == 'D') { // discovery
+            // warning: do not indent multiline warspcript below...
+            executedWarpScript = ` ${executedWarpScript} \n { 'url' '${Warp10URL}' 'template' 
+<'
+${DiscoveryPreviewWebview.getTemplate(context, discoveryTheme)}
+'>
+           } @senx/discovery2/render `;
           }
           progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
 
@@ -158,8 +165,8 @@ export default class ExecCommand {
               let listOfMacros = WarpScriptParser.getListOfMacroCalls(executedWarpScript);
 
               if (listOfMacros.length > 0) {
-                  allMacroPrepended = true;
-                  for (const m of listOfMacros) {
+                allMacroPrepended = true;
+                for (const m of listOfMacros) {
                   const macroName = m.substring(1);
                   console.log('-' + macroName + '-');
                   await WSDocumentLinksProvider.getMacroURI(macroName).then(

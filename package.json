@@ -12,7 +12,7 @@
 	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
 	"license": "Apache-2.0",
-	"version": "2.1.11",
+	"version": "2.1.12",
 	"publisher": "senx",
 	"engines": {
 		"vscode": "^1.61.0"
@@ -266,6 +266,7 @@
 		"socks-proxy-agent": "5.0.0",
 		"uuid": "8.3.2",
 		"vscode-languageclient": "7.0.0",
-		"vscode-proxy-agent": "0.5.2"
+		"vscode-proxy-agent": "0.5.2",
+		"@senx/discovery-widgets": "^1.1.38"
 	}
 }

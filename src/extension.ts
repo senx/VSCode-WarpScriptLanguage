@@ -64,14 +64,14 @@ export function activate(context: ExtensionContext) {
 
     context.subscriptions.push(commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(previewPanels); }));
     context.subscriptions.push(commands.registerCommand('extension.execConvertUnicodeInJson', () => { new UnicodeJsonConversion().exec(); }));
-    context.subscriptions.push(commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(''); }));
+    context.subscriptions.push(commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin,context)(''); }));
     context.subscriptions.push(commands.registerCommand('extension.abortAllWS', () => { new ExecCommand().abortAllRequests(outputWin)(); }))
     context.subscriptions.push(commands.registerCommand('extension.execWSOnSelection', () => {
       let editor = window.activeTextEditor;
       if (editor) {
         let selection = editor.selection;
         let text = editor.document.getText(selection);
-        new ExecCommand().exec(outputWin)(text);
+        new ExecCommand().exec(outputWin,context)(text);
       }
     }));
     context.subscriptions.push(commands.registerCommand('extension.jumptoWSoffset', (offset: number) => {

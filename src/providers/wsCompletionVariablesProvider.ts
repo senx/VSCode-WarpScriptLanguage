@@ -80,7 +80,7 @@ export default class WSCompletionVariablesProvider
             break;
           }
         }
-        console.log(startListidx, i);
+        //console.log(startListidx, i);
         if (startListidx != -1) {
           for (var j = startListidx + 1; j < i - 1; j++) {
             if (WarpScriptParser.IsWsLitteralString(statements[j])) {

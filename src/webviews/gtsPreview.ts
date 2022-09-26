@@ -18,7 +18,7 @@ export default class GTSPreviewWebview {
   }
   //dark themes : Default Dark+, Visual Studio Dark, Abyss, Kimbie Dark, Monokai, Monokai Dimmed, Red, Solarized Dark, Tomorrow Night Blue, Default High Contrast
 
-  LightThemesList: string[] = [
+  static LightThemesList: string[] = [
     "Visual Studio Light",
     "Default Light+",
     "Quiet Light",
@@ -34,7 +34,7 @@ export default class GTSPreviewWebview {
     let showDots = workspace.getConfiguration().get('warpscript.showDots');
     if (theme == "auto") {
       let vscodetheme: string = workspace.getConfiguration().get("workbench.colorTheme");
-      if (this.LightThemesList.indexOf(vscodetheme) > -1) {
+      if (GTSPreviewWebview.LightThemesList.indexOf(vscodetheme) > -1) {
         theme = "light";
       }
       else { theme = "dark"; }

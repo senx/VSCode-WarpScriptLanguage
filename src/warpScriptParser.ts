@@ -7,10 +7,11 @@ import { CancellationTokenSource } from 'vscode-languageclient';
 export interface specialCommentCommands {
   endpoint?: string;
   timeunit?: string;
-  localmacrosubstitution?: boolean,
-  displayPreviewOpt?: string,
-  listOfMacroInclusion?: string[],
-  listOfMacroInclusionRange?: Range[]
+  localmacrosubstitution?: boolean;
+  displayPreviewOpt?: string;
+  listOfMacroInclusion?: string[];
+  listOfMacroInclusionRange?: Range[];
+  theme?: string;
 }
 
 /**
@@ -225,7 +226,7 @@ export default class WarpScriptParser {
         i++;
         while (i < ws.length && ws.charAt(i) != "'" && ws.charAt(i) != '\n') { i++; }
         i++;
-        result.push(ws.substring(start, i).replace('\r',''));
+        result.push(ws.substring(start, i).replace('\r', ''));
         // console.log(i, 'end of string');
       }
       if (ws.charAt(i) == '"') { //start of string, seek for end
@@ -235,7 +236,7 @@ export default class WarpScriptParser {
         while (i < ws.length && ws.charAt(i) != '"' && ws.charAt(i) != '\n') { i++; }
         // console.log(i, 'end of string');
         i++;
-        result.push(ws.substring(start, i).replace('\r',''));
+        result.push(ws.substring(start, i).replace('\r', ''));
       }
 
       if (ws.charAt(i) == '<' && ws.charAt(i + 1) == '%') { //start of a macro.
@@ -254,9 +255,9 @@ export default class WarpScriptParser {
         let start = i;
         while (i < ws.length && ws.charAt(i) != ' ' && ws.charAt(i) != '\n') { i++; }
         if (withPosition) {
-          result.push([ws.substring(start, i).replace('\r',''), start, i]);
+          result.push([ws.substring(start, i).replace('\r', ''), start, i]);
         } else {
-          result.push(ws.substring(start, i).replace('\r',''));
+          result.push(ws.substring(start, i).replace('\r', ''));
         }
       }
       i++;
@@ -394,10 +395,12 @@ export default class WarpScriptParser {
               if (p.startsWith("macro:")) {
                 p = p.substring(6).trim()
                 result.listOfMacroInclusion.push(p);
-                let r = new Range(new Position(l,3),new Position(l,currentline.trim().length))
+                let r = new Range(new Position(l, 3), new Position(l, currentline.trim().length))
                 result.listOfMacroInclusionRange.push(r);
               }
               break;
+            case "theme":
+              result.theme = parametervalue.trim().toLowerCase();
             default:
               break;
           }

@@ -12,7 +12,6 @@ export default class WSDocumentLinksProvider implements DocumentLinkProvider {
     for (let i = 0; i < macros.length; i++) {
       const macroLinkName = macros[i][0];
       const macroName = macroLinkName.substring(1);
-      console.log("###" + macroName)
       const linkStart = document.positionAt(macros[i][1]);
       const linkEnd = document.positionAt(macros[i][2]);
       await WSDocumentLinksProvider.getMacroURI(macroName).then(
