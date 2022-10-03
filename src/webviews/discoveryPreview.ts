@@ -152,7 +152,7 @@ export default class DiscoveryPreviewWebview {
       --warp-view-button-secondary-label-color: rgba(41, 52, 65, 1);
       --warp-view-button-inactive-label-color: #ccc;
       --warp-view-button-inactive-bg-color: #1F4A4F;
-  
+      --warp-view-chart-grid-color:#c0c0c0;
       font-size: 12px;
       line-height: 1.52;
       color: #1b1b1b;
@@ -198,7 +198,7 @@ export default class DiscoveryPreviewWebview {
       --warp-view-button-secondary-bg-color: #333333;
       --warp-view-button-secondary-label-color: #fff;
       --warp-view-button-inactive-label-color: #AEAEDD;
-  
+      --warp-view-chart-grid-color:#AEAEDD;
       font-family: 'Quicksand', sans-serif;
       font-size: 12px;
       line-height: 1.52;
@@ -240,6 +240,7 @@ export default class DiscoveryPreviewWebview {
     --warp-view-button-label-color: #FFFFFF;
     --warp-view-button-border-color: #6c757d;
     --warp-view-button-inactive-label-color: #6c757d;
+    --warp-view-chart-grid-color:#808080;
   }  
   `,
     darkblue: `
@@ -267,7 +268,8 @@ export default class DiscoveryPreviewWebview {
     --warp-view-button-secondary-label-color: rgba(41, 52, 65, 1);
     --warp-view-button-inactive-label-color: #ccc;
     --warp-view-button-inactive-bg-color: #02253C;
-
+    --warp-view-chart-grid-color:#808080;
+    
     --gts-separator-font-color: #fff;
     --gts-labelname-font-color: rgb(105, 223, 184);
     --gts-classname-font-color: rgb(126, 189, 245);
