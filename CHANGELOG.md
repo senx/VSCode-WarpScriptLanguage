@@ -36,20 +36,20 @@ VSCode WarpScript Extension
 > +  2022/01/27  | Added new // @includeLocalMacro special comment  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ca199690e1fa1b8508dcb6fb9d1b4018b684ed14)*)
 > +  2022/01/26  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f21662ae69f2b88ca65c8519e590e43d8e8d1402)*)
 
-## v2.1.1
-
-
 ## 2.0.8
+
+
+## v2.1.1
 
 > +  2021/11/03  | version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/21c18e0b23d7fc62132b7e4f5c0e2185a7fd86a1)*)
 > +  2021/11/03  | debug fix  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/24e04aed3ad8ff80536ab4845740dcb7397eb428)*)
 > +  2021/11/03  | fix uri handling  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c62cca198e80364c6ca53f628caffcdde07eca19)*)
 > +  2021/10/29  | version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ceb83a1c81e2dcc49462125966f05c14499fabc6)*)
 
-## 2.0.7
-
-
 ## 2.0.6
+
+
+## 2.0.7
 
 > +  2021/10/29  | Version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/6eeaefc39aadedc77ddb9f185d90d20c5cfb8b34)*)
 > +  2021/10/29  | VSCodeWeb adaptations  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c9dc46a752786ce6d6cb0c82ee57e474a4949df8)*)
