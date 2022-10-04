@@ -256,6 +256,7 @@
 		"@senx/flows-beautifier": "^1.0.4",
 		"@senx/warp10": "1.1.2",
 		"@senx/warpview": "2.0.90",
+    "@senx/discovery-widgets": "1.1.40",
 		"at-least-node": "1.0.0",
 		"file-saver": "2.0.5",
 		"http-parser-js": "0.5.3",
@@ -266,7 +267,6 @@
 		"socks-proxy-agent": "5.0.0",
 		"uuid": "8.3.2",
 		"vscode-languageclient": "7.0.0",
-		"vscode-proxy-agent": "0.5.2",
-		"@senx/discovery-widgets": "^1.1.39"
+		"vscode-proxy-agent": "0.5.2"
 	}
 }

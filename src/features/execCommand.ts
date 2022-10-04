@@ -13,8 +13,8 @@ import { promisify } from 'util';
 import { gzip } from 'zlib';
 import { endpointsForThisSession, sessionName } from '../globals';
 import WarpScriptExtConstants from '../constants';
-import DiscoveryPreviewWebview from '../webviews/discoveryPreview'
 import { ExtensionContext } from "vscode";
+import { SharedMem } from '../extension';
 
 let lookupAsync: any;
 if (!!dns.lookup) {
@@ -88,12 +88,12 @@ export default class ExecCommand {
           //
           // analyse the first warpscript lines starting with //
           //
-          let commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(executedWarpScript);
+          const commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(executedWarpScript);
           Warp10URL = commentsCommands.endpoint || Warp10URL;
           let substitutionWithLocalMacros = !(commentsCommands.localmacrosubstitution === false);
           PreviewTimeUnit = commentsCommands.timeunit || PreviewTimeUnit;
           displayPreviewOpt = commentsCommands.displayPreviewOpt || displayPreviewOpt;
-
+          console.log({commentsCommands})
           //
           // keep a simple suffix for the json filename (either n for nanosecond or m for millisecond. nothing for default.)
           let jsonSuffix: string = PreviewTimeUnit.substr(0, 1);
@@ -112,15 +112,15 @@ export default class ExecCommand {
           }
 
           //  for discovery preview, wrap the code to render as html
-          let discoveryTheme = commentsCommands.theme || "";
-          if (displayPreviewOpt == 'D') { // discovery
+          // let discoveryTheme = commentsCommands.theme || "";
+          /*if (displayPreviewOpt == 'D') { // discovery
             // warning: do not indent multiline warspcript below...
             executedWarpScript = ` ${executedWarpScript} \n { 'url' '${Warp10URL}' 'template' 
 <'
 ${DiscoveryPreviewWebview.getTemplate(context, discoveryTheme)}
 '>
            } @senx/discovery2/render `;
-          }
+          }*/
           progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
 
           let lines: number[] = [document.lineCount]
@@ -346,6 +346,7 @@ FLOWS
                   let uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
                   let wsFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}.mc2`;
                   let jsonFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}${jsonSuffix}.json`;
+                  SharedMem.set(uuid, commentsCommands);
 
                   // Save executed warpscript
                   try {
@@ -369,7 +370,7 @@ FLOWS
 
                   // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
                   let sizeMB: number = Math.round(body.length / 1024 / 1024);
-                  if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape && !DiscoveryPreviewWebview.seemsToBeDiscoveryHtml(body)) {
+                  if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
                     // Do not unescape \\u nor control characters.
                     body = unescape(body.replace(/(?<!\\)\\u(?!000)(?!001)([0-9A-Fa-f]{4})/g, "%u\$1"))
                   }

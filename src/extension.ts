@@ -23,6 +23,21 @@ import { FLoWSBeautifier } from '@senx/flows-beautifier';
 import { commands, ExtensionContext, languages, Range, Selection, TextDocument, TextEdit, TextEditor, TextEditorRevealType, TextLine, ViewColumn, WebviewPanel, window, workspace } from 'vscode';
 import { userInfo } from 'os';
 
+
+export class SharedMem {
+  private static registry: any = {};
+  public static set(uid: string, content: any) {
+    SharedMem.registry[uid] = content;
+  }
+  public static get(uid: string): any {
+    return SharedMem.registry[uid];
+  }
+
+  public static log() {
+    console.log({ registry: SharedMem.registry })
+  }
+}
+
 /**
  * Main extension's entrypoint
  *
@@ -64,14 +79,14 @@ export function activate(context: ExtensionContext) {
 
     context.subscriptions.push(commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(previewPanels); }));
     context.subscriptions.push(commands.registerCommand('extension.execConvertUnicodeInJson', () => { new UnicodeJsonConversion().exec(); }));
-    context.subscriptions.push(commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin,context)(''); }));
+    context.subscriptions.push(commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin, context)(''); }));
     context.subscriptions.push(commands.registerCommand('extension.abortAllWS', () => { new ExecCommand().abortAllRequests(outputWin)(); }))
     context.subscriptions.push(commands.registerCommand('extension.execWSOnSelection', () => {
       let editor = window.activeTextEditor;
       if (editor) {
         let selection = editor.selection;
         let text = editor.document.getText(selection);
-        new ExecCommand().exec(outputWin,context)(text);
+        new ExecCommand().exec(outputWin, context)(text);
       }
     }));
     context.subscriptions.push(commands.registerCommand('extension.jumptoWSoffset', (offset: number) => {
@@ -109,7 +124,7 @@ export function activate(context: ExtensionContext) {
     // let previewPanels.gts: vscode.WebviewPanel = null;
     // let previewPanels.image: vscode.WebviewPanel = null;
     let gtsPreviewWebview = new GTSPreviewWebview(context);
-    let discoveryPreviewWebview = new DiscoveryPreviewWebview();
+    let discoveryPreviewWebview = new DiscoveryPreviewWebview(context);
     let imagePreviewWebview = new ImagePreviewWebview(context);
     let latestJSONdisplayed: string = '';
 
@@ -124,10 +139,11 @@ export function activate(context: ExtensionContext) {
 
         let suffixes = jsonResultRegEx.exec(textEditor.document.uri.fsPath);
         //look for a timeUnit indication into the json name
-        let timeUnit: string = suffixes[1] || 'u';
+        const uuid: string = suffixes[1] || '';
+        let timeUnit: string = suffixes[2] || 'u';
         timeUnit = timeUnit + 's';
         //look for a preview setting into the json name
-        let previewSetting: string = suffixes[2] || '';
+        let previewSetting: string = suffixes[3] || '';
         console.log("preview=" + previewSetting);
 
         // do not refresh preview when the preview window when selecting the json of the current preview
@@ -135,10 +151,10 @@ export function activate(context: ExtensionContext) {
         latestJSONdisplayed = textEditor.document.fileName;
 
         if (previewSetting != 'X' && workspace.getConfiguration().get('warpscript.PreviewTabs') !== 'none' && !alreadypreviewed) {
-          
+
           if (previewSetting == "J") {
             console.log("format json !")
-             commands.executeCommand("editor.action.formatDocument");             
+            commands.executeCommand("editor.action.formatDocument");
           }
           // gtsPreview panel
           if (previewPanels.gts == null) {
@@ -153,7 +169,7 @@ export function activate(context: ExtensionContext) {
             previewPanels.gts.onDidDispose(() => { previewPanels.gts = null; })
           }
           // refresh gtsPreview 
-          gtsPreviewWebview.getHtmlContent(textEditor.document.getText(), timeUnit).then(htmlcontent =>  setTimeout(() => previewPanels.gts.webview.html = htmlcontent))
+          gtsPreviewWebview.getHtmlContent(textEditor.document.getText(), timeUnit).then(htmlcontent => setTimeout(() => previewPanels.gts.webview.html = htmlcontent))
 
           // imagePreview panel, if one image found
           imagePreviewWebview.findImages(textEditor.document.getText(), textEditor.document.getText().length > 500000)
@@ -174,24 +190,22 @@ export function activate(context: ExtensionContext) {
               }
             })
 
-          // discoveryPreview panel, if html found
-          discoveryPreviewWebview.findDiscoveryHtml(textEditor.document.getText(), outputWin)
-            .then((rawhtml: string) => {
-              if (rawhtml !== "") {
-                if (previewPanels.discovery == null) {
-                  previewPanels.discovery = window.createWebviewPanel('discoverypreview', 'Discovery',
-                    { viewColumn: ViewColumn.Two, preserveFocus: true },
-                    { enableScripts: true, retainContextWhenHidden: true });
-                }
-                if (previewSetting == '') {
-                  setTimeout(() => previewPanels.discovery.reveal(ViewColumn.Two), 500);
-                }
-                discoveryPreviewWebview.getHtmlContent(rawhtml).then((htmlcontent: string) => previewPanels.discovery.webview.html = htmlcontent);
-                //when closed by the user
-                previewPanels.discovery.onDidDispose(() => { previewPanels.discovery = null; })
-              }
-            })
-
+          if (previewSetting == 'D') {
+            SharedMem.log();
+            if (previewPanels.discovery == null) {
+              discoveryPreviewWebview.findDiscovery(textEditor.document.getText(), outputWin).then(json => {
+                discoveryPreviewWebview.getHtmlContent(json, SharedMem.get(uuid)).then((htmlcontent: string) => previewPanels.discovery.webview.html = htmlcontent);
+                previewPanels.discovery = window.createWebviewPanel('discoverypreview', 'Discovery',
+                  { viewColumn: ViewColumn.Two, preserveFocus: true },
+                  { enableScripts: true, retainContextWhenHidden: true });
+                previewPanels.discovery.onDidDispose(() => { previewPanels.discovery = null; });
+              });
+            } else {
+              discoveryPreviewWebview.findDiscovery(textEditor.document.getText(), outputWin).then(json => {
+                discoveryPreviewWebview.getHtmlContent(json, SharedMem.get(uuid)).then((htmlcontent: string) => previewPanels.discovery.webview.html = htmlcontent);
+              });
+            }
+          }
           //focus if focus forced by option
           if (previewSetting == 'G' && previewPanels.gts != null) {
             setTimeout(() => previewPanels.gts.reveal(ViewColumn.Two), 200);

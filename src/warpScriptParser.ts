@@ -401,6 +401,7 @@ export default class WarpScriptParser {
               break;
             case "theme":
               result.theme = parametervalue.trim().toLowerCase();
+              break;
             default:
               break;
           }
