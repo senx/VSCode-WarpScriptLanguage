@@ -38,6 +38,8 @@ pipeline {
     stage("Build") {
       steps {
         nvm('version': 'v17.1.0') {
+          sh 'rm -fr node_modules'
+          sh 'rm -fr assets'
           sh 'npm install --force'
           sh 'npm run vsce package'
         }
