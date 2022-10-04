@@ -267,6 +267,6 @@
 		"uuid": "8.3.2",
 		"vscode-languageclient": "7.0.0",
 		"vscode-proxy-agent": "0.5.2",
-		"@senx/discovery-widgets": "^1.1.38"
+		"@senx/discovery-widgets": "^1.1.39"
 	}
 }
