@@ -13,7 +13,6 @@ import { promisify } from 'util';
 import { gzip } from 'zlib';
 import { endpointsForThisSession, sessionName } from '../globals';
 import WarpScriptExtConstants from '../constants';
-import { ExtensionContext } from "vscode";
 import { SharedMem } from '../extension';
 
 let lookupAsync: any;
@@ -45,7 +44,7 @@ export default class ExecCommand {
     }
   }
 
-  public exec(outputWin: OutputChannel, context: ExtensionContext): any {
+  public exec(outputWin: OutputChannel): any {
     return (selectiontext: string) => {
       // Check current active document is a warpcript
       if (typeof window.activeTextEditor === 'undefined'
