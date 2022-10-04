@@ -236,6 +236,7 @@
 		"changelog": "node scripts/changelog.js > CHANGELOG.md && git add CHANGELOG.md && git commit -m 'Changelog Update' || true"
 	},
 	"devDependencies": {
+		"@senx/discovery-themes": "^0.0.1",
 		"@types/js-yaml": "4.0.3",
 		"@types/lodash": "^4.14.176",
 		"@types/node": "16.11.1",
@@ -253,10 +254,10 @@
 		"vscode-textmate": "5.4.0"
 	},
 	"dependencies": {
+		"@senx/discovery-widgets": "1.1.40",
 		"@senx/flows-beautifier": "^1.0.4",
 		"@senx/warp10": "1.1.2",
 		"@senx/warpview": "2.0.90",
-    "@senx/discovery-widgets": "1.1.40",
 		"at-least-node": "1.0.0",
 		"file-saver": "2.0.5",
 		"http-parser-js": "0.5.3",
