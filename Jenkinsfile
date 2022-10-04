@@ -37,9 +37,9 @@ pipeline {
 
     stage("Build") {
       steps {
-        nvm('version': 'v17.1.0') {
-          sh 'yarn install --immutable --immutable-cache --check-cache'
-          sh 'yarn vsce package'
+        nvm('version': 'v18.8.0') {
+          sh 'npm install --force'
+          sh 'npm run vsce package'
         }
       }
     }
@@ -52,8 +52,8 @@ pipeline {
         message 'Deploy to Microsoft Marketplace and Open VSX Registry?'
       }
       steps {
-        nvm('version': 'v17.1.0') {
-          sh 'yarn vsce publish -p $VSCODE_PAT'
+        nvm('version': 'v18.8.0') {
+          sh 'npm run vsce publish -p $VSCODE_PAT'
           sh 'npx -y ovsx publish -p $OPENVSX_PAT'
         }
       }
