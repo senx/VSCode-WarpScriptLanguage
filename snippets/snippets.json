@@ -373,8 +373,8 @@
       "    }",
       "  ]",
       "}",
-      "// the `// @preview discovery` will append this line automatically to the code:",
-      "// { 'url' 'your Warp 10 exec endpoint'  } @senx/discovery2/render // html output"
+      "// the `// @preview discovery` will wrap the execution result in a html page, using <discovery-dashboard> webcomponent.",
+      ""
     ]
   },
   "discovery (ex2)": {
@@ -520,8 +520,7 @@
       "",
       "  ]",
       "}",
-      "// the `// @preview discovery` will append this line automatically to the code:",
-      "// { 'url' 'your Warp 10 exec endpoint'  } @senx/discovery2/render // html output",
+      "// the `// @preview discovery` will wrap the execution result in a html page, using <discovery-dashboard> webcomponent.",
       ""
     ]
   },
@@ -554,8 +553,8 @@
       "    ${6:   }",
       "  ]",
       "}",
-      "// the `// @preview discovery` will append this line automatically to the code:",
-      "// { 'url' 'your Warp 10 exec endpoint'  } @senx/discovery2/render // html output"
+      "// the `// @preview discovery` will wrap the execution result in a html page, using <discovery-dashboard> webcomponent.",
+      ""
     ]
   },
   "dtile01": {
