@@ -38,8 +38,7 @@ pipeline {
     stage("Build") {
       steps {
         nvm('version': 'v17.1.0') {
-          sh 'rm -fr node_modules'
-          sh 'rm -fr assets'
+          sh 'rm -fr package-lock.json assets node_modules yarn.lock package-lock.json'
           sh 'npm install --force'
           sh 'npm run vsce package'
         }
