@@ -1,8 +1,18 @@
 VSCode WarpScript Extension
 ---
 
+## v2.1.16
+
+> +  2022/10/05  | version bump  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/b0001d29ad626a34cd1551a93a5ecceb4f4b7471)*)
+
 ## v2.1.15
 
+> +  2022/10/05  | udpate MAP snippets  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/a85733c51acee916621ad820623b1044801fec14)*)
+> +  2022/10/05  | also remove render macro from snippets  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/1b32504fc231aa06d88e5536648cc68b8663cae2)*)
+
+## v2.1.14
+
+> +  2022/10/04  | jenkins  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/d50d154afa79678ea29524ddb455fef2790be6a0)*)
 > +  2022/10/04  | Jenkins  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/3226b8c12a45167692be1cea587a6048ae6930e1)*)
 > +  2022/10/04  | fix  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c12002744c52907aef1152215f45b7d011eb84b8)*)
 > +  2022/10/04  | vsce version bump  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c07d9c80bb844ccd690a4e042dbdd95a6a7e9162)*)
@@ -97,18 +107,5 @@ VSCode WarpScript Extension
 > +  2021/11/03  | debug fix  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/24e04aed3ad8ff80536ab4845740dcb7397eb428)*)
 > +  2021/11/03  | fix uri handling  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c62cca198e80364c6ca53f628caffcdde07eca19)*)
 > +  2021/10/29  | version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ceb83a1c81e2dcc49462125966f05c14499fabc6)*)
-
-## 2.0.6
-
-
-## 2.0.7
-
-> +  2021/10/29  | Version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/6eeaefc39aadedc77ddb9f185d90d20c5cfb8b34)*)
-> +  2021/10/29  | VSCodeWeb adaptations  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c9dc46a752786ce6d6cb0c82ee57e474a4949df8)*)
-> +  2021/10/21  | vscode-web adaptations  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c24b15900ba0932de7b8c6841170bb2558020366)*)
-> +  2021/10/21  | version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/11e9ffbe5bdbc116f829ecbb81061b6553d43872)*)
-> +  2021/10/21  | refactoring  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f3ba631a4cf9b537db7c3dc83c65d348a18c21f6)*)
-> +  2021/10/21  | prepare for vscode.dev  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/d018917e3c16467e2962c95ad17b4c01851324d3)*)
-> +  2021/10/15  | changelog  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/a67b0891c21db225e99bbbfabc93f09777127f16)*)
 
 
