@@ -89,10 +89,12 @@ export default class ExecCommand {
           //
           const commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(executedWarpScript);
           Warp10URL = commentsCommands.endpoint || Warp10URL;
+          commentsCommands.endpoint = Warp10URL; // commentsCommand should be up to date in shared memory later on.
           let substitutionWithLocalMacros = !(commentsCommands.localmacrosubstitution === false);
           PreviewTimeUnit = commentsCommands.timeunit || PreviewTimeUnit;
+          commentsCommands.timeunit = PreviewTimeUnit;
           displayPreviewOpt = commentsCommands.displayPreviewOpt || displayPreviewOpt;
-          console.log({commentsCommands})
+          commentsCommands.displayPreviewOpt = '';
           //
           // keep a simple suffix for the json filename (either n for nanosecond or m for millisecond. nothing for default.)
           let jsonSuffix: string = PreviewTimeUnit.substr(0, 1);
