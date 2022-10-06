@@ -191,20 +191,22 @@ export function activate(context: ExtensionContext) {
             })
 
           if (previewSetting == 'D') {
-            SharedMem.log();
-            if (previewPanels.discovery == null) {
-              discoveryPreviewWebview.findDiscovery(textEditor.document.getText(), outputWin).then(json => {
-                discoveryPreviewWebview.getHtmlContent(json, SharedMem.get(uuid)).then((htmlcontent: string) => previewPanels.discovery.webview.html = htmlcontent);
-                previewPanels.discovery = window.createWebviewPanel('discoverypreview', 'Discovery',
-                  { viewColumn: ViewColumn.Two, preserveFocus: true },
-                  { enableScripts: true, retainContextWhenHidden: true });
-                previewPanels.discovery.onDidDispose(() => { previewPanels.discovery = null; });
-              });
-            } else {
-              discoveryPreviewWebview.findDiscovery(textEditor.document.getText(), outputWin).then(json => {
-                discoveryPreviewWebview.getHtmlContent(json, SharedMem.get(uuid)).then((htmlcontent: string) => previewPanels.discovery.webview.html = htmlcontent);
-              });
+            // SharedMem.log();
+            // there is no way to refresh a webview. So if user execute the same dashboard (to update data), webview.html will remain the same, and webview will not update.
+            // insert a random comment in html do not help if the webview is hanging on a huge load. It must be closed!
+            if (previewPanels.discovery != null) {
+              previewPanels.discovery.onDidDispose(() => { }); // no need for callback anymore, extension closes it
+              previewPanels.discovery.dispose();
+              previewPanels.discovery = null;
             }
+            // and re open it...
+            discoveryPreviewWebview.findDiscovery(textEditor.document.getText(), outputWin).then(json => {
+              discoveryPreviewWebview.getHtmlContent(json, SharedMem.get(uuid)).then((htmlcontent: string) => previewPanels.discovery.webview.html = htmlcontent);
+              previewPanels.discovery = window.createWebviewPanel('discoverypreview', 'Discovery',
+                { viewColumn: ViewColumn.Two, preserveFocus: true },
+                { enableScripts: true, retainContextWhenHidden: true });
+              previewPanels.discovery.onDidDispose(() => { previewPanels.discovery = null; }); // user close it
+            });
           }
           //focus if focus forced by option
           if (previewSetting == 'G' && previewPanels.gts != null) {
