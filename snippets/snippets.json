@@ -893,6 +893,31 @@
       "}"
     ]
   },
+  "dtile16": {
+    "prefix": "discovery-tile 16 input:radio",
+    "description": "Discovery within WarpScript",
+    "body": [
+      "{",
+      "  'type' 'button:radio'",
+      "  'x' 0 'y' 0 'w' 12 'h' 1",
+      "  'macro' <%",
+      "    {",
+      "      // you must define  '${1:period}' '1 w' // default = week",
+      "      // into dashboard 'vars' too.",
+      "      'data'  [",
+      "        { 'label' 'Hour'  'value' '1 h'    'active' \\$${1:period} '1 h' ==   }",
+      "        { 'label' 'Day'   'value' '1 d'    'active' \\$${1:period} '1 d' ==   }",
+      "        { 'label' 'Week'  'value' '1 w'    'active' \\$${1:period} '1 w' ==   }",
+      "        { 'label' 'Month' 'value' '31 d'   'active' \\$${1:period} '31 d' ==  }",
+      "        { 'label' 'Year'  'value' '365 d'  'active' \\$${1:period} '365 d' == }",
+      "        // In this example, as the value is valid WarpScript, you can evaluate directly the result with \\$period EVAL in the tiles listening to this event.",
+      "      ]",
+      "      'events' [ { 'type' 'variable' 'tags' 'input' 'selector' '${1:period}' } ]",
+      "    }",
+      "  %>",
+      "}"
+    ]
+  },
   "devent01": {
     "prefix": "discovery-event 01 popup",
     "description": "Discovery within WarpScript",
@@ -902,7 +927,7 @@
       "  // 'options' { 'eventHandler' 'type=popup,tag=dashboard' }",
       "  'tags' [ 'dashboard' ] ",
       "  'type' 'popup'",
-      "  'value' ${1:insert a discovery tile here}",
+      "  'value' ${1:insert a discovery tile here, or a full dashboard structure with several tiles}",
       "}"
     ]
   },
