@@ -12,7 +12,7 @@
 	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
 	"license": "Apache-2.0",
-	"version": "2.1.19",
+	"version": "2.1.20",
 	"publisher": "senx",
 	"engines": {
 		"vscode": "^1.61.0"
@@ -236,8 +236,8 @@
 		"changelog": "node scripts/changelog.js > CHANGELOG.md && git add CHANGELOG.md && git commit -m 'Changelog Update' || true"
 	},
 	"devDependencies": {
-		"@senx/discovery-themes": "^0.0.1",
-		"@senx/discovery-widgets": "^1.1.40",
+		"@senx/discovery-themes": "0.0.2",
+		"@senx/discovery-widgets": "1.1.42",
 		"@senx/warpview": "2.0.90",
 		"@types/js-yaml": "4.0.3",
 		"@types/lodash": "^4.14.176",
