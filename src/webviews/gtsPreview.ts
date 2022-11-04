@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { ExtensionContext, workspace } from 'vscode';
+import { ExtensionContext, WebviewPanel, workspace } from 'vscode';
 import WarpScriptExtConstants from '../constants';
 
 export default class GTSPreviewWebview {
@@ -27,7 +27,7 @@ export default class GTSPreviewWebview {
   /**
    * 
    */
-  public async getHtmlContent(data: string, timeUnit: string): Promise<string> {
+  public async getHtmlContent(data: string, timeUnit: string, webviewPanel: WebviewPanel): Promise<string> {
 
     //define the theme
     let theme = workspace.getConfiguration().get('warpscript.theme');
@@ -46,12 +46,12 @@ export default class GTSPreviewWebview {
     let mapHeight = workspace.getConfiguration().get('warpscript.PreviewDefaultMapHeight');
 
     //build the webcomponent path, the webview way.
-    const warpviewPath: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'warpview', 'elements', 'warpview-elements.js'));
+    const warpviewPath: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'warpview', 'elements', 'warpview-elements.js'), webviewPanel);
     //build the logo path, the webview way.
-    const LogoPath: string = WarpScriptExtConstants.getRessource(this.context, join('images', 'warpstudio.png'));
-    const LogoWhitePath: string = WarpScriptExtConstants.getRessource(this.context, join('images', 'warpstudio-white.png'));
+    const LogoPath: string = WarpScriptExtConstants.getRessource(this.context, join('images', 'warpstudio.png'), webviewPanel);
+    const LogoWhitePath: string = WarpScriptExtConstants.getRessource(this.context, join('images', 'warpstudio-white.png'), webviewPanel);
     //build the spectre css path, the webview way.
-    const spectreCSSPath: string = WarpScriptExtConstants.getRessource(this.context, join('assets', 'spectre.css', 'dist', 'spectre.min.css'));
+    const spectreCSSPath: string = WarpScriptExtConstants.getRessource(this.context, join('assets', 'spectre.css', 'dist', 'spectre.min.css'), webviewPanel);
 
     //build a time unit warning
     let TimeUnitWarning: string = '';
