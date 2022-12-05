@@ -22,6 +22,7 @@ import { FlowsHoverProvider } from './providers/hover/FlowsHoverProvider';
 import { FLoWSBeautifier } from '@senx/flows-beautifier';
 import { commands, ExtensionContext, languages, Range, Selection, TextDocument, TextEdit, TextEditor, TextEditorRevealType, TextLine, ViewColumn, WebviewPanel, window, workspace } from 'vscode';
 import { userInfo } from 'os';
+import { join } from "path";
 
 
 export class SharedMem {
@@ -222,6 +223,11 @@ export function activate(context: ExtensionContext) {
       }
     });
     console.log('Preview loaded');
+
+    // display Discovery version at startup
+    try {
+      outputWin.appendLine(`Discovery version ${WarpScriptExtConstants.getPackageVersion(context, join('assets', '@senx', 'discovery-widgets', 'package.json'))}`);
+    } catch (error) { }
 
     // define a session name as user name + uuid.
     // remains the same until extension reload, or vscode reload.

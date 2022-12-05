@@ -5,6 +5,7 @@
 import { tmpdir } from "os";
 import { join } from "path";
 import { ExtensionContext, Uri, WebviewPanel, workspace } from "vscode";
+import { readFileSync } from 'fs';
 
 export default class WarpScriptExtConstants {
 
@@ -36,6 +37,12 @@ export default class WarpScriptExtConstants {
   public static getRessource(context: ExtensionContext, path: string, webviewPanel: WebviewPanel): string {
     const scriptPathOnDisk = Uri.file(join(context.extensionUri.path, path));
     return webviewPanel.webview.asWebviewUri(scriptPathOnDisk).toString();
+  }
+
+  public static getPackageVersion(context: ExtensionContext, packageJsonPath: string): string {
+    const packagePath: Uri = Uri.file(join(context.extensionUri.path, packageJsonPath));
+    const packageContent = JSON.parse(readFileSync(packagePath.path, "utf8"));
+    return packageContent.version;
   }
 
 }
