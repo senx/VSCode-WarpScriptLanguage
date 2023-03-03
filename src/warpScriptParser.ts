@@ -200,10 +200,15 @@ export default class WarpScriptParser {
     while (i < ws.length - 1 && !cancelToken.isCancellationRequested) { //often test 2 characters
       if (ws.charAt(i) == '<' && ws.charAt(i + 1) == "'") { //start of a multiline, look for end
         // console.log(i, 'start of multiline');
+        let start = i;
         let lines: string[] = ws.substring(i, ws.length).split('\n');
         let lc = 0;
         while (lc < lines.length && lines[lc].trim() != "'>") { i += lines[lc].length + 1; lc++; }
-        i += lines[lc].length + 1;
+        i += lines[lc].length;
+        let rawMultiLine = ws.substring(start+2, i-2);
+        // console.log(rawMultiLine);      // may include some \r\n
+        rawMultiLine = rawMultiLine.replace('\r', ''); // thank you m$...
+        result.push("'" + rawMultiLine.substring(1, rawMultiLine.length-1) + "'");  // multilines are stored as a single statement between simple quotes, with \n inside.
         // console.log(i, 'end of multiline');
       }
       if (ws.charAt(i) == '/' && ws.charAt(i + 1) == '*') { //start one multiline comment, seek for end of comment
