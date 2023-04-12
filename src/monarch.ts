@@ -1,4 +1,4 @@
-export class MonarchFlows {
+export class Monarch {
         public static rules:any =  {
     "keywords": [
         "!",
