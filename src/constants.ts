@@ -4,7 +4,8 @@
 
 import { tmpdir } from "os";
 import { join } from "path";
-import { ExtensionContext, Uri, workspace } from "vscode";
+import { ExtensionContext, Uri, WebviewPanel, workspace } from "vscode";
+import { readFileSync } from 'fs';
 
 export default class WarpScriptExtConstants {
 
@@ -33,11 +34,15 @@ export default class WarpScriptExtConstants {
     return new RegExp(tmp.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '[\/\\\\]' + '(\\d{3})([nmu])([XGIJD]?)\\.json', 'gi');
   }
 
-  public static getRessource(context: ExtensionContext, path: string) {
-    let onDiskPath = { ...context.extensionUri, path: join(context.extensionUri.path, path) } as Uri;
-    return WarpScriptExtConstants.isVirtualWorkspace
-      ? onDiskPath.scheme + '://' + onDiskPath.authority + onDiskPath.path
-      : Uri.file(join(context.extensionUri.path, path)).with({ scheme: 'vscode-resource' }).toString()
+  public static getRessource(context: ExtensionContext, path: string, webviewPanel: WebviewPanel): string {
+    const scriptPathOnDisk = Uri.file(join(context.extensionUri.path, path));
+    return webviewPanel.webview.asWebviewUri(scriptPathOnDisk).toString();
+  }
+
+  public static getPackageVersion(context: ExtensionContext, packageJsonPath: string): string {
+    const packagePath: Uri = Uri.file(join(context.extensionUri.path, packageJsonPath));
+    const packageContent = JSON.parse(readFileSync(packagePath.path, "utf8"));
+    return packageContent.version;
   }
 
 }

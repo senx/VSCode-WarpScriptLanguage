@@ -1,4 +1,4 @@
-import { OutputChannel } from "vscode";
+import { OutputChannel, WebviewPanel } from "vscode";
 import { ExtensionContext, workspace } from "vscode";
 import GTSPreviewWebview from './gtsPreview'
 import WarpScriptExtConstants from "../constants";
@@ -54,22 +54,22 @@ export default class DiscoveryPreviewWebview {
   }
 
 
-  public async getHtmlContent(discoveryJSON: any, opts: specialCommentCommands): Promise<string> {
+  public async getHtmlContent(discoveryJSON: any, opts: specialCommentCommands, webviewPanel: WebviewPanel): Promise<string> {
     // manipulate html here if needed
     const vscodetheme: string = workspace.getConfiguration().get("workbench.colorTheme")
     let ideTheme = 'dark';
     if (GTSPreviewWebview.LightThemesList.indexOf(vscodetheme) > -1) {
       ideTheme = 'light';
     }
-    const discoveryPathNoModule: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'discovery-widgets', 'dist', 'discovery', 'discovery.js'));
-    const discoveryPathModule: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'discovery-widgets', 'dist', 'discovery', 'discovery.esm.js'));
-    const discoveryTheme: string = WarpScriptExtConstants.getRessource(this.context, join('assets', 'themes.css'));
+    const discoveryPathNoModule: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'discovery-widgets', 'dist', 'discovery', 'discovery.js'), webviewPanel);
+    const discoveryPathModule: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'discovery-widgets', 'dist', 'discovery', 'discovery.esm.js'), webviewPanel);
+    const discoveryTheme: string = WarpScriptExtConstants.getRessource(this.context, join('assets', 'themes.css'), webviewPanel);
     let theme = opts.theme || ideTheme;
     if (ideTheme === 'light' && !opts.theme) {
       theme = 'default';
     }
-    const darkLogo: string = WarpScriptExtConstants.getRessource(this.context, join('images', 'senx_header_dark.png'));
-    const whiteLogo: string = WarpScriptExtConstants.getRessource(this.context, join('images', 'senx_header_light.png'));
+    const darkLogo: string = WarpScriptExtConstants.getRessource(this.context, join('images', 'senx_header_dark.png'), webviewPanel);
+    const whiteLogo: string = WarpScriptExtConstants.getRessource(this.context, join('images', 'senx_header_light.png'), webviewPanel);
     let senxLogo = "light";
     switch (theme) {
       case 'dark':

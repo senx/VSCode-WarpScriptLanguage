@@ -1,5 +1,5 @@
 import { join } from "path";
-import { ExtensionContext } from "vscode";
+import { ExtensionContext, WebviewPanel } from "vscode";
 import WarpScriptExtConstants from "../constants";
 
 
@@ -43,8 +43,8 @@ export default class ImagePreviewWebview {
     return (imageList);
   }
 
-  public async getHtmlContent(imageList: String[]): Promise<string> {
-    let fileSaverPath: string = WarpScriptExtConstants.getRessource(this.context, join('node_modules', 'file-saver', 'dist', 'FileSaver.min.js'));
+  public async getHtmlContent(imageList: String[], webviewPanel: WebviewPanel): Promise<string> {
+    let fileSaverPath: string = WarpScriptExtConstants.getRessource(this.context, join('node_modules', 'file-saver', 'dist', 'FileSaver.min.js'), webviewPanel);
     let htmlContent = `<head>
         <title>Stack images</title>
         <script src="${fileSaverPath}"></script>

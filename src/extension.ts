@@ -22,6 +22,7 @@ import { FlowsHoverProvider } from './providers/hover/FlowsHoverProvider';
 import { FLoWSBeautifier } from '@senx/flows-beautifier';
 import { commands, ExtensionContext, languages, Range, Selection, TextDocument, TextEdit, TextEditor, TextEditorRevealType, TextLine, ViewColumn, WebviewPanel, window, workspace } from 'vscode';
 import { userInfo } from 'os';
+import { join } from "path";
 
 
 export class SharedMem {
@@ -169,7 +170,7 @@ export function activate(context: ExtensionContext) {
             previewPanels.gts.onDidDispose(() => { previewPanels.gts = null; })
           }
           // refresh gtsPreview 
-          gtsPreviewWebview.getHtmlContent(textEditor.document.getText(), timeUnit).then(htmlcontent => setTimeout(() => previewPanels.gts.webview.html = htmlcontent))
+          gtsPreviewWebview.getHtmlContent(textEditor.document.getText(), timeUnit, previewPanels.gts).then(htmlcontent => setTimeout(() => previewPanels.gts.webview.html = htmlcontent))
 
           // imagePreview panel, if one image found
           imagePreviewWebview.findImages(textEditor.document.getText(), textEditor.document.getText().length > 500000)
@@ -186,7 +187,7 @@ export function activate(context: ExtensionContext) {
                   // when closed by the user
                   previewPanels.image.onDidDispose(() => { previewPanels.image = null; })
                 }
-                imagePreviewWebview.getHtmlContent(imageList).then(htmlcontent => previewPanels.image.webview.html = htmlcontent);
+                imagePreviewWebview.getHtmlContent(imageList, previewPanels.image).then(htmlcontent => previewPanels.image.webview.html = htmlcontent);
               }
             })
 
@@ -201,14 +202,14 @@ export function activate(context: ExtensionContext) {
             }
             // and re open it...
             discoveryPreviewWebview.findDiscovery(textEditor.document.getText(), outputWin).then(json => {
-              discoveryPreviewWebview.getHtmlContent(json, SharedMem.get(uuid)).then((htmlcontent: string) => previewPanels.discovery.webview.html = htmlcontent);
               previewPanels.discovery = window.createWebviewPanel('discoverypreview', 'Discovery',
-                { viewColumn: ViewColumn.Two, preserveFocus: true },
-                { enableScripts: true, retainContextWhenHidden: true });
+              { viewColumn: ViewColumn.Two, preserveFocus: true },
+              { enableScripts: true, retainContextWhenHidden: true });
+              discoveryPreviewWebview.getHtmlContent(json, SharedMem.get(uuid), previewPanels.discovery).then((htmlcontent: string) => previewPanels.discovery.webview.html = htmlcontent);
               previewPanels.discovery.onDidDispose(() => { previewPanels.discovery = null; }); // user close it
             });
           }
-          //focus if focus forced by option
+          //focus if focus forced by optionu
           if (previewSetting == 'G' && previewPanels.gts != null) {
             setTimeout(() => previewPanels.gts.reveal(ViewColumn.Two), 200);
           }
@@ -222,6 +223,11 @@ export function activate(context: ExtensionContext) {
       }
     });
     console.log('Preview loaded');
+
+    // display Discovery version at startup
+    try {
+      outputWin.appendLine(`Discovery version ${WarpScriptExtConstants.getPackageVersion(context, join('assets', '@senx', 'discovery-widgets', 'package.json'))}`);
+    } catch (error) { }
 
     // define a session name as user name + uuid.
     // remains the same until extension reload, or vscode reload.
