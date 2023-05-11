@@ -683,7 +683,7 @@
       "",
       "    { ",
       "      'data' \\$values // data can also be a gts or a list thereof",
-      "      // 'globalParams' { 'bar' { 'stacked' true } }",
+      "      // 'globalParams' { 'bar' { 'stacked' true } 'showLegend' true }",
       "    } ",
       "  %>",
       "}"
