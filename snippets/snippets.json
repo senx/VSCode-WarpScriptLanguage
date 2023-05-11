@@ -286,6 +286,8 @@
   "tokengen": {
     "prefix": "tokengen",
     "body": [
+      "'insert here token with tokengen capability'",
+      "CAPADD // allow to use TOKENGEN",
       "'myapp' 'applicationName' STORE",
       "NOW 1 ADDYEARS MSTU / 'expiryDate' STORE",
       "UUID 'ownerAndProducer' STORE",
