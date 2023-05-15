@@ -175,7 +175,7 @@ export default class WSDiagnostics {
 
 	// try to retrieve properties from an enpoint. Request if needed.
 	public static getEndpointProperties(url: string): endPointProp {
-		if (endpointsProperties[url] && (endpointsProperties[url].lastRefresh + 600000)> Date.now()) { // new try every 10 minutes
+		if (endpointsProperties[url] && (endpointsProperties[url].lastRefresh + 600000) > Date.now()) { // new try every 10 minutes
 			return endpointsProperties[url];
 		}
 
@@ -228,6 +228,7 @@ export default class WSDiagnostics {
 	private refreshConfig() {
 		// read debounce time from config, default to 5000
 		this.debounceTime = workspace.getConfiguration().get("warpscript.debounceTimeBeforeAudit") || 5000;
+		if (this.debounceTime < 1000) { this.debounceTime = 1000; }
 		console.log("debounce time = %d", this.debounceTime);
 	}
 

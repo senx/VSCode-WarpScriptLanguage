@@ -227,7 +227,7 @@
 					"scope": "resource",
 					"type": "number",
 					"default": 5000,
-					"description": "The WarpScript static parsing request will be done as soon as editor idle time (no change in the editor) reach this time (in ms). 5s debounce is recommendended to avoid to saturate servers with audit checks."
+					"description": "The WarpScript static parsing request will be done as soon as editor idle time (no change in the editor) reach this time (in ms). 5s debounce is recommendended to avoid to saturate servers with audit checks. It cannot be less than 1 second."
 				}
 			}
 		}
