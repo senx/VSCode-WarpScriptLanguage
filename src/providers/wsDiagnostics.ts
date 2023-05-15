@@ -20,7 +20,7 @@ export default class WSDiagnostics {
 			const commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(executedWarpScript);
 			Warp10URL = commentsCommands.endpoint || Warp10URL;
 			// properties of the enpoint ?
-			let prop: endPointProp = this.getEndpointProperties(Warp10URL);
+			let prop: endPointProp = WSDiagnostics.getEndpointProperties(Warp10URL);
 			if (prop && prop.auditAvailable) {
 				let ws = "WSAUDITMODE <% \n" + document.getText() + "\n %> CLEAR WSAUDIT";
 				var request_options: request.Options = {
@@ -174,12 +174,12 @@ export default class WSDiagnostics {
 	}
 
 	// try to retrieve properties from an enpoint. Request if needed.
-	public getEndpointProperties(url: string): endPointProp {
-		if (endpointsProperties[url]) {
+	public static getEndpointProperties(url: string): endPointProp {
+		if (endpointsProperties[url] && (endpointsProperties[url].lastRefresh + 600000)> Date.now()) { // new try every 10 minutes
 			return endpointsProperties[url];
 		}
 
-		let ws: string = "REV <% 'WSAUDITMODE' EVAL true %> <% false %> <% %> TRY ";
+		let ws: string = "IDENT DUP ISNULL <% DROP '' %> IFT  REV <% 'WSAUDITMODE' EVAL true %> <% false %> <% %> TRY ";
 
 		var request_options: request.Options = {
 			headers: {
@@ -200,8 +200,14 @@ export default class WSDiagnostics {
 			} else if (response.statusCode == 200) {
 				try {
 					let answer = JSON.parse(body);
-					let props: endPointProp = { auditAvailable: answer[0], revision: answer[1] };
+					let props: endPointProp = {
+						auditAvailable: answer[0],
+						revision: answer[1],
+						ident: answer[2],
+						lastRefresh: Date.now()
+					};
 					endpointsProperties[url] = props;
+					console.log(props)
 				} catch (error) {
 					console.log("cannot request " + url + " revision");
 				}
