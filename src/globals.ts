@@ -12,3 +12,10 @@ export let weAreClosingFilesFlag:boolean = false;
 export let sessionName:string = "";
 
 export let endpointsForThisSession:{[key: string]: number} = {};
+
+export interface endPointProp {
+  revision: string;
+  auditAvailable: boolean;
+}
+
+export let endpointsProperties:{[key: string]: endPointProp} = {};

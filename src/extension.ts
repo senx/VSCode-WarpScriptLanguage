@@ -23,7 +23,7 @@ import { FLoWSBeautifier } from '@senx/flows-beautifier';
 import { commands, ExtensionContext, languages, Range, Selection, TextDocument, TextEdit, TextEditor, TextEditorRevealType, TextLine, ViewColumn, WebviewPanel, window, workspace } from 'vscode';
 import { userInfo } from 'os';
 import { join } from "path";
-
+import  WSDiagnostics from './providers/wsDiagnostics';
 
 export class SharedMem {
   private static registry: any = {};
@@ -128,6 +128,10 @@ export function activate(context: ExtensionContext) {
     let discoveryPreviewWebview = new DiscoveryPreviewWebview(context);
     let imagePreviewWebview = new ImagePreviewWebview(context);
     let latestJSONdisplayed: string = '';
+
+    // enable diagnostics (audit)
+    let wsDiagnostics = new WSDiagnostics(context);
+    wsDiagnostics.initializeDiagnostics();    
 
     //each time focus change, we look at the file type and file name. Json + special name => stack preview.
     window.onDidChangeActiveTextEditor((textEditor: TextEditor) => {
