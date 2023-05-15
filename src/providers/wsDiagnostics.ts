@@ -74,7 +74,7 @@ export default class WSDiagnostics {
 							let errors = answer[0];
 							for (let i = 0; i < errors.length; i++) {
 								let err = errors[i];
-								//console.log(err)
+								console.log(err)
 								if (err["type"] == "UNKNOWN") {
 									output.push({
 										message: "Unknown function " + err["statement"],
@@ -84,7 +84,15 @@ export default class WSDiagnostics {
 										severity: DiagnosticSeverity.Error
 									})
 								}
-
+								if (err["type"] == "WS_EXCEPTION") {
+									output.push({
+										message: "WarpScript Exception, " + err["statement"],
+										// first line for Warp 10 is 1. this is the line with WSAUDIT <%
+										// first line for VSCode is 0.
+										range: this.getRangeFromStatementNumber(lines[err["line"] - 2], err["line"] - 2, err["position"]),
+										severity: DiagnosticSeverity.Error
+									})
+								}
 							}
 							collection.set(document.uri, output as readonly Diagnostic[]);
 						} catch (error) {
