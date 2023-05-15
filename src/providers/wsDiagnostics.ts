@@ -1,4 +1,4 @@
-import { ExtensionContext, languages, window, workspace, TextDocument, DiagnosticCollection, Position, Range, DiagnosticSeverity, Location, DiagnosticRelatedInformation, Diagnostic } from 'vscode';
+import { ExtensionContext, languages, window, workspace, TextDocument, DiagnosticCollection, Position, Range, DiagnosticSeverity, Diagnostic } from 'vscode';
 import { endpointsProperties, endPointProp } from '../globals';
 import * as request from 'request';
 import { specialCommentCommands } from '../warpScriptParser';
