@@ -204,7 +204,7 @@ export default class WarpScriptParser {
         let lines: string[] = ws.substring(i, ws.length).split('\n');
         let lc = 0;
         while (lc < lines.length && lines[lc].trim() != "'>") { i += lines[lc].length + 1; lc++; }
-        i += lines[lc].length;
+        if (lc < lines.length) {i += lines[lc].length;}
         let rawMultiLine = ws.substring(start+2, i-2);
         // console.log(rawMultiLine);      // may include some \r\n
         rawMultiLine = rawMultiLine.replace('\r', ''); // thank you m$...
