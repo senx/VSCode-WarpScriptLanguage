@@ -80,7 +80,7 @@ export default class WSDiagnostics {
 										message: "Unknown function " + err["statement"],
 										// first line for Warp 10 is 1. this is the line with WSAUDIT <%
 										// first line for VSCode is 0.
-										range: this.getRangeFromStatementNumber(lines[err["line"] - 2], err["line"] - 2, err["position"]),
+										range: this.getRangeFromPositionWithEnd(lines[err["line"] - 2], err["line"] - 2, err["position"],err["position.end"]),
 										severity: DiagnosticSeverity.Error
 									})
 								}
@@ -89,8 +89,17 @@ export default class WSDiagnostics {
 										message: "WarpScript Exception, " + err["statement"],
 										// first line for Warp 10 is 1. this is the line with WSAUDIT <%
 										// first line for VSCode is 0.
-										range: this.getRangeFromStatementNumber(lines[err["line"] - 2], err["line"] - 2, err["position"]),
+										range: this.getRangeFromPositionWithEnd(lines[err["line"] - 2], err["line"] - 2, err["position"],err["position.end"]),
 										severity: DiagnosticSeverity.Error
+									})
+								}
+								if (err["type"] == "WS_WARNING") {
+									output.push({
+										message: "WarpScript Warning, " + err["statement"],
+										// first line for Warp 10 is 1. this is the line with WSAUDIT <%
+										// first line for VSCode is 0.
+										range: this.getRangeFromPositionWithEnd(lines[err["line"] - 2], err["line"] - 2, err["position"],err["position.end"]),
+										severity: DiagnosticSeverity.Warning
 									})
 								}
 							}
@@ -124,6 +133,21 @@ export default class WSDiagnostics {
 			collection.clear();
 		}
 
+	}
+
+	// very simplified version if Warp 10 parser can return statement absolute position.
+	private getRangeFromPosition(line: string, lineNo: number, position: number) {
+		// look for next space (or end of line)
+		let end = position;
+		while (end < line.length && line[end] != ' ') {
+			end++;
+		}
+		return new Range(new Position(lineNo, position), new Position(lineNo, end));
+	}
+
+	// very very simplified version if Warp 10 parser can return statement absolute position (PR ongoing)
+	private getRangeFromPositionWithEnd(line: string, lineNo: number, position: number, positionEnd: number) {
+		return new Range(new Position(lineNo, position), new Position(lineNo, positionEnd));
 	}
 
 	// lineNo is the editor line count used to create the range
