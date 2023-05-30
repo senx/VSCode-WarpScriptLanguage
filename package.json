@@ -12,7 +12,7 @@
 	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
 	"license": "Apache-2.0",
-	"version": "2.1.34",
+	"version": "2.2.0",
 	"publisher": "senx",
 	"engines": {
 		"vscode": "^1.73.0"
@@ -222,6 +222,12 @@
 					"type": "boolean",
 					"default": true,
 					"description": "For small files, macros are parsed to allow inline helpers such as code lenses at the beginning of big macros (more than 20 lines) or automatic highlight when you click on a control statement such as IFT."
+				},
+				"warpscript.debounceTimeBeforeAudit": {
+					"scope": "resource",
+					"type": "number",
+					"default": 5000,
+					"description": "The WarpScript static parsing request will be done as soon as editor idle time (no change in the editor) reach this time (in ms). 5s debounce is recommendended to avoid to saturate servers with audit checks. It cannot be less than 1 second."
 				}
 			}
 		}
