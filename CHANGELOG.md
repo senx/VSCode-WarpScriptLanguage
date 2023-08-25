@@ -1,8 +1,9 @@
 VSCode WarpScript Extension
 ---
 
-## 2.2.3
+## v2.2.3
 
+> +  2023/08/25  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f244999776772186d710e48367e08534c2c9a576)*)
 > +  2023/08/25  | version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/579e6bc223326d4366cd3297f9ab5453643303b3)*)
 > +  2023/08/25  | discovery version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/af80320938baf1222aa727b49e703e54a1b032f4)*)
 > +  2023/07/05  | version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/7b5f58246e4a8607ba3e45e695b9810e17420614)*)
