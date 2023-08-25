@@ -243,7 +243,7 @@
 	},
 	"devDependencies": {
 		"@senx/discovery-themes": "0.0.2",
-		"@senx/discovery-widgets": "1.1.84",
+		"@senx/discovery-widgets": "1.1.89",
 		"@senx/warpview": "2.0.90",
 		"@types/js-yaml": "4.0.5",
 		"@types/lodash": "^4.14.195",
