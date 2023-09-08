@@ -1,6 +1,11 @@
 VSCode WarpScript Extension
 ---
 
+## v2.2.4
+
+> +  2023/08/25  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/7bcb1a066d8ac9ebdce95c3edecfafce60ace274)*)
+> +  2023/08/25  | Versions bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f9cd9476dafdedceb26adef69d427e7d59be9897)*)
+
 ## v2.2.3
 
 > +  2023/08/25  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f244999776772186d710e48367e08534c2c9a576)*)
@@ -145,10 +150,5 @@ VSCode WarpScript Extension
 > +  2022/04/29  | Ignore input message if "when" condition is not meet  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/5ae9c5fb38e2dc2fc54f7886349f272d34c94004)*)
 > +  2022/04/29  | doc Update  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c837809e609411c72beea16cdebc61e83694f7df)*)
 > +  2022/04/29  | fix deps  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/463623c903d7691fd876ee3b558c188d1eee9e1b)*)
-
-## v2.1.4
-
-> +  2022/03/11  | version bump  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c8ecc177046c6a64163a9ec5071cc042ad6f6dab)*)
-> +  2022/03/11  | changelog  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2133943f0aa5bbbbe145a6b138f078df490f816d)*)
 
 
