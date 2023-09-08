@@ -12,7 +12,7 @@
 	"author": "SenX <contact@senx.io>",
 	"icon": "images/w.png",
 	"license": "Apache-2.0",
-	"version": "2.2.4",
+	"version": "2.2.5",
 	"publisher": "senx",
 	"engines": {
 		"vscode": "^1.73.0"
@@ -243,7 +243,7 @@
 	},
 	"devDependencies": {
 		"@senx/discovery-themes": "0.0.2",
-		"@senx/discovery-widgets": "1.1.90",
+		"@senx/discovery-widgets": "1.1.92",
 		"@senx/warpview": "2.0.90",
 		"@types/js-yaml": "4.0.5",
 		"@types/lodash": "^4.14.195",
