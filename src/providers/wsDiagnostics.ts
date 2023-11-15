@@ -269,7 +269,7 @@ export default class WSDiagnostics {
         return endpointsProperties[url];
     }
 
-    private noChangeTimer: NodeJS.Timer;
+    private noChangeTimer: any;
     private debounceTime: number;
 
 
