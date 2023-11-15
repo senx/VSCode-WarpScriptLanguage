@@ -1,6 +1,13 @@
 VSCode WarpScript Extension
 ---
 
+## v2.2.6
+
+> +  2023/10/11  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2b5d65aef13af456e5846048a1dc239350296e56)*)
+> +  2023/10/06  | fix map snippet  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/646f45bdb11871c6184c7ebe89b3c8f5ac17ae17)*)
+> +  2023/09/08  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/563d634759ea737aea271ee12bc307b454c3182c)*)
+> +  2023/09/08  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/a88d34ad4744f598da09dc3f743c33fdb43d7b58)*)
+
 ## v2.2.4
 
 > +  2023/08/25  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/7bcb1a066d8ac9ebdce95c3edecfafce60ace274)*)
@@ -141,14 +148,5 @@ VSCode WarpScript Extension
 > +  2022/04/29  | Manage tag during deploiement  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/65c9cec97b6246ecf5c8e01db004ec52d8fd1bde)*)
 > +  2022/04/29  | 2.1.5  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/646b867a17adbe81be98293158695fce75ee4e78)*)
 > +  2022/04/29  | Update changelog  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/bd36d8540f330dba980eb688c5144643bbd13ce1)*)
-
-## 2.1.5
-
-> +  2022/04/29  | Specify node version  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/b16334ad0d21bd80f4d397215a36ae6cfcfdae18)*)
-> +  2022/04/29  | Revert to the old tag detection  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/1e1268ae1bed749f2fc87e4b4e346d3fb6ea2cce)*)
-> +  2022/04/29  | Jenkins : abort previous build  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/74654d365a5cfd556733cbc6fb4b79bed58a750c)*)
-> +  2022/04/29  | Ignore input message if "when" condition is not meet  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/5ae9c5fb38e2dc2fc54f7886349f272d34c94004)*)
-> +  2022/04/29  | doc Update  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c837809e609411c72beea16cdebc61e83694f7df)*)
-> +  2022/04/29  | fix deps  (*[xavier](marin.xavier@gmail.com) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/463623c903d7691fd876ee3b558c188d1eee9e1b)*)
 
 
