@@ -62,7 +62,7 @@ export default class WSCompletionMacrosProvider
           result.push(item);
 
           item = new CompletionItem("include macro:", CompletionItemKind.Method)
-          item.documentation = new MarkdownString().appendMarkdown("If macro substitution is active, the following local macro path will be prepended to the script, allowing indirect reference with RUN\n\nEx:").appendCodeblock("// @preview macro/test/help\n\n 'macro/test/help' RUN");
+          item.documentation = new MarkdownString().appendMarkdown("If macro substitution is active, the following local macro path will be prepended to the script, allowing indirect reference with RUN\n\nEx:").appendCodeblock("// @include macro:test/help\n\n 'test/help' RUN");
           item.detail = "VSCode warpscript instruction";
           result.push(item);
 
