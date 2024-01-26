@@ -1,279 +1,439 @@
 {
-	"name": "warpscript-language",
-	"displayName": "WarpScript & FLoWS language support",
-	"description": "WarpScript & FLoWS support",
-	"keywords": [
-		"Warp 10",
-		"WarpScript",
-		"Geo Times Series",
-		"Times Series",
-		"FLoWS"
-	],
-	"author": "SenX <contact@senx.io>",
-	"icon": "images/w.png",
-	"license": "Apache-2.0",
-	"version": "2.2.9",
-	"publisher": "senx",
-	"engines": {
-		"vscode": "^1.73.0"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/senx/VSCode-WarpScriptLanguage"
-	},
-	"bugs": {
-		"url": "https://github.com/senx/VSCode-WarpScriptLanguage/issues"
-	},
-	"categories": [
-		"Programming Languages",
-		"Snippets",
-		"Linters"
-	],
-	"galleryBanner": {
-		"color": "#404040",
-		"theme": "dark"
-	},
-	"activationEvents": [
-		"onLanguage:warpscript",
-		"onLanguage:flows"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"snippets": [
-			{
-				"language": "warpscript",
-				"path": "./snippets/snippets.json"
-			},
-			{
-				"language": "flows",
-				"path": "./snippets/snippets-flows.json"
-			}
-		],
-		"keybindings": [
-			{
-				"command": "extension.execWS",
-				"key": "ctrl+alt+e",
-				"when": "editorFocus"
-			},
-			{
-				"command": "extension.execWSOnSelection",
-				"key": "ctrl+alt+a",
-				"when": "editorHasSelection && editorFocus"
-			}
-		],
-		"commands": [
-			{
-				"command": "extension.execWS",
-				"title": "Run WarpScript or Flows",
-				"category": "WarpScript",
-				"icon": {
-					"light": "./image/run.svg",
-					"dark": "./image/run_inverse.svg"
-				}
-			},
-			{
-				"command": "extension.execWSOnSelection",
-				"title": "Run WarpScript on selection",
-				"category": "WarpScript"
-			},
-			{
-				"command": "extension.execCloseJsonResults",
-				"title": "Close all Warp 10 json output in the workspace",
-				"category": "WarpScript"
-			},
-			{
-				"command": "extension.execConvertUnicodeInJson",
-				"title": "Unescape unicode characters in Json output",
-				"category": "WarpScript"
-			}
-		],
-		"languages": [
-			{
-				"id": "warpscript",
-				"aliases": [
-					"WarpScript",
-					"warpscript"
-				],
-				"extensions": [
-					"mc2"
-				],
-				"configuration": "./syntaxes/warpscript.language-configuration.json"
-			},
-			{
-				"id": "flows",
-				"aliases": [
-					"FLoWS",
-					"flows"
-				],
-				"extensions": [
-					"flows"
-				],
-				"configuration": "./syntaxes/flows.language-configuration.json"
-			}
-		],
-		"grammars": [
-			{
-				"language": "warpscript",
-				"scopeName": "source.warpscript",
-				"path": "./syntaxes/warpscript.tmLanguage.json"
-			},
-			{
-				"language": "flows",
-				"scopeName": "source.flows",
-				"path": "./syntaxes/flows.tmLanguage.json"
-			}
-		],
-		"configuration": {
-			"type": "object",
-			"title": "WarpScript",
-			"properties": {
-				"warpscript.theme": {
-					"enum": [
-						"auto",
-						"light",
-						"dark"
-					],
-					"scope": "window",
-					"default": "auto",
-					"description": "Data visualization theme"
-				},
-				"warpscript.Warp10URL": {
-					"scope": "resource",
-					"type": "string",
-					"default": "http://127.0.0.1:8080/api/v0/exec",
-					"description": "Warp 10 URL"
-				},
-				"warpscript.http.timeout": {
-					"scope": "resource",
-					"type": "number",
-					"default": 3600000,
-					"description": "Http timeout in ms."
-				},
-				"warpscript.ProxyPac": {
-					"scope": "resource",
-					"type": "string",
-					"default": "",
-					"description": "Local path of your proxy.pac file. It supports SOCKS5. Make sure `Http: Proxy Support` configuration is `OFF`."
-				},
-				"warpscript.ProxyURL": {
-					"scope": "resource",
-					"type": "string",
-					"default": "",
-					"description": "When defined, this proxy URL will override `Proxy Pac` setting. Use `http://user:pass@host:port`. It may support `pac+http://pathto/proxy.pac`, but without authentication. Make sure `Http: Proxy Support` configuration is `OFF`."
-				},
-				"warpscript.useGZIP": {
-					"scope": "resource",
-					"type": "boolean",
-					"default": true,
-					"description": "Use GZIP compression"
-				},
-				"warpscript.showButton": {
-					"scope": "resource",
-					"type": "boolean",
-					"default": true,
-					"description": "Show exec button"
-				},
-				"warpscript.showDots": {
-					"scope": "resource",
-					"type": "boolean",
-					"default": true,
-					"description": "Show dots on graph"
-				},
-				"warpscript.PreviewTabs": {
-					"enum": [
-						"auto",
-						"none"
-					],
-					"scope": "window",
-					"default": "auto",
-					"description": "Prevent the GTS Preview and Image tabs to pop up after execution"
-				},
-				"warpscript.DefaultTimeUnit": {
-					"enum": [
-						"us",
-						"ms",
-						"ns"
-					],
-					"scope": "window",
-					"default": "us",
-					"description": "Warp 10 Time Unit for GTS Preview"
-				},
-				"warpscript.PreviewDefaultChartHeight": {
-					"type": "integer",
-					"default": 400,
-					"description": "Default height in pixels of the GTS Preview chart"
-				},
-				"warpscript.PreviewDefaultMapHeight": {
-					"type": "integer",
-					"default": 500,
-					"description": "Default height in pixels of the GTS Preview map"
-				},
-				"warpscript.maxFileSizeForAutomaticUnicodeEscape": {
-					"type": "integer",
-					"default": 0,
-					"description": "Maximum json file size in MB for automatic unicode unescape. Set to 0 to disable the feature."
-				},
-				"warpscript.maxFileSizeBeforeJsonWarning": {
-					"type": "integer",
-					"default": 20,
-					"description": "Maximum json file size in MB. If the result is greater than this size, you will be asked for a confirmation before parsing. Set to 0 to disable the feature."
-				},
-				"warpscript.enableInlineHelpers": {
-					"type": "boolean",
-					"default": true,
-					"description": "For small files, macros are parsed to allow inline helpers such as code lenses at the beginning of big macros (more than 20 lines) or automatic highlight when you click on a control statement such as IFT."
-				},
-				"warpscript.debounceTimeBeforeAudit": {
-					"scope": "resource",
-					"type": "number",
-					"default": 5000,
-					"description": "The WarpScript static parsing request will be done as soon as editor idle time (no change in the editor) reach this time (in ms). 5s debounce is recommendended to avoid to saturate servers with audit checks. It cannot be less than 1 second."
-				}
-			}
-		}
-	},
-	"scripts": {
-		"vsce": "./node_modules/vsce/vsce",
-		"vscode:prepublish": "npm run changelog && npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node scripts/build.js",
-		"docupdate": "git add src/wsGlobals.ts && git add src/flowsGlobals.ts && git add src/ref.ts && git add monarch.ts && git add syntaxes/warpscript.tmLanguage.json && git add syntaxes/flows.tmLanguage.json && git commit -m 'doc Update'",
-		"changelog": "node scripts/changelog.js > CHANGELOG.md && git add CHANGELOG.md && git commit -m 'Changelog Update' || true"
-	},
-	"devDependencies": {
-		"@senx/discovery-themes": "0.0.2",
-		"@senx/discovery-widgets": "1.1.102",
-		"@senx/warpview": "2.0.90",
-		"@types/js-yaml": "4.0.9",
-		"@types/lodash": "4.14.202",
-		"@types/node": "20.11.6",
-		"@types/request": "2.48.12",
-		"@types/uuid": "9.0.7",
-		"@types/vscode": "^1.73.0",
-		"@types/vscode-webview": "1.57.4",
-		"fs-extra": "11.2.0",
-		"js-yaml": "4.1.0",
-		"plist": "3.1.0",
-		"showdown": "2.1.0",
-		"spectre.css": "0.5.9",
-		"typescript": "4.9.5",
-		"vsce": "2.15.0",
-		"vscode-textmate": "9.0.0"
-	},
-	"dependencies": {
-		"@senx/flows-beautifier": "1.0.4",
-		"@senx/warp10": "2.0.3",
-		"at-least-node": "1.0.0",
-		"file-saver": "2.0.5",
-		"http-parser-js": "0.5.8",
-		"lodash": "4.17.21",
-		"pac-resolver": "4.1.0",
-		"proxy-agent": "4.0.0",
-		"request": "2.88.2",
-		"socks-proxy-agent": "5.0.0",
-		"uuid": "9.0.0",
-		"vscode-languageclient": "8.1.0",
-		"vscode-proxy-agent": "0.12.0"
-	}
+  "name": "warpscript-language",
+  "displayName": "WarpScript & FLoWS language support",
+  "description": "WarpScript & FLoWS support",
+  "keywords": [
+    "Warp 10",
+    "WarpScript",
+    "Geo Times Series",
+    "Times Series",
+    "FLoWS"
+  ],
+  "author": "SenX <contact@senx.io>",
+  "icon": "images/w.png",
+  "license": "Apache-2.0",
+  "version": "2.2.9",
+  "publisher": "senx",
+  "engines": {
+    "vscode": "^1.73.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/senx/VSCode-WarpScriptLanguage"
+  },
+  "bugs": {
+    "url": "https://github.com/senx/VSCode-WarpScriptLanguage/issues"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Linters"
+  ],
+  "galleryBanner": {
+    "color": "#404040",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onLanguage:warpscript",
+    "onLanguage:flows",
+    "onDebugResolve:warpscript",
+    "onDebugDynamicConfigurations:warpscript"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "breakpoints": [
+      {
+        "language": "warpscript"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "warpscript",
+        "languages": [
+          "warpscript"
+        ],
+        "label": "warpscript Debug",
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Absolute path to a text file.",
+                "default": "${workspaceFolder}/${command:AskForProgramName}"
+              },
+              "stopOnEntry": {
+                "type": "boolean",
+                "description": "Automatically stop after launch.",
+                "default": true
+              },
+              "trace": {
+                "type": "boolean",
+                "description": "Enable logging of the Debug Adapter Protocol.",
+                "default": true
+              },
+              "compileError": {
+                "type": "string",
+                "description": "Simulates a compile error in 'launch' request.",
+                "enum": [
+                  "default",
+                  "show",
+                  "hide"
+                ],
+                "enumDescriptions": [
+                  "default: show fake compile error to user",
+                  "show fake compile error to user",
+                  "do not show fake compile error to user"
+                ]
+              }
+            }
+          },
+          "attach": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Absolute path to a text file.",
+                "default": "${workspaceFolder}/${command:AskForProgramName}"
+              },
+              "stopOnEntry": {
+                "type": "boolean",
+                "description": "Automatically stop after attach.",
+                "default": true
+              },
+              "trace": {
+                "type": "boolean",
+                "description": "Enable logging of the Debug Adapter Protocol.",
+                "default": true
+              },
+              "compileError": {
+                "type": "string",
+                "description": "Simulates a compile error in 'attach' request.",
+                "enum": [
+                  "default",
+                  "show",
+                  "hide"
+                ],
+                "enumDescriptions": [
+                  "default: show fake compile error to user",
+                  "show fake compile error to user",
+                  "do not show fake compile error to user"
+                ]
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "warpscript",
+            "request": "launch",
+            "name": "Ask for file name",
+            "program": "${workspaceFolder}/${command:AskForProgramName}",
+            "stopOnEntry": true
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "warpscript Debug: Launch",
+            "description": "A new configuration for 'debugging' a user selected warpscript file.",
+            "body": {
+              "type": "warpscript",
+              "request": "launch",
+              "name": "Ask for file name",
+              "program": "^\"\\${workspaceFolder}/\\${command:AskForProgramName}\"",
+              "stopOnEntry": true
+            }
+          }
+        ],
+        "variables": {
+          "AskForProgramName": "extension.warpscript-debug.getProgramName"
+        }
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "resourceLangId == warpscript && editorHasSelection",
+          "command": "extension.execWSOnSelection",
+          "group": "Warp 10"
+        },
+        {
+          "when": "resourceLangId == warpscript",
+          "command": "extension.execWS",
+          "group": "Warp 10"
+        }
+      ],
+      "editor/title": [
+        {
+          "when": "resourceLangId == warpscript",
+          "command": "extension.execWS",
+          "group": "navigation"
+        }
+      ]
+    },
+    "snippets": [
+      {
+        "language": "warpscript",
+        "path": "./snippets/snippets.json"
+      },
+      {
+        "language": "flows",
+        "path": "./snippets/snippets-flows.json"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "extension.execWS",
+        "key": "ctrl+alt+e",
+        "when": "editorFocus"
+      },
+      {
+        "command": "extension.execWSOnSelection",
+        "key": "ctrl+alt+a",
+        "when": "editorHasSelection && editorFocus"
+      }
+    ],
+    "commands": [
+      {
+        "command": "extension.execWS",
+        "title": "Run WarpScript or Flows",
+        "category": "WarpScript",
+        "icon": {
+          "light": "./images/run.svg",
+          "dark": "./images/run-inverse.svg"
+        }
+      },
+      {
+        "command": "extension.execWSOnSelection",
+        "title": "Run WarpScript on selection",
+        "category": "WarpScript"
+      },
+      {
+        "command": "extension.execCloseJsonResults",
+        "title": "Close all Warp 10 json output in the workspace",
+        "category": "WarpScript"
+      },
+      {
+        "command": "extension.execConvertUnicodeInJson",
+        "title": "Unescape unicode characters in Json output",
+        "category": "WarpScript"
+      }
+    ],
+    "languages": [
+      {
+        "id": "warpscript",
+        "aliases": [
+          "WarpScript",
+          "warpscript"
+        ],
+        "extensions": [
+          "mc2"
+        ],
+        "configuration": "./syntaxes/warpscript.language-configuration.json"
+      },
+      {
+        "id": "flows",
+        "aliases": [
+          "FLoWS",
+          "flows"
+        ],
+        "extensions": [
+          "flows"
+        ],
+        "configuration": "./syntaxes/flows.language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "warpscript",
+        "scopeName": "source.warpscript",
+        "path": "./syntaxes/warpscript.tmLanguage.json"
+      },
+      {
+        "language": "flows",
+        "scopeName": "source.flows",
+        "path": "./syntaxes/flows.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "WarpScript",
+      "properties": {
+        "warpscript.theme": {
+          "enum": [
+            "auto",
+            "light",
+            "dark"
+          ],
+          "scope": "window",
+          "default": "auto",
+          "description": "Data visualization theme"
+        },
+        "warpscript.Warp10URL": {
+          "scope": "resource",
+          "type": "string",
+          "default": "http://127.0.0.1:8080/api/v0/exec",
+          "description": "Warp 10 URL"
+        },
+        "warpscript.http.timeout": {
+          "scope": "resource",
+          "type": "number",
+          "default": 3600000,
+          "description": "Http timeout in ms."
+        },
+        "warpscript.ProxyPac": {
+          "scope": "resource",
+          "type": "string",
+          "default": "",
+          "description": "Local path of your proxy.pac file. It supports SOCKS5. Make sure `Http: Proxy Support` configuration is `OFF`."
+        },
+        "warpscript.ProxyURL": {
+          "scope": "resource",
+          "type": "string",
+          "default": "",
+          "description": "When defined, this proxy URL will override `Proxy Pac` setting. Use `http://user:pass@host:port`. It may support `pac+http://pathto/proxy.pac`, but without authentication. Make sure `Http: Proxy Support` configuration is `OFF`."
+        },
+        "warpscript.useGZIP": {
+          "scope": "resource",
+          "type": "boolean",
+          "default": true,
+          "description": "Use GZIP compression"
+        },
+        "warpscript.showButton": {
+          "scope": "resource",
+          "type": "boolean",
+          "default": true,
+          "description": "Show exec button"
+        },
+        "warpscript.showDots": {
+          "scope": "resource",
+          "type": "boolean",
+          "default": true,
+          "description": "Show dots on graph"
+        },
+        "warpscript.PreviewTabs": {
+          "enum": [
+            "auto",
+            "none"
+          ],
+          "scope": "window",
+          "default": "auto",
+          "description": "Prevent the GTS Preview and Image tabs to pop up after execution"
+        },
+        "warpscript.DefaultTimeUnit": {
+          "enum": [
+            "us",
+            "ms",
+            "ns"
+          ],
+          "scope": "window",
+          "default": "us",
+          "description": "Warp 10 Time Unit for GTS Preview"
+        },
+        "warpscript.PreviewDefaultChartHeight": {
+          "type": "integer",
+          "default": 400,
+          "description": "Default height in pixels of the GTS Preview chart"
+        },
+        "warpscript.PreviewDefaultMapHeight": {
+          "type": "integer",
+          "default": 500,
+          "description": "Default height in pixels of the GTS Preview map"
+        },
+        "warpscript.maxFileSizeForAutomaticUnicodeEscape": {
+          "type": "integer",
+          "default": 0,
+          "description": "Maximum json file size in MB for automatic unicode unescape. Set to 0 to disable the feature."
+        },
+        "warpscript.maxFileSizeBeforeJsonWarning": {
+          "type": "integer",
+          "default": 20,
+          "description": "Maximum json file size in MB. If the result is greater than this size, you will be asked for a confirmation before parsing. Set to 0 to disable the feature."
+        },
+        "warpscript.enableInlineHelpers": {
+          "type": "boolean",
+          "default": true,
+          "description": "For small files, macros are parsed to allow inline helpers such as code lenses at the beginning of big macros (more than 20 lines) or automatic highlight when you click on a control statement such as IFT."
+        },
+        "warpscript.debounceTimeBeforeAudit": {
+          "scope": "resource",
+          "type": "number",
+          "default": 5000,
+          "description": "The WarpScript static parsing request will be done as soon as editor idle time (no change in the editor) reach this time (in ms). 5s debounce is recommendended to avoid to saturate servers with audit checks. It cannot be less than 1 second."
+        },
+        "warpscript.enableDebug": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enables the debug with the trace plugin."
+        },
+        "warpscript.traceURL": {
+          "scope": "resource",
+          "type": "string",
+          "default": "",
+          "description": "Trace WebSocket URL."
+        },
+        "warpscript.traceToken": {
+          "scope": "resource",
+          "type": "string",
+          "default": "",
+          "description": "Trace Token."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vsce": "./node_modules/vsce/vsce",
+    "vscode:prepublish": "npm run changelog && npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node scripts/build.js",
+    "docupdate": "git add src/wsGlobals.ts && git add src/flowsGlobals.ts && git add src/ref.ts && git add monarch.ts && git add syntaxes/warpscript.tmLanguage.json && git add syntaxes/flows.tmLanguage.json && git commit -m 'doc Update'",
+    "changelog": "node scripts/changelog.js > CHANGELOG.md && git add CHANGELOG.md && git commit -m 'Changelog Update' || true"
+  },
+  "devDependencies": {
+    "@senx/discovery-themes": "0.0.2",
+    "@senx/discovery-widgets": "1.1.102",
+    "@senx/warpview": "2.0.90",
+    "@types/js-yaml": "4.0.9",
+    "@types/lodash": "4.14.202",
+    "@types/node": "20.11.6",
+    "@types/path-browserify": "^1.0.2",
+    "@types/request": "^2.48.12",
+    "@types/uuid": "9.0.7",
+    "@types/vscode": "^1.73.0",
+    "@types/vscode-webview": "1.57.4",
+    "@types/ws": "^8.5.10",
+    "@vscode/debugadapter": "^1.56.0",
+    "@vscode/debugadapter-testsupport": "^1.56.0",
+    "fs-extra": "11.2.0",
+    "js-yaml": "4.1.0",
+    "plist": "3.1.0",
+    "showdown": "2.1.0",
+    "spectre.css": "0.5.9",
+    "typescript": "4.9.5",
+    "vsce": "2.15.0",
+    "vscode-textmate": "9.0.0"
+  },
+  "dependencies": {
+    "@senx/flows-beautifier": "1.0.4",
+    "@senx/warp10": "2.0.3",
+    "at-least-node": "1.0.0",
+    "await-notify": "^1.0.1",
+    "file-saver": "2.0.5",
+    "path-browserify": "^1.0.1",
+    "http-parser-js": "0.5.8",
+    "lodash": "4.17.21",
+    "pac-resolver": "4.1.0",
+    "proxy-agent": "4.0.0",
+    "request": "2.88.2",
+    "socks-proxy-agent": "5.0.0",
+    "uuid": "9.0.0",
+    "vscode-languageclient": "8.1.0",
+    "vscode-proxy-agent": "0.12.0",
+    "ws": "^8.16.0"
+  }
 }

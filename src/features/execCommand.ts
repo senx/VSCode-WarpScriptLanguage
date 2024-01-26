@@ -22,7 +22,7 @@ if (!!dns.lookup) {
 
 export default class ExecCommand {
 
-  private static execNumber: number = 0;
+  public static execNumber: number = 0;
 
   public static currentRunningRequests: request.Request[] = [];
 
@@ -63,7 +63,7 @@ export default class ExecCommand {
       const jsonMaxSizeForAutoUnescape: number = workspace.getConfiguration().get('warpscript.maxFileSizeForAutomaticUnicodeEscape');
       const jsonMaxSizeBeforeWarning: number = workspace.getConfiguration().get('warpscript.maxFileSizeBeforeJsonWarning');
       const useGZIP: boolean = workspace.getConfiguration().get('warpscript.useGZIP');
-      const timeout: number = workspace.getConfiguration().get('warpscript.http.timeout')
+      const timeout: number = workspace.getConfiguration().get('warpscript.http.timeout');
       const proxy_pac: string = workspace.getConfiguration().get('warpscript.ProxyPac');
       const proxy_directUrl: string = workspace.getConfiguration().get('warpscript.ProxyURL');
       const execDate: string = new Date().toLocaleTimeString();
@@ -466,7 +466,7 @@ FLOWS
 
       // 3 seconds to abort on every endpoints
       Object.keys(endpointsForThisSession).forEach(endpoint => {
-        let req = new Warp10(endpoint); // 3 second timeout
+        let req = new Warp10({endpoint}); // 3 second timeout
         req.exec(`<% "${sessionName}" 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`)
           .then((answer: any) => {
             if (answer.result[0]) {

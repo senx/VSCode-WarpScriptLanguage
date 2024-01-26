@@ -20,10 +20,10 @@ export default class CloseJsonResults {
    * 
    * @param previewPanels 
    */
-  public exec(previewPanels: { 'image': WebviewPanel, 'gts': WebviewPanel, 'discovery': WebviewPanel }): any {
+  public exec(previewPanels: { image: WebviewPanel | undefined, gts: WebviewPanel | undefined, discovery: WebviewPanel | undefined }): any {
 
     // the current opened file. usefull to detect the end of "nextEditor" loop.
-    let activefilepath: string = window.activeTextEditor.document.uri.toString();
+    let activefilepath: string | undefined = window?.activeTextEditor?.document.uri.toString();
     // because one loop is not enough :(
     let firstLoop: boolean = true;
 

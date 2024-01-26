@@ -20,10 +20,12 @@ import { v4 } from 'uuid';
 import FlowsCompletionItemProvider from './providers/completion/FlowsCompletionItemProvider';
 import { FlowsHoverProvider } from './providers/hover/FlowsHoverProvider';
 import { FLoWSBeautifier } from '@senx/flows-beautifier';
-import { commands, ExtensionContext, languages, Range, Selection, TextDocument, TextEdit, TextEditor, TextEditorRevealType, TextLine, ViewColumn, WebviewPanel, window, workspace } from 'vscode';
+import { CancellationToken, commands, debug, DebugAdapterDescriptor, DebugAdapterDescriptorFactory, DebugAdapterInlineImplementation, DebugConfiguration, DebugConfigurationProvider, DebugConfigurationProviderTriggerKind, DebugSession, EvaluatableExpression, ExtensionContext, languages, ProviderResult, Range, Selection, TextDocument, TextEdit, TextEditor, TextEditorRevealType, TextLine, Uri, ViewColumn, WebviewPanel, window, workspace, WorkspaceFolder } from 'vscode';
 import { userInfo } from 'os';
 import { join } from "path";
-import  WSDiagnostics from './providers/wsDiagnostics';
+import WSDiagnostics from './providers/wsDiagnostics';
+import { FileAccessor } from './debug/warp10DebugRuntime';
+import { Warp10DebugSession } from './debug/warp10Debug';
 
 export class SharedMem {
   private static registry: any = {};
@@ -51,7 +53,7 @@ export function activate(context: ExtensionContext) {
     console.log('StatusbarUi loaded')
     let outputWin = window.createOutputChannel('Warp10');
     // constant object ref to pass to closeOpenedWebviews
-    let previewPanels: { 'image': WebviewPanel, 'gts': WebviewPanel, 'discovery': WebviewPanel } = { 'image': null, 'gts': null, 'discovery': null };
+    let previewPanels: { image: WebviewPanel | undefined, gts: WebviewPanel | undefined, discovery: WebviewPanel | undefined } = { image: undefined, gts: undefined, discovery: undefined };
 
     // Hover providers
     context.subscriptions.push(languages.registerHoverProvider({ language: 'warpscript' }, new WSHoverProvider()));
@@ -81,6 +83,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(previewPanels); }));
     context.subscriptions.push(commands.registerCommand('extension.execConvertUnicodeInJson', () => { new UnicodeJsonConversion().exec(); }));
     context.subscriptions.push(commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(''); }));
+
     context.subscriptions.push(commands.registerCommand('extension.abortAllWS', () => { new ExecCommand().abortAllRequests(outputWin)(); }))
     context.subscriptions.push(commands.registerCommand('extension.execWSOnSelection', () => {
       let editor = window.activeTextEditor;
@@ -107,7 +110,6 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(
       languages.registerDocumentFormattingEditProvider('flows', {
         provideDocumentFormattingEdits(document: TextDocument): TextEdit[] {
-
           let firstLine: TextLine = document.lineAt(0);
           let lastLine: TextLine = document.lineAt(document.lineCount - 1);
           let textRange: Range = new Range(firstLine.range.start, lastLine.range.end);
@@ -131,7 +133,7 @@ export function activate(context: ExtensionContext) {
 
     // enable diagnostics (audit)
     let wsDiagnostics = new WSDiagnostics(context);
-    wsDiagnostics.initializeDiagnostics();    
+    wsDiagnostics.initializeDiagnostics();
 
     //each time focus change, we look at the file type and file name. Json + special name => stack preview.
     window.onDidChangeActiveTextEditor((textEditor: TextEditor) => {
@@ -207,8 +209,8 @@ export function activate(context: ExtensionContext) {
             // and re open it...
             discoveryPreviewWebview.findDiscovery(textEditor.document.getText(), outputWin).then(json => {
               previewPanels.discovery = window.createWebviewPanel('discoverypreview', 'Discovery',
-              { viewColumn: ViewColumn.Two, preserveFocus: true },
-              { enableScripts: true, retainContextWhenHidden: true });
+                { viewColumn: ViewColumn.Two, preserveFocus: true },
+                { enableScripts: true, retainContextWhenHidden: true });
               discoveryPreviewWebview.getHtmlContent(json, SharedMem.get(uuid), previewPanels.discovery).then((htmlcontent: string) => previewPanels.discovery.webview.html = htmlcontent);
               previewPanels.discovery.onDidDispose(() => { previewPanels.discovery = null; }); // user close it
             });
@@ -242,5 +244,122 @@ export function activate(context: ExtensionContext) {
     WarpScriptExtGlobals.sessionName = `${user}-${v4()}`;
     outputWin.appendLine(`Session Name for WarpScript execution: '${WarpScriptExtGlobals.sessionName}'`);
     console.log(WarpScriptExtGlobals.sessionName);
+
+
+
+    const provider = new Warp10DebugConfigurationProvider();
+    context.subscriptions.push(debug.registerDebugConfigurationProvider('warpscript', provider));
+
+    // register a dynamic configuration provider for 'mock' debug type
+    context.subscriptions.push(debug.registerDebugConfigurationProvider('warpscript', {
+      provideDebugConfigurations(_folder: WorkspaceFolder | undefined): ProviderResult<DebugConfiguration[]> {
+        return [
+          {
+            name: "Dynamic Launch",
+            request: "launch",
+            type: "warpscript",
+            program: "${file}"
+          },
+          {
+            name: "Another Dynamic Launch",
+            request: "launch",
+            type: "warpscript",
+            program: "${file}"
+          },
+          {
+            name: "warpscript Launch",
+            request: "launch",
+            type: "warpscript",
+            program: "${file}"
+          }
+        ];
+      }
+    }, DebugConfigurationProviderTriggerKind.Dynamic));
+  
+    const  factory = new InlineDebugAdapterFactory();
+
+    context.subscriptions.push(debug.registerDebugAdapterDescriptorFactory('warpscript', factory));
+    if ('dispose' in factory) {
+      context.subscriptions.push(factory as any);
+    }
+  
+    // override VS Code's default implementation of the debug hover
+    // here we match only Mock "variables", that are words starting with an '$'
+    context.subscriptions.push(languages.registerEvaluatableExpressionProvider('warpscript', {
+      provideEvaluatableExpression(document: TextDocument, position: any): ProviderResult<EvaluatableExpression> {
+        const VARIABLE_REGEXP = /\$[a-z][a-z0-9]*/ig;
+        const line = document.lineAt(position.line).text;  
+        let m: RegExpExecArray | null;
+        while (m = VARIABLE_REGEXP.exec(line)) {
+          const varRange = new Range(position.line, m.index, position.line, m.index + m[0].length);
+  
+          if (varRange.contains(position)) {
+            return new EvaluatableExpression(varRange);
+          }
+        }
+        return undefined;
+      }
+    }));
   });
+}
+
+class Warp10DebugConfigurationProvider implements DebugConfigurationProvider {
+
+	/**
+	 * Massage a debug configuration just before a debug session is being launched,
+	 * e.g. add all missing attributes to the debug configuration.
+	 */
+	resolveDebugConfiguration(_folder: WorkspaceFolder | undefined, config: DebugConfiguration, _token?: CancellationToken): ProviderResult<DebugConfiguration> {
+
+		// if launch.json is missing or empty
+		if (!config.type && !config.request && !config.name) {
+			const editor = window.activeTextEditor;
+			if (editor && editor.document.languageId === 'warpscript') {
+				config.type = 'warpscript';
+				config.name = 'Launch';
+				config.request = 'launch';
+				config.program = '${file}';
+				config.stopOnEntry = true;
+			}
+		}
+
+		if (!config.program) {
+			return window.showInformationMessage("Cannot find a program to debug").then(_ => {
+				return undefined;	// abort launch
+			});
+		}
+
+		return config;
+	}
+}
+
+export const workspaceFileAccessor: FileAccessor = {
+	isWindows: typeof process !== 'undefined' && process.platform === 'win32',
+	async readFile(path: string): Promise<Uint8Array> {
+		let uri: Uri;
+		try {
+			uri = pathToUri(path);
+		} catch (e) {
+			return new TextEncoder().encode(`cannot read '${path}'`);
+		}
+
+		return await workspace.fs.readFile(uri);
+	},
+	async writeFile(path: string, contents: Uint8Array) {
+		await workspace.fs.writeFile(pathToUri(path), contents);
+	}
+};
+
+function pathToUri(path: string) {
+	try {
+		return Uri.file(path);
+	} catch (e) {
+		return Uri.parse(path);
+	}
+}
+
+class InlineDebugAdapterFactory implements DebugAdapterDescriptorFactory {
+	createDebugAdapterDescriptor(_session: DebugSession): ProviderResult<DebugAdapterDescriptor> {
+		return new DebugAdapterInlineImplementation(new Warp10DebugSession(workspaceFileAccessor));
+	}
 }
