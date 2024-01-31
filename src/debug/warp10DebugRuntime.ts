@@ -46,6 +46,7 @@ interface IRuntimeStackFrame {
   line: number;
   column?: number;
   instruction?: number;
+  level?: number;
 }
 
 interface IRuntimeStack {
@@ -59,7 +60,7 @@ interface RuntimeDisassembledInstruction {
   line?: number;
 }
 
-export type IRuntimeVariableType = number | boolean | string | RuntimeVariable[];
+export type IRuntimeVariableType = number | boolean | string | any | RuntimeVariable[];
 
 export class RuntimeVariable {
   private _memory?: Uint8Array;
@@ -131,7 +132,6 @@ export class Warp10DebugRuntime extends EventEmitter {
     this._currentLine = x;
     this.instruction = this.starts[x];
   }
-  private currentColumn: number | undefined;
 
   // This is the next instruction that will be 'executed'
   public instruction = 0;
@@ -153,97 +153,113 @@ export class Warp10DebugRuntime extends EventEmitter {
   private endpoint: string;
   private webSocket: WebSocket;
   private firstCnx = true;
-
+  private commentsCommands: specialCommentCommands;
   private dataStack: any[];
+  private program: string;
+  private inDebug = false;
 
 
   constructor(private fileAccessor: FileAccessor) {
     super();
   }
 
+  private log(mess: any) {
+    // type, text, filePath, line, column
+    this.sendEvent('output', 'prio', mess, this.program, this.currentLine);
+  }
+
+  private error(e: any) {
+    this.sendEvent('output', 'err', e, this.program, this.currentLine);
+  }
+
+  private debug(e: any) {
+    this.sendEvent('output', 'out', e, this.program, this.currentLine);
+  }
+
+
   /**
    * Start executing the given program.
    */
-  public async start(program: string, stopOnEntry: boolean, debug: boolean): Promise<string> {
-    console.log({ program, stopOnEntry, debug })
-
+  public async start(program: string): Promise<string> {
+    this.program = program;
+    this.firstCnx = true;
+    this.inDebug = true;
     await this.loadSource(this.normalizePathAndCasing(program));
-    console.log({ ws: this.ws });
-
     // Open WebSocket
     this.sid = v4();
-    const commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(this.ws);
-    this.endpoint = commentsCommands.endpoint || workspace.getConfiguration().get('warpscript.Warp10URL');
+    this.commentsCommands = WarpScriptParser.extractSpecialComments(this.ws ?? '');
+    this.endpoint = this.commentsCommands.endpoint || workspace.getConfiguration().get('warpscript.Warp10URL');
     if (!!this.webSocket) {
       this.webSocket.close();
       this.webSocket = undefined;
     }
     const wrapped = `'${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD <% ${this.addBreakPoints(this.ws)} %> '${this.sid}' TRACE EVAL`;
-
-
     const traceURL: string = workspace.getConfiguration().get('warpscript.traceURL');
     this.webSocket = new WebSocket(traceURL);
-    this.webSocket.on('open', () => {
-      console.log('Connected to server');
+    this.webSocket.on('open', () => this.log('Connected to server'));
+    this.webSocket.on('error', (e: any) => {
+      if (e.code === 'ECONNREFUSED') {
+        this.error(`${traceURL} seems to be unreachable.`);
+      } else {
+        this.error(e);
+      }
+      this.sendEvent('end');
     });
-    this.webSocket.on('message', (msg: Buffer) => {
-      console.log(`Received message from server: ${msg}`);
+    this.webSocket.on('message', async (msg: Buffer) => {
+      this.debug(`Received message from server: ${msg}`);
       if (msg.toString().startsWith('Welcome to the ')) {
         this.sendtoWS('ATTACH ' + this.sid);
       }
       if (msg.toString().startsWith('OK Attached to session')) {
-        // this.sendtoWS('CATCH');
-        Requester.send(this.endpoint, wrapped).then((r: any) => {
-          console.log('ended?', r);
-        }).catch((e: any) => console.error(e));
-
+        Requester.send(this.endpoint, wrapped)
+          .then((r: any) => {
+            this.sendEvent('debugResult', r);
+            this.close();
+          })
+          .catch((e: any) => {
+            console.error('WS Error', e, wrapped);
+            this.error(e.message ?? e);
+            this.close();
+          });
       } else if (msg.toString() === 'ERROR No paused execution.') {
-        // this.log(msg.toString());
-      } else {
-        this.getVars().then(() => {
-          // empty
-        });
-        if (this.firstCnx && msg.toString().startsWith('STEP')) {
+        // empty
+      } else if (msg.toString().startsWith('STEP')) {
+        if (this.firstCnx) {
           this.firstCnx = false;
           this.continue(false);
         } else {
-          this.getVars().then(() => {
-            // empty
-          });
+          if (this.inDebug) {
+            await this.getVars();
+          }
         }
-        //     })
-        //     .catch(e => console.error(e));
+        if (/'BREAKPOINT' FUNCREF/.test(msg.toString())) {
+          this.sendEvent('stopOnBreakpoint');
+        } else {
+          this.sendEvent('stopOnStep');
+        }
       }
     });
 
-    this.webSocket.on('close', () => {
-      console.log('Disconnected from server');
-    });
-
-    /*
-        if (debug) {
-          await this.verifyBreakpoints(this._sourceFile);
-          this.continue(false);
-        } else {
-          this.continue(false);
-        } */
-        return this.ws;
+    this.webSocket.on('close', () => this.log('Disconnected from server'));
+    return this.ws;
   }
 
-  public async close(): Promise<any> {
-    return new Promise((resolve, reject) => {
+  public async close(): Promise<void> {
+    return new Promise(resolve => {
+      this.inDebug = false;
       if (this.webSocket) {
-
-        this.getVars().then((d) => {
-          console.log({ d })
-          this.sendtoWS('STOP');
-          this.sendtoWS('DETACH ' + this.sid);
-          this.webSocket.close();
-          console.log('the end', this.dataStack)
-          resolve(this.dataStack);
-        }).catch(e => reject(e));
+        this.getVars()
+          .then(() => {
+            this.sendtoWS('STOP');
+            this.sendtoWS('DETACH ' + this.sid);
+            this.webSocket.close();
+            this.sendEvent('end');
+            resolve();
+          })
+          .catch(() => resolve());
       } else {
-        resolve(this.dataStack);
+        this.sendEvent('end');
+        resolve();
       }
     });
   }
@@ -252,11 +268,11 @@ export class Warp10DebugRuntime extends EventEmitter {
     return new Promise((resolve, reject) => {
       Requester.send(this.endpoint, `<%
     '${this.sid}' TSESSION TSTACK SYMBOLS 
-    '${this.sid.replace('-', '')}Symbols' STORE STACKTOLIST REVERSE 
-    '${this.sid.replace('-', '')}Stack' STORE
+    '${this.sid.replace(/-/gi, '')}Symbols' STORE STACKTOLIST REVERSE 
+    '${this.sid.replace(/-/gi, '')}Stack' STORE
     { 
-      'vars' { $${this.sid.replace('-', '')}Symbols <% DUP LOAD %> FOREACH } 
-      'stack' $${this.sid.replace('-', '')}Stack 
+      'vars' { $${this.sid.replace(/-/gi, '')}Symbols <% DUP LOAD %> FOREACH } 
+      'stack' $${this.sid.replace(/-/gi, '')}Stack 
     }
     %> <% RETHROW %> <% %> TRY
         `)
@@ -271,7 +287,6 @@ export class Warp10DebugRuntime extends EventEmitter {
 
   private addBreakPoints(ws: string) {
     const bps = this.breakPoints.get(this._sourceFile);
-    console.log(bps)
     const splittedWS = (ws ?? '').split('\n');
     (bps ?? [])
       .filter(b => b.verified)
@@ -279,12 +294,11 @@ export class Warp10DebugRuntime extends EventEmitter {
         const line = b.line;
         splittedWS[line] = 'BREAKPOINT ' + splittedWS[line];
       });
-    splittedWS.push('BREAKPOINT ');
     return splittedWS.join('\n');
   }
 
   private sendtoWS(message: string) {
-    console.log('Send to WebSocket ' + message);
+    this.debug('Send to WebSocket ' + message);
     this.webSocket.send(message);
   }
 
@@ -309,7 +323,6 @@ export class Warp10DebugRuntime extends EventEmitter {
    */
   public step(_instruction: boolean, _reverse: boolean) {
     this.sendtoWS('STEP');
-    this.sendEvent('stopOnStep');
   }
 
   private updateCurrentLine(reverse: boolean): boolean {
@@ -319,7 +332,6 @@ export class Warp10DebugRuntime extends EventEmitter {
       } else {
         // no more lines: stop at first line
         this.currentLine = 0;
-        this.currentColumn = undefined;
         this.sendEvent('stopOnEntry');
         return true;
       }
@@ -327,8 +339,6 @@ export class Warp10DebugRuntime extends EventEmitter {
       if (this.currentLine < this.sourceLines.length - 1) {
         this.currentLine++;
       } else {
-        // no more lines: run to end
-        this.currentColumn = undefined;
         this.sendEvent('end');
         return true;
       }
@@ -336,87 +346,42 @@ export class Warp10DebugRuntime extends EventEmitter {
     return false;
   }
 
-  /**
-   * "Step into" for Mock debug means: go to next character
-   */
-  public stepIn(targetId: number | undefined) {
-    if (typeof targetId === 'number') {
-      this.currentColumn = targetId;
-      this.sendEvent('stopOnStep');
-    } else {
-      if (typeof this.currentColumn === 'number') {
-        if (this.currentColumn <= this.sourceLines[this.currentLine].length) {
-          this.currentColumn += 1;
-        }
-      } else {
-        this.currentColumn = 1;
-      }
-      this.sendEvent('stopOnStep');
-    }
+  public stepIn() {
+    this.sendtoWS('STEPINTO');
   }
 
-  /**
-   * "Step out" for Mock debug means: go to previous character
-   */
   public stepOut() {
-    if (typeof this.currentColumn === 'number') {
-      this.currentColumn -= 1;
-      if (this.currentColumn === 0) {
-        this.currentColumn = undefined;
-      }
-    }
-    this.sendEvent('stopOnStep');
+    this.sendtoWS('STEPRETURN');
   }
 
   public getStepInTargets(frameId: number): IRuntimeStepInTargets[] {
-
     const line = this.getLine();
     const words = this.getWords(this.currentLine, line);
-
     // return nothing if frameId is out of range
     if (frameId < 0 || frameId >= words.length) {
       return [];
     }
-
     const { name, index } = words[frameId];
-
-    // make every character of the frame a potential "step in" target
-    return name.split('').map((c, ix) => {
-      return {
-        id: index + ix,
-        label: `target: ${c}`
-      };
-    });
+    return name.split('').map((c, ix) => ({ id: index + ix, label: `target: ${c}` }));
   }
 
-  /**
-   * Returns a fake 'stacktrace' where every 'stackframe' is a word from the current line.
-   */
   public stack(_startFrame: number, _endFrame: number): IRuntimeStack {
     const frames: IRuntimeStackFrame[] = [];
-    // every word of the current line becomes a stack frame.
     for (let i = 0; i < this.dataStack.length; i++) {
-      const stackFrame: IRuntimeStackFrame = {
-        index: i,
-        name: `${this.dataStack[i]}`,	// use a word of the line as the stackframe name
-        file: this._sourceFile,
-        line: this.currentLine,
-        column: 0, // words[i].index
-        instruction: this.dataStack[i]
-      };
-      frames.push(stackFrame);
+      let f = this.dataStack[i];
+      if (typeof f === 'object') {
+        f = JSON.stringify(f);
+      }
+      frames.push({ index: i, name: f, file: this._sourceFile, line: this.currentLine, column: 0 });
     }
-
-    console.log({ frames })
     return { frames: frames, count: frames.length };
   }
 
   /*
    * Determine possible column breakpoint positions for the given line.
-   * Here we return the start location of words with more than 8 characters.
    */
-  public getBreakpoints(_path: string, line: number): number[] {
-    return this.getWords(line, this.getLine(line)).filter(w => w.name.length > 8).map(w => w.index);
+  public getBreakpoints(_path: string, _line: number): number[] {
+    return [0];
   }
 
   /*
@@ -424,7 +389,6 @@ export class Warp10DebugRuntime extends EventEmitter {
    */
   public async setBreakPoint(path: string, line: number): Promise<IRuntimeBreakpoint> {
     path = this.normalizePathAndCasing(path);
-
     const bp: IRuntimeBreakpoint = { verified: false, line, id: this.breakpointId++ };
     let bps = this.breakPoints.get(path);
     if (!bps) {
@@ -473,11 +437,6 @@ export class Warp10DebugRuntime extends EventEmitter {
     this.breakAddresses.clear();
   }
 
-  public setExceptionsFilters(_namedException: string | undefined, _otherExceptions: boolean): void {
- 
-    
-  }
-
   public setInstructionBreakpoint(address: number): boolean {
     this.instructionBreakpoints.add(address);
     return true;
@@ -488,41 +447,45 @@ export class Warp10DebugRuntime extends EventEmitter {
   }
 
   public async getGlobalVariables(_cancellationToken?: () => boolean): Promise<RuntimeVariable[]> {
-    return [new RuntimeVariable('endpoint', this.endpoint)];
+    const globals = [new RuntimeVariable('endpoint', this.endpoint)];
+    if (this.commentsCommands.displayPreviewOpt) {
+      globals.push(new RuntimeVariable('displayPreviewOpt', this.commentsCommands.displayPreviewOpt));
+    }
+    if (this.commentsCommands.listOfMacroInclusion) {
+      globals.push(new RuntimeVariable('listOfMacroInclusion', this.commentsCommands.listOfMacroInclusion.map((m, i) => new RuntimeVariable(`${i}`, m))));
+    }
+    if (this.commentsCommands.listOfMacroInclusionRange) {
+      globals.push(new RuntimeVariable('listOfMacroInclusionRange', this.commentsCommands.listOfMacroInclusionRange.map((m, i) => new RuntimeVariable(`${i}`, JSON.stringify(m)))));
+    }
+    if (this.commentsCommands.localmacrosubstitution) {
+      globals.push(new RuntimeVariable('localmacrosubstitution', this.commentsCommands.localmacrosubstitution));
+    }
+    if (this.commentsCommands.theme) {
+      globals.push(new RuntimeVariable('theme', this.commentsCommands.theme));
+    }
+    if (this.commentsCommands.timeunit) {
+      globals.push(new RuntimeVariable('timeunit', this.commentsCommands.timeunit));
+    }
+    return globals;
   }
 
   private toRuntimeVariable(k: string, v: any): RuntimeVariable {
-    console.log('toRuntimeVariable', k, typeof v);
-    if (Array.isArray(v) || typeof v === 'object') {
-
-      return new RuntimeVariable(k, JSON.stringify(v));
-    }
     return new RuntimeVariable(k, v);
-
   }
 
   public getLocalVariables(): RuntimeVariable[] {
-    return Object.keys(this.variables ?? {}).map(k => {
-      return this.toRuntimeVariable(k, this.variables[k]);
-    });
+    return Object.keys(this.variables ?? {}).map(k => this.toRuntimeVariable(k, this.variables[k]));
   }
 
   public getLocalVariable(name: string): RuntimeVariable | undefined {
     if (this.variables[name]) {
-      let v = this.variables[name]
-      /* if (typeof v === 'object') {
-         v = JSON.stringify(this.variables[name]).slice(0, 50);
-         if (v.length === 50) v = v + '...';
-       }*/
+      let v = this.variables[name];
       return this.toRuntimeVariable(name, v);
     } else {
       return undefined;
     }
   }
 
-  /**
-   * Return words of the given address range as "instructions"
-   */
   public disassemble(address: number, instructionCount: number): RuntimeDisassembledInstruction[] {
     const instructions: RuntimeDisassembledInstruction[] = [];
     for (let a = address; a < address + instructionCount; a++) {
@@ -544,7 +507,6 @@ export class Warp10DebugRuntime extends EventEmitter {
   }
 
   // private methods
-
   private getLine(line?: number): string {
     return this.sourceLines[line === undefined ? this.currentLine : line].trim();
   }
@@ -591,30 +553,17 @@ export class Warp10DebugRuntime extends EventEmitter {
    * return true on stop
    */
   private findNextStatement(reverse: boolean, stepEvent?: string): boolean {
-
     for (let ln = this.currentLine; reverse ? ln >= 0 : ln < this.sourceLines.length; reverse ? ln-- : ln++) {
-
       // is there a source breakpoint?
       const breakpoints = this.breakPoints.get(this._sourceFile);
       if (breakpoints) {
-        const bps = breakpoints.filter(bp => bp.line === ln);
+        const bps = breakpoints.filter(bp => bp.line === ln && bp.verified === true);
         if (bps.length > 0) {
-
-          // send 'stopped' event
           this.sendEvent('stopOnBreakpoint');
-
-          // the following shows the use of 'breakpoint' events to update properties of a breakpoint in the UI
-          // if breakpoint is not yet verified, verify it now and send a 'breakpoint' update event
-          if (!bps[0].verified) {
-            bps[0].verified = true;
-            this.sendEvent('breakpointValidated', bps[0]);
-          }
-
           this.currentLine = ln;
           return true;
         }
       }
-
       const line = this.getLine(ln);
       if (line.length > 0) {
         this.currentLine = ln;
@@ -628,79 +577,8 @@ export class Warp10DebugRuntime extends EventEmitter {
     return false;
   }
 
-  /**
-   * "execute a line" of the readme markdown.
-   * Returns true if execution sent out a stopped event and needs to stop.
-   */
   private executeLine(_ln: number, _reverse: boolean): boolean {
-
     return false;
-    /*
-
-    // first "execute" the instructions associated with this line and potentially hit instruction breakpoints
-    while (reverse ? this.instruction >= this.starts[ln] : this.instruction < this.ends[ln]) {
-      reverse ? this.instruction-- : this.instruction++;
-      if (this.instructionBreakpoints.has(this.instruction)) {
-        this.sendEvent('stopOnInstructionBreakpoint');
-        return true;
-      }
-    }
-
-    const line = this.getLine(ln);
-
-    // find variable accesses
-    let reg0 = /\$([a-z][a-z0-9]*)(=(false|true|[0-9]+(\.[0-9]+)?|\".*\"|\{.*\}))?/ig;
-    let matches0: RegExpExecArray | null;
-    while (matches0 = reg0.exec(line)) {
-      if (matches0.length === 5) {
-        let access: string | undefined;
-        const name = matches0[1];
-        const value = matches0[3];
-        console.log('executeLine', { name, value })
-        let v = new RuntimeVariable(name, this.variables[name]);
-
-        if (value && value.length > 0) {
-
-          if (value === 'true') {
-            v.value = true;
-          } else if (value === 'false') {
-            v.value = false;
-          } else if (value[0] === '"') {
-            v.value = value.slice(1, -1);
-          } else if (value[0] === '{') {
-            v.value = [
-              new RuntimeVariable('fBool', true),
-              new RuntimeVariable('fInteger', 123),
-              new RuntimeVariable('fString', 'hello'),
-              new RuntimeVariable('flazyInteger', 321)
-            ];
-          } else {
-            v.value = parseFloat(value);
-          }
-
-          if (this.variables[name]) {
-            // the first write access to a variable is the "declaration" and not a "write access"
-            access = 'read';
-          }
-          // this.variables[name], v;
-        } else {
-          if (this.variables[name]) {
-            // variable must exist in order to trigger a read access
-            access = 'read';
-          }
-        }
-
-        const accessType = this.breakAddresses.get(name);
-        if (access && accessType && accessType.indexOf(access) >= 0) {
-          this.sendEvent('stopOnDataBreakpoint', access);
-          return true;
-        }
-      }
-    }
-    // nothing interesting found -> continue
-    return false;
-
-    */
   }
 
   private async verifyBreakpoints(path: string): Promise<void> {
@@ -709,19 +587,20 @@ export class Warp10DebugRuntime extends EventEmitter {
       await this.loadSource(path);
       bps.forEach(bp => {
         if (!bp.verified && bp.line < this.sourceLines.length) {
-          const srcLine = this.getLine(bp.line);
-
-          // TODO: gestion des commentaires et des multilignes
-
-          // if a line is empty or starts with '/*' we don't allow to set a breakpoint but move the breakpoint down
-          if (srcLine.length === 0 || srcLine.indexOf('/*') === 0) {
-            bp.line++;
-          }
-          // if a line starts with '#' we don't allow to set a breakpoint but move the breakpoint up
-          if (srcLine.indexOf('#') === 0) {
-            bp.line--;
-          }
           bp.verified = true;
+          const srcLine = this.getLine(bp.line);
+          // Comments and multiline handling
+          if (/<'/.test(srcLine)) bp.verified = false;
+          if (/'>/.test(srcLine)) bp.verified = false;
+          for (let i = bp.line; i >= 0; i--) {
+            if (/'>/.test(this.sourceLines[i]) || /\*\//.test(this.sourceLines[i])) {
+              break;
+            }
+            if (/<'/.test(this.sourceLines[i]) || /\/\*/.test(this.sourceLines[i])) {
+              bp.verified = false;
+              break;
+            }
+          }
           this.sendEvent('breakpointValidated', bp);
         }
       });

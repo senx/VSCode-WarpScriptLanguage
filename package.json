@@ -34,8 +34,7 @@
     "theme": "dark"
   },
   "activationEvents": [
-    "onLanguage:warpscript",
-    "onLanguage:flows",
+    "onDebug:warpscript",
     "onDebugResolve:warpscript",
     "onDebugDynamicConfigurations:warpscript"
   ],
@@ -132,6 +131,7 @@
             "type": "warpscript",
             "request": "launch",
             "name": "Ask for file name",
+            "externalConsole": true,
             "program": "${workspaceFolder}/${command:AskForProgramName}",
             "stopOnEntry": true
           }

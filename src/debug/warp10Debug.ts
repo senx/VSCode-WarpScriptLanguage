@@ -56,15 +56,10 @@ interface IAttachRequestArguments extends ILaunchRequestArguments { }
 
 
 export class Warp10DebugSession extends LoggingDebugSession {
-  // a Mock runtime (or debugger)
   private _runtime: Warp10DebugRuntime;
-
   private _variableHandles = new Handles<'locals' | 'globals' | RuntimeVariable>();
-
   private _configurationDone = new Subject();
-
   private _cancellationTokens = new Map<number, boolean>();
-
   private _reportProgress = false;
   private _progressId = 10000;
   private _cancelledProgressId: string | undefined = undefined;
@@ -72,9 +67,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
 
   private _valuesInHex = false;
   private _useInvalidatedEvent = false;
-
-  private _addressesInHex = true;
-  executedWarpScript: string;
+  private executedWarpScript: string;
   static threadID: number = 1;
 
   /**
@@ -82,7 +75,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
    * We configure the default implementation of a debug adapter here.
    */
   public constructor(fileAccessor: FileAccessor) {
-    super("mock-debug.txt");
+    super("warpscript-debug.txt");
 
     // this debugger uses zero-based lines and columns
     this.setDebuggerLinesStartAt1(false);
@@ -104,25 +97,34 @@ export class Warp10DebugSession extends LoggingDebugSession {
       }
     });
     this._runtime.on('breakpointValidated', (bp: IRuntimeBreakpoint) => this.sendEvent(new BreakpointEvent('changed', { verified: bp.verified, id: bp.id } as DebugProtocol.Breakpoint)));
-    this._runtime.on('output', (type, text, filePath, line, column) => {
-      let category: string;
-      switch (type) {
-        case 'prio': category = 'important'; break;
-        case 'out': category = 'stdout'; break;
-        case 'err': category = 'stderr'; break;
-        default: category = 'console'; break;
-      }
-      const e: DebugProtocol.OutputEvent = new OutputEvent(`${text}\n`, category);
-      if (text === 'start' || text === 'startCollapsed' || text === 'end') {
-        e.body.group = text;
-        e.body.output = `group-${text}\n`;
-      }
-      e.body.source = this.createSource(filePath);
-      e.body.line = this.convertDebuggerLineToClient(line);
-      e.body.column = this.convertDebuggerColumnToClient(column);
-      this.sendEvent(e);
-    });
+    this._runtime.on('output', (type, text, filePath, line, column) => this.log({ text, filePath, line, column, type }));
     this._runtime.on('end', () => this.sendEvent(new TerminatedEvent()));
+    this._runtime.on('debugResult', (r: any) => this.handleResult(r).then(() => this.sendEvent(new TerminatedEvent())));
+  }
+
+  private log(l: any) {
+    let category: string;
+    switch (l.type) {
+      case 'prio': category = 'important'; break;
+      case 'out': category = 'stdout'; break;
+      case 'err': category = 'stderr'; break;
+      default: category = 'console'; break;
+    }
+    if (typeof l.text === 'object') {
+      l.text = JSON.stringify(l.text);
+    }
+    const e: DebugProtocol.OutputEvent = new OutputEvent(`${l.text}\n`, category);
+    if (l.text === 'start' || l.text === 'startCollapsed' || l.text === 'end') {
+      e.body.group = l.text;
+      e.body.output = `group-${l.text}\n`;
+    }
+    if (l.filePath) e.body.source = this.createSource(l.filePath);
+    if (l.line !== undefined) e.body.line = this.convertDebuggerLineToClient(l.line);
+    if (l.column !== undefined) e.body.column = this.convertDebuggerColumnToClient(l.column);
+    if (l.type === 'err') {
+      window.showErrorMessage(l.text);
+    }
+    this.sendEvent(e);
   }
 
   /**
@@ -143,9 +145,9 @@ export class Warp10DebugSession extends LoggingDebugSession {
     // make VS Code use 'evaluate' when hovering over source
     response.body.supportsEvaluateForHovers = true;
     // make VS Code show a 'step back' button
-    response.body.supportsStepBack = true;
+    response.body.supportsStepBack = false;
     // make VS Code support data breakpoints
-    response.body.supportsDataBreakpoints = true;
+    response.body.supportsDataBreakpoints = false;
     // make VS Code support completion in REPL
     response.body.supportsCompletionsRequest = false;
     response.body.completionTriggerCharacters = [".", "["];
@@ -154,7 +156,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     // make VS Code send the breakpointLocations request
     response.body.supportsBreakpointLocationsRequest = true;
     // make VS Code provide "Step in Target" functionality
-    response.body.supportsStepInTargetsRequest = true;
+    response.body.supportsStepInTargetsRequest = false;
     response.body.supportsExceptionFilterOptions = false;
     response.body.exceptionBreakpointFilters = [];
     // make VS Code send exceptionInfo request
@@ -192,7 +194,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
     this._configurationDone.notify();
   }
 
-
   private async writeFile(path: string, content: any): Promise<void> {
     if (WarpScriptExtConstants.isVirtualWorkspace) {
       return await workspace.fs.writeFile(Uri.file(path).with({ scheme: workspace.workspaceFolders![0]!.uri.scheme }), Buffer.from(content, 'utf8'));
@@ -209,58 +210,61 @@ export class Warp10DebugSession extends LoggingDebugSession {
     }
   }
 
+  private async handleResult(result: string) {
+    // Generate unique filenames, ordered by execution order.
+    const uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
+    const wsFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}.mc2`;
+    const PreviewTimeUnit: string = workspace.getConfiguration().get('warpscript.DefaultTimeUnit');
+    const jsonMaxSizeForAutoUnescape: number = workspace.getConfiguration().get('warpscript.maxFileSizeForAutomaticUnicodeEscape');
+    //
+    // keep a simple suffix for the json filename (either n for nanosecond or m for millisecond. nothing for default.)
+    let jsonSuffix: string = PreviewTimeUnit.slice(0, 1);
+    const commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(this.executedWarpScript);
+    // add X after the suffix for no preview at all, add I for focus on images, add G for gts preview.
+    let displayPreviewOpt = '';
+    displayPreviewOpt = commentsCommands.displayPreviewOpt || displayPreviewOpt;
+    commentsCommands.displayPreviewOpt = '';
+    jsonSuffix = jsonSuffix + displayPreviewOpt;
+    let jsonFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}${jsonSuffix}.json`;
+    SharedMem.set(uuid, commentsCommands);
+
+    // Save executed warpscript
+    try {
+      await this.deleteFile(wsFilename); // Remove overwritten file. If file unexistent, fail silently.
+    } catch (e) {
+    }
+    try {
+      await this.writeFile(wsFilename, this.executedWarpScript);
+    } catch (e) {
+      this.log({ text: e, filePath: wsFilename, type: 'err' });
+    }
+    // Save resulting JSON
+    try {
+      await this.deleteFile(jsonFilename); // Remove overwritten file. If file unexistent, fail silently.
+    } catch (e) {
+      this.log({ text: e, filePath: jsonFilename, type: 'err' });
+    }
+
+    // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
+    let sizeMB: number = Math.round(result.length / 1024 / 1024);
+    if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
+      // Do not unescape \\u nor control characters.
+      result = decodeURIComponent(result.replace(/(?<!\\)\\u(?!000)(?!001)([0-9A-Fa-f]{4})/g, "%u\$1"))
+    }
+    // file must be saved whatever its size... but not displayed if too big.
+    this.writeFile(jsonFilename, result).then(() => {
+      this.displayJson(jsonFilename);
+    }, e => {
+      if (e) {
+        this.log({ text: e, filePath: jsonFilename, type: 'err' });
+      }
+    });
+  }
+
   protected disconnectRequest(_response: DebugProtocol.DisconnectResponse, _args: DebugProtocol.DisconnectArguments, _request?: DebugProtocol.Request): void {
-    this._runtime.close().then(async (stack: any[]) => {
-      let body = JSON.stringify(stack);
-      // Generate unique filenames, ordered by execution order.
-      const uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
-      const wsFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}.mc2`;
-      const PreviewTimeUnit: string = workspace.getConfiguration().get('warpscript.DefaultTimeUnit');
-      const jsonMaxSizeForAutoUnescape: number = workspace.getConfiguration().get('warpscript.maxFileSizeForAutomaticUnicodeEscape');
-      //
-      // keep a simple suffix for the json filename (either n for nanosecond or m for millisecond. nothing for default.)
-      let jsonSuffix: string = PreviewTimeUnit.slice(0, 1);
-      const commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(this.executedWarpScript);
-      // add X after the suffix for no preview at all, add I for focus on images, add G for gts preview.
-      let displayPreviewOpt = '';
-      displayPreviewOpt = commentsCommands.displayPreviewOpt || displayPreviewOpt;
-      commentsCommands.displayPreviewOpt = '';
-      jsonSuffix = jsonSuffix + displayPreviewOpt;
-      let jsonFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}${jsonSuffix}.json`;
-      SharedMem.set(uuid, commentsCommands);
-
-      // Save executed warpscript
-      try {
-        await this.deleteFile(wsFilename); // Remove overwritten file. If file unexistent, fail silently.
-      } catch (e) {
-      }
-      try {
-        await this.writeFile(wsFilename, this.executedWarpScript);
-      } catch (e) {
-        console.error(e);
-      }
-      // Save resulting JSON
-      try {
-        await this.deleteFile(jsonFilename); // Remove overwritten file. If file unexistent, fail silently.
-      } catch (e) {
-        console.error(e);
-      }
-
-      // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
-      let sizeMB: number = Math.round(body.length / 1024 / 1024);
-      if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
-        // Do not unescape \\u nor control characters.
-        body = decodeURIComponent(body.replace(/(?<!\\)\\u(?!000)(?!001)([0-9A-Fa-f]{4})/g, "%u\$1"))
-      }
-      // file must be saved whatever its size... but not displayed if too big.
-      this.writeFile(jsonFilename, body).then(() => {
-        this.displayJson(jsonFilename);
-      }, e => {
-        if (e) {
-          console.error(e);
-        }
-      });
-    }).catch(e => console.error(e));
+    this._runtime.close()
+      .then(() => { })
+      .catch(e => this.log({ text: e, filePath: 'stack', type: 'err' }));
   }
 
   private displayJson(jsonFilename: string) {
@@ -277,7 +281,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
             // 
           },
             (err: any) => {
-              console.error(err)
+              this.log({ text: err, filePath: jsonFilename, type: 'err' })
               window.showErrorMessage(err.message);
             });
       });
@@ -293,7 +297,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     // wait 1 second until configuration has finished (and configurationDoneRequest has been called)
     await this._configurationDone.wait(1000);
     // start the program in the runtime
-    this.executedWarpScript = await this._runtime.start(args.program, !!args.stopOnEntry, !args.noDebug);
+    this.executedWarpScript = await this._runtime.start(args.program);
     this.sendResponse(response);
   }
 
@@ -302,7 +306,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   protected async setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): Promise<void> {
-
     const path = args.source.path as string;
     const clientLines = args.lines || [];
 
@@ -317,16 +320,12 @@ export class Warp10DebugSession extends LoggingDebugSession {
       return bp;
     });
     const actualBreakpoints = await Promise.all<DebugProtocol.Breakpoint>(actualBreakpoints0);
-
     // send back the actual breakpoint positions
-    response.body = {
-      breakpoints: actualBreakpoints
-    };
+    response.body = { breakpoints: actualBreakpoints };
     this.sendResponse(response);
   }
 
   protected breakpointLocationsRequest(response: DebugProtocol.BreakpointLocationsResponse, args: DebugProtocol.BreakpointLocationsArguments, _request?: DebugProtocol.Request): void {
-
     if (args.source.path) {
       const bps = this._runtime.getBreakpoints(args.source.path, this.convertClientLineToDebugger(args.line));
       response.body = {
@@ -345,32 +344,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     this.sendResponse(response);
   }
 
-  protected async setExceptionBreakPointsRequest(response: DebugProtocol.SetExceptionBreakpointsResponse, args: DebugProtocol.SetExceptionBreakpointsArguments): Promise<void> {
-
-    let namedException: string | undefined = undefined;
-    let otherExceptions = false;
-
-    if (args.filterOptions) {
-      for (const filterOption of args.filterOptions) {
-        switch (filterOption.filterId) {
-          case 'namedException':
-            namedException = args.filterOptions[0].condition;
-            break;
-          case 'otherExceptions':
-            otherExceptions = true;
-            break;
-        }
-      }
-    }
-
-    if (args.filters) {
-      if (args.filters.indexOf('otherExceptions') >= 0) {
-        otherExceptions = true;
-      }
-    }
-
-    this._runtime.setExceptionsFilters(namedException, otherExceptions);
-
+  protected async setExceptionBreakPointsRequest(response: DebugProtocol.SetExceptionBreakpointsResponse, _args: DebugProtocol.SetExceptionBreakpointsArguments): Promise<void> {
     this.sendResponse(response);
   }
 
@@ -400,18 +374,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     const endFrame = startFrame + maxLevels;
     const stk = this._runtime.stack(startFrame, endFrame);
     response.body = {
-      stackFrames: stk.frames.map((f, ix) => {
-        const sf: DebugProtocol.StackFrame = new StackFrame(ix, f.name, this.createSource(f.file), this.convertDebuggerLineToClient(f.line));
-        if (typeof f.column === 'number') {
-          sf.column = this.convertDebuggerColumnToClient(f.column);
-        }
-        if (typeof f.instruction === 'number') {
-          const address = this.formatAddress(f.instruction);
-          sf.name = `${f.name} ${address}`;
-          sf.instructionPointerReference = address;
-        }
-        return sf;
-      }),
+      stackFrames: stk.frames.map((f, ix) => new StackFrame(ix, f.name, this.createSource(f.file), this.convertDebuggerLineToClient(f.line))),
       // 4 options for 'totalFrames':
       //omit totalFrames property: 	// VS Code has to probe/guess. Should result in a max. of two requests
       totalFrames: stk.frames.length			// stk.count is the correct size, should result in a max. of two requests
@@ -471,6 +434,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     const v = this._variableHandles.get(args.variablesReference);
     if (v === 'locals') {
       vs = this._runtime.getLocalVariables();
+      response.body = { variables: vs.map((v, i) => this.convertFromRuntime(v, String(i))) };
     } else if (v === 'globals') {
       if (request) {
         this._cancellationTokens.set(request.seq, false);
@@ -479,10 +443,13 @@ export class Warp10DebugSession extends LoggingDebugSession {
       } else {
         vs = await this._runtime.getGlobalVariables();
       }
+      response.body = { variables: vs.map((v, i) => this.convertFromRuntime(v, String(i))) };
     } else if (v && Array.isArray(v.value)) {
       vs = v.value;
+      response.body = { variables: vs.map((v, i) => this.convertFromRuntime(v, String(i))) };
+    } else if (v) {
+      response.body = { variables: Object.keys(v).map(k => this.convertFromRuntime((v as any)[k], k)) };
     }
-    response.body = { variables: vs.map(v => this.convertFromRuntime(v)) };
     this.sendResponse(response);
   }
 
@@ -496,7 +463,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
 
     if (rv) {
       rv.value = this.convertToRuntime(args.value);
-      response.body = this.convertFromRuntime(rv);
+      response.body = this.convertFromRuntime(rv, '');
 
       if (rv.memory && rv.reference) {
         this.sendEvent(new MemoryEvent(String(rv.reference), 0, rv.memory.length));
@@ -536,8 +503,8 @@ export class Warp10DebugSession extends LoggingDebugSession {
     this.sendResponse(response);
   }
 
-  protected stepInRequest(response: DebugProtocol.StepInResponse, args: DebugProtocol.StepInArguments): void {
-    this._runtime.stepIn(args.targetId);
+  protected stepInRequest(response: DebugProtocol.StepInResponse, _args: DebugProtocol.StepInArguments): void {
+    this._runtime.stepIn();
     this.sendResponse(response);
   }
 
@@ -596,7 +563,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     }
 
     if (rv) {
-      const v = this.convertFromRuntime(rv);
+      const v = this.convertFromRuntime(rv, '');
       response.body = {
         result: v.value,
         type: v.type,
@@ -619,7 +586,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
       const rv = this._runtime.getLocalVariable(args.expression.substr(1));
       if (rv) {
         rv.value = this.convertToRuntime(args.value);
-        response.body = this.convertFromRuntime(rv);
+        response.body = this.convertFromRuntime(rv, '');
         this.sendResponse(response);
       } else {
         this.sendErrorResponse(response, {
@@ -840,64 +807,86 @@ export class Warp10DebugSession extends LoggingDebugSession {
     return value;
   }
 
-  private convertFromRuntime(v: RuntimeVariable): DebugProtocol.Variable {
-    let dapVariable: DebugProtocol.Variable = {
-      name: v.name,
-      value: '???',
-      type: typeof v.value,
-      variablesReference: 0,
-      evaluateName: '$' + v.name
-    };
-    /*
-        if (v.name.indexOf('lazy') >= 0) {
-          // a "lazy" variable needs an additional click to retrieve its value
-    
-          dapVariable.value = 'lazy var';		// placeholder value
-          v.reference ??= this._variableHandles.create(new RuntimeVariable('', [ new RuntimeVariable('', v.value) ]));
-          dapVariable.variablesReference = v.reference;
-          dapVariable.presentationHint = { lazy: true };
-        } else {
-    */
-    if (Array.isArray(v.value)) {
-      dapVariable.value = 'Object';
-      v.reference ??= this._variableHandles.create(v);
-      dapVariable.variablesReference = v.reference;
-    } else {
-
-      switch (typeof v.value) {
-        case 'number':
-          if (Math.round(v.value) === v.value) {
-            dapVariable.value = this.formatNumber(v.value);
-            (<any>dapVariable).__vscodeVariableMenuContext = 'simple';	// enable context menu contribution
-            dapVariable.type = 'integer';
-          } else {
-            dapVariable.value = v.value.toString();
-            dapVariable.type = 'float';
-          }
-          break;
-        case 'string':
-
-          dapVariable.value = `"${v.value}"`;
-          break;
-        case 'boolean':
-          dapVariable.value = v.value ? 'true' : 'false';
-          break;
-        default:
-          dapVariable.value = typeof v.value;
-          break;
+  private convertFromRuntime(v: RuntimeVariable, name: string): DebugProtocol.Variable {
+    if (v['_value'] !== undefined && v.name !== undefined) {
+      let dapVariable: DebugProtocol.Variable = {
+        name: v.name.startsWith('Array') ? name : v.name,
+        value: '???',
+        type: typeof v.value,
+        variablesReference: 0,
+        evaluateName: '$' + v.name
+      };
+      if (Array.isArray(v.value)) {
+        dapVariable.value = 'Array(' + v.value.length + ')';
+        v.reference ??= this._variableHandles.create(v);
+        dapVariable.variablesReference = v.reference;
+      } else {
+        switch (typeof v.value) {
+          case 'number':
+            if (Math.round(v.value) === v.value) {
+              dapVariable.value = this.formatNumber(v.value);
+              (<any>dapVariable).__vscodeVariableMenuContext = 'simple';	// enable context menu contribution
+              dapVariable.type = 'integer';
+            } else {
+              dapVariable.value = v.value.toString();
+              dapVariable.type = 'float';
+            }
+            break;
+          case 'string':
+            if (v.value.startsWith('[') || v.value.startsWith('{')) {
+              dapVariable.value = JSON.parse(v.value);
+              dapVariable.type = 'Object';
+            } else {
+              dapVariable.value = `"${v.value}"`;
+            }
+            break;
+          case 'boolean':
+            dapVariable.value = v.value ? 'true' : 'false';
+            break;
+          default:
+            dapVariable.value = typeof v.value;
+            break;
+        }
       }
-    }
-    //}
 
-    if (v.memory) {
-      v.reference ??= this._variableHandles.create(v);
-      dapVariable.memoryReference = String(v.reference);
+      if (v.memory) {
+        v.reference ??= this._variableHandles.create(v);
+        dapVariable.memoryReference = String(v.reference);
+      }
+      return dapVariable;
+    } else {
+      let dapVariable: DebugProtocol.Variable = {
+        name,
+        value: String(v),
+        type: typeof v,
+        variablesReference: 0
+      };
+      if (Array.isArray(v)) {
+        dapVariable.value = 'Array(' + v.length + ')';
+        const reference = this._variableHandles.create(this.convertToRuntimeVariable(v, 0));
+        dapVariable.variablesReference = reference;
+      } else if (typeof v === 'object') {
+        dapVariable.value = Warp10DebugSession.isGts(v) ? 'GTS' : 'Object';
+        const reference = this._variableHandles.create(v);
+        dapVariable.variablesReference = reference;
+      }
+      return dapVariable;
     }
-    return dapVariable;
+
   }
 
-  private formatAddress(x: number, _pad = 8) {
-    return 'mem' + (this._addressesInHex ? '0x' + x.toString(16).padStart(8, '0') : x.toString(10));
+  private convertToRuntimeVariable(v: any, index: number, name?: string): RuntimeVariable {
+    if (Array.isArray(v)) {
+      return new RuntimeVariable(name ?? 'Array(' + v.length + ')', v.map((item, i) => this.convertToRuntimeVariable(item, i)));
+    } else if (typeof v === 'object') {
+      return new RuntimeVariable(Warp10DebugSession.isGts(v) ? 'GTS' : name ?? 'Object', Object.keys(v).map((k, i) => this.convertToRuntimeVariable(v[k], i, k)));
+    } else {
+      return new RuntimeVariable(name ?? String(index), v);
+    }
+  }
+
+  static isGts(item: any) {
+    return !!item && (item.c === '' || !!item.c) && !!item.v && Array.isArray(item.v);
   }
 
   private formatNumber(x: number) {
@@ -905,7 +894,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   private createSource(filePath: string): Source {
-    return new Source(basename(filePath), this.convertDebuggerPathToClient(filePath), undefined, undefined, 'mock-adapter-data');
+    return new Source(basename(filePath), this.convertDebuggerPathToClient(filePath), undefined, undefined, 'warpscript-adapter-data');
   }
 }
 
