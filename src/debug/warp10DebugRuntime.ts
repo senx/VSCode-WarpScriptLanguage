@@ -111,6 +111,7 @@ export class Warp10DebugRuntime extends EventEmitter {
 
   // the initial (and one and only) file we are 'debugging'
   private _sourceFile: string = '';
+  private lineInfo: any;
   public get sourceFile() {
     return this._sourceFile;
   }
@@ -193,7 +194,7 @@ export class Warp10DebugRuntime extends EventEmitter {
       this.webSocket.close();
       this.webSocket = undefined;
     }
-    const wrapped = `'${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD <% ${this.addBreakPoints(this.ws)} %> '${this.sid}' TRACE EVAL`;
+    const wrapped = `true STMTPOS '${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD <% ${this.addBreakPoints(this.ws)} %> '${this.sid}' TRACE EVAL`;
     const traceURL: string = workspace.getConfiguration().get('warpscript.traceURL');
     this.webSocket = new WebSocket(traceURL);
     this.webSocket.on('open', () => this.log('Connected to server'));
@@ -210,6 +211,9 @@ export class Warp10DebugRuntime extends EventEmitter {
       if (msg.toString().startsWith('Welcome to the ')) {
         this.sendtoWS('ATTACH ' + this.sid);
       }
+      if (msg.toString().startsWith('// Maximum server capacity ')) {
+        this.close().then(() => Promise.reject(msg.toString()));
+      }
       if (msg.toString().startsWith('OK Attached to session')) {
         Requester.send(this.endpoint, wrapped)
           .then((r: any) => {
@@ -219,9 +223,10 @@ export class Warp10DebugRuntime extends EventEmitter {
           .catch((e: any) => {
             console.error('WS Error', e, wrapped);
             this.error(e.message ?? e);
-            this.close();
+            this.close().then(() => Promise.reject(e));
           });
       } else if (msg.toString() === 'ERROR No paused execution.') {
+        this.close().then(() => Promise.reject());
         // empty
       } else if (msg.toString().startsWith('STEP')) {
         if (this.firstCnx) {
@@ -266,20 +271,26 @@ export class Warp10DebugRuntime extends EventEmitter {
 
   private async getVars(): Promise<any> {
     return new Promise((resolve, reject) => {
-      Requester.send(this.endpoint, `<%
-    '${this.sid}' TSESSION TSTACK SYMBOLS 
-    '${this.sid.replace(/-/gi, '')}Symbols' STORE STACKTOLIST REVERSE 
-    '${this.sid.replace(/-/gi, '')}Stack' STORE
-    { 
-      'vars' { $${this.sid.replace(/-/gi, '')}Symbols <% DUP LOAD %> FOREACH } 
-      'stack' $${this.sid.replace(/-/gi, '')}Stack 
-    }
-    %> <% RETHROW %> <% %> TRY
-        `)
+      Requester.send(this.endpoint, `<% '${this.sid}' TSESSION 
+      <% 'last.stmtpos' STACKATTRIBUTE '.stmtpos' TSTORE %> TEVAL
+        TSTACK SYMBOLS 'symbols' STORE 
+        STACKTOLIST REVERSE 'stack' STORE
+        { 
+          'vars' { $symbols <% DUP LOAD TYPEOF %> FOREACH } 
+          'stack' $stack <% TYPEOF %> F LMAP
+          'lastStmtpos'  '.stmtpos' TLOAD
+        }
+        %> <% RETHROW %> <% %> TRY`)
         .then((vars: any) => {
+
           const data = JSON.parse(vars ?? '[]')[0];
           this.variables = data?.vars ?? {};
           this.dataStack = [... (data?.stack ?? [])];
+          if (data.lastStmtpos) {
+            this.lineInfo = data.lastStmtpos.split(':').map((l: string) => parseInt(l, 10));
+          } else {
+            this.lineInfo = undefined;
+          }
           resolve(data);
         }).catch(e => reject(e));
     });
@@ -380,8 +391,19 @@ export class Warp10DebugRuntime extends EventEmitter {
   /*
    * Determine possible column breakpoint positions for the given line.
    */
-  public getBreakpoints(_path: string, _line: number): number[] {
-    return [0];
+  public getBreakpoints(_path: string, _line: number): any {
+    if (this.lineInfo) {
+      return {
+        line: this.lineInfo[0],
+        colStart: this.lineInfo[1] + 1,
+        colEnd: this.lineInfo[2] + 1
+      };
+    }
+    else return {
+      line: this.currentLine,
+      colStart: 0,
+      colEnd: 0
+    }
   }
 
   /*
@@ -512,6 +534,7 @@ export class Warp10DebugRuntime extends EventEmitter {
   }
 
   private getWords(l: number, line: string): Word[] {
+    console.log('getWords', l, line)
     // break line into words
     const WORD_REGEXP = /[a-z]+/ig;
     const words: Word[] = [];
@@ -532,7 +555,7 @@ export class Warp10DebugRuntime extends EventEmitter {
   private initializeContents(memory: Uint8Array) {
     this.ws = new TextDecoder().decode(memory);
     this.sourceLines = this.ws.split(/\r?\n/);
-
+/*
     this.instructions = [];
 
     this.starts = [];
@@ -546,7 +569,7 @@ export class Warp10DebugRuntime extends EventEmitter {
         this.instructions.push(word);
       }
       this.ends.push(this.instructions.length);
-    }
+    } */
   }
 
   /**

@@ -28,10 +28,10 @@ import { Subject } from 'await-notify';
 import * as base64 from 'base64-js';
 import ExecCommand from '../features/execCommand';
 import WarpScriptExtConstants from '../constants';
-import { TextDocument, Uri, ViewColumn, window, workspace } from 'vscode';
+import { OverviewRulerLane, Range, TextDocument, TextEditorDecorationType, Uri, ViewColumn, window, workspace } from 'vscode';
 import { SharedMem } from '../extension';
 import WarpScriptParser, { specialCommentCommands } from '../warpScriptParser';
-import { FileAccessor, IRuntimeBreakpoint, IRuntimeVariableType, RuntimeVariable, Warp10DebugRuntime, timeout } from './warp10DebugRuntime';
+import { FileAccessor, IRuntimeBreakpoint, IRuntimeVariableType, RuntimeVariable, Warp10DebugRuntime } from './warp10DebugRuntime';
 
 /**
  * This interface describes the mock-debug specific launch attributes
@@ -68,6 +68,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
   private _valuesInHex = false;
   private _useInvalidatedEvent = false;
   private executedWarpScript: string;
+  private inlineDecoration: TextEditorDecorationType;
   static threadID: number = 1;
 
   /**
@@ -100,6 +101,9 @@ export class Warp10DebugSession extends LoggingDebugSession {
     this._runtime.on('output', (type, text, filePath, line, column) => this.log({ text, filePath, line, column, type }));
     this._runtime.on('end', () => this.sendEvent(new TerminatedEvent()));
     this._runtime.on('debugResult', (r: any) => this.handleResult(r).then(() => this.sendEvent(new TerminatedEvent())));
+    this._runtime.on('inline-mark', (r: any) => {
+      console.log(r)
+    });
   }
 
   private log(l: any) {
@@ -326,21 +330,20 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   protected breakpointLocationsRequest(response: DebugProtocol.BreakpointLocationsResponse, args: DebugProtocol.BreakpointLocationsArguments, _request?: DebugProtocol.Request): void {
+    const breakpoints: any[] = [];
     if (args.source.path) {
-      const bps = this._runtime.getBreakpoints(args.source.path, this.convertClientLineToDebugger(args.line));
-      response.body = {
-        breakpoints: bps.map(col => {
-          return {
-            line: args.line,
-            column: this.convertDebuggerColumnToClient(col)
-          };
-        })
-      };
-    } else {
-      response.body = {
-        breakpoints: []
-      };
+      const info = this._runtime.getBreakpoints(args.source.path, this.convertClientLineToDebugger(args.line));
+      breakpoints.push({ line: args.line });
+      const line = info.line - 1;
+      const col = info.colEnd;
+      console.log(args)
+      if(this.inlineDecoration) {
+        this.inlineDecoration.dispose();
+      }
+      this.inlineDecoration = window.createTextEditorDecorationType({ after: { color: 'red', contentText: '⯆' } });
+      window.activeTextEditor.setDecorations(this.inlineDecoration, [new Range(line, info.colEnd, line, info.colEnd)]);
     }
+    response.body = { breakpoints };
     this.sendResponse(response);
   }
 
@@ -608,7 +611,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
 
   private async progressSequence() {
     const ID = '' + this._progressId++;
-    await timeout(100);
+    //  await timeout(100);
     const title = this._isProgressCancellable ? 'Cancellable operation' : 'Long running operation';
     const startEvent: DebugProtocol.ProgressStartEvent = new ProgressStartEvent(ID, title);
     startEvent.body.cancellable = this._isProgressCancellable;
@@ -617,7 +620,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     this.sendEvent(new OutputEvent(`start progress: ${ID}\n`));
     let endMessage = 'progress ended';
     for (let i = 0; i < 100; i++) {
-      await timeout(500);
+      //  await timeout(500);
       this.sendEvent(new ProgressUpdateEvent(ID, `progress: ${i}`));
       if (this._cancelledProgressId === ID) {
         endMessage = 'progress cancelled';
@@ -756,7 +759,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   protected setInstructionBreakpointsRequest(response: DebugProtocol.SetInstructionBreakpointsResponse, args: DebugProtocol.SetInstructionBreakpointsArguments) {
-
+    console.log('setInstructionBreakpointsRequest')
     // clear all instruction breakpoints
     this._runtime.clearInstructionBreakpoints();
 

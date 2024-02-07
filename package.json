@@ -12,7 +12,7 @@
   "author": "SenX <contact@senx.io>",
   "icon": "images/w.png",
   "license": "Apache-2.0",
-  "version": "2.2.9",
+  "version": "2.3.0-debug",
   "publisher": "senx",
   "engines": {
     "vscode": "^1.73.0"
