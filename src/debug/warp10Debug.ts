@@ -335,8 +335,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
       const info = this._runtime.getBreakpoints(args.source.path, this.convertClientLineToDebugger(args.line));
       breakpoints.push({ line: args.line });
       const line = info.line - 1;
-      const col = info.colEnd;
-      console.log(args)
       if(this.inlineDecoration) {
         this.inlineDecoration.dispose();
       }
