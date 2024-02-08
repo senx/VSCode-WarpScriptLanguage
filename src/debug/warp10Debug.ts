@@ -175,8 +175,8 @@ export class Warp10DebugSession extends LoggingDebugSession {
     // make VS Code send setExpression request
     response.body.supportsSetExpression = false;
     // make VS Code send disassemble request
-    response.body.supportsDisassembleRequest = true;
-    response.body.supportsSteppingGranularity = true;
+    response.body.supportsDisassembleRequest = false;
+    response.body.supportsSteppingGranularity = false;
     response.body.supportsInstructionBreakpoints = false;
     // make VS Code able to read and write variable memory
     response.body.supportsReadMemoryRequest = false;
