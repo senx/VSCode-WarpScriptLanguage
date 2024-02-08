@@ -197,12 +197,12 @@ export class Warp10DebugRuntime extends EventEmitter {
     this.webSocket = new WebSocket(traceURL);
     this.webSocket.on('open', () => this.log('Connected to server'));
     this.webSocket.on('error', (e: any) => {
-      if (e.code === 'ECONNREFUSED') {
+      if (e.code === 'ECONNREFUSED' || e.code === 'ESOCKETTIMEDOUT') {
         this.error(`${traceURL} seems to be unreachable.`);
       } else {
         this.error(e);
       }
-      this.sendEvent('end');
+      this.close();
     });
     this.webSocket.on('message', async (msg: Buffer) => {
       this.debug(`Received message from server: ${msg}`);
@@ -286,6 +286,12 @@ export class Warp10DebugRuntime extends EventEmitter {
           this.dataStack = [... (data?.stack ?? [])];
           if (data.lastStmtpos) {
             this.lineInfo = data.lastStmtpos.split(':').map((l: string) => parseInt(l, 10));
+            const bps = this.breakPoints.get(this._sourceFile).filter(b => b.verified && b.line === this.lineInfo[0] - 1);
+            if (bps.length > 0) {
+              const offset = 'BREAKPOINT '.length;
+              this.lineInfo[1] = this.lineInfo[1] - offset;
+              this.lineInfo[2] = this.lineInfo[2] - offset;
+            }
           } else {
             this.lineInfo = undefined;
           }
