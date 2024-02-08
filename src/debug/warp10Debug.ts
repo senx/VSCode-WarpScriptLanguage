@@ -344,8 +344,10 @@ export class Warp10DebugSession extends LoggingDebugSession {
       if (this.inlineDecoration) {
         this.inlineDecoration.dispose();
       }
+      if(this._runtime.isDebug()) {
       this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: 'red', contentText: '⯆' } });
       window.activeTextEditor.setDecorations(this.inlineDecoration, [new Range(line, info.colEnd, line, info.colEnd)]);
+      }
     }
     response.body = { breakpoints };
     this.sendResponse(response);

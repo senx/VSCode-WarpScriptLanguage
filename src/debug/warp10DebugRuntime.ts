@@ -391,18 +391,22 @@ export class Warp10DebugRuntime extends EventEmitter {
     return { frames: frames, count: frames.length };
   }
 
+  public isDebug() {
+    return this.inDebug;
+  }
+
   /*
    * Determine possible column breakpoint positions for the given line.
    */
   public getBreakpoints(_path: string, _line: number): any {
     if (this.lineInfo) {
+      this.currentLine = this.lineInfo[0] - 1
       return {
         line: this.lineInfo[0],
         colStart: this.lineInfo[1] + 1,
         colEnd: this.lineInfo[2] + 1
       };
-    }
-    else return {
+    } else return {
       line: this.currentLine,
       colStart: 0,
       colEnd: 0
