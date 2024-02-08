@@ -28,7 +28,7 @@ import { Subject } from 'await-notify';
 import * as base64 from 'base64-js';
 import ExecCommand from '../features/execCommand';
 import WarpScriptExtConstants from '../constants';
-import { OverviewRulerLane, Range, TextDocument, TextEditorDecorationType, Uri, ViewColumn, window, workspace } from 'vscode';
+import { Range, TextDocument, TextEditorDecorationType, Uri, ViewColumn, window, workspace } from 'vscode';
 import { SharedMem } from '../extension';
 import WarpScriptParser, { specialCommentCommands } from '../warpScriptParser';
 import { FileAccessor, IRuntimeBreakpoint, IRuntimeVariableType, RuntimeVariable, Warp10DebugRuntime } from './warp10DebugRuntime';
@@ -99,7 +99,12 @@ export class Warp10DebugSession extends LoggingDebugSession {
     });
     this._runtime.on('breakpointValidated', (bp: IRuntimeBreakpoint) => this.sendEvent(new BreakpointEvent('changed', { verified: bp.verified, id: bp.id } as DebugProtocol.Breakpoint)));
     this._runtime.on('output', (type, text, filePath, line, column) => this.log({ text, filePath, line, column, type }));
-    this._runtime.on('end', () => this.sendEvent(new TerminatedEvent()));
+    this._runtime.on('end', () => {
+      if (this.inlineDecoration) {
+        this.inlineDecoration.dispose();
+      }
+      this.sendEvent(new TerminatedEvent());
+    });
     this._runtime.on('debugResult', (r: any) => this.handleResult(r).then(() => this.sendEvent(new TerminatedEvent())));
     this._runtime.on('inline-mark', (r: any) => {
       console.log(r)
@@ -170,7 +175,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     // make VS Code send setExpression request
     response.body.supportsSetExpression = false;
     // make VS Code send disassemble request
-    response.body.supportsDisassembleRequest = false;
+    response.body.supportsDisassembleRequest = true;
     response.body.supportsSteppingGranularity = true;
     response.body.supportsInstructionBreakpoints = false;
     // make VS Code able to read and write variable memory
@@ -215,6 +220,9 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   private async handleResult(result: string) {
+    if (this.inlineDecoration) {
+      this.inlineDecoration.dispose();
+    }
     // Generate unique filenames, ordered by execution order.
     const uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
     const wsFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}.mc2`;
@@ -266,9 +274,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   protected disconnectRequest(_response: DebugProtocol.DisconnectResponse, _args: DebugProtocol.DisconnectArguments, _request?: DebugProtocol.Request): void {
-    this._runtime.close()
-      .then(() => { })
-      .catch(e => this.log({ text: e, filePath: 'stack', type: 'err' }));
+    this._runtime.close();
   }
 
   private displayJson(jsonFilename: string) {
@@ -335,7 +341,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
       const info = this._runtime.getBreakpoints(args.source.path, this.convertClientLineToDebugger(args.line));
       breakpoints.push({ line: args.line });
       const line = info.line - 1;
-      if(this.inlineDecoration) {
+      if (this.inlineDecoration) {
         this.inlineDecoration.dispose();
       }
       this.inlineDecoration = window.createTextEditorDecorationType({ after: { color: 'red', contentText: '⯆' } });
@@ -398,9 +404,8 @@ export class Warp10DebugSession extends LoggingDebugSession {
   protected async writeMemoryRequest(response: DebugProtocol.WriteMemoryResponse, { data, memoryReference, offset = 0 }: DebugProtocol.WriteMemoryArguments) {
     const variable = this._variableHandles.get(Number(memoryReference));
     if (typeof variable === 'object') {
-      const decoded = base64.toByteArray(data);
-      variable.setMemory(decoded, offset);
-      response.body = { bytesWritten: decoded.length };
+      variable.setMemory(data, offset);
+      response.body = { bytesWritten: data.length };
     } else {
       response.body = { bytesWritten: 0 };
     }
@@ -435,7 +440,21 @@ export class Warp10DebugSession extends LoggingDebugSession {
     const v = this._variableHandles.get(args.variablesReference);
     if (v === 'locals') {
       vs = this._runtime.getLocalVariables();
-      response.body = { variables: vs.map((v, i) => this.convertFromRuntime(v, String(i))) };
+      response.body = {
+        variables: vs.map(v => {
+          let dapVariable: DebugProtocol.Variable = {
+            name: `${v.name}`,
+            value: v.value,
+            type: v.value,
+            variablesReference: 0,
+            evaluateName: v.name,
+            presentationHint: { lazy: true }
+          };
+          v.reference ??= this._variableHandles.create(new RuntimeVariable('stackVariable', v.name));
+          dapVariable.variablesReference = v.reference;
+          return dapVariable;
+        })
+      };
     } else if (v === 'globals') {
       if (request) {
         this._cancellationTokens.set(request.seq, false);
@@ -444,12 +463,25 @@ export class Warp10DebugSession extends LoggingDebugSession {
       } else {
         vs = await this._runtime.getGlobalVariables();
       }
-      response.body = { variables: vs.map((v, i) => this.convertFromRuntime(v, String(i))) };
-    } else if (v && Array.isArray(v.value)) {
-      vs = v.value;
-      response.body = { variables: vs.map((v, i) => this.convertFromRuntime(v, String(i))) };
-    } else if (v) {
-      response.body = { variables: Object.keys(v).map(k => this.convertFromRuntime((v as any)[k], k)) };
+      response.body = {
+        variables: vs.map(v => {
+          let dapVariable: DebugProtocol.Variable = {
+            name: `${v.name}`,
+            value: typeof v.value === 'string' ? v.value : JSON.stringify(v.value),
+            type: typeof v.value,
+            variablesReference: 0,
+            evaluateName: v.name,
+          };
+          return dapVariable;
+        })
+      };
+    } else {
+      if ('stackVariable' === v.name) {
+        const realValue = await this._runtime.getVarValue(v.value);
+        response.body = { variables: [this.convertFromRuntime(realValue, v.value)] };
+      } else {
+        response.body = { variables: v.value };
+      }
     }
     this.sendResponse(response);
   }
@@ -808,72 +840,29 @@ export class Warp10DebugSession extends LoggingDebugSession {
     return value;
   }
 
-  private convertFromRuntime(v: RuntimeVariable, name: string): DebugProtocol.Variable {
+  private convertFromRuntime(v: any, name: string): DebugProtocol.Variable {
     if (v['_value'] !== undefined && v.name !== undefined) {
       let dapVariable: DebugProtocol.Variable = {
-        name: v.name.startsWith('Array') ? name : v.name,
-        value: '???',
-        type: typeof v.value,
+        name: `${name}`,
+        value: v.value,
+        type: typeof v.value === 'string' ? v.value : typeof v.value,
         variablesReference: 0,
-        evaluateName: '$' + v.name
+        evaluateName: v.name,
+        presentationHint: { lazy: true }
       };
-      if (Array.isArray(v.value)) {
-        dapVariable.value = 'Array(' + v.value.length + ')';
-        v.reference ??= this._variableHandles.create(v);
-        dapVariable.variablesReference = v.reference;
-      } else {
-        switch (typeof v.value) {
-          case 'number':
-            if (Math.round(v.value) === v.value) {
-              dapVariable.value = this.formatNumber(v.value);
-              (<any>dapVariable).__vscodeVariableMenuContext = 'simple';	// enable context menu contribution
-              dapVariable.type = 'integer';
-            } else {
-              dapVariable.value = v.value.toString();
-              dapVariable.type = 'float';
-            }
-            break;
-          case 'string':
-            if (v.value.startsWith('[') || v.value.startsWith('{')) {
-              dapVariable.value = JSON.parse(v.value);
-              dapVariable.type = 'Object';
-            } else {
-              dapVariable.value = `"${v.value}"`;
-            }
-            break;
-          case 'boolean':
-            dapVariable.value = v.value ? 'true' : 'false';
-            break;
-          default:
-            dapVariable.value = typeof v.value;
-            break;
-        }
-      }
-
-      if (v.memory) {
-        v.reference ??= this._variableHandles.create(v);
-        dapVariable.memoryReference = String(v.reference);
-      }
+      v.reference ??= this._variableHandles.create(new RuntimeVariable('stackVariable', v.name));
+      dapVariable.variablesReference = v.reference;
       return dapVariable;
     } else {
       let dapVariable: DebugProtocol.Variable = {
         name,
         value: String(v),
-        type: typeof v,
-        variablesReference: 0
+        type: name,
+        variablesReference: 0,
+        presentationHint: { kind: 'data', lazy: false }
       };
-      if (Array.isArray(v)) {
-        dapVariable.value = 'Array(' + v.length + ')';
-        const reference = this._variableHandles.create(this.convertToRuntimeVariable(v, 0));
-        dapVariable.variablesReference = reference;
-      } else if (typeof v === 'object') {
-        dapVariable.value = Warp10DebugSession.isGts(v) ? 'GTS' : 'Object';
-        const reference = this._variableHandles.create(v);
-        dapVariable.variablesReference = reference;
-      }
       return dapVariable;
     }
-
   }
 
   private convertToRuntimeVariable(v: any, index: number, name?: string): RuntimeVariable {
@@ -888,10 +877,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
 
   static isGts(item: any) {
     return !!item && (item.c === '' || !!item.c) && !!item.v && Array.isArray(item.v);
-  }
-
-  private formatNumber(x: number) {
-    return this._valuesInHex ? '0x' + x.toString(16) : x.toString(10);
   }
 
   private createSource(filePath: string): Source {

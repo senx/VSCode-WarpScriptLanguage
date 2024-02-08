@@ -85,15 +85,14 @@ export class RuntimeVariable {
 
   constructor(public readonly name: string, private _value: IRuntimeVariableType) { }
 
-  public setMemory(data: Uint8Array, offset = 0) {
+  public setMemory(data: string, offset = 0) {
     const memory = this.memory;
     if (!memory) {
       return;
     }
 
-    memory.set(data, offset);
+    memory.set(new TextEncoder().encode(data), offset);
     this._memory = memory;
-    this._value = new TextDecoder().decode(memory);
   }
 }
 
@@ -122,7 +121,6 @@ export class Warp10DebugRuntime extends EventEmitter {
   private sourceLines: string[] = [];
   private instructions: Word[] = [];
   private starts: number[] = [];
-  private ends: number[] = [];
 
   // This is the next line that will be 'executed'
   private _currentLine = 0;
@@ -212,22 +210,22 @@ export class Warp10DebugRuntime extends EventEmitter {
         this.sendtoWS('ATTACH ' + this.sid);
       }
       if (msg.toString().startsWith('// Maximum server capacity ')) {
-        this.close().then(() => Promise.reject(msg.toString()));
+        this.close();
+        this.error(msg.toString());
       }
       if (msg.toString().startsWith('OK Attached to session')) {
         Requester.send(this.endpoint, wrapped)
           .then((r: any) => {
-            this.sendEvent('debugResult', r);
             this.close();
+            this.sendEvent('debugResult', r);
           })
           .catch((e: any) => {
             console.error('WS Error', e, wrapped);
             this.error(e.message ?? e);
-            this.close().then(() => Promise.reject(e));
+            this.close();
           });
       } else if (msg.toString() === 'ERROR No paused execution.') {
-        this.close().then(() => Promise.reject());
-        // empty
+        this.close();
       } else if (msg.toString().startsWith('STEP')) {
         if (this.firstCnx) {
           this.firstCnx = false;
@@ -249,23 +247,23 @@ export class Warp10DebugRuntime extends EventEmitter {
     return this.ws;
   }
 
-  public async close(): Promise<void> {
-    return new Promise(resolve => {
-      this.inDebug = false;
-      if (this.webSocket) {
-        this.getVars()
-          .then(() => {
-            this.sendtoWS('STOP');
-            this.sendtoWS('DETACH ' + this.sid);
-            this.webSocket.close();
-            this.sendEvent('end');
-            resolve();
-          })
-          .catch(() => resolve());
-      } else {
-        this.sendEvent('end');
-        resolve();
-      }
+  public close() {
+    this.inDebug = false;
+    if (this.webSocket) {
+      this.sendtoWS('STOP');
+      this.sendtoWS('DETACH ' + this.sid);
+      this.webSocket.close();
+    }
+    this.sendEvent('end');
+  }
+
+  async getVarValue(key: string) {
+    return new Promise((resolve, reject) => {
+      Requester.send(this.endpoint, `'${this.sid}' TSESSION TSTACK STACKTOLIST DROP '${key}' LOAD`)
+        .then((vars: any) => {
+          const data = JSON.parse(vars ?? '[]')[0];
+          resolve(JSON.stringify(data));
+        }).catch(e => reject(e));
     });
   }
 
@@ -312,7 +310,6 @@ export class Warp10DebugRuntime extends EventEmitter {
     this.debug('Send to WebSocket ' + message);
     this.webSocket.send(message);
   }
-
 
   /**
    * Continue execution to the end/beginning.
@@ -492,7 +489,9 @@ export class Warp10DebugRuntime extends EventEmitter {
   }
 
   private toRuntimeVariable(k: string, v: any): RuntimeVariable {
-    return new RuntimeVariable(k, v);
+    const variable = new RuntimeVariable(k, v);
+    // variable.setMemory(k);
+    return variable;
   }
 
   public getLocalVariables(): RuntimeVariable[] {
@@ -555,21 +554,6 @@ export class Warp10DebugRuntime extends EventEmitter {
   private initializeContents(memory: Uint8Array) {
     this.ws = new TextDecoder().decode(memory);
     this.sourceLines = this.ws.split(/\r?\n/);
-/*
-    this.instructions = [];
-
-    this.starts = [];
-    this.instructions = [];
-    this.ends = [];
-
-    for (let l = 0; l < this.sourceLines.length; l++) {
-      this.starts.push(this.instructions.length);
-      const words = this.getWords(l, this.sourceLines[l]);
-      for (let word of words) {
-        this.instructions.push(word);
-      }
-      this.ends.push(this.instructions.length);
-    } */
   }
 
   /**
