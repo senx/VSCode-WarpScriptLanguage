@@ -211,7 +211,7 @@ export class Warp10DebugRuntime extends EventEmitter {
       }
       if (msg.toString().startsWith('// Maximum server capacity ')) {
         this.close();
-        this.error(msg.toString());
+        this.error(msg.toString().replace('// ', ''));
       }
       if (msg.toString().startsWith('OK Attached to session')) {
         Requester.send(this.endpoint, wrapped)
@@ -243,17 +243,20 @@ export class Warp10DebugRuntime extends EventEmitter {
       }
     });
 
-    this.webSocket.on('close', () => this.log('Disconnected from server'));
+    this.webSocket.on('close', () => {
+      this.log('Disconnected from server');
+      this.close();
+    });
     return this.ws;
   }
 
   public close() {
-    this.inDebug = false;
-    if (this.webSocket) {
+    if (this.webSocket && this.inDebug) {
       this.sendtoWS('STOP');
       this.sendtoWS('DETACH ' + this.sid);
       this.webSocket.close();
     }
+    this.inDebug = false;
     this.sendEvent('end');
   }
 
