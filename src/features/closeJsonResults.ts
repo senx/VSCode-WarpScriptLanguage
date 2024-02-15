@@ -71,13 +71,13 @@ export default class CloseJsonResults {
     WarpScriptExtGlobals.weAreClosingFilesFlag = true;
 
     // close any opened webview.
-    if (!this.isNullOrUndefined(previewPanels.gts)) {
+    if (previewPanels.gts) {
       previewPanels.gts.dispose();
     }
-    if (!this.isNullOrUndefined(previewPanels.image)) {
+    if (previewPanels.image) {
       previewPanels.image.dispose();
     }
-    if (!this.isNullOrUndefined(previewPanels.discovery)) {
+    if (previewPanels.discovery) {
       previewPanels.discovery.dispose();
     }
     // initiate the loop

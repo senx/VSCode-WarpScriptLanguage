@@ -1,12 +1,12 @@
 import { HoverProvider, Hover, TextDocument, CancellationToken, Position, MarkdownString } from 'vscode';
 import { specialCommentCommands } from '../../warpScriptParser';
 import WarpScriptParser from '../../warpScriptParser';
-import * as vscode from 'vscode';
-import * as request from 'request';
+import vscode from 'vscode';
+import request from 'request';
 import { SocksProxyAgent } from 'socks-proxy-agent';
-import * as ProxyAgent from 'proxy-agent';
-import * as pac from 'pac-resolver';
-import * as  dns from 'dns';
+import ProxyAgent from 'proxy-agent';
+import pac from 'pac-resolver';
+import dns from 'dns';
 import { promisify } from 'util';
 
 let lookupAsync: any;

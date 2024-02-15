@@ -67,8 +67,8 @@ export class Warp10DebugSession extends LoggingDebugSession {
 
   private _valuesInHex = false;
   private _useInvalidatedEvent = false;
-  private executedWarpScript: string;
-  private inlineDecoration: TextEditorDecorationType;
+  private executedWarpScript: string | undefined;
+  private inlineDecoration: TextEditorDecorationType | undefined;
   static threadID: number = 1;
 
   /**
@@ -226,12 +226,12 @@ export class Warp10DebugSession extends LoggingDebugSession {
     // Generate unique filenames, ordered by execution order.
     const uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
     const wsFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}.mc2`;
-    const PreviewTimeUnit: string = workspace.getConfiguration().get('warpscript.DefaultTimeUnit');
-    const jsonMaxSizeForAutoUnescape: number = workspace.getConfiguration().get('warpscript.maxFileSizeForAutomaticUnicodeEscape');
+    const PreviewTimeUnit: string = workspace.getConfiguration().get('warpscript.DefaultTimeUnit') as string;
+    const jsonMaxSizeForAutoUnescape: number = workspace.getConfiguration().get('warpscript.maxFileSizeForAutomaticUnicodeEscape') as number;
     //
     // keep a simple suffix for the json filename (either n for nanosecond or m for millisecond. nothing for default.)
     let jsonSuffix: string = PreviewTimeUnit.slice(0, 1);
-    const commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(this.executedWarpScript);
+    const commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(this.executedWarpScript ?? '');
     // add X after the suffix for no preview at all, add I for focus on images, add G for gts preview.
     let displayPreviewOpt = '';
     displayPreviewOpt = commentsCommands.displayPreviewOpt || displayPreviewOpt;
@@ -344,9 +344,11 @@ export class Warp10DebugSession extends LoggingDebugSession {
       if (this.inlineDecoration) {
         this.inlineDecoration.dispose();
       }
-      if(this._runtime.isDebug()) {
-      this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: 'red', contentText: '⯆' } });
-      window.activeTextEditor.setDecorations(this.inlineDecoration, [new Range(line, info.colEnd, line, info.colEnd)]);
+      if (this._runtime.isDebug()) {
+        this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: 'red', contentText: '⯆' } });
+        if (window.activeTextEditor) {
+          window.activeTextEditor.setDecorations(this.inlineDecoration, [new Range(line, info.colEnd, line, info.colEnd)]);
+        }
       }
     }
     response.body = { breakpoints };

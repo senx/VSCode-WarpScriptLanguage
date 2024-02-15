@@ -4,8 +4,8 @@
 		"target": "ES2020",
 		"outDir": "out",
 		"lib": [
-			"WebWorker",
-			"ES2020"
+			"ES2020",
+      "DOM"
 		],
 		"sourceMap": true,
 		"rootDir": "src",
@@ -14,7 +14,8 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noImplicitAny": true,
-		"noImplicitReturns": true
+		"noImplicitReturns": true,
+    "esModuleInterop": true
 	},
 	"exclude": [
 		"node_modules",
@@ -24,6 +25,7 @@
 		"src/flows-beautify-typescript/js_beautify.d.ts",
 		"src/flows-beautify-typescript/js_beautify.ts",
 		"src/flowsGlobals.ts",
-		"src/wsGlobals.ts"
+		"src/wsGlobals.ts",
+    "src/static"
 	]
 }

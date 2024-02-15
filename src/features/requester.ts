@@ -18,8 +18,8 @@ export class Requester {
 
   public static send(url: string, ws: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      const useGZIP: boolean = workspace.getConfiguration().get('warpscript.useGZIP');
-      const timeout: number = workspace.getConfiguration().get('warpscript.http.timeout');
+      const useGZIP: boolean = !!workspace.getConfiguration().get('warpscript.useGZIP');
+      const timeout: number = workspace.getConfiguration().get('warpscript.http.timeout') ?? 5000;
       const proxy_pac: string = workspace.getConfiguration().get('warpscript.ProxyPac');
       const proxy_directUrl: string = workspace.getConfiguration().get('warpscript.ProxyURL');
 

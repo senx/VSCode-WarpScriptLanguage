@@ -147,14 +147,14 @@ export class Warp10DebugRuntime extends EventEmitter {
 
   private breakAddresses = new Map<string, string>();
 
-  private ws: string;
-  private sid: string;
-  private endpoint: string;
-  private webSocket: WebSocket;
+  private ws: string | undefined;
+  private sid: string | undefined;
+  private endpoint: string | undefined;
+  private webSocket: WebSocket | undefined;
   private firstCnx = true;
-  private commentsCommands: specialCommentCommands;
-  private dataStack: any[];
-  private program: string;
+  private commentsCommands: specialCommentCommands | undefined;
+  private dataStack: any[] | undefined;
+  private program: string | undefined;
   private inDebug = false;
 
 
@@ -192,8 +192,8 @@ export class Warp10DebugRuntime extends EventEmitter {
       this.webSocket.close();
       this.webSocket = undefined;
     }
-    const wrapped = `true STMTPOS '${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD <% ${this.addBreakPoints(this.ws)} %> '${this.sid}' TRACE EVAL`;
-    const traceURL: string = workspace.getConfiguration().get('warpscript.traceURL');
+    const wrapped = `true STMTPOS '${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD <% ${this.addBreakPoints(this.ws ?? '')} %> '${this.sid}' TRACE EVAL`;
+    const traceURL: string = workspace.getConfiguration().get('warpscript.traceURL') as string;
     this.webSocket = new WebSocket(traceURL);
     this.webSocket.on('open', () => this.log('Connected to server'));
     this.webSocket.on('error', (e: any) => {
@@ -214,7 +214,7 @@ export class Warp10DebugRuntime extends EventEmitter {
         this.error(msg.toString().replace('// ', ''));
       }
       if (msg.toString().startsWith('OK Attached to session')) {
-        Requester.send(this.endpoint, wrapped)
+        Requester.send(this.endpoint ?? '', wrapped)
           .then((r: any) => {
             this.close();
             this.sendEvent('debugResult', r);
@@ -247,7 +247,7 @@ export class Warp10DebugRuntime extends EventEmitter {
       this.log('Disconnected from server');
       this.close();
     });
-    return this.ws;
+    return this.ws ?? '';
   }
 
   public close() {
@@ -262,7 +262,7 @@ export class Warp10DebugRuntime extends EventEmitter {
 
   async getVarValue(key: string) {
     return new Promise((resolve, reject) => {
-      Requester.send(this.endpoint, `'${this.sid}' TSESSION TSTACK STACKTOLIST DROP '${key}' LOAD`)
+      Requester.send(this.endpoint ?? '', `'${this.sid}' TSESSION TSTACK STACKTOLIST DROP '${key}' LOAD`)
         .then((vars: any) => {
           const data = JSON.parse(vars ?? '[]')[0];
           resolve(JSON.stringify(data));
@@ -272,7 +272,7 @@ export class Warp10DebugRuntime extends EventEmitter {
 
   private async getVars(): Promise<any> {
     return new Promise((resolve, reject) => {
-      Requester.send(this.endpoint, `<% '${this.sid}' TSESSION 
+      Requester.send(this.endpoint ?? '', `<% '${this.sid}' TSESSION 
       <% 'last.stmtpos' STACKATTRIBUTE '.stmtpos' TSTORE %> TEVAL
         TSTACK SYMBOLS 'symbols' STORE 
         STACKTOLIST REVERSE 'stack' STORE
@@ -289,7 +289,7 @@ export class Warp10DebugRuntime extends EventEmitter {
           this.dataStack = [... (data?.stack ?? [])];
           if (data.lastStmtpos) {
             this.lineInfo = data.lastStmtpos.split(':').map((l: string) => parseInt(l, 10));
-            const bps = this.breakPoints.get(this._sourceFile).filter(b => b.verified && b.line === this.lineInfo[0] - 1);
+            const bps = (this.breakPoints.get(this._sourceFile) ?? []).filter(b => b.verified && b.line === this.lineInfo[0] - 1);
             if (bps.length > 0) {
               const offset = 'BREAKPOINT '.length;
               this.lineInfo[1] = this.lineInfo[1] - offset;
@@ -316,8 +316,10 @@ export class Warp10DebugRuntime extends EventEmitter {
   }
 
   private sendtoWS(message: string) {
-    this.debug('Send to WebSocket ' + message);
-    this.webSocket.send(message);
+    if (this.webSocket) {
+      this.debug('Send to WebSocket ' + message);
+      this.webSocket.send(message);
+    }
   }
 
   /**
@@ -384,6 +386,7 @@ export class Warp10DebugRuntime extends EventEmitter {
 
   public stack(_startFrame: number, _endFrame: number): IRuntimeStack {
     const frames: IRuntimeStackFrame[] = [];
+    this.dataStack = this.dataStack ?? [];
     for (let i = 0; i < this.dataStack.length; i++) {
       let f = this.dataStack[i];
       if (typeof f === 'object') {
@@ -480,22 +483,22 @@ export class Warp10DebugRuntime extends EventEmitter {
 
   public async getGlobalVariables(_cancellationToken?: () => boolean): Promise<RuntimeVariable[]> {
     const globals = [new RuntimeVariable('endpoint', this.endpoint)];
-    if (this.commentsCommands.displayPreviewOpt) {
+    if (this.commentsCommands?.displayPreviewOpt) {
       globals.push(new RuntimeVariable('displayPreviewOpt', this.commentsCommands.displayPreviewOpt));
     }
-    if (this.commentsCommands.listOfMacroInclusion) {
+    if (this.commentsCommands?.listOfMacroInclusion) {
       globals.push(new RuntimeVariable('listOfMacroInclusion', this.commentsCommands.listOfMacroInclusion.map((m, i) => new RuntimeVariable(`${i}`, m))));
     }
-    if (this.commentsCommands.listOfMacroInclusionRange) {
+    if (this.commentsCommands?.listOfMacroInclusionRange) {
       globals.push(new RuntimeVariable('listOfMacroInclusionRange', this.commentsCommands.listOfMacroInclusionRange.map((m, i) => new RuntimeVariable(`${i}`, JSON.stringify(m)))));
     }
-    if (this.commentsCommands.localmacrosubstitution) {
+    if (this.commentsCommands?.localmacrosubstitution) {
       globals.push(new RuntimeVariable('localmacrosubstitution', this.commentsCommands.localmacrosubstitution));
     }
-    if (this.commentsCommands.theme) {
+    if (this.commentsCommands?.theme) {
       globals.push(new RuntimeVariable('theme', this.commentsCommands.theme));
     }
-    if (this.commentsCommands.timeunit) {
+    if (this.commentsCommands?.timeunit) {
       globals.push(new RuntimeVariable('timeunit', this.commentsCommands.timeunit));
     }
     return globals;

@@ -98,7 +98,7 @@ export function activate(context: ExtensionContext) {
       // this short command allow to do links inside the document. it jumps to the required text offset, if a word is found. it selects the word.
       let editor = window.activeTextEditor;
       if (editor) {
-        let wordRange: Range = editor.document.getWordRangeAtPosition(editor.document.positionAt(offset));
+        let wordRange: Range = editor.document.getWordRangeAtPosition(editor.document.positionAt(offset)) as Range;
         if (wordRange !== undefined) {
           editor.selections = [new Selection(wordRange.start, wordRange.end)];
           editor.revealRange(wordRange, TextEditorRevealType.InCenterIfOutsideViewport);
@@ -136,7 +136,7 @@ export function activate(context: ExtensionContext) {
     wsDiagnostics.initializeDiagnostics();
 
     //each time focus change, we look at the file type and file name. Json + special name => stack preview.
-    window.onDidChangeActiveTextEditor((textEditor: TextEditor) => {
+    window.onDidChangeActiveTextEditor((textEditor: TextEditor | undefined) => {
       StatusbarUi.Init();
       if (!WarpScriptExtGlobals.weAreClosingFilesFlag &&
         typeof textEditor !== 'undefined' &&
@@ -144,7 +144,7 @@ export function activate(context: ExtensionContext) {
         textEditor.document.languageId === 'json' &&
         textEditor.document.uri.fsPath.match(jsonResultRegEx)) {
 
-        let suffixes = jsonResultRegEx.exec(textEditor.document.uri.fsPath);
+        let suffixes = jsonResultRegEx.exec(textEditor.document.uri.fsPath) ?? [];
         //look for a timeUnit indication into the json name
         const uuid: string = suffixes[1] || '';
         let timeUnit: string = suffixes[2] || 'u';
@@ -173,10 +173,15 @@ export function activate(context: ExtensionContext) {
               setTimeout(() => window.showTextDocument(textEditor.document, { preview: true, preserveFocus: false }), 500);
             }
             // when closed by the user
-            previewPanels.gts.onDidDispose(() => { previewPanels.gts = null; })
+            previewPanels.gts.onDidDispose(() => { previewPanels.gts = undefined; })
           }
           // refresh gtsPreview 
-          gtsPreviewWebview.getHtmlContent(textEditor.document.getText(), timeUnit, previewPanels.gts).then(htmlcontent => setTimeout(() => previewPanels.gts.webview.html = htmlcontent))
+          gtsPreviewWebview.getHtmlContent(textEditor.document.getText(), timeUnit, previewPanels.gts)
+            .then(htmlcontent => setTimeout(() => {
+              if (previewPanels.gts) {
+                previewPanels.gts.webview.html = htmlcontent;
+              }
+            }))
 
           // imagePreview panel, if one image found
           imagePreviewWebview.findImages(textEditor.document.getText(), textEditor.document.getText().length > 500000)
@@ -191,9 +196,11 @@ export function activate(context: ExtensionContext) {
                     setTimeout(() => window.showTextDocument(textEditor.document, { preview: true, preserveFocus: false }), 500);
                   }
                   // when closed by the user
-                  previewPanels.image.onDidDispose(() => { previewPanels.image = null; })
+                  previewPanels.image.onDidDispose(() => { previewPanels.image = undefined; })
                 }
-                imagePreviewWebview.getHtmlContent(imageList, previewPanels.image).then(htmlcontent => previewPanels.image.webview.html = htmlcontent);
+                imagePreviewWebview.getHtmlContent(imageList, previewPanels.image).then(htmlcontent => {
+                  if (previewPanels?.image?.webview) previewPanels.image.webview.html = htmlcontent;
+                });
               }
             })
 
@@ -204,32 +211,49 @@ export function activate(context: ExtensionContext) {
             if (previewPanels.discovery != null) {
               previewPanels.discovery.onDidDispose(() => { }); // no need for callback anymore, extension closes it
               previewPanels.discovery.dispose();
-              previewPanels.discovery = null;
+              previewPanels.discovery = undefined;
             }
             // and re open it...
             discoveryPreviewWebview.findDiscovery(textEditor.document.getText(), outputWin).then(json => {
               previewPanels.discovery = window.createWebviewPanel('discoverypreview', 'Discovery',
                 { viewColumn: ViewColumn.Two, preserveFocus: true },
                 { enableScripts: true, retainContextWhenHidden: true });
-              discoveryPreviewWebview.getHtmlContent(json, SharedMem.get(uuid), previewPanels.discovery).then((htmlcontent: string) => previewPanels.discovery.webview.html = htmlcontent);
-              previewPanels.discovery.onDidDispose(() => { previewPanels.discovery = null; }); // user close it
+              discoveryPreviewWebview.getHtmlContent(json, SharedMem.get(uuid), previewPanels.discovery)
+                .then((htmlcontent: string) => {
+                  if (previewPanels.discovery) {
+                    previewPanels.discovery.webview.html = htmlcontent;
+                  }
+                });
+              previewPanels.discovery.onDidDispose(() => { previewPanels.discovery = undefined; }); // user close it
             });
           }
           //focus if focus forced by optionu
-          if (previewSetting == 'G' && previewPanels.gts != null) {
-            setTimeout(() => previewPanels.gts.reveal(ViewColumn.Two), 200);
+          if (!!previewPanels?.gts && previewSetting === 'G') {
+            setTimeout(() => {
+              if (previewPanels.gts) {
+                previewPanels.gts.reveal(ViewColumn.Two);
+              }
+            }, 200);
           }
-          if (previewSetting == 'I' && previewPanels.image != null) {
-            setTimeout(() => previewPanels.image.reveal(ViewColumn.Two), 200);
+          if (previewSetting === 'I' && previewPanels.image) {
+            setTimeout(() => {
+              if (previewPanels.image) {
+                previewPanels.image.reveal(ViewColumn.Two);
+              }
+            }, 200);
           }
-          if (previewSetting == 'D' && previewPanels.discovery != null) {
-            setTimeout(() => previewPanels.discovery.reveal(ViewColumn.Two), 200);
+          if (previewSetting === 'D' && previewPanels.discovery) {
+            setTimeout(() => {
+              if (previewPanels.discovery) {
+                previewPanels.discovery.reveal(ViewColumn.Two);
+              }
+            }, 200);
           }
         }
       }
     });
     console.log('Preview loaded');
-
+   // DebugPluginWebView.render(context.extensionUri, context);
     // display Discovery version at startup
     try {
       outputWin.appendLine(`Discovery version ${WarpScriptExtConstants.getPackageVersion(context, join('assets', '@senx', 'discovery-widgets', 'package.json'))}`);
@@ -275,24 +299,24 @@ export function activate(context: ExtensionContext) {
         ];
       }
     }, DebugConfigurationProviderTriggerKind.Dynamic));
-  
-    const  factory = new InlineDebugAdapterFactory();
+
+    const factory = new InlineDebugAdapterFactory();
 
     context.subscriptions.push(debug.registerDebugAdapterDescriptorFactory('warpscript', factory));
     if ('dispose' in factory) {
       context.subscriptions.push(factory as any);
     }
-  
+
     // override VS Code's default implementation of the debug hover
     // here we match only Mock "variables", that are words starting with an '$'
     context.subscriptions.push(languages.registerEvaluatableExpressionProvider('warpscript', {
       provideEvaluatableExpression(document: TextDocument, position: any): ProviderResult<EvaluatableExpression> {
         const VARIABLE_REGEXP = /\$[a-z][a-z0-9]*/ig;
-        const line = document.lineAt(position.line).text;  
+        const line = document.lineAt(position.line).text;
         let m: RegExpExecArray | null;
         while (m = VARIABLE_REGEXP.exec(line)) {
           const varRange = new Range(position.line, m.index, position.line, m.index + m[0].length);
-  
+
           if (varRange.contains(position)) {
             return new EvaluatableExpression(varRange);
           }
@@ -305,61 +329,61 @@ export function activate(context: ExtensionContext) {
 
 class Warp10DebugConfigurationProvider implements DebugConfigurationProvider {
 
-	/**
-	 * Massage a debug configuration just before a debug session is being launched,
-	 * e.g. add all missing attributes to the debug configuration.
-	 */
-	resolveDebugConfiguration(_folder: WorkspaceFolder | undefined, config: DebugConfiguration, _token?: CancellationToken): ProviderResult<DebugConfiguration> {
+  /**
+   * Massage a debug configuration just before a debug session is being launched,
+   * e.g. add all missing attributes to the debug configuration.
+   */
+  resolveDebugConfiguration(_folder: WorkspaceFolder | undefined, config: DebugConfiguration, _token?: CancellationToken): ProviderResult<DebugConfiguration> {
 
-		// if launch.json is missing or empty
-		if (!config.type && !config.request && !config.name) {
-			const editor = window.activeTextEditor;
-			if (editor && editor.document.languageId === 'warpscript') {
-				config.type = 'warpscript';
-				config.name = 'Launch';
-				config.request = 'launch';
-				config.program = '${file}';
-				config.stopOnEntry = true;
-			}
-		}
+    // if launch.json is missing or empty
+    if (!config.type && !config.request && !config.name) {
+      const editor = window.activeTextEditor;
+      if (editor && editor.document.languageId === 'warpscript') {
+        config.type = 'warpscript';
+        config.name = 'Launch';
+        config.request = 'launch';
+        config.program = '${file}';
+        config.stopOnEntry = true;
+      }
+    }
 
-		if (!config.program) {
-			return window.showInformationMessage("Cannot find a program to debug").then(_ => {
-				return undefined;	// abort launch
-			});
-		}
+    if (!config.program) {
+      return window.showInformationMessage("Cannot find a program to debug").then(_ => {
+        return undefined;	// abort launch
+      });
+    }
 
-		return config;
-	}
+    return config;
+  }
 }
 
 export const workspaceFileAccessor: FileAccessor = {
-	isWindows: typeof process !== 'undefined' && process.platform === 'win32',
-	async readFile(path: string): Promise<Uint8Array> {
-		let uri: Uri;
-		try {
-			uri = pathToUri(path);
-		} catch (e) {
-			return new TextEncoder().encode(`cannot read '${path}'`);
-		}
+  isWindows: typeof process !== 'undefined' && process.platform === 'win32',
+  async readFile(path: string): Promise<Uint8Array> {
+    let uri: Uri;
+    try {
+      uri = pathToUri(path);
+    } catch (e) {
+      return new TextEncoder().encode(`cannot read '${path}'`);
+    }
 
-		return await workspace.fs.readFile(uri);
-	},
-	async writeFile(path: string, contents: Uint8Array) {
-		await workspace.fs.writeFile(pathToUri(path), contents);
-	}
+    return await workspace.fs.readFile(uri);
+  },
+  async writeFile(path: string, contents: Uint8Array) {
+    await workspace.fs.writeFile(pathToUri(path), contents);
+  }
 };
 
 function pathToUri(path: string) {
-	try {
-		return Uri.file(path);
-	} catch (e) {
-		return Uri.parse(path);
-	}
+  try {
+    return Uri.file(path);
+  } catch (e) {
+    return Uri.parse(path);
+  }
 }
 
 class InlineDebugAdapterFactory implements DebugAdapterDescriptorFactory {
-	createDebugAdapterDescriptor(_session: DebugSession): ProviderResult<DebugAdapterDescriptor> {
-		return new DebugAdapterInlineImplementation(new Warp10DebugSession(workspaceFileAccessor));
-	}
+  createDebugAdapterDescriptor(_session: DebugSession): ProviderResult<DebugAdapterDescriptor> {
+    return new DebugAdapterInlineImplementation(new Warp10DebugSession(workspaceFileAccessor));
+  }
 }

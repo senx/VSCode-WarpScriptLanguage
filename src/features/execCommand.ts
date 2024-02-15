@@ -1,14 +1,14 @@
 import { StatusbarUi } from './../statusbarUi';
-import * as request from 'request';
+import request from 'request';
 import WSDocumentLinksProvider from '../providers/wsDocumentLinksProvider';
 import { OutputChannel, Progress, ProgressLocation, TextDocument, Uri, ViewColumn, window, workspace } from 'vscode';
 import { specialCommentCommands } from '../warpScriptParser';
 import WarpScriptParser from '../warpScriptParser';
 import { Warp10 } from '@senx/warp10';
 import { SocksProxyAgent } from 'socks-proxy-agent';
-import * as  ProxyAgent from 'proxy-agent';
-import * as  pac from 'pac-resolver';
-import * as  dns from 'dns';
+import ProxyAgent from 'proxy-agent';
+import pac from 'pac-resolver';
+import dns from 'dns';
 import { promisify } from 'util';
 import { gzip } from 'zlib';
 import { endpointsForThisSession, sessionName } from '../globals';
@@ -58,17 +58,17 @@ export default class ExecCommand {
       }
       StatusbarUi.Working('loading...');
 
-      let Warp10URL: string = workspace.getConfiguration().get('warpscript.Warp10URL');
-      let PreviewTimeUnit: string = workspace.getConfiguration().get('warpscript.DefaultTimeUnit');
-      const jsonMaxSizeForAutoUnescape: number = workspace.getConfiguration().get('warpscript.maxFileSizeForAutomaticUnicodeEscape');
-      const jsonMaxSizeBeforeWarning: number = workspace.getConfiguration().get('warpscript.maxFileSizeBeforeJsonWarning');
-      const useGZIP: boolean = workspace.getConfiguration().get('warpscript.useGZIP');
-      const timeout: number = workspace.getConfiguration().get('warpscript.http.timeout');
-      const proxy_pac: string = workspace.getConfiguration().get('warpscript.ProxyPac');
-      const proxy_directUrl: string = workspace.getConfiguration().get('warpscript.ProxyURL');
+      let Warp10URL: string = workspace.getConfiguration().get('warpscript.Warp10URL') as string;
+      let PreviewTimeUnit: string = workspace.getConfiguration().get('warpscript.DefaultTimeUnit') as string;
+      const jsonMaxSizeForAutoUnescape: number = workspace.getConfiguration().get('warpscript.maxFileSizeForAutomaticUnicodeEscape') as number;
+      const jsonMaxSizeBeforeWarning: number = workspace.getConfiguration().get('warpscript.maxFileSizeBeforeJsonWarning') as number;
+      const useGZIP: boolean = !!workspace.getConfiguration().get('warpscript.useGZIP');
+      const timeout: number = workspace.getConfiguration().get('warpscript.http.timeout') as number;
+      const proxy_pac: string = workspace.getConfiguration().get('warpscript.ProxyPac') as string;
+      const proxy_directUrl: string = workspace.getConfiguration().get('warpscript.ProxyURL') as string;
       const execDate: string = new Date().toLocaleTimeString();
       const document: TextDocument = window.activeTextEditor.document;
-      const baseFilename: string = document.fileName.split('\\').pop().split('/').pop();
+      const baseFilename: string = !!document ? ((document.fileName ?? '').split('\\').pop() ?? '').split('/').pop() ?? '' as string : '';
 
       window.withProgress<boolean>({
         location: ProgressLocation.Window,
@@ -129,7 +129,7 @@ ${DiscoveryPreviewWebview.getTemplate(context, discoveryTheme)}
           if (substitutionWithLocalMacros) {
 
             // first, prepend macros of the special comments "// @include macro: "
-            for (let macroName of commentsCommands.listOfMacroInclusion) {
+            for (let macroName of commentsCommands.listOfMacroInclusion ?? []) {
               if (macroName.startsWith('@')) {
                 macroName = macroName.substring(1);
               }
@@ -198,14 +198,14 @@ ${DiscoveryPreviewWebview.getTemplate(context, discoveryTheme)}
             }
 
           } else {
-            if (commentsCommands.listOfMacroInclusion.length > 0) {
+            if (commentsCommands.listOfMacroInclusion && commentsCommands.listOfMacroInclusion.length > 0) {
               outputWin.show();
               outputWin.append('[' + execDate + '] ');
               outputWin.appendLine("warning '// @localmacrosubstitution false' also disables all the '// @include macro:' instructions")
             }
           }
 
-          if (window.activeTextEditor.document.languageId === 'flows') {
+          if (window?.activeTextEditor?.document.languageId === 'flows') {
             executedWarpScript = `<'
 ${executedWarpScript} 
 '>
@@ -360,7 +360,7 @@ FLOWS
                       window.showErrorMessage(err.message);
                       StatusbarUi.Execute();
                     }
-                  } catch (e) {
+                  } catch (e: any) {
                     window.showErrorMessage(e.message || e);
                     StatusbarUi.Execute();
                   }
@@ -466,7 +466,7 @@ FLOWS
 
       // 3 seconds to abort on every endpoints
       Object.keys(endpointsForThisSession).forEach(endpoint => {
-        let req = new Warp10({endpoint}); // 3 second timeout
+        let req = new Warp10({ endpoint }); // 3 second timeout
         req.exec(`<% "${sessionName}" 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`)
           .then((answer: any) => {
             if (answer.result[0]) {
