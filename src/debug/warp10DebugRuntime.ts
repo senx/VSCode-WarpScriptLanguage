@@ -175,6 +175,12 @@ export class Warp10DebugRuntime extends EventEmitter {
     this.sendEvent('output', 'out', e, this.program, this.currentLine);
   }
 
+  public async getContent(program: string): Promise<string> {
+    if (!this.ws) {
+      await this.loadSource(this.normalizePathAndCasing(program));
+    }
+    return this.ws;
+  }
 
   /**
    * Start executing the given program.
@@ -183,7 +189,7 @@ export class Warp10DebugRuntime extends EventEmitter {
     this.program = program;
     this.firstCnx = true;
     this.inDebug = true;
-    await this.loadSource(this.normalizePathAndCasing(program));
+    await this.getContent(program);
     // Open WebSocket
     this.sid = v4();
     this.commentsCommands = WarpScriptParser.extractSpecialComments(this.ws ?? '');

@@ -41,6 +41,7 @@ export class ProfileView {
           localResourceRoots: [Uri.joinPath(extensionUri, "out")],
         }
       );
+   //   panel.webview.postMessage({ command: 'refactor' });
 
       ProfileView.currentPanel = new ProfileView(panel, extensionUri, context);
     }

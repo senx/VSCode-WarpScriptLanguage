@@ -1,0 +1,28 @@
+.bar {
+  height: 100%;
+}
+
+img.logo {
+  height: 50px;
+  width: auto;
+}
+
+.links {
+  width: auto;
+}
+
+header {
+  padding: 5px;
+}
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-section a {
+  padding-left: 5px;
+  padding-right: 5px;
+}

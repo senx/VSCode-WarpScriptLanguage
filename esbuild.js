@@ -17,19 +17,23 @@ const webviewConfig = {
   ...baseConfig,
   target: "es2020",
   format: "esm",
-  entryPoints: ["./src/static/profile.ts"],
-  outfile: "./out/static/profile.js",
+  entryPoints: ["./src/static/profile.ts", "./src/static/tracePluginInfo.ts"],
+  outdir: "./out/static/",
   plugins: [
-    // Copy webview css and ttf files to `out` directory unaltered
-    /*
     copy({
       resolveFrom: "cwd",
       assets: {
-        from: ["./src/webview/*.css", "./src/webview/*.ttf"],
-        to: ["./out"],
+        from: ["./images/*.*"],
+        to: ["./out/images"],
       },
     }),
-    */
+    copy({
+      resolveFrom: "cwd",
+      assets: {
+        from: ["./src/static/*.css", "./src/static/*.ttf" ],
+        to: ["./out/static"],
+      },
+    }),
   ],
 };
 

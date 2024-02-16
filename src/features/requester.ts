@@ -113,4 +113,17 @@ export class Requester {
       });
     });
   }
+
+  public static getInstanceInfo(endpoint: string) {
+    const ws = `{ 
+  "stu" STU 
+  "rev" REV
+  'extensions' {
+    'trace'   'io.senx.plugins.trace.TraceWarpScriptExtension' EXTLOADED
+    'stackPS' 'io.warp10.script.ext.stackps.StackPSWarpScriptExtension' EXTLOADED
+    'git'     'io.warp10.ext.git.GitWarpScriptExtension' EXTLOADED
+  }
+}`;
+    return Requester.send(endpoint, ws);
+  }
 }

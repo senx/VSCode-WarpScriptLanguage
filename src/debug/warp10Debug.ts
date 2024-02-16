@@ -28,10 +28,12 @@ import { Subject } from 'await-notify';
 import * as base64 from 'base64-js';
 import ExecCommand from '../features/execCommand';
 import WarpScriptExtConstants from '../constants';
-import { Range, TextDocument, TextEditorDecorationType, Uri, ViewColumn, window, workspace } from 'vscode';
+import { ExtensionContext, Range, TextDocument, TextEditorDecorationType, Uri, ViewColumn, window, workspace } from 'vscode';
 import { SharedMem } from '../extension';
 import WarpScriptParser, { specialCommentCommands } from '../warpScriptParser';
 import { FileAccessor, IRuntimeBreakpoint, IRuntimeVariableType, RuntimeVariable, Warp10DebugRuntime } from './warp10DebugRuntime';
+import { Requester } from '../features/requester';
+import { TracePluginInfo } from '../webviews/tracePluginInfo';
 
 /**
  * This interface describes the mock-debug specific launch attributes
@@ -64,19 +66,23 @@ export class Warp10DebugSession extends LoggingDebugSession {
   private _progressId = 10000;
   private _cancelledProgressId: string | undefined = undefined;
   private _isProgressCancellable = true;
-
   private _valuesInHex = false;
   private _useInvalidatedEvent = false;
   private executedWarpScript: string | undefined;
   private inlineDecoration: TextEditorDecorationType | undefined;
+  private context: ExtensionContext;
+
+
   static threadID: number = 1;
+
 
   /**
    * Creates a new debug adapter that is used for one debug session.
    * We configure the default implementation of a debug adapter here.
    */
-  public constructor(fileAccessor: FileAccessor) {
+  public constructor(fileAccessor: FileAccessor, context: ExtensionContext) {
     super("warpscript-debug.txt");
+    this.context = context;
 
     // this debugger uses zero-based lines and columns
     this.setDebuggerLinesStartAt1(false);
@@ -110,7 +116,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   private log(l: any) {
-    console.log(l)
     let category: string;
     switch (l.type) {
       case 'prio': category = 'important'; break;
@@ -130,7 +135,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     if (l.line !== undefined) e.body.line = this.convertDebuggerLineToClient(l.line);
     if (l.column !== undefined) e.body.column = this.convertDebuggerColumnToClient(l.column);
     if (l.type === 'err' && !!l.popin) {
-      window.showErrorMessage('SenX Warp 10 - Trace plugin', { modal: true, detail: l.text });
+      window.showErrorMessage('SenX Warp 10 - Trace plugin', { detail: l.text }, ...['Cancel']);
     } else if (l.type === 'err') {
       window.showErrorMessage(l.text);
     }
@@ -307,9 +312,33 @@ export class Warp10DebugSession extends LoggingDebugSession {
     logger.setup(args.trace ? Logger.LogLevel.Verbose : Logger.LogLevel.Stop, false);
     // wait 1 second until configuration has finished (and configurationDoneRequest has been called)
     await this._configurationDone.wait(1000);
-    // start the program in the runtime
-    this.executedWarpScript = await this._runtime.start(args.program);
-    this.sendResponse(response);
+
+    const ws = await this._runtime.getContent(args.program);
+    const commentsCommands = WarpScriptParser.extractSpecialComments(ws ?? '');
+    const endpoint = commentsCommands.endpoint || workspace.getConfiguration().get('warpscript.Warp10URL');
+
+    // check if trace plugin is active
+    const checkWS = JSON.parse(await Requester.getInstanceInfo(endpoint));
+    console.log({ checkWS });
+    const hasTrace = (checkWS[0]?.extensions ?? {}).trace;
+    if (!hasTrace) {
+      if (this.inlineDecoration) {
+        this.inlineDecoration.dispose();
+      }
+      this.sendEvent(new TerminatedEvent());
+      window
+        .showWarningMessage('The Warp 10 Trace Plugin is not activated', ...['Learn more', 'Cancel'])
+        .then(selection => {
+          if ('Learn more' === selection) {
+            TracePluginInfo.render(this.context);
+          }
+        });
+    } else {
+
+      // start the program in the runtime
+      this.executedWarpScript = await this._runtime.start(args.program);
+      this.sendResponse(response);
+    }
   }
 
   protected setFunctionBreakPointsRequest(response: DebugProtocol.SetFunctionBreakpointsResponse, _args: DebugProtocol.SetFunctionBreakpointsArguments, _request?: DebugProtocol.Request): void {

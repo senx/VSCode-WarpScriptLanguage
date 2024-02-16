@@ -13,9 +13,21 @@ provideVSCodeDesignSystem().register(allComponents);
 // DOM to load before we can reference any of the HTML elements
 // or toolkit components
 window.addEventListener("load", main);
+window.addEventListener('message', event => {
 
+  const message = event.data; // The JSON data our extension sent
+
+  switch (message.command) {
+      case 'refactor':
+        
+          break;
+  }
+});
 function main() {
   // Define default data grid
+
+
+  
   const defaultDataGrid = document.getElementById("default-grid") as DataGrid;
   defaultDataGrid.rowsData = [
     {

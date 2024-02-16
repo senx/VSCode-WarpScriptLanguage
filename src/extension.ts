@@ -301,6 +301,7 @@ export function activate(context: ExtensionContext) {
     }, DebugConfigurationProviderTriggerKind.Dynamic));
 
     const factory = new InlineDebugAdapterFactory();
+    factory.setContext(context);
 
     context.subscriptions.push(debug.registerDebugAdapterDescriptorFactory('warpscript', factory));
     if ('dispose' in factory) {
@@ -383,7 +384,11 @@ function pathToUri(path: string) {
 }
 
 class InlineDebugAdapterFactory implements DebugAdapterDescriptorFactory {
+  context: ExtensionContext;
+  setContext(context: ExtensionContext) {
+    this.context = context;
+  }
   createDebugAdapterDescriptor(_session: DebugSession): ProviderResult<DebugAdapterDescriptor> {
-    return new DebugAdapterInlineImplementation(new Warp10DebugSession(workspaceFileAccessor));
+    return new DebugAdapterInlineImplementation(new Warp10DebugSession(workspaceFileAccessor, this.context));
   }
 }
