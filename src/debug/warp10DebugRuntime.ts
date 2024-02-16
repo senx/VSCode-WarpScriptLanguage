@@ -162,13 +162,13 @@ export class Warp10DebugRuntime extends EventEmitter {
     super();
   }
 
-  private log(mess: any) {
+  private log(mess: any, popin?: boolean) {
     // type, text, filePath, line, column
-    this.sendEvent('output', 'prio', mess, this.program, this.currentLine);
+    this.sendEvent('output', 'prio', mess, this.program, this.currentLine, undefined, popin);
   }
 
-  private error(e: any) {
-    this.sendEvent('output', 'err', e, this.program, this.currentLine);
+  private error(e: any, popin?: boolean) {
+    this.sendEvent('output', 'err', e, this.program, this.currentLine, undefined, popin);
   }
 
   private debug(e: any) {
@@ -198,7 +198,7 @@ export class Warp10DebugRuntime extends EventEmitter {
     this.webSocket.on('open', () => this.log('Connected to server'));
     this.webSocket.on('error', (e: any) => {
       if (e.code === 'ECONNREFUSED' || e.code === 'ESOCKETTIMEDOUT') {
-        this.error(`${traceURL} seems to be unreachable.`);
+        this.error(`${traceURL} seems to be unreachable.`, true);
       } else {
         this.error(e);
       }
@@ -209,9 +209,9 @@ export class Warp10DebugRuntime extends EventEmitter {
       if (msg.toString().startsWith('Welcome to the ')) {
         this.sendtoWS('ATTACH ' + this.sid);
       }
-      if (msg.toString().startsWith('// Maximum server capacity ')) {
+      if (msg.toString().startsWith('// Maximum number of concurrent sessions reached')) {
         this.close();
-        this.error(msg.toString().replace('// ', ''));
+        this.error(msg.toString().replace('// ', ''), true);
       }
       if (msg.toString().startsWith('OK Attached to session')) {
         Requester.send(this.endpoint ?? '', wrapped)
@@ -220,8 +220,12 @@ export class Warp10DebugRuntime extends EventEmitter {
             this.sendEvent('debugResult', r);
           })
           .catch((e: any) => {
-            console.error('WS Error', e, wrapped);
-            this.error(e.message ?? e);
+            if ((e.message ?? e).startsWith('Exception at ')) {
+              this.close();
+              this.error(((e.message ?? e).split('[TOP] ')[1] ?? '').replace(/\(/, '').replace(/\)/, ''), true);
+            } else {
+              this.error(e.message ?? e);
+            }
             this.close();
           });
       } else if (msg.toString() === 'ERROR No paused execution.') {

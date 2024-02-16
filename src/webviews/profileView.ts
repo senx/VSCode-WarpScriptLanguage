@@ -70,7 +70,7 @@ export class ProfileView {
 
   private _getWebviewContent(webview: Webview, extensionUri: Uri) {
     const webviewUri = this.getUri(webview, extensionUri, ["out", 'static', "profile.js"]);
-    const styleUri: string = WarpScriptExtConstants.getRessource(this.context, join('out', 'static','style.css'), this._panel);
+    // const styleUri: string = WarpScriptExtConstants.getRessource(this.context, join('out', 'static','style.css'), this._panel);
     const codiconUri: string = WarpScriptExtConstants.getRessource(this.context, join('out', 'static','codicon.css'), this._panel);
     return /*html*/ `
       <!DOCTYPE html>

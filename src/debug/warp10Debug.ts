@@ -98,7 +98,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
       }
     });
     this._runtime.on('breakpointValidated', (bp: IRuntimeBreakpoint) => this.sendEvent(new BreakpointEvent('changed', { verified: bp.verified, id: bp.id } as DebugProtocol.Breakpoint)));
-    this._runtime.on('output', (type, text, filePath, line, column) => this.log({ text, filePath, line, column, type }));
+    this._runtime.on('output', (type, text, filePath, line, column, popin) => this.log({ text, filePath, line, column, type, popin }));
     this._runtime.on('end', () => {
       if (this.inlineDecoration) {
         this.inlineDecoration.dispose();
@@ -106,12 +106,11 @@ export class Warp10DebugSession extends LoggingDebugSession {
       this.sendEvent(new TerminatedEvent());
     });
     this._runtime.on('debugResult', (r: any) => this.handleResult(r).then(() => this.sendEvent(new TerminatedEvent())));
-    this._runtime.on('inline-mark', (r: any) => {
-      console.log(r)
-    });
+    this._runtime.on('inline-mark', (r: any) => console.log(r));
   }
 
   private log(l: any) {
+    console.log(l)
     let category: string;
     switch (l.type) {
       case 'prio': category = 'important'; break;
@@ -130,7 +129,9 @@ export class Warp10DebugSession extends LoggingDebugSession {
     if (l.filePath) e.body.source = this.createSource(l.filePath);
     if (l.line !== undefined) e.body.line = this.convertDebuggerLineToClient(l.line);
     if (l.column !== undefined) e.body.column = this.convertDebuggerColumnToClient(l.column);
-    if (l.type === 'err') {
+    if (l.type === 'err' && !!l.popin) {
+      window.showErrorMessage('SenX Warp 10 - Trace plugin', { modal: true, detail: l.text });
+    } else if (l.type === 'err') {
       window.showErrorMessage(l.text);
     }
     this.sendEvent(e);
