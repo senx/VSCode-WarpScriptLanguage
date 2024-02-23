@@ -96,7 +96,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     this._runtime.on('stopOnBreakpoint', () => this.sendEvent(new StoppedEvent('breakpoint', Warp10DebugSession.threadID)));
     this._runtime.on('stopOnDataBreakpoint', () => this.sendEvent(new StoppedEvent('data breakpoint', Warp10DebugSession.threadID)));
     this._runtime.on('stopOnInstructionBreakpoint', () => this.sendEvent(new StoppedEvent('instruction breakpoint', Warp10DebugSession.threadID)));
-    this._runtime.on('stopOnException', (exception) => {
+    this._runtime.on('stopOnException', exception => {
       if (exception) {
         this.sendEvent(new StoppedEvent(`exception(${exception})`, Warp10DebugSession.threadID));
       } else {
@@ -316,29 +316,37 @@ export class Warp10DebugSession extends LoggingDebugSession {
     const ws = await this._runtime.getContent(args.program);
     const commentsCommands = WarpScriptParser.extractSpecialComments(ws ?? '');
     const endpoint = commentsCommands.endpoint || workspace.getConfiguration().get('warpscript.Warp10URL');
-
-    // check if trace plugin is active
-    const checkWS = JSON.parse(await Requester.getInstanceInfo(endpoint));
-    console.log({ checkWS });
-    const hasTrace = (checkWS[0]?.extensions ?? {}).trace;
-    if (!hasTrace) {
-      if (this.inlineDecoration) {
-        this.inlineDecoration.dispose();
-      }
-      this.sendEvent(new TerminatedEvent());
-      window
-        .showWarningMessage('The Warp 10 Trace Plugin is not activated', ...['Learn more', 'Cancel'])
-        .then(selection => {
-          if ('Learn more' === selection) {
-            TracePluginInfo.render(this.context);
+    Requester.getInstanceInfo(endpoint)
+      .then(info => {
+        // check if trace plugin is active
+        const checkWS = JSON.parse(info);
+        console.log({ checkWS });
+        const hasTrace = (checkWS[0]?.extensions ?? {}).trace;
+        if (!hasTrace) {
+          if (this.inlineDecoration) {
+            this.inlineDecoration.dispose();
           }
-        });
-    } else {
+          this.sendEvent(new TerminatedEvent());
+          window
+            .showWarningMessage('The Warp 10 Trace Plugin is not activated', ...['Learn more', 'Cancel'])
+            .then(selection => {
+              if ('Learn more' === selection) {
+                TracePluginInfo.render(this.context);
+              }
+            });
+        } else {
+          // start the program in the runtime
+          this._runtime.start(args.program).then(r => {
+            this.executedWarpScript = r;
+            this.sendResponse(response);
+          });
+        }
+      })
+      .catch(e => {
+        window.showErrorMessage(e.message ?? e, ...['Cancel']);
+        this.sendEvent(new TerminatedEvent());
+      });
 
-      // start the program in the runtime
-      this.executedWarpScript = await this._runtime.start(args.program);
-      this.sendResponse(response);
-    }
   }
 
   protected setFunctionBreakPointsRequest(response: DebugProtocol.SetFunctionBreakpointsResponse, _args: DebugProtocol.SetFunctionBreakpointsArguments, _request?: DebugProtocol.Request): void {

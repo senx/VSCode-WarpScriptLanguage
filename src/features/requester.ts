@@ -83,20 +83,28 @@ export class Requester {
         request.post(request_options, (error: any, response: any, _body: string) => {
           if (error) {
             // error is set if server is unreachable or if the request is aborted
-            console.error(error);
+            let rejection: any = {};
             if (error.aborted) {
-              reject({ message: 'Aborted' });
+              rejection = { message: 'Aborted' };
             } else {
-              reject({ message: `Cannot find or reach server, check your Warp 10 server endpoint: ${error.message}` });
+              rejection = { message: `Cannot find or reach server, check your Warp 10 server endpoint: ${error.message}` };
             }
+            console.error(rejection.message);
+            reject(rejection);
           } else if (response.statusCode == 301) {
-            reject({ message: `Check your Warp 10 server endpoint ("${response.request.uri.href}), you may have forgotten the api/v0/exec in the URL` });
+            const message = `Check your Warp 10 server endpoint ("${response.request.uri.href}), you may have forgotten the api/v0/exec in the URL`;
+            console.error(message);
+            reject({ message });
           } else if (response.statusCode != 200 && response.statusCode != 500) {
             // manage non 200 answers here
-            reject({ message: `Error, server answered code ${response.statusCode}: ${response.body.toString().slice(0, 1000)}` });
+            const message = `Error, server answered code ${response.statusCode}: ${response.body.toString().slice(0, 1000)}`;
+            console.error(message);
+            reject({ message });
           } else if (response.statusCode == 500 && !response.headers['x-warp10-error-message']) {
             // received a 500 error without any x-warp10-error-message. Could also be a endpoint error.
-            reject({ message: `Error, error 500 without any error. Are you sure you are using an exec endpoint ? Endpoint: ${response.request.uri.href}: ${response.body.toString().slice(0, 1000)}` });
+            const message = `Error, error 500 without any error. Are you sure you are using an exec endpoint ? Endpoint: ${response.request.uri.href}: ${response.body.toString().slice(0, 1000)}`;
+            console.error(message);
+            reject({ message });
           } else if (response.headers['x-warp10-error-message']) {
             let line = parseInt(response.headers['x-warp10-error-line'])
             // Check if error message contains infos from LINEON
@@ -105,7 +113,8 @@ export class Requester {
             while ((lineonMatch = lineonPattern.exec(response.headers['x-warp10-error-message']))) {
               line = parseInt(lineonMatch[1]);
             }
-            reject({ message: response.headers['x-warp10-error-message'], line });
+            const message = response.headers['x-warp10-error-message'];
+            reject({ message, line });
           } else {
             resolve(response.body);
           }

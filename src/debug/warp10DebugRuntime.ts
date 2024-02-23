@@ -200,9 +200,11 @@ export class Warp10DebugRuntime extends EventEmitter {
     }
     const wrapped = `true STMTPOS '${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD <% ${this.addBreakPoints(this.ws ?? '')} %> '${this.sid}' TRACE EVAL`;
     const traceURL: string = workspace.getConfiguration().get('warpscript.traceURL') as string;
+    console.log('new webSocket')
     this.webSocket = new WebSocket(traceURL);
     this.webSocket.on('open', () => this.log('Connected to server'));
     this.webSocket.on('error', (e: any) => {
+      console.log('webSocket', e)
       if (e.code === 'ECONNREFUSED' || e.code === 'ESOCKETTIMEDOUT') {
         this.error(`${traceURL} seems to be unreachable.`, true);
       } else {
@@ -226,6 +228,7 @@ export class Warp10DebugRuntime extends EventEmitter {
             this.sendEvent('debugResult', r);
           })
           .catch((e: any) => {
+            console.log('exec', e)
             if ((e.message ?? e).startsWith('Exception at ')) {
               this.close();
               this.error(((e.message ?? e).split('[TOP] ')[1] ?? '').replace(/\(/, '').replace(/\)/, ''), true);
