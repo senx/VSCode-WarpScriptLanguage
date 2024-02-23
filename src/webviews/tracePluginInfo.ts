@@ -114,23 +114,24 @@ export class TracePluginInfo {
             </section>
         </header>
           <h1>The Warp 10 Trace Plugin</h1>
+          <vscode-divider></vscode-divider>
           <p>The Warp 10 Trace Plugin is a commercial plugin that aims to trace code execution.</p>
-          <p>Features</p>
-          <ul>
-            <li>Debug <ul>
+          <p>Thanks to that plugin, you will be able to:</p>
+          <ul style="margin-bottom: 1.2em;">
+            <li>Debug <ul class="checks">
               <li>Add breakpoints</li>
               <li>Navigate to nex breakpoint</li>
               <li>Navigate step by step</li>
               <li>Explore variables values</li>
               <li>See the stack state during execution</li>
               </ul></li>
-            <li>Profile <ul>
+            <li>Profile <ul class="checks">
               <li>See time spend per function/macro</li>
               <li>Discover iteration counts</li>
             </ul></li>
-            </ul>
-
-            <vscode-button appearance="primary" id="contact">Contact us</vscode-button>
+          </ul>
+          <vscode-divider style="margin-bottom: 1.2em;"></vscode-divider>
+          <vscode-button appearance="primary" id="contact">Contact sales</vscode-button>
           <script>var exports = {"__esModule": true};</script>
           <script type="module" src="${webviewUri}"></script>
         </body>

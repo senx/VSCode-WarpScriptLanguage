@@ -26,3 +26,16 @@ header {
   padding-left: 5px;
   padding-right: 5px;
 }
+
+ul.checks {
+  list-style-type: "✓";
+  list-style-position: outside;
+
+  li {
+    padding-left: 5px;
+
+    &::marker {
+      font-size: 1.2em;
+    }
+  }
+}
