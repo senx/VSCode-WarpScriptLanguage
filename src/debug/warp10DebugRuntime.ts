@@ -231,7 +231,7 @@ export class Warp10DebugRuntime extends EventEmitter {
             console.log('exec', e)
             if ((e.message ?? e).startsWith('Exception at ')) {
               this.close();
-              this.error(((e.message ?? e).split('[TOP] ')[1] ?? '').replace(/\(/, '').replace(/\)/, ''), true);
+              this.error(((e.message ?? e).split('[TOP]')[1] ?? '').replace(/\(/, '').replace(/\)/, ''), true);
             } else {
               this.error(e.message ?? e);
             }

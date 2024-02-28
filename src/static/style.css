@@ -35,3 +35,73 @@ ul.checks {
 ul.checks li {
   padding-left: 5px;
 }
+
+body {
+  background-color: #fff;
+  color: #000;
+  padding: 0;
+}
+
+body.theme-dark {
+  background-color: #222;
+  color: #fff;
+}
+
+header {
+  padding: 5px;
+}
+
+.navbar-section a,
+.navbar-section a:hover,
+.navbar-section a:visited {
+  color: #004eff !important;
+}
+
+body.theme-dark .navbar-section a,
+body.theme-dark .navbar-section a:hover,
+body.theme-dark .navbar-section a:visited {
+  color: #fff !important;
+}
+
+.bar {
+  height: 100%;
+}
+
+img.logo {
+  height: 50px;
+  width: auto;
+}
+
+.links {
+  width: auto;
+}
+
+.lead {
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}

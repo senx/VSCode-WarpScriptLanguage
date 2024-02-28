@@ -135,7 +135,17 @@ export class Warp10DebugSession extends LoggingDebugSession {
     if (l.line !== undefined) e.body.line = this.convertDebuggerLineToClient(l.line);
     if (l.column !== undefined) e.body.column = this.convertDebuggerColumnToClient(l.column);
     if (l.type === 'err' && !!l.popin) {
-      window.showErrorMessage('SenX Warp 10 - Trace plugin', { detail: l.text }, ...['Cancel']);
+      window.showErrorMessage(l.text, ...['Cancel']);
+      if (/Unknown function 'STMTPOS'/.test(l.text)) {
+        this.sendEvent(new TerminatedEvent());
+        window
+          .showWarningMessage('The Warp 10 Trace Plugin is not activated', ...['Learn more', 'Cancel'])
+          .then(selection => {
+            if ('Learn more' === selection) {
+              TracePluginInfo.render(this.context);
+            }
+          });
+      }
     } else if (l.type === 'err') {
       window.showErrorMessage(l.text);
     }
