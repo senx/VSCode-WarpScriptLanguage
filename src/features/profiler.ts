@@ -1,7 +1,7 @@
 import { StatusbarUi } from './../statusbarUi';
 import request from 'request';
 import WSDocumentLinksProvider from '../providers/wsDocumentLinksProvider';
-import { OutputChannel, Progress, ProgressLocation, TextDocument, Uri, ViewColumn, window, workspace } from 'vscode';
+import { ExtensionContext, OutputChannel, Progress, ProgressLocation, TextDocument, Uri, ViewColumn, window, workspace } from 'vscode';
 import { specialCommentCommands } from '../warpScriptParser';
 import WarpScriptParser from '../warpScriptParser';
 import { Warp10 } from '@senx/warp10';
@@ -14,19 +14,16 @@ import { gzip } from 'zlib';
 import { endpointsForThisSession, sessionName } from '../globals';
 import WarpScriptExtConstants from '../constants';
 import { SharedMem } from '../extension';
+import ExecCommand from './execCommand';
+import { v4 } from 'uuid';
+import { ProfilerWebview } from '../webviews/profilerWebview';
 
 let lookupAsync: any;
 if (!!dns.lookup) {
   lookupAsync = promisify(dns.lookup);
 }
 
-export default class ExecCommand {
-
-  public static execNumber: number = 0;
-
-  public static currentRunningRequests: request.Request[] = [];
-
-  static pad(str: any, size: number, padder: string) { return (padder.repeat(30) + str).substr(-size); }
+export default class ProfilerCommand {
 
   private async writeFile(path: string, content: any): Promise<void> {
     if (WarpScriptExtConstants.isVirtualWorkspace) {
@@ -44,7 +41,7 @@ export default class ExecCommand {
     }
   }
 
-  public exec(outputWin: OutputChannel): any {
+  public exec(outputWin: OutputChannel, context: ExtensionContext): any {
     return (selectiontext: string) => {
       // Check current active document is a warpcript
       if (typeof window.activeTextEditor === 'undefined'
@@ -111,23 +108,11 @@ export default class ExecCommand {
           while (lineonMatch = re.exec(Warp10URL)) {
             Warp10URLhostname = lineonMatch[1]; //group 1
           }
-
-          //  for discovery preview, wrap the code to render as html
-          // let discoveryTheme = commentsCommands.theme || "";
-          /*if (displayPreviewOpt == 'D') { // discovery
-            // warning: do not indent multiline warspcript below...
-            executedWarpScript = ` ${executedWarpScript} \n { 'url' '${Warp10URL}' 'template' 
-<'
-${DiscoveryPreviewWebview.getTemplate(context, discoveryTheme)}
-'>
-           } @senx/discovery2/render `;
-          }*/
           progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
 
           let lines: number[] = [document.lineCount]
           let uris: string[] = [document.uri.toString()]
           if (substitutionWithLocalMacros) {
-
             // first, prepend macros of the special comments "// @include macro: "
             for (let macroName of commentsCommands.listOfMacroInclusion ?? []) {
               if (macroName.startsWith('@')) {
@@ -205,18 +190,19 @@ ${DiscoveryPreviewWebview.getTemplate(context, discoveryTheme)}
             }
           }
 
-          if (window?.activeTextEditor?.document.languageId === 'flows') {
-            executedWarpScript = `<'
-${executedWarpScript} 
-'>
-FLOWS
-`;
-          }
           // log the beginning of the warpscript
           console.log("about to send this WarpScript:", executedWarpScript.slice(0, 10000), 'on', Warp10URL);
 
+          let wrappedWarpScript = executedWarpScript;
+          if (workspace.getConfiguration().get('warpscript.enableDebug')) {
+            const uuid = v4();
+            wrappedWarpScript = `'${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD true STMTPOS
+            <%
+            ${wrappedWarpScript}
+            %> PROFILE '${uuid}' STORE @${uuid} $${uuid} PROFILE.RESULTS`;
+          }
           // Gzip the script before sending it.
-          gzip(Buffer.from(executedWarpScript, 'utf8'), async (err, gzipWarpScript) => {
+          gzip(Buffer.from(wrappedWarpScript, 'utf8'), async (err, gzipWarpScript) => {
             if (err) {
               console.error(err);
             }
@@ -231,7 +217,7 @@ FLOWS
               url: Warp10URL,
               gzip: useGZIP,
               timeout: timeout,
-              body: useGZIP ? gzipWarpScript : executedWarpScript,
+              body: useGZIP ? gzipWarpScript : wrappedWarpScript,
               rejectUnauthorized: false
             }
 
@@ -246,7 +232,7 @@ FLOWS
                 let FindProxyForURL = pac(proxy_pac_text.getText());
                 proxy_pac_resp = await FindProxyForURL(Warp10URL);
               } catch (e) {
-                console.log(e);
+                console.error(e);
                 StatusbarUi.Execute();
               }
 
@@ -305,7 +291,6 @@ FLOWS
                 StatusbarUi.Execute();
                 return e(true)
               } else {
-                // console.log(error, response, body)
                 let errorParam: any = null
                 progress.report({ message: 'Parsing response' });
                 if (response.headers['x-warp10-error-message']) {
@@ -368,6 +353,11 @@ FLOWS
                   try {
                     await this.deleteFile(jsonFilename); // Remove overwritten file. If file unexistent, fail silently.
                   } catch (e) { }
+
+                  const profileResult = this.parseProfile(JSON.parse(body));
+
+                  ProfilerWebview.render(context, profileResult.profile, window.activeTextEditor); 
+                  body = JSON.stringify(profileResult.stack);
 
                   // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
                   let sizeMB: number = Math.round(body.length / 1024 / 1024);
@@ -434,6 +424,13 @@ FLOWS
     };
   }
 
+  private parseProfile(myStack: any[]) {
+    const profile = myStack.shift();
+    const stack = myStack;
+    return { profile, stack };
+  }
+
+
   private displayJson(jsonFilename: string, progress: Progress<{ message?: string; }>, errorParam: any) {
     console.debug(errorParam)
     let jsonUri: Uri;
@@ -498,22 +495,4 @@ FLOWS
       }, 10000)
     }
   }
-
-  public static formatElapsedTime(elapsed: number) {
-    if (elapsed < 1000) {
-      return ExecCommand.pad(elapsed.toFixed(3), 7, ' ') + ' ns';
-    }
-    if (elapsed < 1000000) {
-      return ExecCommand.pad((elapsed / 1000).toFixed(3), 7, ' ') + ' μs';
-    }
-    if (elapsed < 1000000000) {
-      return ExecCommand.pad((elapsed / 1000000).toFixed(3), 7, ' ') + ' ms';
-    }
-    if (elapsed < 1000000000000) {
-      return ExecCommand.pad((elapsed / 1000000000).toFixed(3), 7, ' ') + ' s ';
-    }
-    // Max exec time for nice output: 999.999 minutes (should be OK, timeout should happen before that).
-    return ExecCommand.pad((elapsed / 60000000000).toFixed(3), 7, ' ') + ' m ';
-  }
-
 }

@@ -165,14 +165,23 @@
           "when": "resourceLangId == warpscript",
           "command": "extension.execWS",
           "group": "Warp 10"
+        },
+        {
+          "when": "resourceLangId == warpscript && config.warpscript.enableDebug",
+          "command": "extension.profile",
+          "group": "Warp 10"
         }
       ],
-      "editor/title": [
+      "editor/title": [{
+          "when": "resourceLangId == warpscript && config.warpscript.enableDebug",
+          "command": "extension.profile",
+          "group": "navigation"
+        },
         {
           "when": "resourceLangId == warpscript",
           "command": "extension.execWS",
           "group": "navigation"
-        }
+        }        
       ]
     },
     "snippets": [
@@ -221,6 +230,15 @@
         "command": "extension.execConvertUnicodeInJson",
         "title": "Unescape unicode characters in Json output",
         "category": "WarpScript"
+      },
+      {
+        "command": "extension.profile",
+        "title": "Profile WarpScript",
+        "category": "WarpScript",
+        "icon": {
+          "light": "./images/profile.svg",
+          "dark": "./images/profile-inverse.svg"
+        }
       }
     ],
     "languages": [

@@ -26,6 +26,7 @@ import { join } from "path";
 import WSDiagnostics from './providers/wsDiagnostics';
 import { FileAccessor } from './debug/warp10DebugRuntime';
 import { Warp10DebugSession } from './debug/warp10Debug';
+import ProfilerCommand from './features/profiler';
 
 export class SharedMem {
   private static registry: any = {};
@@ -83,6 +84,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(previewPanels); }));
     context.subscriptions.push(commands.registerCommand('extension.execConvertUnicodeInJson', () => { new UnicodeJsonConversion().exec(); }));
     context.subscriptions.push(commands.registerCommand('extension.execWS', () => { new ExecCommand().exec(outputWin)(''); }));
+    context.subscriptions.push(commands.registerCommand('extension.profile', () => { new ProfilerCommand().exec(outputWin, context)(''); }));
 
     context.subscriptions.push(commands.registerCommand('extension.abortAllWS', () => { new ExecCommand().abortAllRequests(outputWin)(); }))
     context.subscriptions.push(commands.registerCommand('extension.execWSOnSelection', () => {
@@ -94,7 +96,6 @@ export function activate(context: ExtensionContext) {
       }
     }));
     context.subscriptions.push(commands.registerCommand('extension.jumptoWSoffset', (offset: number) => {
-      // console.log("try to jump to offset ", offset)
       // this short command allow to do links inside the document. it jumps to the required text offset, if a word is found. it selects the word.
       let editor = window.activeTextEditor;
       if (editor) {
@@ -124,8 +125,6 @@ export function activate(context: ExtensionContext) {
 
     new WSDocumentFormattingEditProvider();
     // webview panels for dataviz. will be created only when needed.
-    // let previewPanels.gts: vscode.WebviewPanel = null;
-    // let previewPanels.image: vscode.WebviewPanel = null;
     let gtsPreviewWebview = new GTSPreviewWebview(context);
     let discoveryPreviewWebview = new DiscoveryPreviewWebview(context);
     let imagePreviewWebview = new ImagePreviewWebview(context);
@@ -253,8 +252,6 @@ export function activate(context: ExtensionContext) {
       }
     });
     console.log('Preview loaded');
-   // DebugPluginWebView.render(context.extensionUri, context);
-    // display Discovery version at startup
     try {
       outputWin.appendLine(`Discovery version ${WarpScriptExtConstants.getPackageVersion(context, join('assets', '@senx', 'discovery-widgets', 'package.json'))}`);
     } catch (error) { }
