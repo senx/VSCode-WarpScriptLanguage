@@ -1,4 +1,4 @@
-import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn, ExtensionContext, workspace, TextEditor, Range, TextEditorRevealType, TextEditorDecorationType, TextDocument, languages, DiagnosticCollection, DiagnosticRelatedInformation, Position, Location } from "vscode";
+import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn, ExtensionContext, workspace, TextEditor, Range, TextEditorRevealType, TextEditorDecorationType } from "vscode";
 import WarpScriptExtConstants from "../constants";
 import { join } from "path";
 import GTSPreviewWebview from "./gtsPreview";
@@ -27,7 +27,7 @@ export class ProfilerWebview {
     this.result = result;
     this.context = context;
     this.activeTextEditor = activeTextEditor;
-
+    this.macros = {};
     this.profileMacroDecoration = window.createTextEditorDecorationType({ gutterIconPath: context.asAbsolutePath('images/line.svg') });
     // Set an event listener to listen for when the panel is disposed (i.e. when the user closes
     // the panel or when the panel is closed programmatically)
@@ -39,36 +39,26 @@ export class ProfilerWebview {
     const profs: any[] = [...result].sort((a: any[], b: any[]) => a[0] - b[0]);
     for (let i = 0; i < activeTextEditor.document.lineCount; i++) {
       let profIndex = 0;
-      const profLine = result.filter((p: any[]) => p[0] - 3 === i).sort((a: any[], b: any[]) => a[1] - b[1]) ?? [];
+      const profLine = result.filter((p: any[]) => p[0] - 2 === i).sort((a: any[], b: any[]) => a[1] - b[1]) ?? [];
       const line = activeTextEditor.document.lineAt(i).text;
       line.split('').forEach((char, c) => {
-
         if ((profLine[profIndex] ?? []).length > 0 && c === profLine[profIndex][1]) {
-          code += '';
           if ('M' === profLine[profIndex][3]) {
-            code += '';
             this.lastMacros.push(profLine[profIndex].join('-'));
             this.macros[profLine[profIndex].join('-')] = { start: i + 1 };
           }
-          code += '';
         }
         code += char;
         if (code.endsWith('%>')) {
-          code += '';
-          this.macros[this.lastMacros.pop()].end = i + 1;
+          const m = this.lastMacros.pop();
+          this.macros[m].end = i + 1;
         }
         if ((profLine[profIndex] ?? []).length > 0 && c === profLine[profIndex][2]) {
-          code += '';
           profIndex++;
         }
       });
       code += '\n';
     }
-    code = code
-      // .replace(/\%>/gi, '%></span>')
-      .replace(/\%>/gi, '%&gt;')
-      .replace(/<\%/gi, '&lt;%')
-      ;
     this.macros[profs[0].join('-')] = { start: 1, end: activeTextEditor.document.lineCount };
   }
 
@@ -148,7 +138,7 @@ export class ProfilerWebview {
       });
       this.activeTextEditor.setDecorations(this.afterFnDecoration, [new Range(m.start, 0, m.end, 0)]);
     } else {
-      const range = new Range(profile[0] - 3, profile[1], profile[0] - 3, profile[2] + 1);
+      const range = new Range(profile[0] - 2, profile[1], profile[0] - 2, profile[2] + 1);
       this.activeTextEditor.revealRange(range, TextEditorRevealType.InCenterIfOutsideViewport);
       this.activeTextEditor.setDecorations(this.profileFnDecoration, [{ range }]);
 

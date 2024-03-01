@@ -13,17 +13,33 @@ provideVSCodeDesignSystem().register(allComponents);
 const vscode = acquireVsCodeApi();
 let code = '';
 
-function getFunction(p: any[]) {
-  const line = code.split('\n')[p[0] - 3];
-  if (!!line) {
-    return line.slice(p[1], p[2] + 1);
-  } else {
-    return p.join('-');
+function getName(p: any[]) {
+  switch (p[3]) {
+    case 'm':
+      return 'Total';
+    case 'M':
+      const comments = code.split('\n')[p[0] - 2].split('#');
+      if(comments.length > 1) {
+        return `Macro (${comments[1].trim()})`
+      } else {
+        return 'Macro';
+      }
+    default:
+      const line = code.split('\n')[p[0] - 2];
+      if (!!line) {
+        return line.slice(p[1], p[2] + 1);
+      } else {
+        return p.join('-');
+      }
   }
 }
 
 function getPerCal(total: any, count: any) {
-  return parseFloat(total) / parseFloat(count);
+  if(count > 0) {
+    return parseFloat(total) / parseFloat(count);
+  } else {
+    return total;
+  }
 }
 // Just like a regular webpage we need to wait for the webview
 // DOM to load before we can reference any of the HTML elements
@@ -32,12 +48,11 @@ window.addEventListener("load", main);
 window.addEventListener('message', event => {
   const message = event.data; // The JSON data our extension sent
   code = message.ws;
-  //  (document.getElementById('res') as HTMLPreElement).innerHTML = JSON.stringify(message.result, undefined, 2);
-  const profile = message.result.filter((p: any[]) => p[0] !== 3);
-
+  console.log({ message })
+  const profile = message.result; // .filter((p: any[]) => p[0] !== 3);
 
   (document.getElementById('profile') as DataGrid).rowsData = profile.map((p: any[]) => {
-    return { Name: p[3] === 'M' ? 'macro' : getFunction(p), Calls: p[4], 'Total time': p[5] + ' ns', 'Time per call': getPerCal(p[5], p[4]) + ' ns' }
+    return { Name: getName(p), Calls: p[4], 'Total time': p[5] + ' ns', 'Time per call': getPerCal(p[5], p[4]) + ' ns' }
   });
 
   document.getElementById('profile').addEventListener('mouseout', () => unhighlight());
@@ -49,12 +64,12 @@ window.addEventListener('message', event => {
 });
 
 function unhighlight() {
-  vscode.postMessage({command: 'unhighlight'});
+  vscode.postMessage({ command: 'unhighlight' });
 }
 
 function highlight(tr: Element, p: any) {
   const f = tr.querySelectorAll('vscode-data-grid-cell')[0].textContent.trim();
-  vscode.postMessage({command: 'highlight',text: f, profile: p});
+  vscode.postMessage({ command: 'highlight', text: f, profile: p });
 }
 
 function main() {

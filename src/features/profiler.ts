@@ -196,10 +196,9 @@ export default class ProfilerCommand {
           let wrappedWarpScript = executedWarpScript;
           if (workspace.getConfiguration().get('warpscript.enableDebug')) {
             const uuid = v4();
-            wrappedWarpScript = `'${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD true STMTPOS
-            <%
-            ${wrappedWarpScript}
-            %> PROFILE '${uuid}' STORE @${uuid} $${uuid} PROFILE.RESULTS  'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile' $profile 'stack' $stack }`;
+            wrappedWarpScript = `'${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD true STMTPOS <%
+${wrappedWarpScript}
+%> PROFILE '${uuid}' STORE @${uuid} $${uuid} PROFILE.RESULTS  'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile' $profile 'stack' $stack }`;
           }
           // Gzip the script before sending it.
           gzip(Buffer.from(wrappedWarpScript, 'utf8'), async (err, gzipWarpScript) => {
@@ -423,13 +422,6 @@ export default class ProfilerCommand {
       })
     };
   }
-
-  private parseProfile(myStack: any[]) {
-    const profile = myStack.shift();
-    const stack = myStack;
-    return { profile, stack };
-  }
-
 
   private displayJson(jsonFilename: string, progress: Progress<{ message?: string; }>, errorParam: any) {
     console.debug(errorParam)

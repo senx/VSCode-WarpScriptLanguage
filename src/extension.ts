@@ -49,9 +49,9 @@ export class SharedMem {
  */
 export function activate(context: ExtensionContext) {
   WarpScriptExtConstants.jsonResultRegEx().then(jsonResultRegEx => {
-    console.log('About to load')
+    console.debug('About to load')
     StatusbarUi.Init();
-    console.log('StatusbarUi loaded')
+    console.debug('StatusbarUi loaded')
     let outputWin = window.createOutputChannel('Warp10');
     // constant object ref to pass to closeOpenedWebviews
     let previewPanels: { image: WebviewPanel | undefined, gts: WebviewPanel | undefined, discovery: WebviewPanel | undefined } = { image: undefined, gts: undefined, discovery: undefined };
@@ -59,13 +59,13 @@ export function activate(context: ExtensionContext) {
     // Hover providers
     context.subscriptions.push(languages.registerHoverProvider({ language: 'warpscript' }, new WSHoverProvider()));
     context.subscriptions.push(languages.registerHoverProvider({ language: 'flows' }, new FlowsHoverProvider()));
-    console.log('Hover providers loaded');
+    console.debug('Hover providers loaded');
 
     // Completion providers
     context.subscriptions.push(languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionItemProvider()));
     context.subscriptions.push(languages.registerCompletionItemProvider({ language: 'flows' }, new FlowsCompletionItemProvider()));
     context.subscriptions.push(languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionVariablesProvider(), "'", "$"));
-    console.log('Completion providers loaded');
+    console.debug('Completion providers loaded');
     // TODO
     // context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: 'flows' }, new WSCompletionVariablesProvider(), "'"));
     context.subscriptions.push(languages.registerCompletionItemProvider({ language: 'warpscript' }, new WSCompletionMacrosProvider(), "@", "/"));
@@ -79,7 +79,7 @@ export function activate(context: ExtensionContext) {
       context.subscriptions.push(languages.registerDocumentHighlightProvider({ language: 'warpscript' }, new WSDocumentHighlightsProvider()));
     }
     context.subscriptions.push(languages.registerDocumentLinkProvider({ language: 'warpscript' }, new WSDocumentLinksProvider()));
-    console.log('Languages loaded');
+    console.debug('Languages loaded');
 
     context.subscriptions.push(commands.registerCommand('extension.execCloseJsonResults', () => { new CloseJsonResults().exec(previewPanels); }));
     context.subscriptions.push(commands.registerCommand('extension.execConvertUnicodeInJson', () => { new UnicodeJsonConversion().exec(); }));
@@ -106,7 +106,7 @@ export function activate(context: ExtensionContext) {
         }
       }
     }));
-    console.log('Commands loaded');
+    console.debug('Commands loaded');
 
     context.subscriptions.push(
       languages.registerDocumentFormattingEditProvider('flows', {
@@ -121,7 +121,7 @@ export function activate(context: ExtensionContext) {
         }
       })
     );
-    console.log('FLoWS loaded');
+    console.debug('FLoWS loaded');
 
     new WSDocumentFormattingEditProvider();
     // webview panels for dataviz. will be created only when needed.
@@ -150,7 +150,7 @@ export function activate(context: ExtensionContext) {
         timeUnit = timeUnit + 's';
         //look for a preview setting into the json name
         let previewSetting: string = suffixes[3] || '';
-        console.log("preview=" + previewSetting);
+        console.debug("preview=" + previewSetting);
 
         // do not refresh preview when the preview window when selecting the json of the current preview
         let alreadypreviewed: boolean = (latestJSONdisplayed == textEditor.document.fileName);
@@ -159,7 +159,7 @@ export function activate(context: ExtensionContext) {
         if (previewSetting != 'X' && workspace.getConfiguration().get('warpscript.PreviewTabs') !== 'none' && !alreadypreviewed) {
 
           if (previewSetting == "J") {
-            console.log("format json !")
+            console.debug("format json !")
             commands.executeCommand("editor.action.formatDocument");
           }
           // gtsPreview panel
@@ -251,7 +251,7 @@ export function activate(context: ExtensionContext) {
         }
       }
     });
-    console.log('Preview loaded');
+    console.debug('Preview loaded');
     try {
       outputWin.appendLine(`Discovery version ${WarpScriptExtConstants.getPackageVersion(context, join('assets', '@senx', 'discovery-widgets', 'package.json'))}`);
     } catch (error) { }
@@ -264,9 +264,7 @@ export function activate(context: ExtensionContext) {
     }
     WarpScriptExtGlobals.sessionName = `${user}-${v4()}`;
     outputWin.appendLine(`Session Name for WarpScript execution: '${WarpScriptExtGlobals.sessionName}'`);
-    console.log(WarpScriptExtGlobals.sessionName);
-
-
+    console.debug(WarpScriptExtGlobals.sessionName);
 
     const provider = new Warp10DebugConfigurationProvider();
     context.subscriptions.push(debug.registerDebugConfigurationProvider('warpscript', provider));
@@ -322,6 +320,7 @@ export function activate(context: ExtensionContext) {
         return undefined;
       }
     }));
+    commands.executeCommand('setContext', 'senx.warpscript-language.loaded', true);
   });
 }
 

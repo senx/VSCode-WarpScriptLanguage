@@ -157,28 +157,28 @@
     "menus": {
       "editor/context": [
         {
-          "when": "resourceLangId == warpscript && editorHasSelection",
+          "when": "resourceLangId == warpscript && editorHasSelection && senx.warpscript-language.loaded",
           "command": "extension.execWSOnSelection",
           "group": "Warp 10"
         },
         {
-          "when": "resourceLangId == warpscript",
+          "when": "resourceLangId == warpscript && senx.warpscript-language.loaded",
           "command": "extension.execWS",
           "group": "Warp 10"
         },
         {
-          "when": "resourceLangId == warpscript && config.warpscript.enableDebug",
+          "when": "resourceLangId == warpscript && config.warpscript.enableDebug && senx.warpscript-language.loaded",
           "command": "extension.profile",
           "group": "Warp 10"
         }
       ],
       "editor/title": [{
-          "when": "resourceLangId == warpscript && config.warpscript.enableDebug",
+          "when": "resourceLangId == warpscript && config.warpscript.enableDebug && senx.warpscript-language.loaded",
           "command": "extension.profile",
           "group": "navigation"
         },
         {
-          "when": "resourceLangId == warpscript",
+          "when": "resourceLangId == warpscript && senx.warpscript-language.loaded",
           "command": "extension.execWS",
           "group": "navigation"
         }        
