@@ -1,6 +1,6 @@
-import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn, ExtensionContext, workspace, TextEditor, Range, TextEditorRevealType, TextEditorDecorationType } from "vscode";
+import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn, ExtensionContext, workspace, TextEditor, Range, TextEditorRevealType, TextEditorDecorationType, TextDocument, languages, DiagnosticCollection, DiagnosticRelatedInformation, Position, Location } from "vscode";
 import WarpScriptExtConstants from "../constants";
-import path, { join } from "path";
+import { join } from "path";
 import GTSPreviewWebview from "./gtsPreview";
 export class ProfilerWebview {
   public static currentPanel: ProfilerWebview | undefined;
@@ -110,7 +110,7 @@ export class ProfilerWebview {
 
     ProfilerWebview.currentPanel._panel.onDidChangeViewState(e => {
       if (e.webviewPanel.active) {
-        ProfilerWebview.currentPanel._panel.webview.postMessage({ result: ProfilerWebview.currentPanel.result, ws: activeTextEditor.document.getText() });
+        ProfilerWebview.currentPanel._panel.webview.postMessage({ result, ws: activeTextEditor.document.getText() });
       }
     })
   }
@@ -122,7 +122,6 @@ export class ProfilerWebview {
       this.afterFnDecoration.dispose();
     }
   }
-
 
   getPerCal(total: number, count: number) {
     return total / count;
@@ -163,6 +162,8 @@ export class ProfilerWebview {
       this.activeTextEditor.setDecorations(this.afterFnDecoration, [{ range }]);
     }
   }
+
+
   getProfileResult(profile: any[]): string {
     return `${profile[4]} call${profile[4] > 1 ? 's' : ''}, ${profile[5]} ns${profile[4] > 1 ? `, ${this.getPerCal(profile[5], profile[4])} ns per op.` : ''}`;
   }

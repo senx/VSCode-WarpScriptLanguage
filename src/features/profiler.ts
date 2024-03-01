@@ -199,7 +199,7 @@ export default class ProfilerCommand {
             wrappedWarpScript = `'${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD true STMTPOS
             <%
             ${wrappedWarpScript}
-            %> PROFILE '${uuid}' STORE @${uuid} $${uuid} PROFILE.RESULTS`;
+            %> PROFILE '${uuid}' STORE @${uuid} $${uuid} PROFILE.RESULTS  'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile' $profile 'stack' $stack }`;
           }
           // Gzip the script before sending it.
           gzip(Buffer.from(wrappedWarpScript, 'utf8'), async (err, gzipWarpScript) => {
@@ -354,10 +354,10 @@ export default class ProfilerCommand {
                     await this.deleteFile(jsonFilename); // Remove overwritten file. If file unexistent, fail silently.
                   } catch (e) { }
 
-                  const profileResult = this.parseProfile(JSON.parse(body));
-
-                  ProfilerWebview.render(context, profileResult.profile, window.activeTextEditor); 
-                  body = JSON.stringify(profileResult.stack);
+                  const profileResult = JSON.parse(body)[0];
+                  console.log(profileResult)
+                  ProfilerWebview.render(context, profileResult.profile?? [], window.activeTextEditor); 
+                  body = profileResult.stack ?? '[]';
 
                   // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
                   let sizeMB: number = Math.round(body.length / 1024 / 1024);
