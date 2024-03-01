@@ -17,6 +17,7 @@ import { SharedMem } from '../extension';
 import ExecCommand from './execCommand';
 import { v4 } from 'uuid';
 import { ProfilerWebview } from '../webviews/profilerWebview';
+import { TracePluginInfo } from '../webviews/tracePluginInfo';
 
 let lookupAsync: any;
 if (!!dns.lookup) {
@@ -323,6 +324,15 @@ ${wrappedWarpScript}
                   outputWin.append('ERROR file://');
                   outputWin.append(Uri.parse(uris[i]).fsPath + ':' + lineInError);
                   outputWin.appendLine(' ' + errorMessage);
+                  if (/Unknown function 'PROFILE'/.test(errorMessage)) {
+                    window
+                      .showWarningMessage('The Warp 10 Trace Plugin is not activated', ...['Learn more', 'Cancel'])
+                      .then(selection => {
+                        if ('Learn more' === selection) {
+                          TracePluginInfo.render(context);
+                        }
+                      });
+                  }
                 }
                 // If no content-type is specified, response is the JSON representation of the stack
                 if (response.body.startsWith('[')) {

@@ -138,10 +138,11 @@ export class TracePluginInfo {
 
           <vscode-divider></vscode-divider>
           <div class="columns">
-          <div class="hero hero-sm text-center col-6 col-mx-auto">
-            <h5 class="text-center py-2">Dive into an unparalleled debugging and profiling experience with TracePlugin. Download now and trace your path to impeccable code. Transform your development process with TracePlugin.</p>
-
+          <div class="hero hero-sm text-center col-8 col-mx-auto">
+            <h5 class="text-center py-2">Dive into an unparalleled debugging and profiling experience with TracePlugin. Download now and trace your path to impeccable code. Transform your development process with TracePlugin.</h5>
+            <div>
             <vscode-button appearance="primary" id="contact">Contact sales</vscode-button>  
+            </div>
           </div>
           </div>
           <vscode-divider></vscode-divider>
