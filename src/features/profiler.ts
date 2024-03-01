@@ -118,7 +118,7 @@ export default class ProfilerCommand {
               if (macroName.startsWith('@')) {
                 macroName = macroName.substring(1);
               }
-              console.log('-' + macroName + '-');
+              console.debug('-' + macroName + '-');
               await WSDocumentLinksProvider.getMacroURI(macroName).then(
                 async (uri) => {
                   if (uris.indexOf(uri.toString()) === -1) {
@@ -130,7 +130,7 @@ export default class ProfilerCommand {
                     let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
                     executedWarpScript = prepend + executedWarpScript;
                     //          linesOfMacrosPrepended += prepend.split('\n').length - 1;
-                    console.log(prepend.split('\n'))
+                    console.debug(prepend.split('\n'))
                     // Update lines and uris references
                     lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
                     uris.unshift(uri.toString());
@@ -154,7 +154,7 @@ export default class ProfilerCommand {
                 allMacroPrepended = true;
                 for (const m of listOfMacros) {
                   const macroName = m.substring(1);
-                  console.log('-' + macroName + '-');
+                  console.debug('-' + macroName + '-');
                   await WSDocumentLinksProvider.getMacroURI(macroName).then(
                     async (uri) => {
                       if (uris.indexOf(uri.toString()) === -1) {
@@ -166,7 +166,7 @@ export default class ProfilerCommand {
                         let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
                         executedWarpScript = prepend + executedWarpScript;
                         //          linesOfMacrosPrepended += prepend.split('\n').length - 1;
-                        console.log(prepend.split('\n'))
+                        console.debug(prepend.split('\n'))
                         // Update lines and uris references
                         lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
                         uris.unshift(uri.toString());
@@ -191,7 +191,7 @@ export default class ProfilerCommand {
           }
 
           // log the beginning of the warpscript
-          console.log("about to send this WarpScript:", executedWarpScript.slice(0, 10000), 'on', Warp10URL);
+          console.debug("about to send this WarpScript:", executedWarpScript.slice(0, 10000), 'on', Warp10URL);
 
           let wrappedWarpScript = executedWarpScript;
           if (workspace.getConfiguration().get('warpscript.enableDebug')) {
@@ -262,7 +262,7 @@ ${wrappedWarpScript}
             let req: request.Request = request.post(request_options, async (error: any, response: any, body: string) => {
               if (error) { // error is set if server is unreachable or if the request is aborted
                 if (error.aborted) {
-                  console.log("request aborted");
+                  console.debug("request aborted");
                   StatusbarUi.Execute();
                   progress.report({ message: 'Aborted' });
                   return c(true)
@@ -354,8 +354,7 @@ ${wrappedWarpScript}
                   } catch (e) { }
 
                   const profileResult = JSON.parse(body)[0];
-                  console.log(profileResult)
-                  ProfilerWebview.render(context, profileResult.profile?? [], window.activeTextEditor); 
+                  ProfilerWebview.render(context, profileResult.profile ?? [], window.activeTextEditor);
                   body = profileResult.stack ?? '[]';
 
                   // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
@@ -410,7 +409,7 @@ ${wrappedWarpScript}
               }
               // decrease request count on this endpoint
               endpointsForThisSession[req.uri.href]--;
-              console.log(endpointsForThisSession)
+              console.debug(endpointsForThisSession)
             });
             ExecCommand.currentRunningRequests.push(req);
             // increase request count on this endpoint, to use it later for session abort
