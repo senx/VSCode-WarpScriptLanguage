@@ -9,13 +9,15 @@ provideVSCodeDesignSystem().register(allComponents);
 
 const vscode = acquireVsCodeApi();
 let code = '';
+let totalTime = 0;
 
 window.addEventListener('message', event => {
   const message = event.data; // The JSON data our extension sent
   code = message.ws;
-  const profile = message.result;
+  const profile = message.result.filter((p: any[]) => p[4] > 0);
+  totalTime = (profile[0] ?? [])[5];
   (document.getElementById('profile') as DataGrid).rowsData = profile.map((p: any[]) => {
-    return { Name: getName(p), Calls: p[4], 'Total time': p[5] + ' ns', 'Time per call': getPerCal(p[5], p[4]) + ' ns' }
+    return { Name: getName(p), Calls: p[4], 'Total time': p[5] + ' ns', '% of total time': getPercent(p[5]) + '%', 'Time per call': getPerCal(p[5], p[4]) + ' ns' }
   });
 
   document.getElementById('profile').addEventListener('mouseout', () => unhighlight());
@@ -41,7 +43,7 @@ function getName(p: any[]) {
       return 'Total';
     case 'M':
       const comments = code.split('\n')[p[0] - 2].split('#');
-      if(comments.length > 1) {
+      if (comments.length > 1) {
         return `Macro (${comments[1].trim()})`
       } else {
         return 'Macro';
@@ -57,9 +59,11 @@ function getName(p: any[]) {
 }
 
 function getPerCal(total: any, count: any) {
-  if(count > 0) {
-    return parseFloat(total) / parseFloat(count);
-  } else {
-    return total;
-  }
+  return count > 0 ? parseFloat(total) / parseFloat(count) : total;
+}
+
+
+
+function getPercent(time: any) {
+  return Math.round(time / totalTime * 10000) / 100;
 }
