@@ -290,6 +290,18 @@ export class Warp10DebugRuntime extends EventEmitter {
     });
   }
 
+
+  async getStackValue(key: string) {
+    return new Promise((resolve, reject) => {
+      Requester.send(this.endpoint ?? "", `'${this.sid}' TSESSION TSTACK STACKTOLIST REVERSE ${key} GET`)
+        .then((vars: any) => {
+          const data = JSON.parse(vars ?? "[]")[0];
+          resolve(JSON.stringify(data));
+        })
+        .catch((e) => reject(e));
+    });
+  }
+
   private async getVars(): Promise<any> {
     return new Promise((resolve, reject) => {
       Requester.send(this.endpoint ?? "", `<% '${this.sid}' TSESSION 
@@ -301,8 +313,7 @@ export class Warp10DebugRuntime extends EventEmitter {
           'stack' $stack <% TYPEOF %> F LMAP
           'lastStmtpos'  '.stmtpos' TLOAD
         }
-        %> <% RETHROW %> <% %> TRY`
-      )
+        %> <% RETHROW %> <% %> TRY`)
         .then((vars: any) => {
           const data = JSON.parse(vars ?? "[]")[0];
           this.variables = data?.vars ?? {};
@@ -524,6 +535,11 @@ export class Warp10DebugRuntime extends EventEmitter {
 
   public getLocalVariables(): RuntimeVariable[] {
     return Object.keys(this.variables ?? {}).map((k) => this.toRuntimeVariable(k, this.variables[k]));
+  }
+
+
+  public getStack(): RuntimeVariable[] {
+    return (this.dataStack ?? []).map((k, i) => this.toRuntimeVariable(String(i), k));
   }
 
   public getLocalVariable(name: string): RuntimeVariable | undefined {

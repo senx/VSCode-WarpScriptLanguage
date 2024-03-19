@@ -351,10 +351,10 @@ export class Warp10DebugSession extends LoggingDebugSession {
       } else {
         // start the program in the runtime
         this._runtime.start(args.program, checkWS[0])
-        .then((r) => {
-          this.executedWarpScript = r;
-          this.sendResponse(response);
-        });
+          .then((r) => {
+            this.executedWarpScript = r;
+            this.sendResponse(response);
+          });
       }
     })
       .catch((e) => {
@@ -376,7 +376,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     const actualBreakpoints0 = clientLines.map(async (l) => {
       const { verified, line, id } = await this._runtime.setBreakPoint(path, this.convertClientLineToDebugger(l));
 
-      
+
 
       const bp = new Breakpoint(verified, this.convertDebuggerLineToClient(line)) as DebugProtocol.Breakpoint;
       bp.id = id;
@@ -447,8 +447,9 @@ export class Warp10DebugSession extends LoggingDebugSession {
   protected scopesRequest(response: DebugProtocol.ScopesResponse, _args: DebugProtocol.ScopesArguments): void {
     response.body = {
       scopes: [
-        new Scope("Locals", this._variableHandles.create("locals"), false),
-        new Scope("Globals", this._variableHandles.create("globals"), true),
+        new Scope("Script parameters", this._variableHandles.create("globals"), true),
+        new Scope("Script variables", this._variableHandles.create("locals"), false),
+        new Scope("Stack", this._variableHandles.create(new RuntimeVariable("stack", [])), false),
       ],
     };
     this.sendResponse(response);
@@ -491,6 +492,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
   protected async variablesRequest(response: DebugProtocol.VariablesResponse, args: DebugProtocol.VariablesArguments, request?: DebugProtocol.Request): Promise<void> {
     let vs: RuntimeVariable[] = [];
     const v = this._variableHandles.get(args.variablesReference);
+    console.log(v)
     if (v === "locals") {
       vs = this._runtime.getLocalVariables();
       response.body = {
@@ -528,14 +530,33 @@ export class Warp10DebugSession extends LoggingDebugSession {
           return dapVariable;
         }),
       };
+    } else if ("stackVariable" === v.name) {
+      const realValue = await this._runtime.getVarValue(v.value);
+      response.body = { variables: [this.convertFromRuntime(realValue, v.value)], };
+    }else if ("stackStack" === v.name) {
+      const realValue = await this._runtime.getStackValue(v.value);
+      response.body = { variables: [this.convertFromRuntime(realValue, v.value)], };
+    } else if ("stack" === v.name) {
+      vs = this._runtime.getStack();
+      response.body = {
+        variables: vs.map((v) => {
+          let dapVariable: DebugProtocol.Variable = {
+            name: `${v.name}`,
+            value: v.value,
+            type: v.value,
+            variablesReference: 0,
+            evaluateName: v.name,
+            presentationHint: { lazy: true },
+          };
+          v.reference ??= this._variableHandles.create(new RuntimeVariable("stackStack", v.name));
+          dapVariable.variablesReference = v.reference;
+          return dapVariable;
+        }),
+      };
     } else {
-      if ("stackVariable" === v.name) {
-        const realValue = await this._runtime.getVarValue(v.value);
-        response.body = { variables: [this.convertFromRuntime(realValue, v.value)], };
-      } else {
-        response.body = { variables: v.value };
-      }
+      response.body = { variables: v.value };
     }
+
     this.sendResponse(response);
   }
 
