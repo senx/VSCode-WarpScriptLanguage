@@ -162,6 +162,7 @@ export class Warp10DebugRuntime extends EventEmitter {
   private dataStack: any[] | undefined;
   private program: string | undefined;
   private inDebug = false;
+  private checkWS: any = {};
 
   constructor(private fileAccessor: FileAccessor) {
     super();
@@ -192,6 +193,7 @@ export class Warp10DebugRuntime extends EventEmitter {
    */
   public async start(program: string, checkWS: {}): Promise<string> {
     this.program = program;
+    this.checkWS = checkWS;
     this.firstCnx = true;
     await this.getContent(program);
     // Open WebSocket
@@ -394,7 +396,7 @@ export class Warp10DebugRuntime extends EventEmitter {
     try {
       if (!this.lineInfo) await this.getVars();
     } catch (e) {
-     // console.error(e)
+      // console.error(e)
     }
     if (this.lineInfo) {
       const curLine = this.getLine(this.lineInfo[0] - 1);
@@ -499,10 +501,20 @@ export class Warp10DebugRuntime extends EventEmitter {
     if (this.commentsCommands?.theme) {
       globals.push(new RuntimeVariable("theme", this.commentsCommands.theme));
     }
-    if (this.commentsCommands?.timeunit) {
-      globals.push(new RuntimeVariable("timeunit", this.commentsCommands.timeunit));
-    }
+
+    globals.push(new RuntimeVariable("timeunit", this.commentsCommands?.timeunit ?? this.getTimeUnitName(this.checkWS.stu)));
+    globals.push(new RuntimeVariable("revision", this.checkWS.rev));
+
     return globals;
+  }
+
+  private getTimeUnitName(stu: number): string {
+    switch (stu) {
+      case 1000: return 'ms'
+      case 1000000: return 'µs'
+      case 1000000000: return 'ns'
+      default: return 'µs'
+    }
   }
 
   private toRuntimeVariable(k: string, v: any): RuntimeVariable {
