@@ -533,7 +533,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     } else if ("stackVariable" === v.name) {
       const realValue = await this._runtime.getVarValue(v.value);
       response.body = { variables: [this.convertFromRuntime(realValue, v.value)], };
-    }else if ("stackStack" === v.name) {
+    } else if ("stackStack" === v.name) {
       const realValue = await this._runtime.getStackValue(v.value);
       response.body = { variables: [this.convertFromRuntime(realValue, v.value)], };
     } else if ("stack" === v.name) {

@@ -269,22 +269,10 @@ export function activate(context: ExtensionContext) {
     const provider = new Warp10DebugConfigurationProvider();
     context.subscriptions.push(debug.registerDebugConfigurationProvider('warpscript', provider));
 
-    // register a dynamic configuration provider for 'mock' debug type
+    // register a dynamic configuration provider for 'warpscript' debug type
     context.subscriptions.push(debug.registerDebugConfigurationProvider('warpscript', {
       provideDebugConfigurations(_folder: WorkspaceFolder | undefined): ProviderResult<DebugConfiguration[]> {
         return [
-          {
-            name: "Dynamic Launch",
-            request: "launch",
-            type: "warpscript",
-            program: "${file}"
-          },
-          {
-            name: "Another Dynamic Launch",
-            request: "launch",
-            type: "warpscript",
-            program: "${file}"
-          },
           {
             name: "warpscript Launch",
             request: "launch",
