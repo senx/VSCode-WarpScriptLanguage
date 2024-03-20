@@ -66,7 +66,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
   private executedWarpScript: string | undefined;
   private inlineDecoration: TextEditorDecorationType | undefined;
   private context: ExtensionContext;
-
+  private path: string;
   static threadID: number = 1;
 
   /**
@@ -325,11 +325,11 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   protected async launchRequest(response: DebugProtocol.LaunchResponse, args: ILaunchRequestArguments) {
+    this.path = args.program;
     // make sure to 'Stop' the buffered logging if 'trace' is not set
     logger.setup(args.trace ? Logger.LogLevel.Verbose : Logger.LogLevel.Stop, false);
     // wait 1 second until configuration has finished (and configurationDoneRequest has been called)
     await this._configurationDone.wait(1000);
-
     const ws = await this._runtime.getContent(args.program);
     const commentsCommands = WarpScriptParser.extractSpecialComments(ws ?? "");
     const endpoint = commentsCommands.endpoint || workspace.getConfiguration().get("warpscript.Warp10URL");
@@ -375,9 +375,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
     // set and verify breakpoint locations
     const actualBreakpoints0 = clientLines.map(async (l) => {
       const { verified, line, id } = await this._runtime.setBreakPoint(path, this.convertClientLineToDebugger(l));
-
-
-
       const bp = new Breakpoint(verified, this.convertDebuggerLineToClient(line)) as DebugProtocol.Breakpoint;
       bp.id = id;
       return bp;
@@ -392,12 +389,18 @@ export class Warp10DebugSession extends LoggingDebugSession {
     let breakpoints: any[] = [];
     if (args.source.path) {
       const info = await this._runtime.getBreakpoints(args.source.path, this.convertClientLineToDebugger(args.line));
+      breakpoints = info.bps.map((col: number) => {
+        return {
+          line: args.line,
+          column: this.convertDebuggerColumnToClient(col)
+        };
+      });
       if (this.inlineDecoration) {
         this.inlineDecoration.dispose();
       }
       if (this._runtime.isDebug() && window.activeTextEditor) {
         this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
-        window.activeTextEditor.setDecorations(this.inlineDecoration, [new Range(info.line, info.colEnd, info.line, info.colEnd)]);
+        window.activeTextEditor.setDecorations(this.inlineDecoration, [new Range(info.line - 1, info.colEnd, info.line - 1, info.colEnd)]);
       }
     }
     response.body = { breakpoints };
@@ -447,7 +450,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
   protected scopesRequest(response: DebugProtocol.ScopesResponse, _args: DebugProtocol.ScopesArguments): void {
     response.body = {
       scopes: [
-        new Scope("Script parameters", this._variableHandles.create("globals"), true),
+        new Scope("Script parameters", this._variableHandles.create("globals"), false),
         new Scope("Script variables", this._variableHandles.create("locals"), false),
         new Scope("Stack", this._variableHandles.create(new RuntimeVariable("stack", [])), false),
       ],
@@ -492,7 +495,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
   protected async variablesRequest(response: DebugProtocol.VariablesResponse, args: DebugProtocol.VariablesArguments, request?: DebugProtocol.Request): Promise<void> {
     let vs: RuntimeVariable[] = [];
     const v = this._variableHandles.get(args.variablesReference);
-    console.log(v)
     if (v === "locals") {
       vs = this._runtime.getLocalVariables();
       response.body = {
@@ -532,10 +534,10 @@ export class Warp10DebugSession extends LoggingDebugSession {
       };
     } else if ("stackVariable" === v.name) {
       const realValue = await this._runtime.getVarValue(v.value);
-      response.body = { variables: [this.convertFromRuntime(realValue, v.value)], };
+      response.body = { variables: [this.convertFromRuntime(realValue, v.value)] };
     } else if ("stackStack" === v.name) {
       const realValue = await this._runtime.getStackValue(v.value);
-      response.body = { variables: [this.convertFromRuntime(realValue, v.value)], };
+      response.body = { variables: [this.convertFromRuntime(realValue, v.value)] };
     } else if ("stack" === v.name) {
       vs = this._runtime.getStack();
       response.body = {
@@ -806,6 +808,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     if (args.progressId) {
       this._cancelledProgressId = args.progressId;
     }
+    this._runtime.close();
   }
 
   protected disassembleRequest(response: DebugProtocol.DisassembleResponse, args: DebugProtocol.DisassembleArguments) {
@@ -908,12 +911,57 @@ export class Warp10DebugSession extends LoggingDebugSession {
     } else {
       let dapVariable: DebugProtocol.Variable = {
         name,
-        value: String(v),
-        type: name,
+        value: v,
         variablesReference: 0,
-        presentationHint: { kind: "data", lazy: false },
+        presentationHint: { lazy: false },
       };
       return dapVariable;
+    }
+  }
+
+  convertObject(o: any, key: string): any {
+    if (typeof o === 'string') {
+      if (o.startsWith('[') || o.startsWith('{')) {
+        let d = JSON.parse(o);
+        if (o.startsWith('[')) {
+          return {
+            name: key,
+            value: d.map((item: any, i: number) => this.convertObject(item, String(i))),
+            type: 'Array',
+            variablesReference: 0,
+            presentationHint: { lazy: false, kind: 'Array' },
+          }
+        }
+        if (o.startsWith('{')) {
+          return {
+            name: key,
+            value: Object.keys(d).map((i: any) => this.convertObject(d[i], i)),
+            type: 'Object',
+            variablesReference: 0,
+            presentationHint: { lazy: false, kind: 'Object' },
+          }
+        }
+      } else {
+        return {
+          name: key,
+          value: o,
+          type: 'string',
+          variablesReference: 0,
+          presentationHint: { lazy: false, kind: 'String' },
+        } as DebugProtocol.Variable
+      }
+    } else {
+      if (typeof o === 'number') {
+        return {
+          name: key,
+          value: String(o),
+          type: 'number',
+          variablesReference: 0,
+          presentationHint: { lazy: false, kind: 'Number' },
+        }
+      } else {
+        return this.convertObject(JSON.stringify(o), key);
+      }
     }
   }
 

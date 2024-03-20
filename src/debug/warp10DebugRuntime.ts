@@ -126,7 +126,6 @@ export class Warp10DebugRuntime extends EventEmitter {
   // the contents (= lines) of the one and only file
   private sourceLines: string[] = [];
   private instructions: Word[] = [];
-  private starts: number[] = [];
 
   // This is the next line that will be 'executed'
   private _currentLine = 0;
@@ -135,7 +134,6 @@ export class Warp10DebugRuntime extends EventEmitter {
   }
   private set currentLine(x) {
     this._currentLine = x;
-    this.instruction = this.starts[x];
   }
 
   // This is the next instruction that will be 'executed'
@@ -195,6 +193,8 @@ export class Warp10DebugRuntime extends EventEmitter {
     this.program = program;
     this.checkWS = checkWS;
     this.firstCnx = true;
+    this.ws = undefined;
+    this._sourceFile = undefined;
     await this.getContent(program);
     // Open WebSocket
     this.sid = v4();
@@ -204,11 +204,12 @@ export class Warp10DebugRuntime extends EventEmitter {
       this.webSocket.close();
       this.webSocket = undefined;
     }
-    const wrapped = `true STMTPOS '${workspace.getConfiguration().get("warpscript.traceToken")}' CAPADD <% ${this.addBreakPoints(this.ws ?? "")} %> '${this.sid}' TRACE EVAL`;
+    const wrapped = `true STMTPOS '${workspace.getConfiguration().get("warpscript.traceToken")}' CAPADD <%
+${this.addBreakPoints(this.ws ?? "")} %> '${this.sid}' TRACE EVAL`;
     this.sourceLines = wrapped.split('\n');
     const traceURL: string = workspace.getConfiguration().get("warpscript.traceURL") as string;
     this.webSocket = new WebSocket(traceURL);
-    this.webSocket.on("open", () => this.log("Connected to server"));
+    this.webSocket.on("open", () => this.log(`Connected to server: ${traceURL}`));
     this.webSocket.on("error", (e: any) => {
       console.error("webSocket error", e);
       if (e.code === "ECONNREFUSED" || "ENOTFOUND" === e.code || e.code === "ESOCKETTIMEDOUT") {
@@ -264,6 +265,7 @@ export class Warp10DebugRuntime extends EventEmitter {
 
     this.webSocket.on("close", () => {
       this.log("Disconnected from server");
+      this.ws = undefined;
       this.close();
     });
     return this.ws ?? "";
@@ -282,10 +284,7 @@ export class Warp10DebugRuntime extends EventEmitter {
   async getVarValue(key: string) {
     return new Promise((resolve, reject) => {
       Requester.send(this.endpoint ?? "", `'${this.sid}' TSESSION TSTACK STACKTOLIST DROP '${key}' LOAD`)
-        .then((vars: any) => {
-          const data = JSON.parse(vars ?? "[]")[0];
-          resolve(JSON.stringify(data));
-        })
+        .then((vars: any) => resolve((vars ?? "[]").replace(/^\[(.*)\]/g, '$1')))
         .catch((e) => reject(e));
     });
   }
@@ -304,23 +303,25 @@ export class Warp10DebugRuntime extends EventEmitter {
 
   private async getVars(): Promise<any> {
     return new Promise((resolve, reject) => {
-      Requester.send(this.endpoint ?? "", `<% '${this.sid}' TSESSION 
-      <% 'last.stmtpos' STACKATTRIBUTE '.stmtpos' TSTORE %> TEVAL
-        TSTACK SYMBOLS 'symbols' STORE 
-        STACKTOLIST REVERSE 'stack' STORE
-        { 
-          'vars' { $symbols <% DUP LOAD TYPEOF %> FOREACH } 
-          'stack' $stack <% TYPEOF %> F LMAP
-          'lastStmtpos'  '.stmtpos' TLOAD
-        }
-        %> <% RETHROW %> <% %> TRY`)
+      const ws = `<% '${this.sid}' TSESSION 
+<%
+  'last.stmtpos' STACKATTRIBUTE '.stmtpos' TSTORE %> TEVAL
+  TSTACK SYMBOLS 'symbols' STORE 
+  STACKTOLIST REVERSE 'stack' STORE
+  { 
+    'vars' { $symbols <% DUP LOAD TYPEOF %> FOREACH } 
+    'stack' $stack <% TYPEOF %> F LMAP
+    'lastStmtpos'  '.stmtpos' TLOAD
+  }
+%> <% RETHROW %> <% %> TRY`;
+      Requester.send(this.endpoint ?? "", ws)
         .then((vars: any) => {
           const data = JSON.parse(vars ?? "[]")[0];
           this.variables = data?.vars ?? {};
           this.dataStack = [...(data?.stack ?? [])];
           if (data.lastStmtpos) {
             this.lineInfo = data.lastStmtpos.split(":").map((l: string) => parseInt(l, 10));
-            this.currentLine = this.lineInfo[0] - 1;
+            this.currentLine = this.lineInfo[0] - 1 - 1;
           } else {
             this.lineInfo = undefined;
           }
@@ -333,7 +334,8 @@ export class Warp10DebugRuntime extends EventEmitter {
   private addBreakPoints(ws: string) {
     const bps = this.breakPoints.get(this._sourceFile);
     const splittedWS = (ws ?? "").split("\n");
-    (bps ?? []).filter((b) => b.verified).forEach((b: any) => splittedWS[b.line + 1] = "BREAKPOINT " + splittedWS[b.line + 1]);
+    (bps ?? []).filter((b) => b.verified)
+      .forEach((b: any) => splittedWS[b.line + 1] = `BREAKPOINT ${(splittedWS[b.line + 1] ?? '')}`.trim());
     return splittedWS.join("\n");
   }
 
@@ -407,16 +409,15 @@ export class Warp10DebugRuntime extends EventEmitter {
     try {
       if (!this.lineInfo) await this.getVars();
     } catch (e) {
-      // console.error(e)
+      //    console.error(e)
     }
     if (this.lineInfo) {
       const curLine = this.getLine(this.lineInfo[0] - 1);
-      //let sawSpace = true;
       const bps: number[] = [0];
       const offset = curLine.startsWith('BREAKPOINT') ? 'BREAKPOINT'.length : 0;
       return {
         line: this.lineInfo[0] - 1,
-        colStart: this.lineInfo[1] + 1 - offset,
+        colStart: Math.max(this.lineInfo[1] + 1 - offset, 0),
         colEnd: Math.max(this.lineInfo[2] + 1 - offset, 0),
         bps
       };
@@ -425,7 +426,7 @@ export class Warp10DebugRuntime extends EventEmitter {
         line: this.currentLine,
         colStart: 0,
         colEnd: 0,
-        bps: []
+        bps: [0]
       };
   }
 
@@ -433,6 +434,7 @@ export class Warp10DebugRuntime extends EventEmitter {
    * Set breakpoint in file with given line.
    */
   public async setBreakPoint(path: string, line: number): Promise<IRuntimeBreakpoint> {
+
     path = this.normalizePathAndCasing(path);
     const bp: IRuntimeBreakpoint = {
       verified: false,
