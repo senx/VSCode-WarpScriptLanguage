@@ -135,7 +135,12 @@ export class TracePluginInfo {
             <li><b>Increased Productivity</b>: Save time with intuitive tools that simplify the debugging process, from placing breakpoints to analyzing the call stack.</li>
             <li><b>Performance Optimization</b>: Identify critical areas of your code with advanced profiling for targeted optimization and more responsive applications.</li>
           </ul>
-
+          <vscode-divider></vscode-divider>
+          <h3>Configuration keys</h3>
+          <ul style="margin-bottom: 1.2em;">
+            <li><b>traceToken</b>: a valid trace token with the "trace" capability</li>
+            <li><b>traceURL</b>: the trace WebSocket url</li>
+          </ul>
           <vscode-divider></vscode-divider>
           <div class="columns">
           <div class="hero hero-sm text-center col-8 col-mx-auto">

@@ -209,6 +209,10 @@ ${this.addBreakPoints(this.ws ?? "")}
 %> '${this.sid}' TRACE EVAL`;
     this.sourceLines = wrapped.split('\n');
     const traceURL: string = workspace.getConfiguration().get("warpscript.traceURL") as string;
+    if(!traceURL) {
+      this.close();
+      return this.ws ?? "";
+    } 
     this.webSocket = new WebSocket(traceURL);
     this.webSocket.on("open", () => this.log(`Connected to server: ${traceURL}`));
     this.webSocket.on("error", (e: any) => {

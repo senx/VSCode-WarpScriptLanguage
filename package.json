@@ -15,7 +15,7 @@
   "version": "2.3.0-debug",
   "publisher": "senx",
   "engines": {
-    "vscode": "^1.73.0"
+    "vscode": "^1.87.0"
   },
   "repository": {
     "type": "git",
@@ -356,11 +356,6 @@
           "default": 5000,
           "description": "The WarpScript static parsing request will be done as soon as editor idle time (no change in the editor) reach this time (in ms). 5s debounce is recommendended to avoid to saturate servers with audit checks. It cannot be less than 1 second."
         },
-        "warpscript.enableDebug": {
-          "type": "boolean",
-          "default": false,
-          "description": "Enables the debug with the trace plugin."
-        },
         "warpscript.traceURL": {
           "scope": "resource",
           "type": "string",
@@ -398,13 +393,11 @@
     "@types/path-browserify": "^1.0.2",
     "@types/request": "^2.48.12",
     "@types/uuid": "9.0.7",
-    "@types/vscode": "^1.73.0",
+    "@types/vscode": "^1.87.0",
     "@types/vscode-webview": "1.57.5",
     "@types/ws": "^8.5.10",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
-    "@vscode/debugadapter": "^1.56.0",
-    "@vscode/debugadapter-testsupport": "^1.56.0",
     "esbuild": "^0.16.10",
     "esbuild-plugin-copy": "^2.0.1",
     "eslint": "^8.26.0",
@@ -422,9 +415,13 @@
   "dependencies": {
     "@senx/flows-beautifier": "1.0.4",
     "@senx/warp10": "2.0.3",
+    "@vscode/debugadapter": "^1.56.0",
+    "@vscode/debugadapter-testsupport": "^1.56.0",
     "@vscode/webview-ui-toolkit": "^1.4.0",
     "at-least-node": "1.0.0",
     "await-notify": "^1.0.1",
+    "base64-js": "^1.5.1",
+    "concat-map": "^0.0.2",
     "file-saver": "2.0.5",
     "http-parser-js": "0.5.8",
     "lodash": "4.17.21",
@@ -432,6 +429,7 @@
     "path-browserify": "^1.0.1",
     "proxy-agent": "4.0.0",
     "request": "2.88.2",
+    "semver": "^7.6.0",
     "socks-proxy-agent": "5.0.0",
     "uuid": "9.0.0",
     "vscode-languageclient": "8.1.0",

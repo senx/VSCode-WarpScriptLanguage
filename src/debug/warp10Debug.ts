@@ -216,7 +216,26 @@ export class Warp10DebugSession extends LoggingDebugSession {
   protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneResponse, args: DebugProtocol.ConfigurationDoneArguments): void {
     super.configurationDoneRequest(response, args);
     // notify the launchRequest that configuration has finished
-    this._configurationDone.notify();
+    if (
+      !workspace.getConfiguration().get("warpscript.traceToken") ||
+      !workspace.getConfiguration().get("warpscript.traceURL")
+    ) {
+      const mess = ['In order to debug, you have to set some configuration parameters:'];
+      if(!workspace.getConfiguration().get("warpscript.traceToken")) {
+        mess.push('- traceToken = a valid trace token with the "trace" capability');
+      }
+      if(!workspace.getConfiguration().get("warpscript.traceURL")) {
+        mess.push('- traceURL = the trace WebSocket url');
+      }
+      window.showErrorMessage('WarpScript debug', { modal: true, detail:mess.join('\n') }, ...["Learn more"])
+      .then((selection) => {
+        if ("Learn more" === selection) {
+          TracePluginInfo.render(this.context);
+        }
+      });
+    } else {
+      this._configurationDone.notify();
+    }
   }
 
   private async writeFile(path: string, content: any): Promise<void> {
@@ -392,7 +411,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     if (args.source.path) {
       const info = await this._runtime.getBreakpoints(args.source.path, this.convertClientLineToDebugger(args.line));
       if (info.line === args.line) {
-        breakpoints = info.bps.map(() => ({ line: info.line}));
+        breakpoints = info.bps.map(() => ({ line: info.line }));
       }
       if (this._runtime.isDebug() && window.activeTextEditor) {
         this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
