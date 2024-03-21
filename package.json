@@ -58,7 +58,7 @@
               "program"
             ],
             "properties": {
-              
+              "stopOnEntry": true
             }
           },
           "attach": {
@@ -144,7 +144,8 @@
           "group": "Warp 10"
         }
       ],
-      "editor/title": [{
+      "editor/title": [
+        {
           "when": "resourceLangId == warpscript && config.warpscript.enableDebug && senx.warpscript-language.loaded",
           "command": "extension.profile",
           "group": "navigation"
@@ -153,7 +154,7 @@
           "when": "resourceLangId == warpscript && senx.warpscript-language.loaded",
           "command": "extension.execWS",
           "group": "navigation"
-        }        
+        }
       ]
     },
     "snippets": [
@@ -397,7 +398,7 @@
     "@types/path-browserify": "^1.0.2",
     "@types/request": "^2.48.12",
     "@types/uuid": "9.0.7",
-    "@types/vscode": "^1.86.0",
+    "@types/vscode": "^1.73.0",
     "@types/vscode-webview": "1.57.5",
     "@types/ws": "^8.5.10",
     "@typescript-eslint/eslint-plugin": "^5.42.0",

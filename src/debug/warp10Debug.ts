@@ -66,7 +66,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
   private executedWarpScript: string | undefined;
   private inlineDecoration: TextEditorDecorationType | undefined;
   private context: ExtensionContext;
-  private path: string;
   static threadID: number = 1;
 
   /**
@@ -325,7 +324,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   protected async launchRequest(response: DebugProtocol.LaunchResponse, args: ILaunchRequestArguments) {
-    this.path = args.program;
     // make sure to 'Stop' the buffered logging if 'trace' is not set
     logger.setup(args.trace ? Logger.LogLevel.Verbose : Logger.LogLevel.Stop, false);
     // wait 1 second until configuration has finished (and configurationDoneRequest has been called)
@@ -333,30 +331,31 @@ export class Warp10DebugSession extends LoggingDebugSession {
     const ws = await this._runtime.getContent(args.program);
     const commentsCommands = WarpScriptParser.extractSpecialComments(ws ?? "");
     const endpoint = commentsCommands.endpoint || workspace.getConfiguration().get("warpscript.Warp10URL");
-    Requester.getInstanceInfo(endpoint).then((info) => {
-      // check if trace plugin is active
-      const checkWS = JSON.parse(info);
-      const hasTrace = (checkWS[0]?.extensions ?? {}).trace;
-      if (!hasTrace) {
-        if (this.inlineDecoration) {
-          this.inlineDecoration.dispose();
+    Requester.getInstanceInfo(endpoint)
+      .then((info) => {
+        // check if trace plugin is active
+        const checkWS = JSON.parse(info);
+        const hasTrace = (checkWS[0]?.extensions ?? {}).trace;
+        if (!hasTrace) {
+          if (this.inlineDecoration) {
+            this.inlineDecoration.dispose();
+          }
+          this.sendEvent(new TerminatedEvent());
+          window.showWarningMessage("The Warp 10 Trace Plugin is not activated", ...["Learn more", "Cancel"])
+            .then((selection) => {
+              if ("Learn more" === selection) {
+                TracePluginInfo.render(this.context);
+              }
+            });
+        } else {
+          // start the program in the runtime
+          this._runtime.start(args.program, checkWS[0])
+            .then((r) => {
+              this.executedWarpScript = r;
+              this.sendResponse(response);
+            });
         }
-        this.sendEvent(new TerminatedEvent());
-        window.showWarningMessage("The Warp 10 Trace Plugin is not activated", ...["Learn more", "Cancel"])
-          .then((selection) => {
-            if ("Learn more" === selection) {
-              TracePluginInfo.render(this.context);
-            }
-          });
-      } else {
-        // start the program in the runtime
-        this._runtime.start(args.program, checkWS[0])
-          .then((r) => {
-            this.executedWarpScript = r;
-            this.sendResponse(response);
-          });
-      }
-    })
+      })
       .catch((e) => {
         window.showErrorMessage(e.message ?? e, ...["Cancel"]);
         this.sendEvent(new TerminatedEvent());
@@ -387,25 +386,30 @@ export class Warp10DebugSession extends LoggingDebugSession {
 
   protected async breakpointLocationsRequest(response: DebugProtocol.BreakpointLocationsResponse, args: DebugProtocol.BreakpointLocationsArguments, _request?: DebugProtocol.Request): Promise<void> {
     let breakpoints: any[] = [];
+    if (this.inlineDecoration) {
+      this.inlineDecoration.dispose();
+    }
     if (args.source.path) {
       const info = await this._runtime.getBreakpoints(args.source.path, this.convertClientLineToDebugger(args.line));
-      breakpoints = info.bps.map((col: number) => {
-        return {
-          line: args.line,
-          column: this.convertDebuggerColumnToClient(col)
-        };
-      });
-      if (this.inlineDecoration) {
-        this.inlineDecoration.dispose();
+      if (info.line === args.line) {
+        breakpoints = info.bps.map(() => ({ line: info.line}));
       }
       if (this._runtime.isDebug() && window.activeTextEditor) {
         this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
-        window.activeTextEditor.setDecorations(this.inlineDecoration, [new Range(info.line - 1, info.colEnd, info.line - 1, info.colEnd)]);
+        window.activeTextEditor.setDecorations(this.inlineDecoration, [
+          new Range(
+            info.line - 1,
+            info.colEnd,
+            info.line - 1,
+            info.colEnd
+          )
+        ]);
       }
+      response.body = { breakpoints };
     }
-    response.body = { breakpoints };
     this.sendResponse(response);
   }
+
 
   protected async setExceptionBreakPointsRequest(response: DebugProtocol.SetExceptionBreakpointsResponse, _args: DebugProtocol.SetExceptionBreakpointsArguments): Promise<void> {
     this.sendResponse(response);
@@ -450,8 +454,8 @@ export class Warp10DebugSession extends LoggingDebugSession {
   protected scopesRequest(response: DebugProtocol.ScopesResponse, _args: DebugProtocol.ScopesArguments): void {
     response.body = {
       scopes: [
-        new Scope("Script parameters", this._variableHandles.create("globals"), false),
-        new Scope("Script variables", this._variableHandles.create("locals"), false),
+        new Scope("Environment", this._variableHandles.create("globals"), false),
+        new Scope("Variables", this._variableHandles.create("locals"), false),
         new Scope("Stack", this._variableHandles.create(new RuntimeVariable("stack", [])), false),
       ],
     };
@@ -594,7 +598,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   protected nextRequest(response: DebugProtocol.NextResponse, args: DebugProtocol.NextArguments): void {
-    this._runtime.step(args.granularity === "instruction", false);
+    this._runtime.step(args.granularity !== "instruction", false);
     this.sendResponse(response);
   }
 
@@ -685,12 +689,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
         presentationHint: v.presentationHint,
       };
     } else {
-      response.body = {
-        result: reply
-          ? reply
-          : `evaluate(context: '${args.context}', '${args.expression}')`,
-        variablesReference: 0,
-      };
+      response.body = { result: reply ? reply : `evaluate(context: '${args.context}', '${args.expression}')`, variablesReference: 0 };
     }
 
     this.sendResponse(response);
@@ -723,7 +722,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
 
   private async progressSequence() {
     const ID = "" + this._progressId++;
-    //  await timeout(100);
     const title = this._isProgressCancellable
       ? "Cancellable operation"
       : "Long running operation";
@@ -795,9 +793,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   protected completionsRequest(response: DebugProtocol.CompletionsResponse, _args: DebugProtocol.CompletionsArguments): void {
-    response.body = {
-      targets: [],
-    };
+    response.body = { targets: [] };
     this.sendResponse(response);
   }
 

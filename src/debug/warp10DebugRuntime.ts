@@ -205,7 +205,8 @@ export class Warp10DebugRuntime extends EventEmitter {
       this.webSocket = undefined;
     }
     const wrapped = `true STMTPOS '${workspace.getConfiguration().get("warpscript.traceToken")}' CAPADD <%
-${this.addBreakPoints(this.ws ?? "")} %> '${this.sid}' TRACE EVAL`;
+${this.addBreakPoints(this.ws ?? "")}
+%> '${this.sid}' TRACE EVAL`;
     this.sourceLines = wrapped.split('\n');
     const traceURL: string = workspace.getConfiguration().get("warpscript.traceURL") as string;
     this.webSocket = new WebSocket(traceURL);
@@ -321,13 +322,16 @@ ${this.addBreakPoints(this.ws ?? "")} %> '${this.sid}' TRACE EVAL`;
           this.dataStack = [...(data?.stack ?? [])];
           if (data.lastStmtpos) {
             this.lineInfo = data.lastStmtpos.split(":").map((l: string) => parseInt(l, 10));
-            this.currentLine = this.lineInfo[0] - 1 - 1;
+            this.currentLine = this.lineInfo[0] - 2;
           } else {
             this.lineInfo = undefined;
           }
           resolve(data);
         })
-        .catch((e) => reject(e));
+        .catch(e => {
+          console.error('getVars', e);
+          reject(e);
+        });
     });
   }
 
@@ -407,34 +411,34 @@ ${this.addBreakPoints(this.ws ?? "")} %> '${this.sid}' TRACE EVAL`;
    */
   public async getBreakpoints(_path: string, _line: number): Promise<any> {
     try {
-      if (!this.lineInfo) await this.getVars();
+      if ((this.lineInfo ?? []).length === 0) await this.getVars();
     } catch (e) {
       //    console.error(e)
     }
-    if (this.lineInfo) {
+    if ((this.lineInfo ?? []).length > 0) {
       const curLine = this.getLine(this.lineInfo[0] - 1);
-      const bps: number[] = [0];
-      const offset = curLine.startsWith('BREAKPOINT') ? 'BREAKPOINT'.length : 0;
+      const offset = curLine.startsWith('BREAKPOINT') ? 'BREAKPOINT'.length : -1;
+      const bps: number[] = [Math.max(this.lineInfo[2] - offset, 0)];
       return {
         line: this.lineInfo[0] - 1,
-        colStart: Math.max(this.lineInfo[1] + 1 - offset, 0),
-        colEnd: Math.max(this.lineInfo[2] + 1 - offset, 0),
+        colStart: Math.max(this.lineInfo[1] - offset, 0),
+        colEnd: Math.max(this.lineInfo[2] - offset, 0),
         bps
       };
-    } else
+    } else {
       return {
         line: this.currentLine,
         colStart: 0,
         colEnd: 0,
         bps: [0]
       };
+    }
   }
 
   /*
    * Set breakpoint in file with given line.
    */
   public async setBreakPoint(path: string, line: number): Promise<IRuntimeBreakpoint> {
-
     path = this.normalizePathAndCasing(path);
     const bp: IRuntimeBreakpoint = {
       verified: false,
@@ -445,6 +449,9 @@ ${this.addBreakPoints(this.ws ?? "")} %> '${this.sid}' TRACE EVAL`;
     if (!bps) {
       bps = new Array<IRuntimeBreakpoint>();
       this.breakPoints.set(path, bps);
+    }
+    if (!this.inDebug) {
+      await this.verifyBreakpoints(path);
     }
     bps.push(bp);
     await this.verifyBreakpoints(path);
@@ -571,7 +578,6 @@ ${this.addBreakPoints(this.ws ?? "")} %> '${this.sid}' TRACE EVAL`;
   }
 
   private getWords(l: number, line: string): Word[] {
-    console.log("getWords", l, line);
     // break line into words
     const WORD_REGEXP = /[a-z]+/gi;
     const words: Word[] = [];
@@ -600,7 +606,7 @@ ${this.addBreakPoints(this.ws ?? "")} %> '${this.sid}' TRACE EVAL`;
       await this.loadSource(path);
       bps.forEach((bp) => {
         if (!bp.verified && bp.line < this.sourceLines.length) {
-          bp.verified = !this.inDebug;
+          bp.verified = true; // !this.inDebug;
           const srcLine = this.getLine(bp.line);
           // Comments and multiline handling
           if (/<'/.test(srcLine)) bp.verified = false;
