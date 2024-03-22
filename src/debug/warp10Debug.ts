@@ -24,7 +24,7 @@ import { Subject } from "await-notify";
 import * as base64 from "base64-js";
 import ExecCommand from "../features/execCommand";
 import WarpScriptExtConstants from "../constants";
-import { ExtensionContext, Range, TextDocument, TextEditorDecorationType, Uri, ViewColumn, window, workspace, } from "vscode";
+import { ExtensionContext, Range, TextDocument, TextEditorDecorationType, Uri, ViewColumn, commands, window, workspace, } from "vscode";
 import { SharedMem } from "../extension";
 import WarpScriptParser, { specialCommentCommands } from "../warpScriptParser";
 import { FileAccessor, IRuntimeBreakpoint, IRuntimeVariableType, RuntimeVariable, Warp10DebugRuntime, } from "./warp10DebugRuntime";
@@ -66,6 +66,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
   private executedWarpScript: string | undefined;
   private inlineDecoration: TextEditorDecorationType | undefined;
   private context: ExtensionContext;
+  private noDebug = true;
   static threadID: number = 1;
 
   /**
@@ -215,24 +216,14 @@ export class Warp10DebugSession extends LoggingDebugSession {
    */
   protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneResponse, args: DebugProtocol.ConfigurationDoneArguments): void {
     super.configurationDoneRequest(response, args);
-    // notify the launchRequest that configuration has finished
-    if (
+    if (this.noDebug) {
+      this._configurationDone.notify();
+    } else if (
       !workspace.getConfiguration().get("warpscript.traceToken") ||
       !workspace.getConfiguration().get("warpscript.traceURL")
     ) {
-      const mess = ['In order to debug, you have to set some configuration parameters:'];
-      if(!workspace.getConfiguration().get("warpscript.traceToken")) {
-        mess.push('- traceToken = a valid trace token with the "trace" capability');
-      }
-      if(!workspace.getConfiguration().get("warpscript.traceURL")) {
-        mess.push('- traceURL = the trace WebSocket url');
-      }
-      window.showErrorMessage('WarpScript debug', { modal: true, detail:mess.join('\n') }, ...["Learn more"])
-      .then((selection) => {
-        if ("Learn more" === selection) {
-          TracePluginInfo.render(this.context);
-        }
-      });
+      this.sendEvent(new TerminatedEvent());
+      TracePluginInfo.render(this.context);
     } else {
       this._configurationDone.notify();
     }
@@ -343,42 +334,59 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   protected async launchRequest(response: DebugProtocol.LaunchResponse, args: ILaunchRequestArguments) {
+    this.noDebug = !!args.noDebug;
     // make sure to 'Stop' the buffered logging if 'trace' is not set
     logger.setup(args.trace ? Logger.LogLevel.Verbose : Logger.LogLevel.Stop, false);
     // wait 1 second until configuration has finished (and configurationDoneRequest has been called)
     await this._configurationDone.wait(1000);
-    const ws = await this._runtime.getContent(args.program);
-    const commentsCommands = WarpScriptParser.extractSpecialComments(ws ?? "");
-    const endpoint = commentsCommands.endpoint || workspace.getConfiguration().get("warpscript.Warp10URL");
-    Requester.getInstanceInfo(endpoint)
-      .then((info) => {
-        // check if trace plugin is active
-        const checkWS = JSON.parse(info);
-        const hasTrace = (checkWS[0]?.extensions ?? {}).trace;
-        if (!hasTrace) {
+
+    if (!!args.noDebug) {
+      console.log('executeCommand', { args });
+      commands.executeCommand('extension.execWS').then(() => {
+        if (this.inlineDecoration) {
+          this.inlineDecoration.dispose();
+        }
+        this.sendEvent(new TerminatedEvent());
+        this.sendResponse(response);
+      });
+    } else {
+      const ws = await this._runtime.getContent(args.program);
+      const commentsCommands = WarpScriptParser.extractSpecialComments(ws ?? "");
+      const endpoint = commentsCommands.endpoint || workspace.getConfiguration().get("warpscript.Warp10URL");
+      Requester.getInstanceInfo(endpoint)
+        .then((info) => {
+          // check if trace plugin is active
+          const checkWS = JSON.parse(info);
+          const hasTrace = (checkWS[0]?.extensions ?? {}).trace;
           if (this.inlineDecoration) {
             this.inlineDecoration.dispose();
           }
+          if (!hasTrace) {
+            this.sendEvent(new TerminatedEvent());
+            window.showWarningMessage("The Warp 10 Trace Plugin is not activated", ...["Learn more", "Cancel"])
+              .then((selection) => {
+                if ("Learn more" === selection) {
+                  TracePluginInfo.render(this.context);
+                }
+              });
+          } else {
+            // start the program in the runtime
+            console.log('this._runtime.start', { args });
+            this._runtime.start(args.program, checkWS[0])
+              .then((r) => {
+                if (this.inlineDecoration) {
+                  this.inlineDecoration.dispose();
+                }
+                this.executedWarpScript = r;
+                this.sendResponse(response);
+              });
+          }
+        })
+        .catch((e) => {
+          window.showErrorMessage(e.message ?? e, ...["Cancel"]);
           this.sendEvent(new TerminatedEvent());
-          window.showWarningMessage("The Warp 10 Trace Plugin is not activated", ...["Learn more", "Cancel"])
-            .then((selection) => {
-              if ("Learn more" === selection) {
-                TracePluginInfo.render(this.context);
-              }
-            });
-        } else {
-          // start the program in the runtime
-          this._runtime.start(args.program, checkWS[0])
-            .then((r) => {
-              this.executedWarpScript = r;
-              this.sendResponse(response);
-            });
-        }
-      })
-      .catch((e) => {
-        window.showErrorMessage(e.message ?? e, ...["Cancel"]);
-        this.sendEvent(new TerminatedEvent());
-      });
+        });
+    }
   }
 
   protected setFunctionBreakPointsRequest(response: DebugProtocol.SetFunctionBreakpointsResponse, _args: DebugProtocol.SetFunctionBreakpointsArguments, _request?: DebugProtocol.Request): void {

@@ -307,6 +307,7 @@ ${this.addBreakPoints(this.ws ?? "")}
   }
 
   private async getVars(): Promise<any> {
+    if(!this.inDebug) return Promise.resolve({});
     return new Promise((resolve, reject) => {
       const ws = `<% '${this.sid}' TSESSION 
 <%
