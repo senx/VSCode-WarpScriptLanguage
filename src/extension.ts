@@ -300,7 +300,6 @@ export function activate(context: ExtensionContext) {
         let m: RegExpExecArray | null;
         while (m = VARIABLE_REGEXP.exec(line)) {
           const varRange = new Range(position.line, m.index, position.line, m.index + m[0].length);
-
           if (varRange.contains(position)) {
             return new EvaluatableExpression(varRange);
           }

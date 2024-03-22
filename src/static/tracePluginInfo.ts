@@ -16,5 +16,7 @@ window.addEventListener("load", main);
 
 function main() {
   const contact = document.getElementById("contact") as Button;
+  const settings = document.getElementById("settings") as Button;
   contact.addEventListener('click', () => acquireVsCodeApi().postMessage({ 'link': 'https://senx.io/contact' }));
+  settings.addEventListener('click', () => acquireVsCodeApi().postMessage({ 'action': 'settings' }));
 }

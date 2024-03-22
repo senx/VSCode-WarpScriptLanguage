@@ -1,4 +1,4 @@
-import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn, ExtensionContext, workspace, env } from "vscode";
+import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn, ExtensionContext, workspace, env, commands } from "vscode";
 import WarpScriptExtConstants from "../constants";
 import { join } from "path";
 import GTSPreviewWebview from "./gtsPreview";
@@ -46,6 +46,9 @@ export class TracePluginInfo {
         message => {
           if (message.link) {
             env.openExternal(Uri.parse(message.link));
+          }
+          if (message.action === 'settings') {
+            commands.executeCommand('workbench.action.openSettings', 'WarpScript');
           }
         },
         undefined,
@@ -141,14 +144,18 @@ export class TracePluginInfo {
             <li><b>traceToken</b>: a valid trace token with the "trace" capability</li>
             <li><b>traceURL</b>: the trace WebSocket url</li>
           </ul>
+          <div style="margin-bottom: 1.2em;">
+            <vscode-button appearance="secondary" id="settings">
+              Open settings
+              <span slot="start" class="codicon codicon-settings-gear"></span>
+            </vscode-button>  
+          </div>
           <vscode-divider></vscode-divider>
           <div class="columns">
-          <div class="hero hero-sm text-center col-8 col-mx-auto">
-            <h5 class="text-center py-2">Dive into an unparalleled debugging and profiling experience with TracePlugin. Download now and trace your path to impeccable code. Transform your development process with TracePlugin.</h5>
-            <div>
-            <vscode-button appearance="primary" id="contact">Contact sales</vscode-button>  
+            <div class="hero hero-sm text-center col-8 col-mx-auto">
+              <h5 class="text-center py-2">Dive into an unparalleled debugging and profiling experience with TracePlugin. Download now and trace your path to impeccable code. Transform your development process with TracePlugin.</h5>
+              <div><vscode-button appearance="primary" id="contact">Contact sales</vscode-button></div>
             </div>
-          </div>
           </div>
           <vscode-divider></vscode-divider>
 
