@@ -43,7 +43,7 @@ export class ProfilerWebview {
       const line = activeTextEditor.document.lineAt(i).text;
       line.split('').forEach((char, c) => {
         if ((profLine[profIndex] ?? []).length > 0 && c === profLine[profIndex][1]) {
-          if ('M' === profLine[profIndex][3]) {
+          if ('M' === profLine[profIndex][3][0]) {
             this.lastMacros.push(profLine[profIndex].join('-'));
             this.macros[profLine[profIndex].join('-')] = { start: i + 1 };
           }
@@ -51,7 +51,7 @@ export class ProfilerWebview {
         code += char;
         if (code.endsWith('%>')) {
           const m = this.lastMacros.pop();
-          this.macros[m].end = i + 1;
+          if(this.macros[m]) this.macros[m].end = i + 1;
         }
         if ((profLine[profIndex] ?? []).length > 0 && c === profLine[profIndex][2]) {
           profIndex++;
@@ -119,7 +119,7 @@ export class ProfilerWebview {
 
   highlight(profile: any[]) {
     this.unhighlight();
-    if ('M' === profile[3]) {
+    if ('M' === profile[3][0]) {
       const m = this.macros[profile.join('-')];
       const ranges = [];
       for (let i = m.start - 1; i < m.end; i++) {

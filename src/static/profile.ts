@@ -38,7 +38,7 @@ function highlight(tr: Element, p: any) {
 }
 
 function getName(p: any[]) {
-  switch (p[3]) {
+  switch (p[3][0]) {
     case 'm':
       return 'Total';
     case 'M':
