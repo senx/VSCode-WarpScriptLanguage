@@ -415,8 +415,8 @@
   "dependencies": {
     "@senx/flows-beautifier": "1.0.4",
     "@senx/warp10": "2.0.3",
-    "@vscode/debugadapter": "^1.56.0",
-    "@vscode/debugadapter-testsupport": "^1.56.0",
+    "@vscode/debugadapter": "^1.65.0",
+    "@vscode/debugadapter-testsupport": "^1.65.0",
     "@vscode/webview-ui-toolkit": "^1.4.0",
     "at-least-node": "1.0.0",
     "await-notify": "^1.0.1",
@@ -431,8 +431,8 @@
     "request": "2.88.2",
     "semver": "^7.6.0",
     "socks-proxy-agent": "5.0.0",
-    "uuid": "9.0.0",
-    "vscode-languageclient": "8.1.0",
+    "uuid": "9.0.1",
+    "vscode-languageclient": "9.0.1",
     "vscode-proxy-agent": "0.12.0",
     "ws": "^8.16.0"
   }

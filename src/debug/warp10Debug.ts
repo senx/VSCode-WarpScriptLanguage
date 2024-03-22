@@ -352,8 +352,8 @@ export class Warp10DebugSession extends LoggingDebugSession {
     } else {
       const ws = await this._runtime.getContent(args.program);
       const commentsCommands = WarpScriptParser.extractSpecialComments(ws ?? "");
-      const endpoint = commentsCommands.endpoint || workspace.getConfiguration().get("warpscript.Warp10URL");
-      Requester.getInstanceInfo(endpoint)
+      const endpoint = commentsCommands.endpoint ?? workspace.getConfiguration().get("warpscript.Warp10URL");
+      Requester.getInstanceInfo(endpoint ?? '')
         .then((info) => {
           // check if trace plugin is active
           const checkWS = JSON.parse(info);

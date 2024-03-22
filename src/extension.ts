@@ -12,7 +12,7 @@ import WSCompletionItemProvider from './providers/completion/WSCompletionItemPro
 import WSCompletionVariablesProvider from './providers/wsCompletionVariablesProvider'
 import WSCompletionMacrosProvider from './providers/wsCompletionMacrosProvider' // TODO
 import WarpScriptExtConstants from './constants'
-import WarpScriptExtGlobals = require('./globals')
+import {WarpScriptExtGlobals} from './globals';
 import GTSPreviewWebview from './webviews/gtsPreview'
 import ImagePreviewWebview from './webviews/imagePreview'
 import DiscoveryPreviewWebview from './webviews/discoveryPreview'

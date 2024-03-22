@@ -1,6 +1,6 @@
 import { TextDocument, workspace } from "vscode";
 import { gzip } from "zlib";
-import { sessionName } from '../globals';
+import { WarpScriptExtGlobals } from '../globals';
 import pac from 'pac-resolver';
 import { StatusbarUi } from "../statusbarUi";
 import dns from 'dns';
@@ -20,8 +20,8 @@ export class Requester {
     return new Promise((resolve, reject) => {
       const useGZIP: boolean = !!workspace.getConfiguration().get('warpscript.useGZIP');
       const timeout: number = workspace.getConfiguration().get('warpscript.http.timeout') ?? 5000;
-      const proxy_pac: string = workspace.getConfiguration().get('warpscript.ProxyPac');
-      const proxy_directUrl: string = workspace.getConfiguration().get('warpscript.ProxyURL');
+      const proxy_pac: string = workspace.getConfiguration().get('warpscript.ProxyPac') ?? '';
+      const proxy_directUrl: string = workspace.getConfiguration().get('warpscript.ProxyURL') ?? '';
 
       gzip(Buffer.from(ws, 'utf8'), async (err, gzipWarpScript) => {
         if (err) {
@@ -32,7 +32,7 @@ export class Requester {
           headers: {
             'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8',
             'Accept': 'application/json',
-            'X-Warp10-WarpScriptSession': sessionName,
+            'X-Warp10-WarpScriptSession': WarpScriptExtGlobals.sessionName,
           },
           method: "POST",
           url,

@@ -82,7 +82,7 @@ export class TracePluginInfo {
   private _getWebviewContent(webview: Webview, extensionUri: Uri) {
     let theme = workspace.getConfiguration().get('warpscript.theme');
     if (theme == "auto") {
-      let vscodetheme: string = workspace.getConfiguration().get("workbench.colorTheme");
+      let vscodetheme: string = workspace.getConfiguration().get("workbench.colorTheme") ?? 'light';
       if (GTSPreviewWebview.LightThemesList.indexOf(vscodetheme) > -1) {
         theme = "light";
       }

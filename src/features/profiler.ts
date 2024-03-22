@@ -11,7 +11,7 @@ import pac from 'pac-resolver';
 import dns from 'dns';
 import { promisify } from 'util';
 import { gzip } from 'zlib';
-import { endpointsForThisSession, sessionName } from '../globals';
+import { WarpScriptExtGlobals } from '../globals';
 import WarpScriptExtConstants from '../constants';
 import { SharedMem } from '../extension';
 import ExecCommand from './execCommand';
@@ -211,7 +211,7 @@ ${wrappedWarpScript}
               headers: {
                 'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8',
                 'Accept': 'application/json',
-                'X-Warp10-WarpScriptSession': sessionName,
+                'X-Warp10-WarpScriptSession': WarpScriptExtGlobals.sessionName,
               },
               method: "POST",
               url: Warp10URL,
@@ -364,7 +364,9 @@ ${wrappedWarpScript}
                   } catch (e) { }
 
                   const profileResult = JSON.parse(body)[0];
-                  ProfilerWebview.render(context, profileResult.profile ?? [], window.activeTextEditor);
+                  if (window.activeTextEditor) {
+                    ProfilerWebview.render(context, profileResult.profile ?? [], window.activeTextEditor);
+                  }
                   body = profileResult.stack ?? '[]';
 
                   // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
@@ -418,14 +420,14 @@ ${wrappedWarpScript}
                 StatusbarUi.Execute();
               }
               // decrease request count on this endpoint
-              endpointsForThisSession[req.uri.href]--;
-              console.debug(endpointsForThisSession)
+              WarpScriptExtGlobals.endpointsForThisSession[req.uri.href]--;
+              console.debug(WarpScriptExtGlobals.endpointsForThisSession)
             });
             ExecCommand.currentRunningRequests.push(req);
             // increase request count on this endpoint, to use it later for session abort
-            endpointsForThisSession[req.uri.href] = (endpointsForThisSession[req.uri.href] || 0) + 1;
+            WarpScriptExtGlobals.endpointsForThisSession[req.uri.href] = (WarpScriptExtGlobals.endpointsForThisSession[req.uri.href] || 0) + 1;
 
-            StatusbarUi.Working(`${endpointsForThisSession[req.uri.href]} WarpScripts running...`);
+            StatusbarUi.Working(`${WarpScriptExtGlobals.endpointsForThisSession[req.uri.href]} WarpScripts running...`);
           });
         });
       })
@@ -463,9 +465,9 @@ ${wrappedWarpScript}
       outputWin.appendLine("Sending WSKILLSESSION to endpoints... 10s before killing every connections.");
 
       // 3 seconds to abort on every endpoints
-      Object.keys(endpointsForThisSession).forEach(endpoint => {
+      Object.keys(WarpScriptExtGlobals.endpointsForThisSession).forEach(endpoint => {
         let req = new Warp10({ endpoint }); // 3 second timeout
-        req.exec(`<% "${sessionName}" 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`)
+        req.exec(`<% "${WarpScriptExtGlobals.sessionName}" 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`)
           .then((answer: any) => {
             if (answer.result[0]) {
               if (answer.result[0] === 0) {
@@ -486,11 +488,12 @@ ${wrappedWarpScript}
         // abort all requests, execute the callback with an error manually set. 
         ExecCommand.currentRunningRequests.forEach(req => {
           req.abort();
+          // @ts-ignore
           req.callback({ 'aborted': 'true' }, undefined, undefined);
         });
         ExecCommand.currentRunningRequests = [];
-        for (let prop in endpointsForThisSession) {
-          delete endpointsForThisSession[prop];
+        for (let prop in WarpScriptExtGlobals.endpointsForThisSession) {
+          delete WarpScriptExtGlobals.endpointsForThisSession[prop];
         }
         outputWin.appendLine("Done. WarpScripts may be still running on the server, but VSCode closed every connections.");
       }, 10000)

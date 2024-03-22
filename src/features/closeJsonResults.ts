@@ -1,7 +1,7 @@
 import { commands, TextEditor, WebviewPanel, window } from 'vscode';
 import { Disposable } from 'vscode-jsonrpc';
 import WarpScriptExtConstants from '../constants';
-import WarpScriptExtGlobals = require('../globals')
+import { WarpScriptExtGlobals } from '../globals';
 /**
  * This functions browse all the opened documents.
  * If the filename match the /tmp/xxxx.json pattern used for the WarpScript output, it close them without any confirmation.

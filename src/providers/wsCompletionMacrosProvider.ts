@@ -68,7 +68,7 @@ export default class WSCompletionMacrosProvider
 
           return resolve(result);
         }
-        return resolve(undefined);
+        return resolve([]);
       }
 
 
