@@ -38,8 +38,7 @@ import { basename } from "path-browserify";
 // @ts-ignore
 import { Subject } from "await-notify";
 import * as base64 from "base64-js";
-import { ExtensionContext, Range, TextDocument, TextEditorDecorationType, Uri, ViewColumn, commands, languages, window, workspace } from "vscode";
-import { DiagnosticSeverity } from "vscode-languageclient";
+import { ExtensionContext, Range, TextDocument, TextEditorDecorationType, Uri, ViewColumn, commands, window, workspace } from "vscode";
 import WarpScriptExtConstants from "../constants";
 import { SharedMem } from "../extension";
 import ExecCommand from "../features/execCommand";
