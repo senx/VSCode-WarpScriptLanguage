@@ -15,21 +15,38 @@
  */
 
 import {
-  Logger, logger, LoggingDebugSession, InitializedEvent, TerminatedEvent, StoppedEvent, BreakpointEvent, OutputEvent, ProgressStartEvent, ProgressUpdateEvent, ProgressEndEvent, InvalidatedEvent, Thread, StackFrame, Scope, Source, Handles, Breakpoint, MemoryEvent,
+  Breakpoint,
+  BreakpointEvent,
+  Handles,
+  InitializedEvent,
+  InvalidatedEvent,
+  Logger,
+  LoggingDebugSession,
+  MemoryEvent,
+  OutputEvent,
+  ProgressEndEvent,
+  ProgressStartEvent, ProgressUpdateEvent,
+  Scope, Source,
+  StackFrame,
+  StoppedEvent,
+  TerminatedEvent,
+  Thread,
+  logger,
 } from "@vscode/debugadapter";
 import { DebugProtocol } from "@vscode/debugprotocol";
 import { basename } from "path-browserify";
 // @ts-ignore
 import { Subject } from "await-notify";
 import * as base64 from "base64-js";
-import ExecCommand from "../features/execCommand";
+import { ExtensionContext, Range, TextDocument, TextEditorDecorationType, Uri, ViewColumn, commands, languages, window, workspace } from "vscode";
+import { DiagnosticSeverity } from "vscode-languageclient";
 import WarpScriptExtConstants from "../constants";
-import { ExtensionContext, Range, TextDocument, TextEditorDecorationType, Uri, ViewColumn, commands, window, workspace, } from "vscode";
 import { SharedMem } from "../extension";
-import WarpScriptParser, { specialCommentCommands } from "../warpScriptParser";
-import { FileAccessor, IRuntimeBreakpoint, IRuntimeVariableType, RuntimeVariable, Warp10DebugRuntime, } from "./warp10DebugRuntime";
+import ExecCommand from "../features/execCommand";
 import { Requester } from "../features/requester";
+import WarpScriptParser, { specialCommentCommands } from "../warpScriptParser";
 import { TracePluginInfo } from "../webviews/tracePluginInfo";
+import { FileAccessor, IRuntimeBreakpoint, IRuntimeVariableType, RuntimeVariable, Warp10DebugRuntime, } from "./warp10DebugRuntime";
 
 /**
  * This interface describes the mock-debug specific launch attributes
@@ -91,7 +108,21 @@ export class Warp10DebugSession extends LoggingDebugSession {
     this._runtime.on("stopOnInstructionBreakpoint", () => this.sendEvent(new StoppedEvent("instruction breakpoint", Warp10DebugSession.threadID)));
     this._runtime.on("stopOnException", (exception) => {
       if (exception) {
-        this.sendEvent(new StoppedEvent(`exception(${exception})`, Warp10DebugSession.threadID));
+        if (this._runtime.isDebug() && window.activeTextEditor) {
+          if (this.inlineDecoration) {
+            this.inlineDecoration.dispose();
+          }
+          this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
+          window.activeTextEditor.setDecorations(this.inlineDecoration, [
+            new Range(
+              exception.info.line - 1,
+              exception.info.colEnd,
+              exception.info.line - 1,
+              exception.info.colEnd
+            )
+          ]);
+        }
+        this.sendEvent(new StoppedEvent(`exception(${exception.e})`, Warp10DebugSession.threadID));
       } else {
         this.sendEvent(new StoppedEvent("exception", Warp10DebugSession.threadID));
       }
@@ -371,7 +402,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
               });
           } else {
             // start the program in the runtime
-            console.log('this._runtime.start', { args });
             this._runtime.start(args.program, checkWS[0])
               .then((r) => {
                 if (this.inlineDecoration) {
@@ -412,15 +442,13 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   protected async breakpointLocationsRequest(response: DebugProtocol.BreakpointLocationsResponse, args: DebugProtocol.BreakpointLocationsArguments, _request?: DebugProtocol.Request): Promise<void> {
-    let breakpoints: any[] = [];
+    let breakpoints: DebugProtocol.BreakpointLocation[] = [];
     if (this.inlineDecoration) {
       this.inlineDecoration.dispose();
     }
     if (args.source.path) {
       const info = await this._runtime.getBreakpoints(args.source.path, this.convertClientLineToDebugger(args.line));
-      if (info.line === args.line) {
-        breakpoints = info.bps.map(() => ({ line: info.line }));
-      }
+      breakpoints = info.bps.map(() => ({ line: args.line }));
       if (this._runtime.isDebug() && window.activeTextEditor) {
         this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
         window.activeTextEditor.setDecorations(this.inlineDecoration, [
@@ -432,8 +460,8 @@ export class Warp10DebugSession extends LoggingDebugSession {
           )
         ]);
       }
-      response.body = { breakpoints };
     }
+    response.body = { breakpoints };
     this.sendResponse(response);
   }
 

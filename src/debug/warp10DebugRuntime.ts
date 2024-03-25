@@ -117,6 +117,7 @@ export class Warp10DebugRuntime extends EventEmitter {
   // the initial (and one and only) file we are 'debugging'
   private _sourceFile: string = "";
   private lineInfo: any;
+  private errorpos: any;
   public get sourceFile() {
     return this._sourceFile;
   }
@@ -161,6 +162,7 @@ export class Warp10DebugRuntime extends EventEmitter {
   private program: string | undefined;
   private inDebug = false;
   private checkWS: any = {};
+  private exceptionRaised = false;
 
   constructor(private fileAccessor: FileAccessor) {
     super();
@@ -193,6 +195,7 @@ export class Warp10DebugRuntime extends EventEmitter {
     this.program = program;
     this.checkWS = checkWS;
     this.firstCnx = true;
+    this.exceptionRaised = false;
     this.ws = undefined;
     this._sourceFile = undefined;
     await this.getContent(program);
@@ -209,10 +212,10 @@ ${this.addBreakPoints(this.ws ?? "")}
 %> '${this.sid}' TRACE EVAL`;
     this.sourceLines = wrapped.split('\n');
     const traceURL: string = workspace.getConfiguration().get("warpscript.traceURL") as string;
-    if(!traceURL) {
+    if (!traceURL) {
       this.close();
       return this.ws ?? "";
-    } 
+    }
     this.webSocket = new WebSocket(traceURL);
     this.webSocket.on("open", () => this.log(`Connected to server: ${traceURL}`));
     this.webSocket.on("error", (e: any) => {
@@ -234,6 +237,7 @@ ${this.addBreakPoints(this.ws ?? "")}
         this.error(msg.toString().replace("// ", ""), true);
       }
       if (msg.toString().startsWith("OK Attached to session")) {
+        this.sendtoWS("CATCH");
         Requester.send(this.endpoint ?? "", wrapped)
           .then((r: any) => {
             this.close();
@@ -265,6 +269,26 @@ ${this.addBreakPoints(this.ws ?? "")}
             this.firstCnx = false;
           }
         }
+      } else if (msg.toString().startsWith('EXCEPTION')) {
+        if (!this.errorpos) {
+          await this.getVars();
+        }
+        this.errorpos = this.errorpos ?? this.lineInfo;
+        if ((this.errorpos ?? []).length > 0) {
+          const curLine = this.getLine(this.errorpos[0] - 1);
+          const offset = curLine.startsWith('BREAKPOINT') ? 'BREAKPOINT'.length : -1;
+          const bps: number[] = [Math.max(this.errorpos[2] - offset, 0)];
+          this.sendEvent('stopOnException', {
+            e: msg.toString(), info: {
+              line: this.errorpos[0] - 1,
+              colStart: Math.max(this.errorpos[1] - offset, 0),
+              colEnd: Math.max(this.errorpos[2] - offset, 0),
+              bps
+            }
+          });
+        }
+        this.error(msg.toString(), true);
+        this.exceptionRaised = true;
       }
     });
 
@@ -307,18 +331,19 @@ ${this.addBreakPoints(this.ws ?? "")}
   }
 
   private async getVars(): Promise<any> {
-    if(!this.inDebug) return Promise.resolve({});
+    if (!this.inDebug) return Promise.resolve({});
     return new Promise((resolve, reject) => {
       const ws = `<% '${this.sid}' TSESSION 
 <%
-  'last.stmtpos' STACKATTRIBUTE '.stmtpos' TSTORE %> TEVAL
-  TSTACK SYMBOLS 'symbols' STORE 
-  STACKTOLIST REVERSE 'stack' STORE
-  { 
+'last.stmtpos' STACKATTRIBUTE '.stmtpos' TSTORE 'last.errorpos' STACKATTRIBUTE '.errorpos' TSTORE %> TEVAL
+TSTACK SYMBOLS 'symbols' STORE 
+STACKTOLIST REVERSE 'stack' STORE
+{ 
     'vars' { $symbols <% DUP LOAD TYPEOF %> FOREACH } 
     'stack' $stack <% TYPEOF %> F LMAP
     'lastStmtpos'  '.stmtpos' TLOAD
-  }
+    'errorpos'  '.errorpos' TLOAD
+}
 %> <% RETHROW %> <% %> TRY`;
       Requester.send(this.endpoint ?? "", ws)
         .then((vars: any) => {
@@ -327,6 +352,7 @@ ${this.addBreakPoints(this.ws ?? "")}
           this.dataStack = [...(data?.stack ?? [])];
           if (data.lastStmtpos) {
             this.lineInfo = data.lastStmtpos.split(":").map((l: string) => parseInt(l, 10));
+            this.errorpos = (data.errorpos ?? '').split(":").map((l: string) => parseInt(l, 10));
             this.currentLine = this.lineInfo[0] - 2;
           } else {
             this.lineInfo = undefined;
@@ -352,6 +378,8 @@ ${this.addBreakPoints(this.ws ?? "")}
     if (this.webSocket) {
       this.debug("Send to WebSocket " + message);
       this.webSocket.send(message);
+    } else {
+      console.error('Socket closed')
     }
   }
 
@@ -359,22 +387,30 @@ ${this.addBreakPoints(this.ws ?? "")}
    * Continue execution to the end/beginning.
    */
   public continue() {
-    this.sendtoWS("CONTINUE");
+    if (!this.exceptionRaised) {
+      this.sendtoWS("CONTINUE");
+    } else {
+      this.close();
+    }
   }
 
   /**
    * Step to the next/previous non empty line.
    */
   public step(_instruction: boolean, _reverse: boolean) {
-    this.sendtoWS("STEP");
+    if (!this.exceptionRaised) {
+      this.sendtoWS("STEP");
+    } else {
+      this.close();
+    }
   }
 
   public stepIn() {
-    this.sendtoWS("STEPINTO");
+    // this.sendtoWS("STEPINTO");
   }
 
   public stepOut() {
-    this.sendtoWS("STEPRETURN");
+    // this.sendtoWS("STEPRETURN");
   }
 
   public getStepInTargets(frameId: number): IRuntimeStepInTargets[] {
@@ -385,25 +421,16 @@ ${this.addBreakPoints(this.ws ?? "")}
       return [];
     }
     const { name, index } = words[frameId];
-    return name.split("").map((c, ix) => ({ id: index + ix, label: `target: ${c}` }));
+    return name.split('').map((c, ix) => ({ id: index + ix, label: `target: ${c}` }));
   }
 
   public stack(_startFrame: number, _endFrame: number): IRuntimeStack {
-    const frames: IRuntimeStackFrame[] = [];
-    this.dataStack = this.dataStack ?? [];
-    for (let i = 0; i < this.dataStack.length; i++) {
-      let f = this.dataStack[i];
-      if (typeof f === "object") {
-        f = JSON.stringify(f);
-      }
-      frames.push({
-        index: i,
-        name: f,
-        file: this._sourceFile,
-        line: this.currentLine,
-        column: 0,
-      });
-    }
+    const frames: IRuntimeStackFrame[] = [{
+      name: 'WarpScript',
+      file: this.program,
+      index: 0,
+      line: this.currentLine
+    }];
     return { frames: frames, count: frames.length };
   }
 
@@ -579,7 +606,7 @@ ${this.addBreakPoints(this.ws ?? "")}
 
   // private methods
   private getLine(line?: number): string {
-    return this.sourceLines[line === undefined ? this.currentLine : line].trim();
+    return (this.sourceLines[line === undefined ? this.currentLine : line] ?? '').trim();
   }
 
   private getWords(l: number, line: string): Word[] {

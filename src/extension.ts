@@ -292,7 +292,7 @@ export function activate(context: ExtensionContext) {
     }
 
     // override VS Code's default implementation of the debug hover
-    // here we match only Mock "variables", that are words starting with an '$'
+    // here we match only WarpScript "variables", that are words starting with an '$'
     context.subscriptions.push(languages.registerEvaluatableExpressionProvider('warpscript', {
       provideEvaluatableExpression(document: TextDocument, position: any): ProviderResult<EvaluatableExpression> {
         const VARIABLE_REGEXP = /\$[a-z][a-z0-9]*/ig;
