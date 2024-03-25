@@ -38,7 +38,8 @@ import { basename } from "path-browserify";
 // @ts-ignore
 import { Subject } from "await-notify";
 import * as base64 from "base64-js";
-import { ExtensionContext, Range, TextDocument, TextEditorDecorationType, Uri, ViewColumn, commands, window, workspace } from "vscode";
+import { DiagnosticCollection, ExtensionContext, Range, TextDocument, TextEditorDecorationType, Uri, ViewColumn, commands, languages, window, workspace } from "vscode";
+import { DiagnosticSeverity } from "vscode-languageclient";
 import WarpScriptExtConstants from "../constants";
 import { SharedMem } from "../extension";
 import ExecCommand from "../features/execCommand";
@@ -84,6 +85,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
   private context: ExtensionContext;
   private noDebug = true;
   static threadID: number = 1;
+  private diagnosticCollection: DiagnosticCollection;
 
   /**
    * Creates a new debug adapter that is used for one debug session.
@@ -120,6 +122,32 @@ export class Warp10DebugSession extends LoggingDebugSession {
               exception.info.colEnd
             )
           ]);
+          this.diagnosticCollection = languages.createDiagnosticCollection('test');
+          if (window.activeTextEditor) {
+            // this.updateDiagnostics(window.activeTextEditor.document, collection);
+            this.diagnosticCollection.clear();
+
+            this.diagnosticCollection.set(window.activeTextEditor.document.uri, [{
+              code: '',
+              message: exception.e,
+              range:new Range(
+                exception.info.line - 1,
+                exception.info.colEnd,
+                exception.info.line - 1,
+                exception.info.colEnd
+              ),
+              severity: DiagnosticSeverity.Error,
+              source: window.activeTextEditor.document.uri.toString(),
+              relatedInformation: [ ]
+            }]);
+          }
+          /*
+          context.subscriptions.push(window.onDidChangeActiveTextEditor(editor => {
+            if (editor) {
+              this.updateDiagnostics(editor.document, collection);
+            }
+          }));
+          */
         }
         this.sendEvent(new StoppedEvent(`exception(${exception.e})`, Warp10DebugSession.threadID));
       } else {
@@ -132,6 +160,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
       if (this.inlineDecoration) {
         this.inlineDecoration.dispose();
       }
+      this.diagnosticCollection.clear();
       this.sendEvent(new TerminatedEvent());
     });
     this._runtime.on("debugResult", (r: any) => this.handleResult(r).then(() => this.sendEvent(new TerminatedEvent())));

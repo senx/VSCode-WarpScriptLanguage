@@ -118,6 +118,7 @@ export class Warp10DebugRuntime extends EventEmitter {
   private _sourceFile: string = "";
   private lineInfo: any;
   private errorpos: any;
+  private errorMess: any[];
   public get sourceFile() {
     return this._sourceFile;
   }
@@ -274,12 +275,18 @@ ${this.addBreakPoints(this.ws ?? "")}
           await this.getVars();
         }
         this.errorpos = this.errorpos ?? this.lineInfo;
+        let errMess = msg.toString();
+        if (this.errorMess && this.errorMess.length > 0) {
+          errMess = this.errorMess[0].message ?? msg.toString();
+        }
         if ((this.errorpos ?? []).length > 0) {
           const curLine = this.getLine(this.errorpos[0] - 1);
           const offset = curLine.startsWith('BREAKPOINT') ? 'BREAKPOINT'.length : -1;
           const bps: number[] = [Math.max(this.errorpos[2] - offset, 0)];
+          errMess = `Error line ${this.errorpos[0] - 1}:${Math.max(this.errorpos[1] - offset, 0)}: ${errMess}`;
           this.sendEvent('stopOnException', {
-            e: msg.toString(), info: {
+            e: errMess,
+            info: {
               line: this.errorpos[0] - 1,
               colStart: Math.max(this.errorpos[1] - offset, 0),
               colEnd: Math.max(this.errorpos[2] - offset, 0),
@@ -287,7 +294,7 @@ ${this.addBreakPoints(this.ws ?? "")}
             }
           });
         }
-        this.error(msg.toString(), true);
+        this.error(errMess, false);
         this.exceptionRaised = true;
       }
     });
@@ -343,6 +350,7 @@ STACKTOLIST REVERSE 'stack' STORE
     'stack' $stack <% TYPEOF %> F LMAP
     'lastStmtpos'  '.stmtpos' TLOAD
     'errorpos'  '.errorpos' TLOAD
+    'error' TERROR 
 }
 %> <% RETHROW %> <% %> TRY`;
       Requester.send(this.endpoint ?? "", ws)
@@ -353,6 +361,7 @@ STACKTOLIST REVERSE 'stack' STORE
           if (data.lastStmtpos) {
             this.lineInfo = data.lastStmtpos.split(":").map((l: string) => parseInt(l, 10));
             this.errorpos = (data.errorpos ?? '').split(":").map((l: string) => parseInt(l, 10));
+            this.errorMess = data.error;
             this.currentLine = this.lineInfo[0] - 2;
           } else {
             this.lineInfo = undefined;
