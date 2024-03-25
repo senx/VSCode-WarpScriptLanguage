@@ -122,17 +122,15 @@ export class Warp10DebugSession extends LoggingDebugSession {
               exception.info.colEnd
             )
           ]);
-          this.diagnosticCollection = languages.createDiagnosticCollection('test');
           if (window.activeTextEditor) {
-            // this.updateDiagnostics(window.activeTextEditor.document, collection);
-            this.diagnosticCollection.clear();
-
+            if(this.diagnosticCollection) this.diagnosticCollection.clear();
+            this.diagnosticCollection = languages.createDiagnosticCollection('WarpScript-debug');
             this.diagnosticCollection.set(window.activeTextEditor.document.uri, [{
               code: '',
               message: exception.e,
               range:new Range(
                 exception.info.line - 1,
-                exception.info.colEnd,
+                exception.info.colStart - 1,
                 exception.info.line - 1,
                 exception.info.colEnd
               ),
@@ -141,13 +139,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
               relatedInformation: [ ]
             }]);
           }
-          /*
-          context.subscriptions.push(window.onDidChangeActiveTextEditor(editor => {
-            if (editor) {
-              this.updateDiagnostics(editor.document, collection);
-            }
-          }));
-          */
         }
         this.sendEvent(new StoppedEvent(`exception(${exception.e})`, Warp10DebugSession.threadID));
       } else {
@@ -160,7 +151,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
       if (this.inlineDecoration) {
         this.inlineDecoration.dispose();
       }
-      this.diagnosticCollection.clear();
+      if(this.diagnosticCollection) this.diagnosticCollection.clear();
       this.sendEvent(new TerminatedEvent());
     });
     this._runtime.on("debugResult", (r: any) => this.handleResult(r).then(() => this.sendEvent(new TerminatedEvent())));

@@ -109,8 +109,8 @@ interface Word {
   index: number;
 }
 
-export function timeout(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+export function timeout(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export class Warp10DebugRuntime extends EventEmitter {
@@ -271,15 +271,14 @@ ${this.addBreakPoints(this.ws ?? "")}
           }
         }
       } else if (msg.toString().startsWith('EXCEPTION')) {
-        if (!this.errorpos) {
-          await this.getVars();
-        }
+        await timeout(500);
+        await this.getVars();
         this.errorpos = this.errorpos ?? this.lineInfo;
         let errMess = msg.toString();
         if (this.errorMess && this.errorMess.length > 0) {
           errMess = this.errorMess[0].message ?? msg.toString();
         }
-        if ((this.errorpos ?? []).length > 0) {
+        if ((this.errorpos ?? []).length > 1) {
           const curLine = this.getLine(this.errorpos[0] - 1);
           const offset = curLine.startsWith('BREAKPOINT') ? 'BREAKPOINT'.length : -1;
           const bps: number[] = [Math.max(this.errorpos[2] - offset, 0)];
@@ -350,7 +349,7 @@ STACKTOLIST REVERSE 'stack' STORE
     'stack' $stack <% TYPEOF %> F LMAP
     'lastStmtpos'  '.stmtpos' TLOAD
     'errorpos'  '.errorpos' TLOAD
-    'error' TERROR 
+    'terror' TERROR 
 }
 %> <% RETHROW %> <% %> TRY`;
       Requester.send(this.endpoint ?? "", ws)
@@ -360,8 +359,8 @@ STACKTOLIST REVERSE 'stack' STORE
           this.dataStack = [...(data?.stack ?? [])];
           if (data.lastStmtpos) {
             this.lineInfo = data.lastStmtpos.split(":").map((l: string) => parseInt(l, 10));
-            this.errorpos = (data.errorpos ?? '').split(":").map((l: string) => parseInt(l, 10));
-            this.errorMess = data.error;
+            this.errorpos = (data.errorpos ?? data.lastStmtpos).split(":").map((l: string) => parseInt(l, 10));
+            this.errorMess = data.terror;
             this.currentLine = this.lineInfo[0] - 2;
           } else {
             this.lineInfo = undefined;
