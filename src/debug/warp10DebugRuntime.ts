@@ -228,16 +228,15 @@ ${this.addBreakPoints(this.ws ?? "")}
       }
       this.close();
     });
-    this.webSocket.on("message", async (msg: Buffer) => {
+    this.webSocket.on("message", async (buf: Buffer) => {
+      const msg = buf.toString('utf-8');
       this.debug(`Received message from server: ${msg}`);
-      if (msg.toString().startsWith("Welcome to the ")) {
+      if (msg.startsWith('VERSION')) {
         this.sendtoWS("ATTACH " + this.sid);
-      }
-      if (msg.toString().startsWith("// Maximum number of concurrent sessions reached")) {
+      } else if (msg.startsWith("// Maximum number of concurrent sessions reached")) {
         this.close();
-        this.error(msg.toString().replace("// ", ""), true);
-      }
-      if (msg.toString().startsWith("OK Attached to session")) {
+        this.error(msg.replace("// ", ""), true);
+      } else if (msg.startsWith("OK Attached to session")) {
         this.sendtoWS("CATCH");
         Requester.send(this.endpoint ?? "", wrapped)
           .then((r: any) => {
@@ -259,7 +258,7 @@ ${this.addBreakPoints(this.ws ?? "")}
         if (this.inDebug) {
           await this.getVars();
         }
-        if (/'BREAKPOINT' FUNCREF/.test(msg.toString())) {
+        if (/'BREAKPOINT' FUNCREF/.test(msg)) {
           this.sendEvent("stopOnBreakpoint");
         } else {
           if (!this.firstCnx) {
@@ -270,13 +269,13 @@ ${this.addBreakPoints(this.ws ?? "")}
             this.firstCnx = false;
           }
         }
-      } else if (msg.toString().startsWith('EXCEPTION')) {
+      } else if (msg.startsWith('EXCEPTION')) {
         await timeout(500);
         await this.getVars();
         this.errorpos = this.errorpos ?? this.lineInfo;
-        let errMess = msg.toString();
+        let errMess = msg;
         if (this.errorMess && this.errorMess.length > 0) {
-          errMess = this.errorMess[0].message ?? msg.toString();
+          errMess = this.errorMess[0].message ?? msg;
         }
         if ((this.errorpos ?? []).length > 1) {
           const curLine = this.getLine(this.errorpos[0] - 1);
