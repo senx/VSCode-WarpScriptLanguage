@@ -208,9 +208,8 @@ export class Warp10DebugRuntime extends EventEmitter {
       this.webSocket.close();
       this.webSocket = undefined;
     }
-    const wrapped = `true STMTPOS '${workspace.getConfiguration().get("warpscript.traceToken")}' CAPADD <%
-${this.addBreakPoints(this.ws ?? "")}
-%> '${this.sid}' TRACE EVAL`;
+    const wrapped = `true STMTPOS '${workspace.getConfiguration().get("warpscript.traceToken")}' CAPADD '${this.sid}' TRACEMODE
+${this.addBreakPoints(this.ws ?? "")}`;
     this.sourceLines = wrapped.split('\n');
     const traceURL: string = workspace.getConfiguration().get("warpscript.traceURL") as string;
     if (!traceURL) {
@@ -252,14 +251,15 @@ ${this.addBreakPoints(this.ws ?? "")}
             }
             this.close();
           });
-      } else if (msg.toString() === "ERROR No paused execution.") {
+      } else if (msg === "ERROR No paused execution.") {
         this.close();
-      } else if (msg.toString().startsWith("STEP")) {
+      } else if (msg.startsWith("STEP")) {
         if (this.inDebug) {
           await this.getVars();
         }
         if (/'BREAKPOINT' FUNCREF/.test(msg)) {
-          this.sendEvent("stopOnBreakpoint");
+          //this.sendEvent("stopOnBreakpoint");
+          this.sendtoWS('STEP');
         } else {
           if (!this.firstCnx) {
             this.sendEvent("stopOnStep");
@@ -377,7 +377,7 @@ STACKTOLIST REVERSE 'stack' STORE
     const bps = this.breakPoints.get(this._sourceFile);
     const splittedWS = (ws ?? "").split("\n");
     (bps ?? []).filter((b) => b.verified)
-      .forEach((b: any) => splittedWS[b.line + 1] = `BREAKPOINT ${(splittedWS[b.line + 1] ?? '')}`.trim());
+      .forEach((b: any) => splittedWS[b.line] = `BREAKPOINT ${(splittedWS[b.line] ?? '')}`.trim());
     return splittedWS.join("\n");
   }
 
