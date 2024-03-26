@@ -107,7 +107,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     this._runtime.on("stopOnBreakpoint", () => this.sendEvent(new StoppedEvent("breakpoint", Warp10DebugSession.threadID)));
     this._runtime.on("stopOnDataBreakpoint", () => this.sendEvent(new StoppedEvent("data breakpoint", Warp10DebugSession.threadID)));
     this._runtime.on("stopOnInstructionBreakpoint", () => this.sendEvent(new StoppedEvent("instruction breakpoint", Warp10DebugSession.threadID)));
-    this._runtime.on("stopOnException", (exception) => {
+    this._runtime.on("stopOnException", exception => {
       if (exception) {
         if (this._runtime.isDebug() && window.activeTextEditor) {
           if (this.inlineDecoration) {
@@ -117,18 +117,18 @@ export class Warp10DebugSession extends LoggingDebugSession {
           window.activeTextEditor.setDecorations(this.inlineDecoration, [
             new Range(
               exception.info.line - 1,
-              exception.info.colEnd,
+              exception.info.colStart - 1,
               exception.info.line - 1,
-              exception.info.colEnd
+              exception.info.colStart - 1
             )
           ]);
           if (window.activeTextEditor) {
-            if(this.diagnosticCollection) this.diagnosticCollection.clear();
+            if (this.diagnosticCollection) this.diagnosticCollection.clear();
             this.diagnosticCollection = languages.createDiagnosticCollection('WarpScript-debug');
             this.diagnosticCollection.set(window.activeTextEditor.document.uri, [{
               code: '',
               message: exception.e,
-              range:new Range(
+              range: new Range(
                 exception.info.line - 1,
                 exception.info.colStart - 1,
                 exception.info.line - 1,
@@ -136,7 +136,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
               ),
               severity: DiagnosticSeverity.Error,
               source: window.activeTextEditor.document.uri.toString(),
-              relatedInformation: [ ]
+              relatedInformation: []
             }]);
           }
         }
@@ -145,13 +145,29 @@ export class Warp10DebugSession extends LoggingDebugSession {
         this.sendEvent(new StoppedEvent("exception", Warp10DebugSession.threadID));
       }
     });
+    this._runtime.on('highlightEvent', info => {
+      if (this.inlineDecoration) {
+        this.inlineDecoration.dispose();
+        if (this._runtime.isDebug() && window.activeTextEditor) {
+          this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
+          window.activeTextEditor.setDecorations(this.inlineDecoration, [
+            new Range(
+              info.line - 1,
+              info.colStart - 1,
+              info.line - 1,
+              info.colStart - 1
+            )
+          ]);
+        }
+      }
+    })
     this._runtime.on("breakpointValidated", (bp: IRuntimeBreakpoint) => this.sendEvent(new BreakpointEvent("changed", { verified: bp.verified, id: bp.id, } as DebugProtocol.Breakpoint)));
     this._runtime.on("output", (type, text, filePath, line, column, popin) => this.log({ text, filePath, line, column, type, popin }));
     this._runtime.on("end", () => {
       if (this.inlineDecoration) {
         this.inlineDecoration.dispose();
       }
-      if(this.diagnosticCollection) this.diagnosticCollection.clear();
+      if (this.diagnosticCollection) this.diagnosticCollection.clear();
       this.sendEvent(new TerminatedEvent());
     });
     this._runtime.on("debugResult", (r: any) => this.handleResult(r).then(() => this.sendEvent(new TerminatedEvent())));
@@ -462,23 +478,9 @@ export class Warp10DebugSession extends LoggingDebugSession {
 
   protected async breakpointLocationsRequest(response: DebugProtocol.BreakpointLocationsResponse, args: DebugProtocol.BreakpointLocationsArguments, _request?: DebugProtocol.Request): Promise<void> {
     let breakpoints: DebugProtocol.BreakpointLocation[] = [];
-    if (this.inlineDecoration) {
-      this.inlineDecoration.dispose();
-    }
     if (args.source.path) {
       const info = await this._runtime.getBreakpoints(args.source.path, this.convertClientLineToDebugger(args.line));
       breakpoints = info.bps.map(() => ({ line: args.line }));
-      if (this._runtime.isDebug() && window.activeTextEditor) {
-        this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
-        window.activeTextEditor.setDecorations(this.inlineDecoration, [
-          new Range(
-            info.line - 1,
-            info.colEnd,
-            info.line - 1,
-            info.colEnd
-          )
-        ]);
-      }
     }
     response.body = { breakpoints };
     this.sendResponse(response);

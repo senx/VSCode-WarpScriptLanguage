@@ -163,7 +163,6 @@ export class Warp10DebugRuntime extends EventEmitter {
   private program: string | undefined;
   private inDebug = false;
   private checkWS: any = {};
-  private exceptionRaised = false;
 
   constructor(private fileAccessor: FileAccessor) {
     super();
@@ -196,7 +195,6 @@ export class Warp10DebugRuntime extends EventEmitter {
     this.program = program;
     this.checkWS = checkWS;
     this.firstCnx = true;
-    this.exceptionRaised = false;
     this.ws = undefined;
     this._sourceFile = undefined;
     await this.getContent(program);
@@ -293,7 +291,6 @@ ${this.addBreakPoints(this.ws ?? "")}`;
           });
         }
         this.error(errMess, false);
-        this.exceptionRaised = true;
       }
     });
 
@@ -361,6 +358,15 @@ STACKTOLIST REVERSE 'stack' STORE
             this.errorpos = (data.errorpos ?? data.lastStmtpos).split(":").map((l: string) => parseInt(l, 10));
             this.errorMess = data.terror;
             this.currentLine = this.lineInfo[0] - 2;
+            if ((this.lineInfo ?? []).length > 0) {
+              const curLine = this.getLine(this.lineInfo[0] - 1);
+              const offset = curLine.startsWith('BREAKPOINT') ? 'BREAKPOINT'.length : -1;
+              this.sendEvent('highlightEvent', {
+                line: this.lineInfo[0] - 1,
+                colStart: Math.max(this.lineInfo[1] - offset, 0),
+                colEnd: Math.max(this.lineInfo[2] - offset, 0),
+              });
+            }
           } else {
             this.lineInfo = undefined;
           }
@@ -394,22 +400,14 @@ STACKTOLIST REVERSE 'stack' STORE
    * Continue execution to the end/beginning.
    */
   public continue() {
-    if (!this.exceptionRaised) {
-      this.sendtoWS("CONTINUE");
-    } else {
-      this.close();
-    }
+    this.sendtoWS("CONTINUE");
   }
 
   /**
    * Step to the next/previous non empty line.
    */
   public step(_instruction: boolean, _reverse: boolean) {
-    if (!this.exceptionRaised) {
-      this.sendtoWS("STEP");
-    } else {
-      this.close();
-    }
+    this.sendtoWS("STEP");
   }
 
   public stepIn() {
