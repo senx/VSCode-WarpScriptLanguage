@@ -1,12 +1,11 @@
-import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn, ExtensionContext, workspace, TextEditor, Range, TextEditorRevealType, TextEditorDecorationType } from "vscode";
-import WarpScriptExtConstants from "../constants";
 import { join } from "path";
+import { Disposable, ExtensionContext, Range, TextEditor, TextEditorDecorationType, TextEditorRevealType, Uri, ViewColumn, Webview, WebviewPanel, window, workspace } from "vscode";
+import WarpScriptExtConstants from "../constants";
 import GTSPreviewWebview from "./gtsPreview";
 export class ProfilerWebview {
   public static currentPanel: ProfilerWebview | undefined;
   private readonly _panel: WebviewPanel;
   private _disposables: Disposable[] = [];
-
   private context: ExtensionContext;
   result: any;
   activeTextEditor: TextEditor;

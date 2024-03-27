@@ -242,7 +242,6 @@ ${this.addBreakPoints(this.ws ?? "")}`;
           })
           .catch((e: any) => {
             if ((e.message ?? e).startsWith("Exception at ")) {
-              this.close();
               this.error(((e.message ?? e).split("[TOP]")[1] ?? "").replace(/\(/, "").replace(/\)/, ""), true);
             } else {
               this.error(e.message ?? e);
@@ -303,7 +302,7 @@ ${this.addBreakPoints(this.ws ?? "")}`;
   }
 
   public close() {
-    if (this.webSocket && this.inDebug) {
+    if (this.webSocket) {
       this.sendtoWS("STOP");
       this.sendtoWS("DETACH " + this.sid);
       this.webSocket.close();

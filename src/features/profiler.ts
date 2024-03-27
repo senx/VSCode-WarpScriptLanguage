@@ -15,7 +15,6 @@ import { WarpScriptExtGlobals } from '../globals';
 import WarpScriptExtConstants from '../constants';
 import { SharedMem } from '../extension';
 import ExecCommand from './execCommand';
-import { v4 } from 'uuid';
 import { ProfilerWebview } from '../webviews/profilerWebview';
 import { TracePluginInfo } from '../webviews/tracePluginInfo';
 
@@ -196,7 +195,6 @@ export default class ProfilerCommand {
 
           let wrappedWarpScript = executedWarpScript;
           if (workspace.getConfiguration().get('warpscript.traceToken')) {
-            const uuid = v4();
             wrappedWarpScript = `'${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD true STMTPOS PROFILEMODE
 ${wrappedWarpScript}
 NULL PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile' $profile 'stack' $stack }`;
@@ -365,7 +363,7 @@ NULL PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile
 
                   const profileResult = JSON.parse(body)[0];
                   if (window.activeTextEditor) {
-                    ProfilerWebview.render(context, profileResult.profile ?? [], window.activeTextEditor);
+                    ProfilerWebview.render(context, profileResult.profile ?? [], window.activeTextEditor, );
                   }
                   body = profileResult.stack ?? '[]';
 
