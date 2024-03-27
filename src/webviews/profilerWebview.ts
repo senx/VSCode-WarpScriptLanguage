@@ -12,7 +12,7 @@ export class ProfilerWebview {
   activeTextEditor: TextEditor;
   macros: any = {};
   lastMacros: any[] = [];
-
+  totalTime = 0;
   profileFnDecoration = window.createTextEditorDecorationType({
     borderWidth: '1px',
     borderStyle: 'solid'
@@ -33,13 +33,21 @@ export class ProfilerWebview {
     // the panel or when the panel is closed programmatically)
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
 
+
     // Set the HTML content for the webview panel
     this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri);
     let code = '';
-    const profs: any[] = [...result].sort((a: any[], b: any[]) => a[0] - b[0]);
+    const global = this.result.filter((p: string[]) => p[3].startsWith('m'))[0];
+    this.totalTime = (global ?? [])[5];
+    this.result = this.result
+      .filter((p: any[]) => p[4] > 0)
+      .filter((p: any[]) => p[0] < activeTextEditor.document.lineCount + 1 && p[0] > 2);
+    this.result.forEach((p: any[]) => p[3] = p[3].replace(/:/g, '_').replace(/-/g, '_'));
+
+    //const profs: any[] = [...result].sort((a: any[], b: any[]) => a[0] - b[0]);
     for (let i = 0; i < activeTextEditor.document.lineCount; i++) {
       let profIndex = 0;
-      const profLine = result.filter((p: any[]) => p[0] - 2 === i).sort((a: any[], b: any[]) => a[1] - b[1]) ?? [];
+      const profLine = result.filter((p: any[]) => p[0] - 1 === i).sort((a: any[], b: any[]) => a[1] - b[1]) ?? [];
       const line = activeTextEditor.document.lineAt(i).text;
       line.split('').forEach((char, c) => {
         if ((profLine[profIndex] ?? []).length > 0 && c === profLine[profIndex][1]) {
@@ -51,7 +59,7 @@ export class ProfilerWebview {
         code += char;
         if (code.endsWith('%>')) {
           const m = this.lastMacros.pop();
-          if(this.macros[m]) this.macros[m].end = i + 1;
+          if (this.macros[m]) this.macros[m].end = i + 1;
         }
         if ((profLine[profIndex] ?? []).length > 0 && c === profLine[profIndex][2]) {
           profIndex++;
@@ -59,7 +67,7 @@ export class ProfilerWebview {
       });
       code += '\n';
     }
-    this.macros[profs[0].join('-')] = { start: 1, end: activeTextEditor.document.lineCount };
+    this.macros[global.join('-')] = { start: 1, end: activeTextEditor.document.lineCount };
   }
 
   public static render(context: ExtensionContext, result: any[], activeTextEditor: TextEditor) {
@@ -122,7 +130,7 @@ export class ProfilerWebview {
     if ('M' === profile[3][0]) {
       const m = this.macros[profile.join('-')];
       const ranges = [];
-      for (let i = m.start - 1; i < m.end; i++) {
+      for (let i = m.start - 2; i < (m.end ?? (m.start - 1)); i++) {
         ranges.push(new Range(i, 0, i, 0));
       }
 
@@ -136,8 +144,8 @@ export class ProfilerWebview {
           margin: '5px'
         }
       });
-      this.activeTextEditor.setDecorations(this.afterFnDecoration, [new Range(m.start, 0, m.end, 0)]);
-    } else {
+      this.activeTextEditor.setDecorations(this.afterFnDecoration, [new Range(m.start, 0, m.end ?? m.start, 0)]);
+    } else if ('F' === profile[3][0]) {
       const range = new Range(profile[0] - 2, profile[1], profile[0] - 2, profile[2] + 1);
       this.activeTextEditor.revealRange(range, TextEditorRevealType.InCenterIfOutsideViewport);
       this.activeTextEditor.setDecorations(this.profileFnDecoration, [{ range }]);

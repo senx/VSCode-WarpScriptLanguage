@@ -197,9 +197,9 @@ export default class ProfilerCommand {
           let wrappedWarpScript = executedWarpScript;
           if (workspace.getConfiguration().get('warpscript.traceToken')) {
             const uuid = v4();
-            wrappedWarpScript = `'${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD true STMTPOS <%
+            wrappedWarpScript = `'${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD true STMTPOS PROFILEMODE
 ${wrappedWarpScript}
-%> PROFILE '${uuid}' STORE @${uuid} $${uuid} PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile' $profile 'stack' $stack }`;
+NULL PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile' $profile 'stack' $stack }`;
           }
           // Gzip the script before sending it.
           gzip(Buffer.from(wrappedWarpScript, 'utf8'), async (err, gzipWarpScript) => {
