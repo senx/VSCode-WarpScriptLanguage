@@ -129,6 +129,7 @@ export class Requester {
   "rev" REV
   'extensions' {
     'trace'   'io.senx.plugins.trace.TraceWarpScriptExtension' EXTLOADED
+    'traceWSEndpoint' <% 'TENDPOINT' EVAL %> <% false %> <% %> TRY
     'stackPS' 'io.warp10.script.ext.stackps.StackPSWarpScriptExtension' EXTLOADED
     'git'     'io.warp10.ext.git.GitWarpScriptExtension' EXTLOADED
   }

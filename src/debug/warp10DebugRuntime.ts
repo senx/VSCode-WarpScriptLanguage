@@ -191,7 +191,7 @@ export class Warp10DebugRuntime extends EventEmitter {
   /**
    * Start executing the given program.
    */
-  public async start(program: string, checkWS: {}): Promise<string> {
+  public async start(program: string, checkWS: any): Promise<string> {
     this.program = program;
     this.checkWS = checkWS;
     this.firstCnx = true;
@@ -209,7 +209,7 @@ export class Warp10DebugRuntime extends EventEmitter {
     const wrapped = `true STMTPOS '${workspace.getConfiguration().get("warpscript.traceToken")}' CAPADD '${this.sid}' TRACEMODE
 ${this.addBreakPoints(this.ws ?? "")}`;
     this.sourceLines = wrapped.split('\n');
-    const traceURL: string = workspace.getConfiguration().get("warpscript.traceURL") as string;
+    const traceURL: string = (checkWS?.extensions ?? {}).traceWSEndpoint;
     if (!traceURL) {
       this.close();
       return this.ws ?? "";

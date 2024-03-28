@@ -282,17 +282,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
    */
   protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneResponse, args: DebugProtocol.ConfigurationDoneArguments): void {
     super.configurationDoneRequest(response, args);
-    if (this.noDebug) {
-      this._configurationDone.notify();
-    } else if (
-      !workspace.getConfiguration().get("warpscript.traceToken") ||
-      !workspace.getConfiguration().get("warpscript.traceURL")
-    ) {
-      this.sendEvent(new TerminatedEvent());
-      TracePluginInfo.render(this.context);
-    } else {
-      this._configurationDone.notify();
-    }
+    this._configurationDone.notify();
   }
 
   private async writeFile(path: string, content: any): Promise<void> {
@@ -420,17 +410,17 @@ export class Warp10DebugSession extends LoggingDebugSession {
       const commentsCommands = WarpScriptParser.extractSpecialComments(ws ?? "");
       const endpoint = commentsCommands.endpoint ?? workspace.getConfiguration().get("warpscript.Warp10URL");
       Requester.getInstanceInfo(endpoint ?? '')
-        .then((info) => {
+        .then(info => {
           // check if trace plugin is active
           const checkWS = JSON.parse(info);
           const hasTrace = (checkWS[0]?.extensions ?? {}).trace;
           if (this.inlineDecoration) {
             this.inlineDecoration.dispose();
           }
-          if (!hasTrace) {
+          if (!hasTrace || !(checkWS[0]?.extensions ?? {}).traceWSEndpoint) {
             this.sendEvent(new TerminatedEvent());
             window.showWarningMessage("The Warp 10 Trace Plugin is not activated", ...["Learn more", "Cancel"])
-              .then((selection) => {
+              .then(selection => {
                 if ("Learn more" === selection) {
                   TracePluginInfo.render(this.context);
                 }
