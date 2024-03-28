@@ -66,7 +66,7 @@ export class ProfilerWebview {
       });
       code += '\n';
     }
-    this.macros[global.join('-')] = { start: 1, end: activeTextEditor.document.lineCount };
+    //  this.macros[global.join('-')] = { start: 1, end: activeTextEditor.document.lineCount };
   }
 
   public static render(context: ExtensionContext, result: any[], activeTextEditor: TextEditor) {
@@ -143,7 +143,7 @@ export class ProfilerWebview {
           margin: '5px'
         }
       });
-      this.activeTextEditor.setDecorations(this.afterFnDecoration, [new Range(m.start, 0, m.end ?? m.start, 0)]);
+      this.activeTextEditor.setDecorations(this.afterFnDecoration, [new Range(m.start - 2, profile[2] + 1, m.start - 2, profile[2] + 1)]);
     } else if ('F' === profile[3][0]) {
       const range = new Range(profile[0] - 2, profile[1], profile[0] - 2, profile[2] + 1);
       this.activeTextEditor.revealRange(range, TextEditorRevealType.InCenterIfOutsideViewport);
@@ -162,7 +162,7 @@ export class ProfilerWebview {
 
 
   getProfileResult(profile: any[]): string {
-    return `${profile[4]} call${profile[4] > 1 ? 's' : ''}, ${profile[5]} ns${profile[4] > 1 ? `, ${this.getPerCal(profile[5], profile[4])} ns per op.` : ''}`;
+    return `${profile[4]} call${profile[4] > 1 ? 's' : ''}, ${profile[5]} ns${profile[4] > 1 ? `, ${Math.round(this.getPerCal(profile[5], profile[4]) * 100) / 100} ns per op.` : ''}`;
   }
 
   /**

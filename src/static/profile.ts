@@ -16,16 +16,24 @@ window.addEventListener('message', event => {
   code = message.ws;
   const profile = message.result.filter((p: any[]) => p[4] > 0);
   totalTime = (profile[0] ?? [])[5];
-  (document.getElementById('profile') as DataGrid).rowsData = profile.map((p: any[]) => {
-    return { Name: getName(p), Calls: p[4], 'Total time': p[5] + ' ns', '% of total time': getPercent(p[5]) + '%', 'Time per call': getPerCal(p[5], p[4]) + ' ns' }
-  });
+  (document.getElementById('profile') as DataGrid).rowsData = profile
+    .filter((p: any[]) => p[4] > 0)
+    .filter((p: any[]) => p[3][0] !== 'm')
+    .filter((p: any[]) => p[0] < code.split('\n').length && p[0] > 2)
+    .map((p: any[]) => ({
+      Name: getName(p),
+      Calls: p[4],
+      'Total time': p[5] + ' ns',
+      'Time per call': Math.round(getPerCal(profile[5], profile[4]) * 100) / 100 + ' ns'
+    }));
 
   document.getElementById('profile').addEventListener('mouseout', () => unhighlight());
-  setTimeout(() => document.getElementById('profile').querySelectorAll('vscode-data-grid-row').forEach((cn: Element, i) => {
-    if (i > 0) {
-      cn.addEventListener('mouseover', () => highlight(cn, profile[i - 1]));
-    }
-  }), 500);
+  setTimeout(() => document.getElementById('profile').querySelectorAll('vscode-data-grid-row')
+    .forEach((cn: Element, i) => {
+      if (i > 0) {
+        cn.addEventListener('mouseover', () => highlight(cn, profile[i]));
+      }
+    }), 500);
 });
 
 function unhighlight() {
@@ -60,10 +68,4 @@ function getName(p: any[]) {
 
 function getPerCal(total: any, count: any) {
   return count > 0 ? parseFloat(total) / parseFloat(count) : total;
-}
-
-
-
-function getPercent(time: any) {
-  return Math.round(time / totalTime * 10000) / 100;
 }
