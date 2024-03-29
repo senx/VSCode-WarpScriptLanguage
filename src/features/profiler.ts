@@ -206,8 +206,9 @@ export default class ProfilerCommand {
             console.debug("about to send this WarpScript:", executedWarpScript.slice(0, 10000), 'on', Warp10URL);
 
             let wrappedWarpScript = executedWarpScript;
-            if (workspace.getConfiguration().get('warpscript.traceToken')) {
-              wrappedWarpScript = `'${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD true STMTPOS PROFILEMODE
+            const traceToken = (workspace.getConfiguration().get<any>("warpscript.TraceTokensPerWarp10URL")?? {})[Warp10URL];
+            if (traceToken) {
+              wrappedWarpScript = `'${traceToken}' CAPADD true STMTPOS PROFILEMODE
 ${wrappedWarpScript}
 NULL PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile' $profile 'stack' $stack }`;
             }

@@ -102,6 +102,19 @@ export class Warp10DebugSession extends LoggingDebugSession {
     this._runtime = new Warp10DebugRuntime(fileAccessor);
 
     // setup event handlers
+    this._runtime.on('openTracePluginInfo', (mess: string, action: string) => {
+      this.sendEvent(new TerminatedEvent());
+      if ('openSettings' === action) {
+        window.showWarningMessage(mess, ...['Open Settings', 'Cancel']).then(resp => {
+          if('Open Settings' === resp) {
+            commands.executeCommand('workbench.action.openSettings', 'Warpscript: Trace Tokens Per Warp10 URL');
+          }
+        })
+      } else {
+        window.showWarningMessage(mess);
+      }
+      TracePluginInfo.render(this.context);
+    })
     this._runtime.on("stopOnEntry", () => this.sendEvent(new StoppedEvent("entry", Warp10DebugSession.threadID)));
     this._runtime.on("stopOnStep", () => this.sendEvent(new StoppedEvent("step", Warp10DebugSession.threadID)));
     this._runtime.on("stopOnBreakpoint", () => this.sendEvent(new StoppedEvent("breakpoint", Warp10DebugSession.threadID)));

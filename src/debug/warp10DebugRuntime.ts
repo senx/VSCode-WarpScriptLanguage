@@ -206,7 +206,12 @@ export class Warp10DebugRuntime extends EventEmitter {
       this.webSocket.close();
       this.webSocket = undefined;
     }
-    const wrapped = `true STMTPOS '${workspace.getConfiguration().get("warpscript.traceToken")}' CAPADD '${this.sid}' TRACEMODE
+    const traceToken = (workspace.getConfiguration().get<any>("warpscript.TraceTokensPerWarp10URL")?? {})[this.endpoint];
+    if(!traceToken) {
+      this.sendEvent('openTracePluginInfo', 'You must set a token with the "trace" capabilitie', 'openSettings');
+      return this.ws ?? "";
+    }
+    const wrapped = `true STMTPOS '${traceToken}' CAPADD '${this.sid}' TRACEMODE
 ${this.addBreakPoints(this.ws ?? "")}`;
     this.sourceLines = wrapped.split('\n');
     const traceURL: string = (checkWS?.extensions ?? {}).traceWSEndpoint;

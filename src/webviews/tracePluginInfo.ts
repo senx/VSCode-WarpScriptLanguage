@@ -141,7 +141,7 @@ export class TracePluginInfo {
           <vscode-divider></vscode-divider>
           <h3>Configuration keys</h3>
           <ul style="margin-bottom: 1.2em;">
-            <li><b>traceToken</b>: a valid token with the "trace" capability</li>
+            <li><b>TraceTokensPerWarp10URL</b>: a valid token with the "trace" capability</li>
           </ul>
           <div style="margin-bottom: 1.2em;">
             <vscode-button appearance="secondary" id="settings">
