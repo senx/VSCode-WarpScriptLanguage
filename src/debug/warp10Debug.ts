@@ -85,6 +85,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
   private context: ExtensionContext;
   static threadID: number = 1;
   private diagnosticCollection: DiagnosticCollection;
+  private program: string;
 
   /**
    * Creates a new debug adapter that is used for one debug session.
@@ -205,12 +206,8 @@ export class Warp10DebugSession extends LoggingDebugSession {
       window.showErrorMessage(l.text, ...["Cancel"]);
       if (/Unknown function 'STMTPOS'/.test(l.text)) {
         this.sendEvent(new TerminatedEvent());
-        window.showWarningMessage("The Warp 10 Trace Plugin is not activated", ...["Learn more", "Cancel"])
-          .then((selection) => {
-            if ("Learn more" === selection) {
-              TracePluginInfo.render(this.context);
-            }
-          });
+        window.showWarningMessage("The Warp 10 Trace Plugin is not activated")
+        TracePluginInfo.render(this.context);
       }
     } else if (l.type === "err") {
       window.showErrorMessage(l.text);
@@ -389,6 +386,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   protected async launchRequest(response: DebugProtocol.LaunchResponse, args: ILaunchRequestArguments) {
+    this.program = args.program;
     // make sure to 'Stop' the buffered logging if 'trace' is not set
     logger.setup(args.trace ? Logger.LogLevel.Verbose : Logger.LogLevel.Stop, false);
     // wait 1 second until configuration has finished (and configurationDoneRequest has been called)
@@ -407,34 +405,29 @@ export class Warp10DebugSession extends LoggingDebugSession {
       const ws = await this._runtime.getContent(args.program);
       const commentsCommands = WarpScriptParser.extractSpecialComments(ws ?? "");
       const endpoint = commentsCommands.endpoint ?? workspace.getConfiguration().get("warpscript.Warp10URL");
-      Requester.getInstanceInfo(endpoint ?? '')
-        .then(info => {
-          // check if trace plugin is active
-          const checkWS = JSON.parse(info);
-          const hasTrace = (checkWS[0]?.extensions ?? {}).trace;
-          if (this.inlineDecoration) {
-            this.inlineDecoration.dispose();
-          }
-          if (!hasTrace || !(checkWS[0]?.extensions ?? {}).traceWSEndpoint) {
-            this.sendEvent(new TerminatedEvent());
-            window.showWarningMessage("The Warp 10 Trace Plugin is not activated", ...["Learn more", "Cancel"])
-              .then(selection => {
-                if ("Learn more" === selection) {
-                  TracePluginInfo.render(this.context);
-                }
-              });
-          } else {
-            // start the program in the runtime
-            this._runtime.start(args.program, checkWS[0])
-              .then((r) => {
-                if (this.inlineDecoration) {
-                  this.inlineDecoration.dispose();
-                }
-                this.executedWarpScript = r;
-                this.sendResponse(response);
-              });
-          }
-        })
+      Requester.getInstanceInfo(endpoint ?? '').then(async info => {
+        // check if trace plugin is active
+        const checkWS = JSON.parse(info);
+        const hasTrace = (checkWS[0]?.extensions ?? {}).trace;
+        if (this.inlineDecoration) {
+          this.inlineDecoration.dispose();
+        }
+        if (!hasTrace || !(checkWS[0]?.extensions ?? {}).traceWSEndpoint) {
+          this.sendEvent(new TerminatedEvent());
+          window.showWarningMessage("The Warp 10 Trace Plugin is not activated");
+          TracePluginInfo.render(this.context);
+        } else {
+          // start the program in the runtime
+          this._runtime.start(args.program, checkWS[0])
+            .then((r) => {
+              if (this.inlineDecoration) {
+                this.inlineDecoration.dispose();
+              }
+              this.executedWarpScript = r;
+              this.sendResponse(response);
+            });
+        }
+      })
         .catch((e) => {
           window.showErrorMessage(e.message ?? e, ...["Cancel"]);
           this.sendEvent(new TerminatedEvent());
@@ -448,20 +441,26 @@ export class Warp10DebugSession extends LoggingDebugSession {
 
   protected async setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): Promise<void> {
     const path = args.source.path as string;
-    const clientLines = args.lines || [];
-    // clear all breakpoints for this file
-    this._runtime.clearBreakpoints(path);
-    // set and verify breakpoint locations
-    const actualBreakpoints0 = clientLines.map(async (l) => {
-      const { verified, line, id } = await this._runtime.setBreakPoint(path, this.convertClientLineToDebugger(l));
-      const bp = new Breakpoint(verified, this.convertDebuggerLineToClient(line)) as DebugProtocol.Breakpoint;
-      bp.id = id;
-      return bp;
-    });
-    const actualBreakpoints = await Promise.all<DebugProtocol.Breakpoint>(actualBreakpoints0);
-    // send back the actual breakpoint positions
-    response.body = { breakpoints: actualBreakpoints };
-    this.sendResponse(response);
+    if (path !== this.program) {
+      response.body = { breakpoints: [] };
+      this.sendResponse(response);
+
+    } else {
+      const clientLines = args.lines || [];
+      // clear all breakpoints for this file
+      this._runtime.clearBreakpoints(path);
+      // set and verify breakpoint locations
+      const actualBreakpoints0 = clientLines.map(async (l) => {
+        const { verified, line, id } = await this._runtime.setBreakPoint(path, this.convertClientLineToDebugger(l));
+        const bp = new Breakpoint(verified, this.convertDebuggerLineToClient(line)) as DebugProtocol.Breakpoint;
+        bp.id = id;
+        return bp;
+      });
+      const actualBreakpoints = await Promise.all<DebugProtocol.Breakpoint>(actualBreakpoints0);
+      // send back the actual breakpoint positions
+      response.body = { breakpoints: actualBreakpoints };
+      this.sendResponse(response);
+    }
   }
 
   protected async breakpointLocationsRequest(response: DebugProtocol.BreakpointLocationsResponse, args: DebugProtocol.BreakpointLocationsArguments, _request?: DebugProtocol.Request): Promise<void> {

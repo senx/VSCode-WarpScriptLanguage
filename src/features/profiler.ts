@@ -17,6 +17,7 @@ import { SharedMem } from '../extension';
 import ExecCommand from './execCommand';
 import { ProfilerWebview } from '../webviews/profilerWebview';
 import { TracePluginInfo } from '../webviews/tracePluginInfo';
+import { Requester } from './requester';
 
 let lookupAsync: any;
 if (!!dns.lookup) {
@@ -42,6 +43,7 @@ export default class ProfilerCommand {
   }
 
   public exec(outputWin: OutputChannel, context: ExtensionContext): any {
+
     return (selectiontext: string) => {
       // Check current active document is a warpcript
       if (typeof window.activeTextEditor === 'undefined'
@@ -108,327 +110,338 @@ export default class ProfilerCommand {
           while (lineonMatch = re.exec(Warp10URL)) {
             Warp10URLhostname = lineonMatch[1]; //group 1
           }
-          progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
+          const info = await Requester.getInstanceInfo(Warp10URL);
+          const checkWS = JSON.parse(info);
+          const hasTrace = (checkWS[0]?.extensions ?? {}).trace;
 
-          let lines: number[] = [document.lineCount]
-          let uris: string[] = [document.uri.toString()]
-          if (substitutionWithLocalMacros) {
-            // first, prepend macros of the special comments "// @include macro: "
-            for (let macroName of commentsCommands.listOfMacroInclusion ?? []) {
-              if (macroName.startsWith('@')) {
-                macroName = macroName.substring(1);
-              }
-              console.debug('-' + macroName + '-');
-              await WSDocumentLinksProvider.getMacroURI(macroName).then(
-                async (uri) => {
-                  if (uris.indexOf(uri.toString()) === -1) {
-                    // outputWin.show();
-                    // outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
-                    let tdoc: TextDocument = await workspace.openTextDocument(uri);
-                    let macroCode: string = tdoc.getText()
-                    // Prepend the macro, store it and then append the rest of the script.
-                    let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
-                    executedWarpScript = prepend + executedWarpScript;
-                    //          linesOfMacrosPrepended += prepend.split('\n').length - 1;
-                    console.debug(prepend.split('\n'))
-                    // Update lines and uris references
-                    lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
-                    uris.unshift(uri.toString());
-                  }
-                }
-              ).catch(
-                () => {
-                  outputWin.show();
-                  outputWin.append('[' + execDate + '] ');
-                  outputWin.appendLine("warning '" + macroName + "' is explicitly included with // @include macro:, but was not found in the VSCode project. Warp 10 will try its internal resolvers.")
-                }
-              );
-            }
-
-            let allMacroPrepended = false;
-
-            while (!allMacroPrepended) {
-              let listOfMacros = WarpScriptParser.getListOfMacroCalls(executedWarpScript);
-
-              if (listOfMacros.length > 0) {
-                allMacroPrepended = true;
-                for (const m of listOfMacros) {
-                  const macroName = m.substring(1);
-                  console.debug('-' + macroName + '-');
-                  await WSDocumentLinksProvider.getMacroURI(macroName).then(
-                    async (uri) => {
-                      if (uris.indexOf(uri.toString()) === -1) {
-                        // outputWin.show();
-                        // outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
-                        let tdoc: TextDocument = await workspace.openTextDocument(uri);
-                        let macroCode: string = tdoc.getText()
-                        // Prepend the macro, store it and then append the rest of the script.
-                        let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
-                        executedWarpScript = prepend + executedWarpScript;
-                        //          linesOfMacrosPrepended += prepend.split('\n').length - 1;
-                        console.debug(prepend.split('\n'))
-                        // Update lines and uris references
-                        lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
-                        uris.unshift(uri.toString());
-                        allMacroPrepended = false;
-                      }
-                    }
-                  ).catch(
-                    () => { /* Ignore missing macros */ }
-                  );
-                }
-              } else {
-                allMacroPrepended = true;
-              }
-            }
-
+          if (!hasTrace || !(checkWS[0]?.extensions ?? {}).traceWSEndpoint) {
+            window.showWarningMessage("The Warp 10 Trace Plugin is not activated");
+            TracePluginInfo.render(context);
           } else {
-            if (commentsCommands.listOfMacroInclusion && commentsCommands.listOfMacroInclusion.length > 0) {
-              outputWin.show();
-              outputWin.append('[' + execDate + '] ');
-              outputWin.appendLine("warning '// @localmacrosubstitution false' also disables all the '// @include macro:' instructions")
-            }
-          }
 
-          // log the beginning of the warpscript
-          console.debug("about to send this WarpScript:", executedWarpScript.slice(0, 10000), 'on', Warp10URL);
 
-          let wrappedWarpScript = executedWarpScript;
-          if (workspace.getConfiguration().get('warpscript.traceToken')) {
-            wrappedWarpScript = `'${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD true STMTPOS PROFILEMODE
-${wrappedWarpScript}
-NULL PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile' $profile 'stack' $stack }`;
-          }
-          // Gzip the script before sending it.
-          gzip(Buffer.from(wrappedWarpScript, 'utf8'), async (err, gzipWarpScript) => {
-            if (err) {
-              console.error(err);
-            }
+            progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
 
-            var request_options: request.Options = {
-              headers: {
-                'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8',
-                'Accept': 'application/json',
-                'X-Warp10-WarpScriptSession': WarpScriptExtGlobals.sessionName,
-              },
-              method: "POST",
-              url: Warp10URL,
-              gzip: useGZIP,
-              timeout: timeout,
-              body: useGZIP ? gzipWarpScript : wrappedWarpScript,
-              rejectUnauthorized: false
-            }
-
-            // If a local proxy.pac is define, use it
-            if (proxy_pac !== "") {
-              // so simple... if only it was supporting socks5. Ends up with an error for SOCKS5 lines.
-              // (request_options as any).agent = new ProxyAgent("pac+" + proxy_pac);
-
-              let proxy_pac_resp: string = 'DIRECT'; // Fallback
-              try {
-                let proxy_pac_text: TextDocument = await workspace.openTextDocument(proxy_pac);
-                let FindProxyForURL = pac(proxy_pac_text.getText());
-                proxy_pac_resp = await FindProxyForURL(Warp10URL);
-              } catch (e) {
-                console.error(e);
-                StatusbarUi.Execute();
-              }
-
-              // Only handle one proxy for now
-              let proxy: string = proxy_pac_resp.split(';')[0];
-              let proxy_split: string[] = proxy.split(' ');
-
-              // If a proxy is defined, make sure it is specified as an IP because SocksProxyAgent does not DNS resolve
-              if (1 < proxy_split.length) {
-                let host_port = proxy_split[1].split(':');
-                if (!!lookupAsync) {
-                  proxy_split[1] = (await lookupAsync(host_port[0])).address + ':' + host_port[1];
+            let lines: number[] = [document.lineCount]
+            let uris: string[] = [document.uri.toString()]
+            if (substitutionWithLocalMacros) {
+              // first, prepend macros of the special comments "// @include macro: "
+              for (let macroName of commentsCommands.listOfMacroInclusion ?? []) {
+                if (macroName.startsWith('@')) {
+                  macroName = macroName.substring(1);
                 }
-              }
-              if ('PROXY' == proxy_split[0]) {
-                (request_options as any).agent = new ProxyAgent('http://' + proxy_split[1]);  //not really tested, should do the job.
-              } else if ('SOCKS' == proxy_split[0] || 'SOCKS5' == proxy_split[0] || 'SOCKS4' == proxy_split[0]) {
-                (request_options as any).agent = new SocksProxyAgent('socks://' + proxy_split[1]);
-              }
-            }
-
-            // if ProxyURL is defined, override the proxy setting. may support pac+file:// syntax too, or pac+http://
-            // see https://www.npmjs.com/package/proxy-agent
-            if (proxy_directUrl !== "") {
-              (request_options as any).agent = new ProxyAgent(proxy_directUrl); //tested with authentication, OK.
-            }
-
-            let req: request.Request = request.post(request_options, async (error: any, response: any, body: string) => {
-              if (error) { // error is set if server is unreachable or if the request is aborted
-                if (error.aborted) {
-                  console.debug("request aborted");
-                  StatusbarUi.Execute();
-                  progress.report({ message: 'Aborted' });
-                  return c(true)
-                } else {
-                  window.showErrorMessage("Cannot find or reach server, check your Warp 10 server endpoint:" + error.message)
-                  console.error(error)
-                  StatusbarUi.Execute();
-                  progress.report({ message: 'Done' });
-                  return e(error)
-                }
-              } else if (response.statusCode == 301) {
-                window.showErrorMessage("Check your Warp 10 server endpoint (" + response.request.uri.href + "), you may have forgotten the api/v0/exec in the URL");
-                console.error(response.body);
-                StatusbarUi.Execute();
-                return e(true)
-              } else if (response.statusCode != 200 && response.statusCode != 500) { // manage non 200 answers here
-                window.showErrorMessage("Error, server answered code " + response.statusCode + " :" + (String)(response.body).slice(0, 1000));
-                console.error(response.body);
-                StatusbarUi.Execute();
-                return e(true)
-              } else if (response.statusCode == 500 && !response.headers['x-warp10-error-message']) {
-                //received a 500 error without any x-warp10-error-message. Could also be a endpoint error.
-                window.showErrorMessage("Error, error 500 without any error. Are you sure you are using an exec endpoint ? Endpoint: " + response.request.uri.href + " :" + (String)(response.body).slice(0, 1000));
-                console.error(response.body);
-                StatusbarUi.Execute();
-                return e(true)
-              } else {
-                let errorParam: any = null
-                progress.report({ message: 'Parsing response' });
-                if (response.headers['x-warp10-error-message']) {
-                  let line = parseInt(response.headers['x-warp10-error-line'])
-
-                  // Check if error message contains infos from LINEON
-                  let lineonPattern = /\[Line #(\d+)\]/g;  // Captures the lines sections name
-                  let lineonMatch: RegExpMatchArray | null;
-                  while ((lineonMatch = lineonPattern.exec(response.headers['x-warp10-error-message']))) {
-                    line = parseInt(lineonMatch[1]);
-                  }
-
-                  let fileInError;
-                  let lineInError = line;
-                  for (var i = 0; i < lines.length; i++) {
-                    if (lineInError <= lines[i]) {
-                      fileInError = uris[i];
-                      break;
-                    } else {
-                      lineInError -= lines[i];
+                console.debug('-' + macroName + '-');
+                await WSDocumentLinksProvider.getMacroURI(macroName).then(
+                  async (uri) => {
+                    if (uris.indexOf(uri.toString()) === -1) {
+                      // outputWin.show();
+                      // outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
+                      let tdoc: TextDocument = await workspace.openTextDocument(uri);
+                      let macroCode: string = tdoc.getText()
+                      // Prepend the macro, store it and then append the rest of the script.
+                      let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
+                      executedWarpScript = prepend + executedWarpScript;
+                      //          linesOfMacrosPrepended += prepend.split('\n').length - 1;
+                      console.debug(prepend.split('\n'))
+                      // Update lines and uris references
+                      lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
+                      uris.unshift(uri.toString());
                     }
                   }
-                  errorParam = 'Error in file ' + fileInError + ' at line ' + lineInError + ' : ' + response.headers['x-warp10-error-message'];
-                  StatusbarUi.Execute();
-
-                  let errorMessage: string = response.headers['x-warp10-error-message'];
-                  // We must substract the number of lines added by prepended macros in the error message.
-                  errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, _group1) => '[Line #' + lineInError.toString() + ']');
-                  outputWin.show();
-                  outputWin.append('[' + execDate + '] ');
-                  outputWin.append('ERROR file://');
-                  outputWin.append(Uri.parse(uris[i]).fsPath + ':' + lineInError);
-                  outputWin.appendLine(' ' + errorMessage);
-                  if (/Unknown function 'PROFILE'/.test(errorMessage)) {
-                    window
-                      .showWarningMessage('The Warp 10 Trace Plugin is not activated', ...['Learn more', 'Cancel'])
-                      .then(selection => {
-                        if ('Learn more' === selection) {
-                          TracePluginInfo.render(context);
-                        }
-                      });
-                  }
-                }
-                // If no content-type is specified, response is the JSON representation of the stack
-                if (response.body.startsWith('[')) {
-
-                  // Generate unique filenames, ordered by execution order.
-                  let uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
-                  let wsFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}.mc2`;
-                  let jsonFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}${jsonSuffix}.json`;
-                  SharedMem.set(uuid, commentsCommands);
-
-                  // Save executed warpscript
-                  try {
-                    await this.deleteFile(wsFilename); // Remove overwritten file. If file unexistent, fail silently.
-                  } catch (e) {
-                  }
-                  try {
-                    await this.writeFile(wsFilename, executedWarpScript);
-                    if (err) {
-                      window.showErrorMessage(err.message);
-                      StatusbarUi.Execute();
-                    }
-                  } catch (e: any) {
-                    window.showErrorMessage(e.message || e);
-                    StatusbarUi.Execute();
-                  }
-                  // Save resulting JSON
-                  try {
-                    await this.deleteFile(jsonFilename); // Remove overwritten file. If file unexistent, fail silently.
-                  } catch (e) { }
-
-                  const profileResult = JSON.parse(body)[0];
-                  if (window.activeTextEditor) {
-                    ProfilerWebview.render(context, profileResult.profile ?? [], window.activeTextEditor, );
-                  }
-                  body = profileResult.stack ?? '[]';
-
-                  // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
-                  let sizeMB: number = Math.round(body.length / 1024 / 1024);
-                  if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
-                    // Do not unescape \\u nor control characters.
-                    body = unescape(body.replace(/(?<!\\)\\u(?!000)(?!001)([0-9A-Fa-f]{4})/g, "%u\$1"))
-                  }
-                  let noDisplay: boolean = jsonMaxSizeBeforeWarning > 0 && sizeMB > jsonMaxSizeBeforeWarning;
-                  // file must be saved whatever its size... but not displayed if too big.
-                  this.writeFile(jsonFilename, body).then(() => {
-                    StatusbarUi.Execute();
+                ).catch(
+                  () => {
                     outputWin.show();
                     outputWin.append('[' + execDate + '] ');
-                    outputWin.append((WarpScriptExtConstants.isVirtualWorkspace ? '' : 'file://') + wsFilename);
-                    outputWin.append(' => ' + (WarpScriptExtConstants.isVirtualWorkspace ? '' : 'file://') + jsonFilename);
-                    outputWin.append(' ' + ExecCommand.formatElapsedTime(response.headers['x-warp10-elapsed']));
-                    outputWin.append(' ' + ExecCommand.pad(response.headers['x-warp10-fetched'], 10, ' ') + ' fetched ');
-                    outputWin.append(ExecCommand.pad(response.headers['x-warp10-ops'], 10, ' ') + ' ops ');
-                    outputWin.append(ExecCommand.pad(baseFilename, 23, ' '));
-                    outputWin.appendLine(' @' + Warp10URLhostname.substr(0, 30));
-                    if (noDisplay) {
-                      outputWin.appendLine(`${(WarpScriptExtConstants.isVirtualWorkspace ? '' : 'file://')}${jsonFilename} is over ${jsonMaxSizeBeforeWarning}MB and was not opened. See Max File Size Before JSON Warning preference.`);
-                      window.showWarningMessage(`WarpScript: please confirm you really want to parse a ${sizeMB}MB file, esc to cancel`, "I am sure", "Nooooo !").then(
-                        (answer) => {
-                          if (answer === "I am sure") {
-                            //size warning confirmed, display the json.
-                            this.displayJson(jsonFilename, progress, errorParam);
-                          }
+                    outputWin.appendLine("warning '" + macroName + "' is explicitly included with // @include macro:, but was not found in the VSCode project. Warp 10 will try its internal resolvers.")
+                  }
+                );
+              }
+
+              let allMacroPrepended = false;
+
+              while (!allMacroPrepended) {
+                let listOfMacros = WarpScriptParser.getListOfMacroCalls(executedWarpScript);
+
+                if (listOfMacros.length > 0) {
+                  allMacroPrepended = true;
+                  for (const m of listOfMacros) {
+                    const macroName = m.substring(1);
+                    console.debug('-' + macroName + '-');
+                    await WSDocumentLinksProvider.getMacroURI(macroName).then(
+                      async (uri) => {
+                        if (uris.indexOf(uri.toString()) === -1) {
+                          // outputWin.show();
+                          // outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
+                          let tdoc: TextDocument = await workspace.openTextDocument(uri);
+                          let macroCode: string = tdoc.getText()
+                          // Prepend the macro, store it and then append the rest of the script.
+                          let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
+                          executedWarpScript = prepend + executedWarpScript;
+                          //          linesOfMacrosPrepended += prepend.split('\n').length - 1;
+                          console.debug(prepend.split('\n'))
+                          // Update lines and uris references
+                          lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
+                          uris.unshift(uri.toString());
+                          allMacroPrepended = false;
                         }
-                      );
-                    } else {
-                      this.displayJson(jsonFilename, progress, errorParam);
+                      }
+                    ).catch(
+                      () => { /* Ignore missing macros */ }
+                    );
+                  }
+                } else {
+                  allMacroPrepended = true;
+                }
+              }
+
+            } else {
+              if (commentsCommands.listOfMacroInclusion && commentsCommands.listOfMacroInclusion.length > 0) {
+                outputWin.show();
+                outputWin.append('[' + execDate + '] ');
+                outputWin.appendLine("warning '// @localmacrosubstitution false' also disables all the '// @include macro:' instructions")
+              }
+            }
+
+            // log the beginning of the warpscript
+            console.debug("about to send this WarpScript:", executedWarpScript.slice(0, 10000), 'on', Warp10URL);
+
+            let wrappedWarpScript = executedWarpScript;
+            if (workspace.getConfiguration().get('warpscript.traceToken')) {
+              wrappedWarpScript = `'${workspace.getConfiguration().get('warpscript.traceToken')}' CAPADD true STMTPOS PROFILEMODE
+${wrappedWarpScript}
+NULL PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile' $profile 'stack' $stack }`;
+            }
+            // Gzip the script before sending it.
+            gzip(Buffer.from(wrappedWarpScript, 'utf8'), async (err, gzipWarpScript) => {
+              if (err) {
+                console.error(err);
+              }
+
+              var request_options: request.Options = {
+                headers: {
+                  'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8',
+                  'Accept': 'application/json',
+                  'X-Warp10-WarpScriptSession': WarpScriptExtGlobals.sessionName,
+                },
+                method: "POST",
+                url: Warp10URL,
+                gzip: useGZIP,
+                timeout: timeout,
+                body: useGZIP ? gzipWarpScript : wrappedWarpScript,
+                rejectUnauthorized: false
+              }
+
+              // If a local proxy.pac is define, use it
+              if (proxy_pac !== "") {
+                // so simple... if only it was supporting socks5. Ends up with an error for SOCKS5 lines.
+                // (request_options as any).agent = new ProxyAgent("pac+" + proxy_pac);
+
+                let proxy_pac_resp: string = 'DIRECT'; // Fallback
+                try {
+                  let proxy_pac_text: TextDocument = await workspace.openTextDocument(proxy_pac);
+                  let FindProxyForURL = pac(proxy_pac_text.getText());
+                  proxy_pac_resp = await FindProxyForURL(Warp10URL);
+                } catch (e) {
+                  console.error(e);
+                  StatusbarUi.Execute();
+                }
+
+                // Only handle one proxy for now
+                let proxy: string = proxy_pac_resp.split(';')[0];
+                let proxy_split: string[] = proxy.split(' ');
+
+                // If a proxy is defined, make sure it is specified as an IP because SocksProxyAgent does not DNS resolve
+                if (1 < proxy_split.length) {
+                  let host_port = proxy_split[1].split(':');
+                  if (!!lookupAsync) {
+                    proxy_split[1] = (await lookupAsync(host_port[0])).address + ':' + host_port[1];
+                  }
+                }
+                if ('PROXY' == proxy_split[0]) {
+                  (request_options as any).agent = new ProxyAgent('http://' + proxy_split[1]);  //not really tested, should do the job.
+                } else if ('SOCKS' == proxy_split[0] || 'SOCKS5' == proxy_split[0] || 'SOCKS4' == proxy_split[0]) {
+                  (request_options as any).agent = new SocksProxyAgent('socks://' + proxy_split[1]);
+                }
+              }
+
+              // if ProxyURL is defined, override the proxy setting. may support pac+file:// syntax too, or pac+http://
+              // see https://www.npmjs.com/package/proxy-agent
+              if (proxy_directUrl !== "") {
+                (request_options as any).agent = new ProxyAgent(proxy_directUrl); //tested with authentication, OK.
+              }
+
+              let req: request.Request = request.post(request_options, async (error: any, response: any, body: string) => {
+                if (error) { // error is set if server is unreachable or if the request is aborted
+                  if (error.aborted) {
+                    console.debug("request aborted");
+                    StatusbarUi.Execute();
+                    progress.report({ message: 'Aborted' });
+                    return c(true)
+                  } else {
+                    window.showErrorMessage("Cannot find or reach server, check your Warp 10 server endpoint:" + error.message)
+                    console.error(error)
+                    StatusbarUi.Execute();
+                    progress.report({ message: 'Done' });
+                    return e(error)
+                  }
+                } else if (response.statusCode == 301) {
+                  window.showErrorMessage("Check your Warp 10 server endpoint (" + response.request.uri.href + "), you may have forgotten the api/v0/exec in the URL");
+                  console.error(response.body);
+                  StatusbarUi.Execute();
+                  return e(true)
+                } else if (response.statusCode != 200 && response.statusCode != 500) { // manage non 200 answers here
+                  window.showErrorMessage("Error, server answered code " + response.statusCode + " :" + (String)(response.body).slice(0, 1000));
+                  console.error(response.body);
+                  StatusbarUi.Execute();
+                  return e(true)
+                } else if (response.statusCode == 500 && !response.headers['x-warp10-error-message']) {
+                  //received a 500 error without any x-warp10-error-message. Could also be a endpoint error.
+                  window.showErrorMessage("Error, error 500 without any error. Are you sure you are using an exec endpoint ? Endpoint: " + response.request.uri.href + " :" + (String)(response.body).slice(0, 1000));
+                  console.error(response.body);
+                  StatusbarUi.Execute();
+                  return e(true)
+                } else {
+                  let errorParam: any = null
+                  progress.report({ message: 'Parsing response' });
+                  if (response.headers['x-warp10-error-message']) {
+                    let line = parseInt(response.headers['x-warp10-error-line'])
+
+                    // Check if error message contains infos from LINEON
+                    let lineonPattern = /\[Line #(\d+)\]/g;  // Captures the lines sections name
+                    let lineonMatch: RegExpMatchArray | null;
+                    while ((lineonMatch = lineonPattern.exec(response.headers['x-warp10-error-message']))) {
+                      line = parseInt(lineonMatch[1]);
                     }
-                  }, (err) => {
-                    if (err) {
-                      window.showErrorMessage(err.message);
-                      errorParam = err.message;
+
+                    let fileInError;
+                    let lineInError = line;
+                    for (var i = 0; i < lines.length; i++) {
+                      if (lineInError <= lines[i]) {
+                        fileInError = uris[i];
+                        break;
+                      } else {
+                        lineInError -= lines[i];
+                      }
+                    }
+                    errorParam = 'Error in file ' + fileInError + ' at line ' + lineInError + ' : ' + response.headers['x-warp10-error-message'];
+                    StatusbarUi.Execute();
+
+                    let errorMessage: string = response.headers['x-warp10-error-message'];
+                    // We must substract the number of lines added by prepended macros in the error message.
+                    errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, _group1) => '[Line #' + lineInError.toString() + ']');
+                    outputWin.show();
+                    outputWin.append('[' + execDate + '] ');
+                    outputWin.append('ERROR file://');
+                    outputWin.append(Uri.parse(uris[i]).fsPath + ':' + lineInError);
+                    outputWin.appendLine(' ' + errorMessage);
+                    if (/Unknown function 'PROFILE'/.test(errorMessage)) {
+                      window
+                        .showWarningMessage('The Warp 10 Trace Plugin is not activated', ...['Learn more', 'Cancel'])
+                        .then(selection => {
+                          if ('Learn more' === selection) {
+                            TracePluginInfo.render(context);
+                          }
+                        });
+                    }
+                  }
+                  // If no content-type is specified, response is the JSON representation of the stack
+                  if (response.body.startsWith('[')) {
+
+                    // Generate unique filenames, ordered by execution order.
+                    let uuid = ExecCommand.pad(ExecCommand.execNumber++, 3, '0');
+                    let wsFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}.mc2`;
+                    let jsonFilename = `${await WarpScriptExtConstants.findTempFolder()}/${uuid}${jsonSuffix}.json`;
+                    SharedMem.set(uuid, commentsCommands);
+
+                    // Save executed warpscript
+                    try {
+                      await this.deleteFile(wsFilename); // Remove overwritten file. If file unexistent, fail silently.
+                    } catch (e) {
+                    }
+                    try {
+                      await this.writeFile(wsFilename, executedWarpScript);
+                      if (err) {
+                        window.showErrorMessage(err.message);
+                        StatusbarUi.Execute();
+                      }
+                    } catch (e: any) {
+                      window.showErrorMessage(e.message || e);
                       StatusbarUi.Execute();
                     }
-                  });
-                } else {
-                  // not a json, or empty body (in case of warpscript error)
-                  console.debug("requests did not return anything intesting in the body")
-                }
-                if (errorParam) {
-                  e(errorParam)
-                } else {
-                  c(true)
-                }
-                StatusbarUi.Execute();
-              }
-              // decrease request count on this endpoint
-              WarpScriptExtGlobals.endpointsForThisSession[req.uri.href]--;
-              console.debug(WarpScriptExtGlobals.endpointsForThisSession)
-            });
-            ExecCommand.currentRunningRequests.push(req);
-            // increase request count on this endpoint, to use it later for session abort
-            WarpScriptExtGlobals.endpointsForThisSession[req.uri.href] = (WarpScriptExtGlobals.endpointsForThisSession[req.uri.href] || 0) + 1;
+                    // Save resulting JSON
+                    try {
+                      await this.deleteFile(jsonFilename); // Remove overwritten file. If file unexistent, fail silently.
+                    } catch (e) { }
 
-            StatusbarUi.Working(`${WarpScriptExtGlobals.endpointsForThisSession[req.uri.href]} WarpScripts running...`);
-          });
+                    const profileResult = JSON.parse(body)[0];
+                    if (window.activeTextEditor) {
+                      ProfilerWebview.render(context, profileResult.profile ?? [], window.activeTextEditor,);
+                    }
+                    body = profileResult.stack ?? '[]';
+
+                    // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
+                    let sizeMB: number = Math.round(body.length / 1024 / 1024);
+                    if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
+                      // Do not unescape \\u nor control characters.
+                      body = unescape(body.replace(/(?<!\\)\\u(?!000)(?!001)([0-9A-Fa-f]{4})/g, "%u\$1"))
+                    }
+                    let noDisplay: boolean = jsonMaxSizeBeforeWarning > 0 && sizeMB > jsonMaxSizeBeforeWarning;
+                    // file must be saved whatever its size... but not displayed if too big.
+                    this.writeFile(jsonFilename, body).then(() => {
+                      StatusbarUi.Execute();
+                      outputWin.show();
+                      outputWin.append('[' + execDate + '] ');
+                      outputWin.append((WarpScriptExtConstants.isVirtualWorkspace ? '' : 'file://') + wsFilename);
+                      outputWin.append(' => ' + (WarpScriptExtConstants.isVirtualWorkspace ? '' : 'file://') + jsonFilename);
+                      outputWin.append(' ' + ExecCommand.formatElapsedTime(response.headers['x-warp10-elapsed']));
+                      outputWin.append(' ' + ExecCommand.pad(response.headers['x-warp10-fetched'], 10, ' ') + ' fetched ');
+                      outputWin.append(ExecCommand.pad(response.headers['x-warp10-ops'], 10, ' ') + ' ops ');
+                      outputWin.append(ExecCommand.pad(baseFilename, 23, ' '));
+                      outputWin.appendLine(' @' + Warp10URLhostname.substr(0, 30));
+                      if (noDisplay) {
+                        outputWin.appendLine(`${(WarpScriptExtConstants.isVirtualWorkspace ? '' : 'file://')}${jsonFilename} is over ${jsonMaxSizeBeforeWarning}MB and was not opened. See Max File Size Before JSON Warning preference.`);
+                        window.showWarningMessage(`WarpScript: please confirm you really want to parse a ${sizeMB}MB file, esc to cancel`, "I am sure", "Nooooo !").then(
+                          (answer) => {
+                            if (answer === "I am sure") {
+                              //size warning confirmed, display the json.
+                              this.displayJson(jsonFilename, progress, errorParam);
+                            }
+                          }
+                        );
+                      } else {
+                        this.displayJson(jsonFilename, progress, errorParam);
+                      }
+                    }, (err) => {
+                      if (err) {
+                        window.showErrorMessage(err.message);
+                        errorParam = err.message;
+                        StatusbarUi.Execute();
+                      }
+                    });
+                  } else {
+                    // not a json, or empty body (in case of warpscript error)
+                    console.debug("requests did not return anything intesting in the body")
+                  }
+                  if (errorParam) {
+                    e(errorParam)
+                  } else {
+                    c(true)
+                  }
+                  StatusbarUi.Execute();
+                }
+                // decrease request count on this endpoint
+                WarpScriptExtGlobals.endpointsForThisSession[req.uri.href]--;
+                console.debug(WarpScriptExtGlobals.endpointsForThisSession)
+              });
+              ExecCommand.currentRunningRequests.push(req);
+              // increase request count on this endpoint, to use it later for session abort
+              WarpScriptExtGlobals.endpointsForThisSession[req.uri.href] = (WarpScriptExtGlobals.endpointsForThisSession[req.uri.href] || 0) + 1;
+
+              StatusbarUi.Working(`${WarpScriptExtGlobals.endpointsForThisSession[req.uri.href]} WarpScripts running...`);
+            });
+          }
         });
-      })
+      });
     };
   }
 
