@@ -328,10 +328,7 @@ ${this.addBreakPoints(this.ws ?? "")}`;
   async getStackValue(key: string) {
     return new Promise((resolve, reject) => {
       Requester.send(this.endpoint ?? "", `'${this.sid}' TSESSION TSTACK STACKTOLIST REVERSE ${key} GET`)
-        .then((vars: any) => {
-          const data = JSON.parse(vars ?? "[]")[0];
-          resolve(JSON.stringify(data));
-        })
+        .then((vars: any) => resolve((vars ?? "[]").replace(/^\[(.*)\]/g, '$1')))
         .catch((e) => reject(e));
     });
   }
