@@ -22,22 +22,27 @@ More details on [warp10.io](https://www.warp10.io)
   - reduce
   - filter
   - apply
-- Embedded WarpView Dataviz
+  - discovery
+- Embedded Dataviz
+- Embedded [Discovery](https://discovery.warp10.io/) support
 - Embedded base 64 image viewer (visible only if returned JSON contains at least one base64 image)
 - WarpScript execution history in output window using the format (files are clickable):
   - [EXEC_START_DATE] file:///os_temp_dir/executed_warpscript.mc2 => file:///os_temp_dir/result.json exec_time fetched_data op_count main_filename.mc2 endpoint
   - [EXEC_START_DATE] ERROR /path/to/script/in/error.mc2:error_line reason_of_failure
 - WarpScript and resulting JSON are sent gzipped between the client and the server
-- (experimental) You can close all the JSON result files to clean your workspace (command Ctrl+Shift+P > "Close all Warp 10 JSON output in the workspace" command)
+- (experimental) You can close all the JSON result files to clean your workspace (command Ctrl+Shift+P > "Close all Warp&nbsp;10 JSON output in the workspace" command)
 
+## Code Debug/Profile
+
+Supports the [TracePlugin](https://studio.senx.io/#/ad/trace-plugin-info) for debugging and profiling WarpScript.
 
 ## Tips
 
-- To slow down autocompletion, you can use VS Code built in configuration `editor.quickSuggestionsDelay`
+- To slow down autocompletion, you can use VSCode built in configuration `editor.quickSuggestionsDelay`
 - `// @endpoint http://xxx/api/v0/exec` at the beginning of the script change the remote execution endpoint
 - `// @localmacrosubstitution false` at the beginning of the script deactivate the local macro substitution
 - `// @preview none` at the beginning of the script disable the preview. `gts` or `image` force the focus to the GTS or image preview after execution.
-- You can set the VS Code default language to WarpScript (Ctrl+, search for default language settings). Every new file (Ctrl+N) will be a WarpScript.
+- You can set the VSCode default language to WarpScript (Ctrl+, search for default language settings). Every new file (Ctrl+N) will be a WarpScript.
 
 ## Graph interactions
 
