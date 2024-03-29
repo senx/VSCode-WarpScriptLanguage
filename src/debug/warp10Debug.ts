@@ -106,7 +106,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
       this.sendEvent(new TerminatedEvent());
       if ('openSettings' === action) {
         window.showWarningMessage(mess, ...['Open Settings', 'Cancel']).then(resp => {
-          if('Open Settings' === resp) {
+          if ('Open Settings' === resp) {
             commands.executeCommand('workbench.action.openSettings', 'Warpscript: Trace Tokens Per Warp10 URL');
           }
         })
@@ -161,17 +161,17 @@ export class Warp10DebugSession extends LoggingDebugSession {
     this._runtime.on('highlightEvent', info => {
       if (this.inlineDecoration) {
         this.inlineDecoration.dispose();
-        if (this._runtime.isDebug() && window.activeTextEditor) {
-          this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
-          window.activeTextEditor.setDecorations(this.inlineDecoration, [
-            new Range(
-              info.line - 1,
-              info.colStart - 1,
-              info.line - 1,
-              info.colStart - 1
-            )
-          ]);
-        }
+      }
+      if (this._runtime.isDebug() && window.activeTextEditor) {
+        this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
+        window.activeTextEditor.setDecorations(this.inlineDecoration, [
+          new Range(
+            info.line - 1,
+            info.colStart - 1,
+            info.line - 1,
+            info.colStart - 1
+          )
+        ]);
       }
     })
     this._runtime.on("breakpointValidated", (bp: IRuntimeBreakpoint) => this.sendEvent(new BreakpointEvent("changed", { verified: bp.verified, id: bp.id, } as DebugProtocol.Breakpoint)));
