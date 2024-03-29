@@ -34,7 +34,7 @@ More details on [warp10.io](https://www.warp10.io)
 
 ## Code Debug/Profile
 
-Supports the [TracePlugin](https://senx.io/contact) for debuging and profiling WarpScript.
+Supports the [TracePlugin](https://senx.io/contact) for debugging and profiling WarpScript.
 
 ## Tips
 
