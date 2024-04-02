@@ -129,10 +129,10 @@ export class Warp10DebugSession extends LoggingDebugSession {
           this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
           window.activeTextEditor.setDecorations(this.inlineDecoration, [
             new Range(
-              exception.info.line - 1,
-              exception.info.colStart - 1,
-              exception.info.line - 1,
-              exception.info.colStart - 1
+              Math.max(exception.info.line - 1, 0),
+              Math.max(exception.info.colStart - 1, 0),
+              Math.max(exception.info.line - 1, 0),
+              Math.max(exception.info.colStart - 1, 0)
             )
           ]);
           if (window.activeTextEditor) {
@@ -142,10 +142,10 @@ export class Warp10DebugSession extends LoggingDebugSession {
               code: '',
               message: exception.e,
               range: new Range(
-                exception.info.line - 1,
-                exception.info.colStart - 1,
-                exception.info.line - 1,
-                exception.info.colEnd
+                Math.max(exception.info.line - 1, 0),
+                Math.max(exception.info.colStart - 1, 0),
+                Math.max(exception.info.line - 1, 0),
+                Math.max(exception.info.colEnd, 0)
               ),
               severity: DiagnosticSeverity.Error,
               source: window.activeTextEditor.document.uri.toString(),
@@ -166,10 +166,10 @@ export class Warp10DebugSession extends LoggingDebugSession {
         this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
         window.activeTextEditor.setDecorations(this.inlineDecoration, [
           new Range(
-            info.line - 1,
-            info.colStart - 1,
-            info.line - 1,
-            info.colStart - 1
+            Math.max(info.line - 1, 0),
+            Math.max(info.colStart - 1, 0),
+            Math.max(info.line - 1, 0),
+            Math.max(info.colStart - 1, 0)
           )
         ]);
       }
