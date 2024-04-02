@@ -12,7 +12,7 @@
   "author": "SenX <contact@senx.io>",
   "icon": "images/w.png",
   "license": "Apache-2.0",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "publisher": "senx",
   "engines": {
     "vscode": "^1.87.0"
@@ -139,14 +139,14 @@
           "group": "Warp 10"
         },
         {
-          "when": "resourceLangId == warpscript && config.warpscript.traceToken && senx.warpscript-language.loaded",
+          "when": "resourceLangId == warpscript && warpscript.showProfile && senx.warpscript-language.loaded",
           "command": "extension.profile",
           "group": "Warp 10"
         }
       ],
       "editor/title": [
         {
-          "when": "resourceLangId == warpscript && config.warpscript.traceToken && senx.warpscript-language.loaded",
+          "when": "resourceLangId == warpscript && warpscript.showProfile && senx.warpscript-language.loaded",
           "command": "extension.profile",
           "group": "navigation"
         },

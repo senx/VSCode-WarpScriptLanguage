@@ -24,7 +24,7 @@ window.addEventListener('message', event => {
       Name: getName(p),
       Calls: p[4],
       'Total time': p[5] + ' ns',
-      'Time per call': Math.round(getPerCal(profile[5], profile[4]) * 100) / 100 + ' ns'
+      'Time per call': (Math.round(getPerCal(p[5], p[4]) * 100) / 100) + ' ns'
     }));
 
   document.getElementById('profile').addEventListener('mouseout', () => unhighlight());
