@@ -139,14 +139,14 @@
           "group": "Warp 10"
         },
         {
-          "when": "resourceLangId == warpscript && config.warpscript.traceToken && senx.warpscript-language.loaded",
+          "when": "resourceLangId == warpscript && warpscript.showProfile && senx.warpscript-language.loaded",
           "command": "extension.profile",
           "group": "Warp 10"
         }
       ],
       "editor/title": [
         {
-          "when": "resourceLangId == warpscript && config.warpscript.traceToken && senx.warpscript-language.loaded",
+          "when": "resourceLangId == warpscript && warpscript.showProfile && senx.warpscript-language.loaded",
           "command": "extension.profile",
           "group": "navigation"
         },
