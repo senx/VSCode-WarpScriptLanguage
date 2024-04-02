@@ -370,6 +370,10 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   protected disconnectRequest(_response: DebugProtocol.DisconnectResponse, _args: DebugProtocol.DisconnectArguments, _request?: DebugProtocol.Request): void {
+    if (!_args.restart && !_args.terminateDebuggee) {
+      this.log({ text: "Debugger disconnected by VSCode (end of script, or idle timeout, or overload)", type: "out"})
+    }
+    // args = {"restart":false,"terminateDebuggee":false} after à 5 minute idle state in vscode, for example paused on a breakpoint.
     this._runtime.close();
   }
 
@@ -880,7 +884,8 @@ export class Warp10DebugSession extends LoggingDebugSession {
     if (args.progressId) {
       this._cancelledProgressId = args.progressId;
     }
-    this._runtime.close();
+    // sent by vscode to speed up interface. But technically, we cannot speed up http requests, and closing them will not speed up.
+    // in any case, do not close the websocket here.
   }
 
   protected disassembleRequest(response: DebugProtocol.DisassembleResponse, args: DebugProtocol.DisassembleArguments) {

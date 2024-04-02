@@ -254,7 +254,7 @@ ${this.addBreakPoints(this.ws ?? "")}`;
             this.close();
           });
       } else if (msg === "ERROR No paused execution.") {
-        this.close();
+        // this can legitimely happens when user keeps pressing F5. several CONTINUE order stacks up, and several are sent just after the STEP pause.
       } else if (msg.startsWith("STEP")) {
         if (this.inDebug) {
           await this.getVars();
