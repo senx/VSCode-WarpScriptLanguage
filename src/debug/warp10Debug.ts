@@ -458,7 +458,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
 
   protected async setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): Promise<void> {
     const path = args.source.path as string;
-    if (path !== this.program) {
+    if (this._runtime.normalizePathAndCasing(path) !== this.program) {
       response.body = { breakpoints: [] };
       this.sendResponse(response);
 
