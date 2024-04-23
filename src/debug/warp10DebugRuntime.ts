@@ -668,7 +668,7 @@ STACKTOLIST REVERSE 'stack' STORE
     setTimeout(() => this.emit(event, ...args), 0);
   }
 
-  private normalizePathAndCasing(path: string) {
+  public normalizePathAndCasing(path: string) {
     if (this.fileAccessor.isWindows) {
       return path.replace(/\//g, "\\").toLowerCase();
     } else {
