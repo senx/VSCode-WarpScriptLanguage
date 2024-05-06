@@ -1,12 +1,16 @@
 import { specialCommentCommands } from '../warpScriptParser';
 import WarpScriptParser from '../warpScriptParser';
 import WSDocumentLinksProvider from '../providers/wsDocumentLinksProvider';
-import { OutputChannel, TextDocument, workspace } from 'vscode';
+import { OutputChannel, TextDocument, Uri, workspace } from 'vscode';
 
 // this helper class manages the macro inclusion.
 // It will prepend all the macros that the script refers to when found locally.
 // when constructed with substitutionWithLocalMacros = false, the prepended WarpScript is the same as the original input.
 
+export interface lineInFile {
+  file:string;
+  line:number;
+}
 
 export default class MacroIncluder {
 
@@ -32,6 +36,7 @@ export default class MacroIncluder {
 
     this.uris = [wsUri]
     this.lines = [executedWarpScript.split('\n').length]
+    this.prependedWs = ws;
 
     if (substitutionWithLocalMacros) {
 
@@ -105,7 +110,7 @@ export default class MacroIncluder {
           allMacroPrepended = true;
         }
       }
-
+      this.prependedWs = executedWarpScript;
     } else {
       if (commentsCommands.listOfMacroInclusion && commentsCommands.listOfMacroInclusion.length > 0) {
         if (this.outputWin) {
@@ -130,5 +135,25 @@ export default class MacroIncluder {
     console.warn(this.lines);
   }
 
+  public printFullWs() {
+    let l = this.prependedWs.split('\n');
+    for (let i=0;i<l.length;i++) {
+      console.log(`#${i}:${this.getUriAndLineFromRealLine(i).file}.${this.getUriAndLineFromRealLine(i).line} ${l[i]}`)
+    }
+  }
+
+  public getUriAndLineFromRealLine(line:number):lineInFile{
+    let fileInError;
+    let lineInError = line;
+    for (var i = 0; i < this.lines.length; i++) {
+      if (lineInError <= this.lines[i]) {
+        fileInError = this.uris[i];
+        break;
+      } else {
+        lineInError -= this.lines[i];
+      }
+    }
+    return { line:lineInError, file:fileInError}
+  }
 
 }
