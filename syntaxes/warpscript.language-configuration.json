@@ -39,7 +39,7 @@
         ["`", "`"]
     ],
     "indentationRules": {
-        "increaseIndentPattern" : "^\\s*(<%|\\[|\\{|\\(|\\[[|<')\\b.*$",
-        "decreaseIndentPattern" : "^\\s*(%>|\\]|\\}|\\)|\\]]|'>)\\b.*$"
+        "increaseIndentPattern" : "^\\s*(<%|\\[|\\{|\\(|\\[|<')\\b.*$",
+        "decreaseIndentPattern" : "^\\s*(%>|\\]|\\}|\\)|\\]|'>)\\b.*$"
     }
  }

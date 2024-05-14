@@ -22,7 +22,8 @@ export default class GTSPreviewWebview {
     "Visual Studio Light",
     "Default Light+",
     "Quiet Light",
-    "Solarized Light"
+    "Solarized Light",
+    "Default Light Modern" // found in windows
   ];
   /**
    * 

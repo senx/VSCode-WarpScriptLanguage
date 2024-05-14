@@ -279,7 +279,7 @@ export default class WSDiagnostics {
     if (this.debounceTime < 1000) {
       this.debounceTime = 1000;
     }
-    console.log("debounce time = %d", this.debounceTime);
+    //console.log("debounce time = %d", this.debounceTime);
   }
 
   public initializeDiagnostics() {

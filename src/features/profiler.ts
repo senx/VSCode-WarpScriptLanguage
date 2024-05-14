@@ -288,7 +288,7 @@ export default class ProfilerCommand {
                     // the full warpscript, with all macros, will be displayed on the first column, and it will be used by the profiler.
                     let warpscriptEditorForProfiler: TextEditor;
 
-                    await workspace.openTextDocument(Uri.parse(wsFilename))
+                    await workspace.openTextDocument(Uri.parse(wsFilename).fsPath)
                       .then((doc: TextDocument) => {
                         window.showTextDocument(doc, { viewColumn: ViewColumn.One, preview: true, preserveFocus: false })
                           .then((editor) => {
