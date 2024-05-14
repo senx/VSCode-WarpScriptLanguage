@@ -14,7 +14,11 @@ export class ProfilerWebview {
   totalTime = 0;
   profileFnDecoration = window.createTextEditorDecorationType({
     borderWidth: '1px',
-    borderStyle: 'solid'
+    borderStyle: 'solid',
+    borderColor: 'red',
+    outlineColor: 'red',
+    outlineStyle: 'solid',
+    outlineWidth: '3px'
   });
   private uriToProfiledWs: string[] = [];
   private uriToFullWs: string = "";
@@ -77,7 +81,7 @@ export class ProfilerWebview {
     this.onchangecallback = window.onDidChangeActiveTextEditor(() => { this.focusHasChanged = true; });
   }
 
-  public static render(context: ExtensionContext, result: any[], activeTextEditor: TextEditor, uriToProfiledWs: string[], uriToFullWs: string) {
+  public static render(context: ExtensionContext, result: any[], activeTextEditor: TextEditor, uriToProfiledWs: string[], uriToFullWs: string): WebviewPanel {
     if (ProfilerWebview.currentPanel) {
       // If the webview panel already exists reveal it
       ProfilerWebview.currentPanel.dispose();
@@ -118,6 +122,8 @@ export class ProfilerWebview {
         ProfilerWebview.currentPanel._panel.webview.postMessage({ result, ws: activeTextEditor.document.getText() });
       }
     })
+
+    return panel;
   }
 
   unhighlight() {
@@ -157,18 +163,29 @@ export class ProfilerWebview {
     //   });
     //   this.activeTextEditor.setDecorations(this.afterFnDecoration, [new Range(m.start - 2, profile[2] + 1, m.start - 2, profile[2] + 1)]);
     // } else if ('F' === profile[3][0]) {
-      const range = new Range(profile[0] - 2, profile[1], profile[0] - 2, profile[2] + 1);
-      this.activeTextEditor.revealRange(range, TextEditorRevealType.InCenterIfOutsideViewport);
-      this.activeTextEditor.setDecorations(this.profileFnDecoration, [{ range }]);
+    const range = new Range(profile[0] - 2, profile[1], profile[0] - 2, profile[2] + 1);
+    this.activeTextEditor.revealRange(range, TextEditorRevealType.InCenterIfOutsideViewport);
+    this.activeTextEditor.setDecorations(this.profileFnDecoration, [{ range }]);
 
-      this.afterFnDecoration = window.createTextEditorDecorationType({
+    this.afterFnDecoration = window.createTextEditorDecorationType({
+      light: {
         after: {
           contentText: this.getProfileResult(profile),
-          color: '#404040',
+          color: '#FF4040',
           margin: '5px'
+
         }
-      });
-      this.activeTextEditor.setDecorations(this.afterFnDecoration, [{ range }]);
+      },
+      dark: {
+        after: {
+          contentText: this.getProfileResult(profile),
+          color: '#FF4040',
+          margin: '5px'
+
+        }
+      }
+    });
+    this.activeTextEditor.setDecorations(this.afterFnDecoration, [{ range }]);
     //}
   }
 
@@ -238,7 +255,8 @@ export class ProfilerWebview {
             </section>
         </header>
         <div class="container">
-          <h1>Profile</h1>
+          <div class=profilertitle>Profiler results</div>
+          <div class=profilerHelp>Hover on lines to reveal the instruction in the first column</br>Place a comment (// or #) on the line where the macro starts to locate it quickly in the table below</div>
           <div class=profilerGenFile>Profile for: ${this.uriToFullWs}</br></div>
           <div class=profilerSources>Built from :</br> ${this.uriToProfiledWs.join('</br>')}</br></div>
           <vscode-data-grid id="profile" aria-label="Profile"  generate-header="sticky"></vscode-data-grid>

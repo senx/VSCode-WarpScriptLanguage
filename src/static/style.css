@@ -108,8 +108,21 @@ img.logo {
 
 .profilerSources {
   font-size: smaller;
+  margin-bottom: 20px;
 }
 
-.profilerGenFile{
+.profilerGenFile {
   font-size: smaller;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.profilertitle {
+  font-size: larger;
+  text-align: center;
+}
+
+.profilerHelp {
+  font-size: x-small;
+  text-align: center;
 }

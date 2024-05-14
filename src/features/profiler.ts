@@ -1,6 +1,6 @@
 import { StatusbarUi } from './../statusbarUi';
 import request from 'request';
-import { ExtensionContext, OutputChannel, Progress, ProgressLocation, TextDocument, TextEditor, Uri, ViewColumn, window, workspace } from 'vscode';
+import { ExtensionContext, OutputChannel, Progress, ProgressLocation, TextDocument, TextEditor, Uri, ViewColumn, window, workspace, WebviewPanel } from 'vscode';
 import { specialCommentCommands } from '../warpScriptParser';
 import WarpScriptParser from '../warpScriptParser';
 import { Warp10 } from '@senx/warp10';
@@ -310,9 +310,8 @@ export default class ProfilerCommand {
                     } catch (e) { }
                     console.log(body)
                     const profileResult = JSON.parse(body)[0];
-                    if (window.activeTextEditor) {
-                      ProfilerWebview.render(context, profileResult.profile ?? [], warpscriptEditorForProfiler, wswlm.getListOfSourceFiles(),Uri.parse(wsFilename).toString());
-                    }
+
+                    const profilerView = ProfilerWebview.render(context, profileResult.profile ?? [], warpscriptEditorForProfiler, wswlm.getListOfSourceFiles(), Uri.parse(wsFilename).toString());
                     body = profileResult.stack ?? '[]';
 
                     let sizeMB: number = Math.round(body.length / 1024 / 1024);
@@ -336,12 +335,12 @@ export default class ProfilerCommand {
                           (answer) => {
                             if (answer === "I am sure") {
                               //size warning confirmed, display the json.
-                              this.displayJson(jsonFilename, progress, errorParam);
+                              this.displayJson(jsonFilename, profilerView, progress, errorParam);
                             }
                           }
                         );
                       } else {
-                        this.displayJson(jsonFilename, progress, errorParam);
+                        this.displayJson(jsonFilename, profilerView, progress, errorParam);
                       }
                     }, (err) => {
                       if (err) {
@@ -377,7 +376,7 @@ export default class ProfilerCommand {
     };
   }
 
-  private displayJson(jsonFilename: string, progress: Progress<{ message?: string; }>, errorParam: any) {
+  private displayJson(jsonFilename: string, focusOnThisPanel: WebviewPanel, progress: Progress<{ message?: string; }>, errorParam: any) {
     console.debug(errorParam)
     let jsonUri: Uri;
     if (WarpScriptExtConstants.isVirtualWorkspace) {
@@ -387,10 +386,11 @@ export default class ProfilerCommand {
     }
     workspace.openTextDocument(jsonUri)
       .then((doc: TextDocument) => {
-        window.showTextDocument(doc, { viewColumn: ViewColumn.Two, preview: true, preserveFocus: false })
+        window.showTextDocument(doc, { viewColumn: ViewColumn.Two, preview: true, preserveFocus: true })
           .then(() => {
             progress.report({ message: 'Done' });
             StatusbarUi.Init();
+            focusOnThisPanel.reveal();
           },
             (err: any) => {
               console.error(err)

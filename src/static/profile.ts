@@ -23,9 +23,9 @@ window.addEventListener('message', event => {
     .filter((p: any[]) => p[0] < numberofLines + 2 && p[0] >= 2);
   (document.getElementById('profile') as DataGrid).rowsData = profile.map((p: any[]) => ({
     Name: getName(p),
-   // Line: p[0],
-   // Start: p[1],
-   // End: p[2],
+    // Line: p[0],
+    // Start: p[1],
+    // End: p[2],
     Calls: p[4],
     'Total time': p[5] + ' ns',
     'Time per call': (Math.round(getPerCal(p[5], p[4]) * 100) / 100) + ' ns'
@@ -35,7 +35,7 @@ window.addEventListener('message', event => {
   setTimeout(() => document.getElementById('profile').querySelectorAll('vscode-data-grid-row')
     .forEach((cn: Element, i) => {  // pray that it is ordered. seems to be.
       if (i > 0) {
-        cn.addEventListener('mouseover', () => highlight(cn, profile[i-1])); // number 0 is the column title !
+        cn.addEventListener('mouseover', () => highlight(cn, profile[i - 1])); // number 0 is the column title !
       }
     }), 500);
 });
@@ -55,7 +55,11 @@ function getName(p: any[]) {
     case 'm':
       return 'Total';
     case 'M':
-      const comments = code.split('\n')[p[0] - 2].split('#');
+      // try see if there is a comment on the same line than the macro start
+      let comments = code.split('\n')[p[0] - 2].split('//');
+      if (comments.length == 1) {
+        comments = code.split('\n')[p[0] - 2].split('#');
+      }
       if (comments.length > 1) {
         return `Macro (${comments[1].trim()})`
       } else {
