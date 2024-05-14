@@ -62,7 +62,7 @@ export default class MacroIncluder {
               let tdoc: TextDocument = await workspace.openTextDocument(uri);
               let macroCode: string = tdoc.getText()
               // Prepend the macro, store it and then append the rest of the script.
-              let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
+              let prepend: string = macroCode + '\n\'' + macroName + '\' STORE // end of ' + uri.toString() + '\n####################################################################################################\n';
               executedWarpScript = prepend + executedWarpScript;
               //          linesOfMacrosPrepended += prepend.split('\n').length - 1;
               //console.log(prepend.split('\n'))
@@ -102,7 +102,7 @@ export default class MacroIncluder {
                   let tdoc: TextDocument = await workspace.openTextDocument(uri);
                   let macroCode: string = tdoc.getText()
                   // Prepend the macro, store it and then append the rest of the script.
-                  let prepend: string = macroCode + '\n\'' + macroName + '\' STORE // end of ' + uri.toString() + '\n\n';
+                  let prepend: string = macroCode + '\n\'' + macroName + '\' STORE // end of ' + uri.toString() + '\n####################################################################################################\n';
                   executedWarpScript = prepend + executedWarpScript;
                   //          linesOfMacrosPrepended += prepend.split('\n').length - 1;
                   //console.log(prepend.split('\n'))
