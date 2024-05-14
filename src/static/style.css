@@ -105,3 +105,11 @@ img.logo {
     width: 1170px;
   }
 }
+
+.profilerSources {
+  font-size: smaller;
+}
+
+.profilerGenFile{
+  font-size: smaller;
+}

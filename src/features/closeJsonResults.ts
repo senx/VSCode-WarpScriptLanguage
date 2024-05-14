@@ -38,6 +38,7 @@ export default class CloseJsonResults {
         if (filename.match(await WarpScriptExtConstants.jsonResultRegEx())) {
           console.log(`${filename} could be closed ! closing...`);
           commands.executeCommand("workbench.action.revertAndCloseActiveEditor");
+          securityReArm();
         }
         else {
           if (activefilepath === editor.document.uri.toString()) {
@@ -62,10 +63,17 @@ export default class CloseJsonResults {
 
 
     // security : if endless loop (not seen), end all.
-    setTimeout(() => {
-      if (onchangecallback) { onchangecallback.dispose(); }
-      WarpScriptExtGlobals.weAreClosingFilesFlag = false;
-    }, 5000);
+    let securityTimer: NodeJS.Timeout = null;
+
+    function securityReArm() {
+      if (securityTimer) { clearTimeout(securityTimer); }
+      securityTimer = setTimeout(function () {
+        if (onchangecallback) { onchangecallback.dispose(); }
+        WarpScriptExtGlobals.weAreClosingFilesFlag = false;
+      }, 5000);
+    }
+
+    securityReArm();
 
     // set the flag to disable the content provider update
     WarpScriptExtGlobals.weAreClosingFilesFlag = true;

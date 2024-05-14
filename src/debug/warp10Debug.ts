@@ -24,8 +24,6 @@ import {
   LoggingDebugSession,
   MemoryEvent,
   OutputEvent,
-  ProgressEndEvent,
-  ProgressStartEvent, ProgressUpdateEvent,
   Scope, Source,
   StackFrame,
   StoppedEvent,
@@ -44,9 +42,10 @@ import WarpScriptExtConstants from "../constants";
 import { SharedMem } from "../extension";
 import ExecCommand from "../features/execCommand";
 import { Requester } from "../features/requester";
-import WarpScriptParser, { specialCommentCommands } from "../warpScriptParser";
+import { specialCommentCommands } from "../warpScriptParser";
 import { TracePluginInfo } from "../webviews/tracePluginInfo";
 import { FileAccessor, IRuntimeBreakpoint, IRuntimeVariableType, RuntimeVariable, Warp10DebugRuntime, } from "./warp10DebugRuntime";
+import { Mutex, withTimeout } from "async-mutex";
 
 /**
  * This interface describes the mock-debug specific launch attributes
@@ -74,18 +73,17 @@ export class Warp10DebugSession extends LoggingDebugSession {
   private _variableHandles = new Handles<"locals" | "globals" | RuntimeVariable>();
   private _configurationDone = new Subject();
   private _cancellationTokens = new Map<number, boolean>();
-  private _reportProgress = false;
-  private _progressId = 10000;
-  private _cancelledProgressId: string | undefined = undefined;
-  private _isProgressCancellable = true;
   private _valuesInHex = false;
   private _useInvalidatedEvent = false;
-  private executedWarpScript: string | undefined;
+  //private executedWarpScript: string | undefined;
   private inlineDecoration: TextEditorDecorationType | undefined;
   private context: ExtensionContext;
   static threadID: number = 1;
   private diagnosticCollection: DiagnosticCollection;
-  private program: string;
+  //private program: string;
+  private currentProgramUri: string;
+  private wswlmReadyMutex = withTimeout(new Mutex(), 10000);
+  private wswlmReady = false;
 
   /**
    * Creates a new debug adapter that is used for one debug session.
@@ -120,59 +118,86 @@ export class Warp10DebugSession extends LoggingDebugSession {
     this._runtime.on("stopOnBreakpoint", () => this.sendEvent(new StoppedEvent("breakpoint", Warp10DebugSession.threadID)));
     this._runtime.on("stopOnDataBreakpoint", () => this.sendEvent(new StoppedEvent("data breakpoint", Warp10DebugSession.threadID)));
     this._runtime.on("stopOnInstructionBreakpoint", () => this.sendEvent(new StoppedEvent("instruction breakpoint", Warp10DebugSession.threadID)));
-    this._runtime.on("stopOnException", exception => {
-      if (exception) {
-        if (this._runtime.isDebug() && window.activeTextEditor) {
-          if (this.inlineDecoration) {
-            this.inlineDecoration.dispose();
-          }
-          this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
-          window.activeTextEditor.setDecorations(this.inlineDecoration, [
-            new Range(
-              Math.max(exception.info.line - 1, 0),
-              Math.max(exception.info.colStart - 1, 0),
-              Math.max(exception.info.line - 1, 0),
-              Math.max(exception.info.colStart - 1, 0)
-            )
-          ]);
-          if (window.activeTextEditor) {
-            if (this.diagnosticCollection) this.diagnosticCollection.clear();
-            this.diagnosticCollection = languages.createDiagnosticCollection('WarpScript-debug');
-            this.diagnosticCollection.set(window.activeTextEditor.document.uri, [{
-              code: '',
-              message: exception.e,
-              range: new Range(
-                Math.max(exception.info.line - 1, 0),
-                Math.max(exception.info.colStart - 1, 0),
-                Math.max(exception.info.line - 1, 0),
-                Math.max(exception.info.colEnd, 0)
-              ),
-              severity: DiagnosticSeverity.Error,
-              source: window.activeTextEditor.document.uri.toString(),
-              relatedInformation: []
-            }]);
-          }
-        }
-        this.sendEvent(new StoppedEvent(`exception(${exception.e})`, Warp10DebugSession.threadID));
-      } else {
-        this.sendEvent(new StoppedEvent("exception", Warp10DebugSession.threadID));
-      }
-    });
+    // this._runtime.on("stopOnException", exception => {
+    //   if (exception) {
+    //     if (this._runtime.isDebug() && window.activeTextEditor) {
+    //       if (this.inlineDecoration) {
+    //         this.inlineDecoration.dispose();
+    //       }
+    //       this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
+    //       window.activeTextEditor.setDecorations(this.inlineDecoration, [
+    //         new Range(
+    //           Math.max(exception.info.line - 1, 0),
+    //           Math.max(exception.info.colStart - 1, 0),
+    //           Math.max(exception.info.line - 1, 0),
+    //           Math.max(exception.info.colStart - 1, 0)
+    //         )
+    //       ]);
+    //       if (window.activeTextEditor) {
+    //         if (this.diagnosticCollection) this.diagnosticCollection.clear();
+    //         this.diagnosticCollection = languages.createDiagnosticCollection('WarpScript-debug');
+    //         this.diagnosticCollection.set(window.activeTextEditor.document.uri, [{
+    //           code: '',
+    //           message: exception.e,
+    //           range: new Range(
+    //             Math.max(exception.info.line - 1, 0),
+    //             Math.max(exception.info.colStart - 1, 0),
+    //             Math.max(exception.info.line - 1, 0),
+    //             Math.max(exception.info.colEnd, 0)
+    //           ),
+    //           severity: DiagnosticSeverity.Error,
+    //           source: window.activeTextEditor.document.uri.toString(),
+    //           relatedInformation: []
+    //         }]);
+    //       }
+    //     }
+    //     this.sendEvent(new StoppedEvent(`exception(${exception.e})`, Warp10DebugSession.threadID));
+    //   } else {
+    //     this.sendEvent(new StoppedEvent("exception", Warp10DebugSession.threadID));
+    //   }
+    // });
     this._runtime.on('highlightEvent', info => {
-      if (this.inlineDecoration) {
-        this.inlineDecoration.dispose();
-      }
-      if (this._runtime.isDebug() && window.activeTextEditor) {
-        this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
-        window.activeTextEditor.setDecorations(this.inlineDecoration, [
-          new Range(
-            Math.max(info.line - 1, 0),
-            Math.max(info.colStart - 1, 0),
-            Math.max(info.line - 1, 0),
-            Math.max(info.colStart - 1, 0)
-          )
-        ]);
-      }
+      //try: console.warn("sending a breakpoint event, just to see, in highlight...", Uri.parse(info.path).fsPath)
+      //this.sendEvent(new BreakpointEvent("breakpoint",new Breakpoint(true,1,8,new Source("macro2.mc2",Uri.parse(info.path).fsPath)  )));
+      // => no effect on current window. window change on breakpoints or step should be managed manually.
+      workspace.openTextDocument(Uri.parse(info.path))
+        .then((doc: TextDocument) => {
+          window.showTextDocument(doc).then(editor => {
+            console.log("yeepee, show decoration in the right file", info)
+            if (this.inlineDecoration) {
+              this.inlineDecoration.dispose();
+            }
+            if (this._runtime.isDebug() && editor) {
+              this.inlineDecoration = window.createTextEditorDecorationType({ before: { color: "red", contentText: "⯆" } });
+              editor.setDecorations(this.inlineDecoration, [
+                new Range(
+                  Math.max(info.line, 0), // vscode ranges also start at line 0
+                  Math.max(info.colStart - 1, 0),
+                  Math.max(info.line, 0),
+                  Math.max(info.colStart - 1, 0)
+                )
+              ]);
+            }
+            if (info.showDiagnostic) {
+              if (this.diagnosticCollection) this.diagnosticCollection.clear();
+              this.diagnosticCollection = languages.createDiagnosticCollection('WarpScript-debug');
+              this.diagnosticCollection.set(window.activeTextEditor.document.uri, [{
+                code: '',
+                message: info.diagMsg,
+                range: new Range(
+                  info.diagLine,
+                  info.diagColStart - 1,
+                  info.diagLine,
+                  info.diagColEnd
+                ),
+                severity: DiagnosticSeverity.Error,
+                source: window.activeTextEditor.document.uri.toString(),
+                relatedInformation: []
+              }]);
+              this.sendEvent(new StoppedEvent(`exception(${info.diagMsg})`, Warp10DebugSession.threadID)); // controls the continue/step/pause buttons.
+            }
+          })
+        })
     })
     this._runtime.on("breakpointValidated", (bp: IRuntimeBreakpoint) => this.sendEvent(new BreakpointEvent("changed", { verified: bp.verified, id: bp.id, } as DebugProtocol.Breakpoint)));
     this._runtime.on("output", (type, text, filePath, line, column, popin) => this.log({ text, filePath, line, column, type, popin }));
@@ -233,9 +258,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
    * to interrogate the features the debug adapter provides.
    */
   protected initializeRequest(response: DebugProtocol.InitializeResponse, args: DebugProtocol.InitializeRequestArguments): void {
-    if (args.supportsProgressReporting) {
-      this._reportProgress = true;
-    }
+    console.warn ("gro, args",args)
     if (args.supportsInvalidatedEvent) {
       this._useInvalidatedEvent = true;
     }
@@ -287,7 +310,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
 
   /**
    * Called at the end of the configuration sequence.
-   * Indicates that all breakpoints etc. have been sent to the DA and that the 'launch' can start.
+   * After launchrequest, indicates that all breakpoints etc. have been sent to the DA and that the 'launch' can start.
    */
   protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneResponse, args: DebugProtocol.ConfigurationDoneArguments): void {
     super.configurationDoneRequest(response, args);
@@ -326,8 +349,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     //
     // keep a simple suffix for the json filename (either n for nanosecond or m for millisecond. nothing for default.)
     let jsonSuffix: string = PreviewTimeUnit.slice(0, 1);
-    const commentsCommands: specialCommentCommands =
-      WarpScriptParser.extractSpecialComments(this.executedWarpScript ?? "");
+    const commentsCommands: specialCommentCommands = this._runtime.wswlm.commentsCommands;
     // add X after the suffix for no preview at all, add I for focus on images, add G for gts preview.
     let displayPreviewOpt = "";
     displayPreviewOpt = commentsCommands.displayPreviewOpt || displayPreviewOpt;
@@ -341,7 +363,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
       await this.deleteFile(wsFilename); // Remove overwritten file. If file unexistent, fail silently.
     } catch (e) { }
     try {
-      await this.writeFile(wsFilename, this.executedWarpScript);
+      await this.writeFile(wsFilename, this._runtime.wswlm.originalWarpScriptContent);  // it may also be the full warpscript + inclusion... but debug token will leak there.
     } catch (e) {
       this.log({ text: e, filePath: wsFilename, type: "err" });
     }
@@ -371,7 +393,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
 
   protected disconnectRequest(_response: DebugProtocol.DisconnectResponse, _args: DebugProtocol.DisconnectArguments, _request?: DebugProtocol.Request): void {
     if (!_args.restart && !_args.terminateDebuggee) {
-      this.log({ text: "Debugger disconnected by VSCode (end of script, or idle timeout, or overload)", type: "out"})
+      this.log({ text: "Debugger disconnected by VSCode (end of script, or idle timeout, or overload)", type: "out" })
     }
     // args = {"restart":false,"terminateDebuggee":false} after à 5 minute idle state in vscode, for example paused on a breakpoint.
     this._runtime.close();
@@ -399,16 +421,30 @@ export class Warp10DebugSession extends LoggingDebugSession {
   }
 
   protected async attachRequest(response: DebugProtocol.AttachResponse, args: IAttachRequestArguments) {
+    // not used with classic F5 start debug
     return this.launchRequest(response, args);
   }
 
   protected async launchRequest(response: DebugProtocol.LaunchResponse, args: ILaunchRequestArguments) {
-    this.program = this._runtime.normalizePathAndCasing(args.program);
+    // called with very few context...
+    // args = {type: 'warpscript', name: 'Launch', request: 'launch', program: '/home/pierre/warpscriptspp/recursive macro test/tests/inclusion test.mc2', stopOnEntry: true, …}
+    this.wswlmReady = false;
+    // as macro inclusion needs to be done before adding any breakpoints, take mutex first.
+    await this.wswlmReadyMutex.runExclusive(async () => {
+      this.currentProgramUri = this._runtime.normalizePathAndCasing(args.program);
+      const ws = await this._runtime.getContent(args.program);
+      await this._runtime.loadWarpScript(ws, this.currentProgramUri);
+      this._runtime.wswlm.printFullWs();
+      this.wswlmReady = true;
+    });
+
+
     // make sure to 'Stop' the buffered logging if 'trace' is not set
     logger.setup(args.trace ? Logger.LogLevel.Verbose : Logger.LogLevel.Stop, false);
     // wait 1 second until configuration has finished (and configurationDoneRequest has been called)
-    await this._configurationDone.wait(1000);
-
+    await this._configurationDone.wait(5000);
+    // console.warn("ready to start")
+    // this._runtime.wswlm.printFullWs();
     if (!!args.noDebug) {
       console.log('executeCommand', { args });
       commands.executeCommand('extension.execWS').then(() => {
@@ -419,8 +455,9 @@ export class Warp10DebugSession extends LoggingDebugSession {
         this.sendResponse(response);
       });
     } else {
-      const ws = await this._runtime.getContent(args.program);
-      const commentsCommands = WarpScriptParser.extractSpecialComments(ws ?? "");
+      //const ws = await this._runtime.getContent(args.program);
+      //this._runtime.printAllBreakpoints();
+      const commentsCommands = this._runtime.wswlm.commentsCommands;
       const endpoint = commentsCommands.endpoint ?? workspace.getConfiguration().get("warpscript.Warp10URL");
       Requester.getInstanceInfo(endpoint ?? '').then(async info => {
         // check if trace plugin is active
@@ -435,12 +472,11 @@ export class Warp10DebugSession extends LoggingDebugSession {
           TracePluginInfo.render(this.context);
         } else {
           // start the program in the runtime
-          this._runtime.start(args.program, checkWS[0])
-            .then((r) => {
+          this._runtime.start(checkWS[0])
+            .then((_r) => {
               if (this.inlineDecoration) {
                 this.inlineDecoration.dispose();
               }
-              this.executedWarpScript = r;
               this.sendResponse(response);
             });
         }
@@ -452,32 +488,69 @@ export class Warp10DebugSession extends LoggingDebugSession {
     }
   }
 
+  // should never be called by frontend, marked unsupported
   protected setFunctionBreakPointsRequest(response: DebugProtocol.SetFunctionBreakpointsResponse, _args: DebugProtocol.SetFunctionBreakpointsArguments, _request?: DebugProtocol.Request): void {
     this.sendResponse(response);
   }
 
+  // right avec launchrequest, the frontend send all the breakpoints defined in all files, in lexicographic order (or no order ?)
+  // backend will say if these are valid breakpoints. When invalid, frontend gray them out.
+  // to know that they are valid, we must know what macros will be included... so we must wait the list of included macro to be ready.
   protected async setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): Promise<void> {
     const path = args.source.path as string;
-    if (this._runtime.normalizePathAndCasing(path) !== this.program) {
-      response.body = { breakpoints: [] };
-      this.sendResponse(response);
 
-    } else {
-      const clientLines = args.lines || [];
-      // clear all breakpoints for this file
-      this._runtime.clearBreakpoints(path);
-      // set and verify breakpoint locations
-      const actualBreakpoints0 = clientLines.map(async (l) => {
-        const { verified, line, id } = await this._runtime.setBreakPoint(path, this.convertClientLineToDebugger(l));
-        const bp = new Breakpoint(verified, this.convertDebuggerLineToClient(line)) as DebugProtocol.Breakpoint;
-        bp.id = id;
-        return bp;
-      });
-      const actualBreakpoints = await Promise.all<DebugProtocol.Breakpoint>(actualBreakpoints0);
-      // send back the actual breakpoint positions
-      response.body = { breakpoints: actualBreakpoints };
-      this.sendResponse(response);
-    }
+    // wait for ws with local macro to be ready... and make sure setBreakPointsRequest are processed one by one.
+    await this.wswlmReadyMutex.runExclusive(async () => {
+      console.warn(path, response, args);
+
+      if (!this.wswlmReady) { // it should be true ! otherwise, it means frontend called setBreakPointsRequest before launchRequest, or that mutex 10s limit reached
+        console.error("frontend called setBreakPointsRequest before launchRequest, or more than 10s to process warpscript local macro inclusion ?!!")
+        let r: DebugProtocol.ErrorResponse = {
+          body: {
+            error: undefined
+          },
+          request_seq: 0,
+          success: false,
+          command: "",
+          seq: 0,
+          type: ""
+        }
+        this.sendErrorResponse(r, 507);
+      } else {
+        console.log(`processing breakpoints for ${path}`)
+        // clear all breakpoints for this file
+        //this._runtime.clearBreakpoints(path);
+        const clientLines = args.lines || [];
+        const breakpoints = clientLines.map(l => {
+          let valid = this._runtime.setLineBreakPoint(path, l - 1); // vscode starts counting line at 1
+          return new Breakpoint(valid, l) as DebugProtocol.Breakpoint
+        })
+        response.body = { breakpoints: breakpoints };
+        this.sendResponse(response);
+      }
+    });
+
+
+
+    // if (!this._runtime.wswlm.isThisFileIncluded(this._runtime.normalizePathAndCasing(path))) { // à faire dans runtime en fait.
+    //   response.body = { breakpoints: [] };
+    //   this.sendResponse(response);
+    //   console.error(`file ${path} NOT included by macro inclusion`) // c'est pété comme manière de faire, il faut lui renvoyer son tableau avec "invalid"
+    // } else {
+
+
+    //   // set and verify breakpoint locations
+    //   const actualBreakpoints0 = clientLines.map(async (l) => {
+    //     const { verified, line, id } = await this._runtime.setBreakPoint(path, this.convertClientLineToDebugger(l));
+    //     const bp = new Breakpoint(verified, this.convertDebuggerLineToClient(line)) as DebugProtocol.Breakpoint;
+    //     bp.id = id;
+    //     return bp;
+    //   });
+    //   const actualBreakpoints = await Promise.all<DebugProtocol.Breakpoint>(actualBreakpoints0);
+    //   // send back the actual breakpoint positions
+    //   response.body = { breakpoints: actualBreakpoints };
+    //   this.sendResponse(response);
+    // }
   }
 
   protected async breakpointLocationsRequest(response: DebugProtocol.BreakpointLocationsResponse, args: DebugProtocol.BreakpointLocationsArguments, _request?: DebugProtocol.Request): Promise<void> {
@@ -521,7 +594,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     const endFrame = startFrame + maxLevels;
     const stk = this._runtime.stack(startFrame, endFrame);
     response.body = {
-      stackFrames: stk.frames.map((f, ix) => new StackFrame(ix, f.name, this.createSource(f.file), this.convertDebuggerLineToClient(f.line))),
+      stackFrames: stk.frames.map((f, ix) => new StackFrame(ix, f.name, this.createSource(f.file), this.convertDebuggerLineToClient(f.line))), // TODO: problem in createSource Path must be a string
       // 4 options for 'totalFrames':
       // omit totalFrames property: 	// VS Code has to probe/guess. Should result in a max. of two requests
       totalFrames: stk.frames.length, // stk.count is the correct size, should result in a max. of two requests
@@ -709,53 +782,18 @@ export class Warp10DebugSession extends LoggingDebugSession {
 
   protected async evaluateRequest(response: DebugProtocol.EvaluateResponse, args: DebugProtocol.EvaluateArguments): Promise<void> {
     let reply: string | undefined;
-    let rv: RuntimeVariable | undefined;
+    let rv: RuntimeVariable = undefined;
 
     switch (args.context) {
-      case "repl":
-        // handle some REPL commands:
-        // 'evaluate' supports to create and delete breakpoints from the 'repl':
-        const matches = /new +([0-9]+)/.exec(args.expression);
-        if (matches && matches.length === 2) {
-          const mbp = await this._runtime.setBreakPoint(this._runtime.sourceFile, this.convertClientLineToDebugger(parseInt(matches[1])));
-          const bp = new Breakpoint(
-            mbp.verified,
-            this.convertDebuggerLineToClient(mbp.line),
-            undefined,
-            this.createSource(this._runtime.sourceFile)
-          ) as DebugProtocol.Breakpoint;
-          bp.id = mbp.id;
-          this.sendEvent(new BreakpointEvent("new", bp));
-          reply = `breakpoint created`;
-        } else {
-          const matches = /del +([0-9]+)/.exec(args.expression);
-          if (matches && matches.length === 2) {
-            const mbp = this._runtime.clearBreakPoint(this._runtime.sourceFile, this.convertClientLineToDebugger(parseInt(matches[1])));
-            if (mbp) {
-              const bp = new Breakpoint(false) as DebugProtocol.Breakpoint;
-              bp.id = mbp.id;
-              this.sendEvent(new BreakpointEvent("removed", bp));
-              reply = `breakpoint deleted`;
-            }
-          } else {
-            const matches = /progress/.exec(args.expression);
-            if (matches && matches.length === 1) {
-              if (this._reportProgress) {
-                reply = `progress started`;
-                this.progressSequence();
-              } else {
-                reply = `frontend doesn't support progress (capability 'supportsProgressReporting' not set)`;
-              }
-            }
-          }
-        }
-      // fall through
-
-      default:
+      case "repl":  // right click, evaluate in debug console, or type directly into the console
+        await this._runtime.evaluateInDebugConsole(args.expression).then(res => {
+          reply = res;
+        }).catch(e => { reply = `Execution error, ${e.message}` });
+        this.sendEvent(new StoppedEvent("step", Warp10DebugSession.threadID)); // this refresh the pane with variables, stack view.
+        break;
+      case "hover": // hovering on a variable $xx : display the content.
         if (args.expression.startsWith("$")) {
           rv = this._runtime.getLocalVariable(args.expression.substr(1));
-        } else {
-          rv = new RuntimeVariable("eval", this.convertToRuntime(args.expression));
         }
         break;
     }
@@ -769,7 +807,10 @@ export class Warp10DebugSession extends LoggingDebugSession {
         presentationHint: v.presentationHint,
       };
     } else {
-      response.body = { result: reply ? reply : `evaluate(context: '${args.context}', '${args.expression}')`, variablesReference: 0 };
+      if (reply && reply.length > 10000) {
+        reply = reply.slice(1, 10000) + "(...truncated)"
+      }
+      response.body = { result: reply ? reply : `cannot evaluate: '${args.expression}'`, variablesReference: 0 }; // display first 10 000 characters only
     }
 
     this.sendResponse(response);
@@ -800,32 +841,7 @@ export class Warp10DebugSession extends LoggingDebugSession {
     }
   }
 
-  private async progressSequence() {
-    const ID = "" + this._progressId++;
-    const title = this._isProgressCancellable
-      ? "Cancellable operation"
-      : "Long running operation";
-    const startEvent: DebugProtocol.ProgressStartEvent = new ProgressStartEvent(ID, title);
-    startEvent.body.cancellable = this._isProgressCancellable;
-    this._isProgressCancellable = !this._isProgressCancellable;
-    this.sendEvent(startEvent);
-    this.sendEvent(new OutputEvent(`start progress: ${ID}\n`));
-    let endMessage = "progress ended";
-    for (let i = 0; i < 100; i++) {
-      //  await timeout(500);
-      this.sendEvent(new ProgressUpdateEvent(ID, `progress: ${i}`));
-      if (this._cancelledProgressId === ID) {
-        endMessage = "progress cancelled";
-        this._cancelledProgressId = undefined;
-        this.sendEvent(new OutputEvent(`cancel progress: ${ID}\n`));
-        break;
-      }
-    }
-    this.sendEvent(new ProgressEndEvent(ID, endMessage));
-    this.sendEvent(new OutputEvent(`end progress: ${ID}\n`));
-    this._cancelledProgressId = undefined;
-  }
-
+ 
   protected dataBreakpointInfoRequest(response: DebugProtocol.DataBreakpointInfoResponse, args: DebugProtocol.DataBreakpointInfoArguments): void {
     response.body = {
       dataId: null,
@@ -881,13 +897,11 @@ export class Warp10DebugSession extends LoggingDebugSession {
     if (args.requestId) {
       this._cancellationTokens.set(args.requestId, true);
     }
-    if (args.progressId) {
-      this._cancelledProgressId = args.progressId;
-    }
     // sent by vscode to speed up interface. But technically, we cannot speed up http requests, and closing them will not speed up.
     // in any case, do not close the websocket here.
   }
 
+  // should never be called by frontend, marked unsupported
   protected disassembleRequest(response: DebugProtocol.DisassembleResponse, args: DebugProtocol.DisassembleArguments) {
     const memoryInt = args.memoryReference.slice(3);
     const baseAddress = parseInt(memoryInt);

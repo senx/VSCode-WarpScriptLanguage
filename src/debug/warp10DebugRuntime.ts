@@ -16,10 +16,12 @@
 
 import { EventEmitter } from "events";
 import { v4 } from "uuid";
-import WarpScriptParser, { specialCommentCommands } from "../warpScriptParser";
+import { specialCommentCommands } from "../warpScriptParser";
 import { WebSocket } from "ws";
-import { workspace } from "vscode";
+import { workspace, Uri } from "vscode";
 import { Requester } from "../features/requester";
+import MacroIncluder from '../features/macroIncluder';
+import { lineInFile } from '../features/macroIncluder';
 
 export interface FileAccessor {
   isWindows: boolean;
@@ -157,12 +159,21 @@ export class Warp10DebugRuntime extends EventEmitter {
   private sid: string | undefined;
   private endpoint: string | undefined;
   private webSocket: WebSocket | undefined;
-  private firstCnx = true;
+  //private firstCnx = true;
   private commentsCommands: specialCommentCommands | undefined;
   private dataStack: any[] | undefined;
-  private program: string | undefined;
+  //private program: string | undefined;
   private inDebug = false;
   private checkWS: any = {};
+
+  // keeps warpscript with local macro. (wswlm)
+  public wswlm: MacroIncluder;
+
+  // after getVars(), this stores the current file and current line in file (in case of local macro inclusion)
+  private fileAndLine: lineInFile = {
+    file: "",
+    line: 0
+  };
 
   constructor(private fileAccessor: FileAccessor) {
     super();
@@ -170,15 +181,15 @@ export class Warp10DebugRuntime extends EventEmitter {
 
   private log(mess: any, popin?: boolean) {
     // type, text, filePath, line, column
-    this.sendEvent("output", "prio", mess, this.program, this.currentLine, undefined, popin);
+    this.sendEvent("output", "prio", mess, this.fileAndLine.file, this.fileAndLine.line, undefined, popin);
   }
 
   private error(e: any, popin?: boolean) {
-    this.sendEvent("output", "err", e, this.program, this.currentLine, undefined, popin);
+    this.sendEvent("output", "err", e, this.fileAndLine.file, this.fileAndLine.line, undefined, popin);
   }
 
   private debug(e: any) {
-    this.sendEvent("output", "out", e, this.program, this.currentLine);
+    this.sendEvent("output", "out", e, this.fileAndLine.file, this.fileAndLine.line);
   }
 
   public async getContent(program: string): Promise<string> {
@@ -188,32 +199,41 @@ export class Warp10DebugRuntime extends EventEmitter {
     return this.ws;
   }
 
+
+  public async loadWarpScript(ws: string, uri: string) {
+    this.wswlm = new MacroIncluder();
+    await this.wswlm.loadWarpScript(ws, uri);
+    this.commentsCommands = this.wswlm.commentsCommands;
+    this._sourceFile = uri;
+  }
+
   /**
    * Start executing the given program.
    */
-  public async start(program: string, checkWS: any): Promise<string> {
-    this.program = program;
+  public async start(checkWS: any): Promise<string> {
     this.checkWS = checkWS;
-    this.firstCnx = true;
-    this.ws = undefined;
-    this._sourceFile = undefined;
-    await this.getContent(program);
+    //this.firstCnx = true;
+    //this.ws = this.wswlm.getFinalWS();
     // Open WebSocket
     this.sid = v4();
-    this.commentsCommands = WarpScriptParser.extractSpecialComments(this.ws ?? "");
     this.endpoint = this.commentsCommands.endpoint || workspace.getConfiguration().get("warpscript.Warp10URL");
     if (!!this.webSocket) {
       this.webSocket.close();
       this.webSocket = undefined;
     }
-    const traceToken = (workspace.getConfiguration().get<any>("warpscript.TraceTokensPerWarp10URL")?? {})[this.endpoint];
-    if(!traceToken) {
-      this.sendEvent('openTracePluginInfo', 'You must set a token with the "trace" capabilitie', 'openSettings');
-      return this.ws ?? "";
+    const traceToken = (workspace.getConfiguration().get<any>("warpscript.TraceTokensPerWarp10URL") ?? {})[this.endpoint];
+    if (!traceToken) {
+      this.sendEvent('openTracePluginInfo', 'You must set a token with the "trace" capability', 'openSettings');
+      return "";
     }
-    const wrapped = `true STMTPOS '${traceToken}' CAPADD '${this.sid}' TRACEMODE
-${this.addBreakPoints(this.ws ?? "")}`;
-    this.sourceLines = wrapped.split('\n');
+
+    // add instructions for trace plugin
+    this.wswlm.prependLinesToAll(`true STMTPOS '${traceToken}' CAPADD '${this.sid}' TRACEMODE`);
+    // add breakpoints
+
+    //     const wrapped = `true STMTPOS '${traceToken}' CAPADD '${this.sid}' TRACEMODE
+    // ${this.addBreakPoints(this.ws ?? "")}`;
+    this.sourceLines = this.wswlm.finalWarpScript;
     const traceURL: string = (checkWS?.extensions ?? {}).traceWSEndpoint;
     if (!traceURL) {
       this.close();
@@ -240,7 +260,7 @@ ${this.addBreakPoints(this.ws ?? "")}`;
         this.error(msg.replace("// ", ""), true);
       } else if (msg.startsWith("OK Attached to session")) {
         this.sendtoWS("CATCH");
-        Requester.send(this.endpoint ?? "", wrapped)
+        Requester.send(this.endpoint ?? "", this.wswlm.getFinalWS())
           .then((r: any) => {
             this.close();
             this.sendEvent("debugResult", r);
@@ -256,45 +276,55 @@ ${this.addBreakPoints(this.ws ?? "")}`;
       } else if (msg === "ERROR No paused execution.") {
         // this can legitimely happens when user keeps pressing F5. several CONTINUE order stacks up, and several are sent just after the STEP pause.
       } else if (msg.startsWith("STEP")) {
-        if (this.inDebug) {
+        // in any case, the trace plugin will stop on first function, for example: STEP 8acd29c6-ce48-4dd6-bf09-7bb09a4a7772 1 66fbf6ae-2b15-4a0b-9ae5-003e71c1481f 0 '%2B' FUNCREF
+        // but if the first line has a breakpoint, it will stop on the breakpoint first. so, the first step can be a valid breakpoint !        
+        if (this.inDebug || /'BREAKPOINT' FUNCREF/.test(msg)) { // in debug, or breakpoint
           await this.getVars();
-        }
-        if (/'BREAKPOINT' FUNCREF/.test(msg)) {
-          //this.sendEvent("stopOnBreakpoint");
-          this.sendtoWS('STEP');
+          this.sendEvent("stopOnStep");
         } else {
-          if (!this.firstCnx) {
-            this.sendEvent("stopOnStep");
-          } else {
-            this.continue();
-            this.inDebug = true;
-            this.firstCnx = false;
-          }
+          this.continue(); // avoid the first step, when first line with an instruction is not a breakpoint
         }
+        this.inDebug = true;
+        // if (this.inDebug) {
+        //   await this.getVars();
+        // }
+        // if (/'BREAKPOINT' FUNCREF/.test(msg)) {
+        //   //this.sendEvent("stopOnBreakpoint");
+        //   this.sendtoWS('STEP'); // this trick is to force a step after breakpoint ?
+        // } else {
+        //   if (!this.firstCnx) {
+        //     this.sendEvent("stopOnStep");
+        //   } else {
+        //     this.continue();
+        //     this.inDebug = true;
+        //     this.firstCnx = false;
+        //   }
+        // }
       } else if (msg.startsWith('EXCEPTION')) {
         await timeout(500);
-        await this.getVars();
-        this.errorpos = this.errorpos ?? this.lineInfo;
-        let errMess = msg;
-        if (this.errorMess && this.errorMess.length > 0) {
-          errMess = this.errorMess[0].message ?? msg;
-        }
-        if ((this.errorpos ?? []).length > 1) {
-          const curLine = this.getLine(this.errorpos[0] - 1);
-          const offset = curLine.startsWith('BREAKPOINT') ? 'BREAKPOINT'.length : -1;
-          const bps: number[] = [Math.max(this.errorpos[2] - offset, 0)];
-          errMess = `Error line ${this.errorpos[0] - 1}:${Math.max(this.errorpos[1] - offset, 0)}: ${errMess}`;
-          this.sendEvent('stopOnException', {
-            e: errMess,
-            info: {
-              line: this.errorpos[0] - 1,
-              colStart: Math.max(this.errorpos[1] - offset, 0),
-              colEnd: Math.max(this.errorpos[2] - offset, 0),
-              bps
-            }
-          });
-        }
-        this.error(errMess, false);
+        await this.getVars(msg);  // will set the position cursor, and switch to the right editor too... so let it manage the diagnostic too.
+
+        // this.errorpos = this.errorpos ?? this.lineInfo;
+        // let errMess = msg;
+        // if (this.errorMess && this.errorMess.length > 0) {
+        //   errMess = this.errorMess[0].message ?? msg;
+        // }
+        // if ((this.errorpos ?? []).length > 1) {
+        //   const curLine = this.getLine(this.errorpos[0] - 1);
+        //   const offset = curLine.startsWith('BREAKPOINT') ? 'BREAKPOINT'.length : -1;
+        //   const bps: number[] = [Math.max(this.errorpos[2] - offset, 0)];
+        //   errMess = `Error line ${this.errorpos[0] - 1}:${Math.max(this.errorpos[1] - offset, 0)}: ${errMess}`;
+        //   this.sendEvent('stopOnException', { // will again set the cursor and a diagnostic underline
+        //     e: errMess,
+        //     info: {
+        //       line: this.errorpos[0] - 1,
+        //       colStart: Math.max(this.errorpos[1] - offset, 0),
+        //       colEnd: Math.max(this.errorpos[2] - offset, 0),
+        //       bps
+        //     }
+        //   });
+        // }
+        // this.error(errMess, false);
       }
     });
 
@@ -333,7 +363,26 @@ ${this.addBreakPoints(this.ws ?? "")}`;
     });
   }
 
-  private async getVars(): Promise<any> {
+
+  public async evaluateInDebugConsole(warpscript: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const ws = `<% '${this.sid}' TSESSION <%
+${warpscript}
+%> TEVAL TSTACK
+%> <% ERROR -1 GET 'message' GET %> <% %> TRY
+      `
+      Requester.send(this.endpoint ?? "", ws)
+        .then((res: any) => {
+          // an evaluation can lead to new variables, so refresh them.
+          this.getVars().then(() => { resolve(res) }).catch(() => { resolve(res) });
+        }).catch(e => {
+          console.error('evaluateInDebugConsole', e);
+          reject(e);
+        });
+    });
+  }
+
+  private async getVars(exceptionTraceMsg?: string): Promise<any> {
     if (!this.inDebug) return Promise.resolve({});
     return new Promise((resolve, reject) => {
       const ws = `<% '${this.sid}' TSESSION 
@@ -352,20 +401,56 @@ STACKTOLIST REVERSE 'stack' STORE
       Requester.send(this.endpoint ?? "", ws)
         .then((vars: any) => {
           const data = JSON.parse(vars ?? "[]")[0];
+          // this.wswlm.printFullWs()
+          // console.warn(data)
           this.variables = data?.vars ?? {};
           this.dataStack = [...(data?.stack ?? [])];
           if (data.lastStmtpos) {
             this.lineInfo = data.lastStmtpos.split(":").map((l: string) => parseInt(l, 10));
             this.errorpos = (data.errorpos ?? data.lastStmtpos).split(":").map((l: string) => parseInt(l, 10));
             this.errorMess = data.terror;
-            this.currentLine = this.lineInfo[0] - 2;
+            this.currentLine = this.lineInfo[0];
+
             if ((this.lineInfo ?? []).length > 0) {
-              const curLine = this.getLine(this.lineInfo[0] - 1);
+              const curLine = this.wswlm.finalWarpScript[this.lineInfo[0] - 1]; // line sent by lastStmtpos is also starting at 1
               const offset = curLine.startsWith('BREAKPOINT') ? 'BREAKPOINT'.length : -1;
+              this.fileAndLine = this.wswlm.getUriAndLineFromRealLine(this.lineInfo[0] - 1) // line sent by lastStmtpos is also starting at 1
+              console.log("file and line (0 index)=", this.fileAndLine)
+
+              let showDiagnostic = false;
+              let diagMsg = "";
+              let diagLine = 0;
+              let diagColStart = 0;
+              let diagColEnd = 0;
+
+
+              if (exceptionTraceMsg) {
+                let errMess = exceptionTraceMsg;
+                if (this.errorMess && this.errorMess.length > 0) {
+                  errMess = this.errorMess[0].message ?? exceptionTraceMsg;
+                }
+                if ((this.errorpos ?? []).length > 1) {
+                  const curErrLine = this.wswlm.finalWarpScript[this.errorpos[0]];
+                  const errOffset = curErrLine.startsWith('BREAKPOINT') ? 'BREAKPOINT'.length : -1;
+                  const errfileAndLine: lineInFile = this.wswlm.getUriAndLineFromRealLine(this.errorpos[0] - 1) // line sent by errorpos is also starting at 1
+                  showDiagnostic = true;
+                  diagMsg = errMess;
+                  diagLine = errfileAndLine.line;
+                  diagColStart = Math.max(this.errorpos[1] - errOffset, 0);
+                  diagColEnd = Math.max(this.errorpos[2] - errOffset, 0);
+                }
+              }
+              // send event to the frontend
               this.sendEvent('highlightEvent', {
-                line: this.lineInfo[0] - 1,
+                line: this.fileAndLine.line, // line starts at 0
                 colStart: Math.max(this.lineInfo[1] - offset, 0),
                 colEnd: Math.max(this.lineInfo[2] - offset, 0),
+                path: this.fileAndLine.file,
+                showDiagnostic: showDiagnostic,
+                diagMsg: diagMsg,
+                diagLine: diagLine,
+                diagColStart: diagColStart,
+                diagColEnd: diagColEnd
               });
             }
           } else {
@@ -380,13 +465,13 @@ STACKTOLIST REVERSE 'stack' STORE
     });
   }
 
-  private addBreakPoints(ws: string) {
-    const bps = this.breakPoints.get(this._sourceFile);
-    const splittedWS = (ws ?? "").split("\n");
-    (bps ?? []).filter((b) => b.verified)
-      .forEach((b: any) => splittedWS[b.line] = `BREAKPOINT ${(splittedWS[b.line] ?? '')}`.trim());
-    return splittedWS.join("\n");
-  }
+  // private addBreakPoints(ws: string) {
+  //   const bps = this.breakPoints.get(this._sourceFile);
+  //   const splittedWS = (ws ?? "").split("\n");
+  //   (bps ?? []).filter((b) => b.verified)
+  //     .forEach((b: any) => splittedWS[b.line] = `BREAKPOINT ${(splittedWS[b.line] ?? '')}`.trim());
+  //   return splittedWS.join("\n");
+  // }
 
   private sendtoWS(message: string) {
     if (this.webSocket) {
@@ -433,7 +518,7 @@ STACKTOLIST REVERSE 'stack' STORE
   public stack(_startFrame: number, _endFrame: number): IRuntimeStack {
     const frames: IRuntimeStackFrame[] = [{
       name: 'WarpScript',
-      file: this.program,
+      file: Uri.parse(this.fileAndLine.file).fsPath,
       index: 0,
       line: this.currentLine
     }];
@@ -442,6 +527,27 @@ STACKTOLIST REVERSE 'stack' STORE
 
   public isDebug() {
     return this.inDebug;
+  }
+
+  public printAllBreakpoints() {
+    console.log("######## dump known breakpoints", this.breakPoints)
+    this.breakPoints.forEach((v: IRuntimeBreakpoint[], k: string) => {
+      console.log(k, v);
+    });
+    console.log("# dump breakAddresses", this.breakAddresses);
+  }
+
+  // first line is zero. do the shift in the frontend interface before calling this function.
+  public setLineBreakPoint(path: string, line: number): boolean {
+    // if (!this.inDebug) {
+    //   return true; // while not in debugging, frontend just ask to validate the breakpoint. we cannot do more.
+    // }
+    let uri = this.normalizePathAndCasing(path);
+    if (!this.wswlm.isThisFileIncluded(uri)) {
+      return false; // the breakpoint is not valid, because this path is not an included macro
+    }
+    // TODO : check if in multiline or in comment
+    return this.wswlm.prependTextToLineInFile(uri, line, "BREAKPOINT ");
   }
 
   /*
@@ -598,6 +704,7 @@ STACKTOLIST REVERSE 'stack' STORE
     }
   }
 
+  // should never be called by frontend, marked unsupported
   public disassemble(address: number, instructionCount: number): RuntimeDisassembledInstruction[] {
     const instructions: RuntimeDisassembledInstruction[] = [];
     for (let a = address; a < address + instructionCount; a++) {
@@ -629,6 +736,9 @@ STACKTOLIST REVERSE 'stack' STORE
   private async loadSource(file: string): Promise<void> {
     if (this._sourceFile !== file) {
       this._sourceFile = this.normalizePathAndCasing(file);
+      if (file.startsWith("file://")) {
+        file = Uri.parse(file).path
+      }
       this.initializeContents(await this.fileAccessor.readFile(file));
     }
   }
@@ -668,11 +778,30 @@ STACKTOLIST REVERSE 'stack' STORE
     setTimeout(() => this.emit(event, ...args), 0);
   }
 
-  public normalizePathAndCasing(path: string) {
-    if (this.fileAccessor.isWindows) {
-      return path.replace(/\//g, "\\").toLowerCase();
-    } else {
-      return path.replace(/\\/g, "/");
+
+  // inspired by vscode internals
+  public pathToUri(path: string) {
+    try {
+      return Uri.file(path);
     }
+    catch (e) {
+      return Uri.parse(path);
+    }
+  }
+
+  public normalizePathAndCasing(path: string) {
+    // use URI everywhere. hope it also works in windows... it works.
+    if (path.startsWith("file://")) {
+      return path
+    } else {
+      let uri = this.pathToUri(path);
+      return uri.toString();
+    }
+    // previously:
+    // if (this.fileAccessor.isWindows) {
+    //   return path.replace(/\//g, "\\").toLowerCase();
+    // } else {
+    //   return path.replace(/\\/g, "/");
+    // }
   }
 }

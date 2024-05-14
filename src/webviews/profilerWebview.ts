@@ -16,16 +16,20 @@ export class ProfilerWebview {
     borderWidth: '1px',
     borderStyle: 'solid'
   });
-
-
+  private uriToProfiledWs: string[] = [];
+  private uriToFullWs: string = "";
+  private onchangecallback: Disposable = undefined;
+  private focusHasChanged = false;
   profileMacroDecoration: TextEditorDecorationType;
   afterFnDecoration: TextEditorDecorationType;
 
-  private constructor(panel: WebviewPanel, extensionUri: Uri, context: ExtensionContext, result: any[], activeTextEditor: TextEditor) {
+  private constructor(panel: WebviewPanel, extensionUri: Uri, context: ExtensionContext, result: any[], activeTextEditor: TextEditor, uriToProfiledWs: string[], uriToFullWs: string) {
     this._panel = panel;
     this.result = result;
     this.context = context;
     this.activeTextEditor = activeTextEditor;
+    this.uriToFullWs = uriToFullWs;
+    this.uriToProfiledWs = uriToProfiledWs;
     this.macros = {};
     this.profileMacroDecoration = window.createTextEditorDecorationType({ gutterIconPath: context.asAbsolutePath('images/line.svg') });
     // Set an event listener to listen for when the panel is disposed (i.e. when the user closes
@@ -67,43 +71,47 @@ export class ProfilerWebview {
       code += '\n';
     }
     //  this.macros[global.join('-')] = { start: 1, end: activeTextEditor.document.lineCount };
+
+    // highlights stops working as soon as we change the active editor, even when we keep the reference to the editor... so we must detect that.
+    this.focusHasChanged = false;
+    this.onchangecallback = window.onDidChangeActiveTextEditor(() => { this.focusHasChanged = true; });
   }
 
-  public static render(context: ExtensionContext, result: any[], activeTextEditor: TextEditor) {
+  public static render(context: ExtensionContext, result: any[], activeTextEditor: TextEditor, uriToProfiledWs: string[], uriToFullWs: string) {
     if (ProfilerWebview.currentPanel) {
       // If the webview panel already exists reveal it
-      ProfilerWebview.currentPanel._panel.reveal(ViewColumn.Two);
-    } else {
-      // If a webview panel does not already exist create and show a new one
-      const panel = window.createWebviewPanel(
-        // Panel view type
-        "ProfilerWebview",
-        // Panel title
-        "Profiler Results",
-        // The editor column the panel should be displayed in
-        ViewColumn.Two,
-        // Extra panel configurations
-        {
-          // Enable JavaScript in the webview
-          enableScripts: true,
-          // Restrict the webview to only load resources from the `out` directory
-          localResourceRoots: [Uri.joinPath(context.extensionUri, "out")],
-        }
-      );
-      panel.webview.onDidReceiveMessage(
-        message => {
-          if (message.command === 'highlight') {
-            ProfilerWebview.currentPanel.highlight(message.profile);
-          }
-          if (message.command === 'unhighlight') {
-            ProfilerWebview.currentPanel.unhighlight();
-          }
-        },
-        undefined,
-        context.subscriptions
-      );
-      ProfilerWebview.currentPanel = new ProfilerWebview(panel, context.extensionUri, context, result, activeTextEditor);
+      ProfilerWebview.currentPanel.dispose();
     }
+    // If a webview panel does not already exist create and show a new one
+    const panel = window.createWebviewPanel(
+      // Panel view type
+      "ProfilerWebview",
+      // Panel title
+      "Profiler Results",
+      // The editor column the panel should be displayed in
+      ViewColumn.Two,
+      // Extra panel configurations
+      {
+        // Enable JavaScript in the webview
+        enableScripts: true,
+        // Restrict the webview to only load resources from the `out` directory
+        localResourceRoots: [Uri.joinPath(context.extensionUri, "out")],
+      }
+    );
+    panel.webview.onDidReceiveMessage(
+      message => {
+        if (message.command === 'highlight') {
+          ProfilerWebview.currentPanel.highlight(message.profile);
+        }
+        if (message.command === 'unhighlight') {
+          ProfilerWebview.currentPanel.unhighlight();
+        }
+      },
+      undefined,
+      context.subscriptions
+    );
+    ProfilerWebview.currentPanel = new ProfilerWebview(panel, context.extensionUri, context, result, activeTextEditor, uriToProfiledWs, uriToFullWs);
+
 
     ProfilerWebview.currentPanel._panel.onDidChangeViewState(e => {
       if (e.webviewPanel.active) {
@@ -126,25 +134,29 @@ export class ProfilerWebview {
 
   highlight(profile: any[]) {
     this.unhighlight();
-    if ('M' === profile[3][0]) {
-      const m = this.macros[profile.join('-')];
-      const ranges = [];
-      for (let i = m.start - 2; i < (m.end ?? (m.start - 1)); i++) {
-        ranges.push(new Range(i, 0, i, 0));
-      }
+    console.log(profile);
+    if (this.focusHasChanged) {
+      window.showTextDocument(this.activeTextEditor.document, ViewColumn.One).then(editor => this.activeTextEditor = editor);
+    }
+    // if ('M' === profile[3][0]) {
+    //   const m = this.macros[profile.join('-')];
+    //   const ranges = [];
+    //   for (let i = m.start - 2; i < (m.end ?? (m.start - 1)); i++) {
+    //     ranges.push(new Range(i, 0, i, 0));
+    //   }
 
-      this.activeTextEditor.revealRange(ranges[0], TextEditorRevealType.InCenterIfOutsideViewport);
-      this.activeTextEditor.setDecorations(this.profileMacroDecoration, ranges);
+    //   this.activeTextEditor.revealRange(ranges[0], TextEditorRevealType.InCenterIfOutsideViewport);
+    //   this.activeTextEditor.setDecorations(this.profileMacroDecoration, ranges);
 
-      this.afterFnDecoration = window.createTextEditorDecorationType({
-        after: {
-          contentText: this.getProfileResult(profile),
-          color: '#404040',
-          margin: '5px'
-        }
-      });
-      this.activeTextEditor.setDecorations(this.afterFnDecoration, [new Range(m.start - 2, profile[2] + 1, m.start - 2, profile[2] + 1)]);
-    } else if ('F' === profile[3][0]) {
+    //   this.afterFnDecoration = window.createTextEditorDecorationType({
+    //     after: {
+    //       contentText: this.getProfileResult(profile),
+    //       color: '#404040',
+    //       margin: '5px'
+    //     }
+    //   });
+    //   this.activeTextEditor.setDecorations(this.afterFnDecoration, [new Range(m.start - 2, profile[2] + 1, m.start - 2, profile[2] + 1)]);
+    // } else if ('F' === profile[3][0]) {
       const range = new Range(profile[0] - 2, profile[1], profile[0] - 2, profile[2] + 1);
       this.activeTextEditor.revealRange(range, TextEditorRevealType.InCenterIfOutsideViewport);
       this.activeTextEditor.setDecorations(this.profileFnDecoration, [{ range }]);
@@ -157,7 +169,7 @@ export class ProfilerWebview {
         }
       });
       this.activeTextEditor.setDecorations(this.afterFnDecoration, [{ range }]);
-    }
+    //}
   }
 
 
@@ -172,6 +184,7 @@ export class ProfilerWebview {
     ProfilerWebview.currentPanel = undefined;
     // Dispose of the current webview panel
     this._panel.dispose();
+    this.onchangecallback.dispose();
     // Dispose of all disposables (i.e. commands) associated with the current webview panel
     while (this._disposables.length) {
       const disposable = this._disposables.pop();
@@ -226,9 +239,12 @@ export class ProfilerWebview {
         </header>
         <div class="container">
           <h1>Profile</h1>
+          <div class=profilerGenFile>Profile for: ${this.uriToFullWs}</br></div>
+          <div class=profilerSources>Built from :</br> ${this.uriToProfiledWs.join('</br>')}</br></div>
           <vscode-data-grid id="profile" aria-label="Profile"  generate-header="sticky"></vscode-data-grid>
           <script>var exports = {"__esModule": true};</script>
           <script type="module" src="${webviewUri}"></script>
+          <div id=debug> </div>
         </body>
       </html>
     `;

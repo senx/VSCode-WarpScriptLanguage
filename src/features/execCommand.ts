@@ -1,6 +1,5 @@
 import { StatusbarUi } from './../statusbarUi';
 import request from 'request';
-import WSDocumentLinksProvider from '../providers/wsDocumentLinksProvider';
 import { OutputChannel, Progress, ProgressLocation, TextDocument, Uri, ViewColumn, window, workspace } from 'vscode';
 import { specialCommentCommands } from '../warpScriptParser';
 import WarpScriptParser from '../warpScriptParser';
@@ -14,6 +13,8 @@ import { gzip } from 'zlib';
 import { WarpScriptExtGlobals } from '../globals';
 import WarpScriptExtConstants from '../constants';
 import { SharedMem } from '../extension';
+import MacroIncluder from '../features/macroIncluder';
+import { lineInFile } from '../features/macroIncluder';
 
 let lookupAsync: any;
 if (!!dns.lookup) {
@@ -90,7 +91,6 @@ export default class ExecCommand {
           const commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(executedWarpScript);
           Warp10URL = commentsCommands.endpoint || Warp10URL;
           commentsCommands.endpoint = Warp10URL; // commentsCommand should be up to date in shared memory later on.
-          let substitutionWithLocalMacros = !(commentsCommands.localmacrosubstitution === false);
           PreviewTimeUnit = commentsCommands.timeunit || PreviewTimeUnit;
           commentsCommands.timeunit = PreviewTimeUnit;
           displayPreviewOpt = commentsCommands.displayPreviewOpt || displayPreviewOpt;
@@ -124,86 +124,11 @@ ${DiscoveryPreviewWebview.getTemplate(context, discoveryTheme)}
           }*/
           progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
 
-          let lines: number[] = [document.lineCount]
-          let uris: string[] = [document.uri.toString()]
-          if (substitutionWithLocalMacros) {
 
-            // first, prepend macros of the special comments "// @include macro: "
-            for (let macroName of commentsCommands.listOfMacroInclusion ?? []) {
-              if (macroName.startsWith('@')) {
-                macroName = macroName.substring(1);
-              }
-              console.log('-' + macroName + '-');
-              await WSDocumentLinksProvider.getMacroURI(macroName).then(
-                async (uri) => {
-                  if (uris.indexOf(uri.toString()) === -1) {
-                    // outputWin.show();
-                    // outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
-                    let tdoc: TextDocument = await workspace.openTextDocument(uri);
-                    let macroCode: string = tdoc.getText()
-                    // Prepend the macro, store it and then append the rest of the script.
-                    let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
-                    executedWarpScript = prepend + executedWarpScript;
-                    //          linesOfMacrosPrepended += prepend.split('\n').length - 1;
-                    console.log(prepend.split('\n'))
-                    // Update lines and uris references
-                    lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
-                    uris.unshift(uri.toString());
-                  }
-                }
-              ).catch(
-                () => {
-                  outputWin.show();
-                  outputWin.append('[' + execDate + '] ');
-                  outputWin.appendLine("warning '" + macroName + "' is explicitly included with // @include macro:, but was not found in the VSCode project. Warp 10 will try its internal resolvers.")
-                }
-              );
-            }
-
-            let allMacroPrepended = false;
-
-            while (!allMacroPrepended) {
-              let listOfMacros = WarpScriptParser.getListOfMacroCalls(executedWarpScript);
-
-              if (listOfMacros.length > 0) {
-                allMacroPrepended = true;
-                for (const m of listOfMacros) {
-                  const macroName = m.substring(1);
-                  console.log('-' + macroName + '-');
-                  await WSDocumentLinksProvider.getMacroURI(macroName).then(
-                    async (uri) => {
-                      if (uris.indexOf(uri.toString()) === -1) {
-                        // outputWin.show();
-                        // outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
-                        let tdoc: TextDocument = await workspace.openTextDocument(uri);
-                        let macroCode: string = tdoc.getText()
-                        // Prepend the macro, store it and then append the rest of the script.
-                        let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
-                        executedWarpScript = prepend + executedWarpScript;
-                        //          linesOfMacrosPrepended += prepend.split('\n').length - 1;
-                        console.log(prepend.split('\n'))
-                        // Update lines and uris references
-                        lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
-                        uris.unshift(uri.toString());
-                        allMacroPrepended = false;
-                      }
-                    }
-                  ).catch(
-                    () => { /* Ignore missing macros */ }
-                  );
-                }
-              } else {
-                allMacroPrepended = true;
-              }
-            }
-
-          } else {
-            if (commentsCommands.listOfMacroInclusion && commentsCommands.listOfMacroInclusion.length > 0) {
-              outputWin.show();
-              outputWin.append('[' + execDate + '] ');
-              outputWin.appendLine("warning '// @localmacrosubstitution false' also disables all the '// @include macro:' instructions")
-            }
-          }
+          // build warpscript with local macro. (wswlm)
+          let wswlm:MacroIncluder= new MacroIncluder(outputWin); 
+          await wswlm.loadWarpScript(document.getText(),document.uri.toString());
+          executedWarpScript=wswlm.getFinalWS();
 
           if (window?.activeTextEditor?.document.languageId === 'flows') {
             executedWarpScript = `<'
@@ -318,27 +243,19 @@ FLOWS
                     line = parseInt(lineonMatch[1]);
                   }
 
-                  let fileInError;
-                  let lineInError = line;
-                  for (var i = 0; i < lines.length; i++) {
-                    if (lineInError <= lines[i]) {
-                      fileInError = uris[i];
-                      break;
-                    } else {
-                      lineInError -= lines[i];
-                    }
-                  }
-                  errorParam = 'Error in file ' + fileInError + ' at line ' + lineInError + ' : ' + response.headers['x-warp10-error-message'];
+                  let pos:lineInFile= wswlm.getUriAndLineFromRealLine(line);
+
+                  errorParam = 'Error in file ' + pos.file + ' at line ' + pos.line + ' : ' + response.headers['x-warp10-error-message'];
                   StatusbarUi.Execute();
 
                   let errorMessage: string = response.headers['x-warp10-error-message'];
                   // We must substract the number of lines added by prepended macros in the error message.
-                  errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, _group1) => '[Line #' + lineInError.toString() + ']');
+                  errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, _group1) => '[Line #' + pos.line.toString() + ']');
                   outputWin.show();
                   outputWin.append('[' + execDate + '] ');
-                  outputWin.append('ERROR file://');
-                  outputWin.append(Uri.parse(uris[i]).fsPath + ':' + lineInError);
-                  outputWin.appendLine(' ' + errorMessage);
+                  outputWin.append('ERROR ');
+                  outputWin.append(pos.file + '#' + pos.line);
+                  outputWin.appendLine(' ' + errorMessage);                  
                 }
                 // If no content-type is specified, response is the JSON representation of the stack
                 if (response.body.startsWith('[')) {
@@ -355,7 +272,7 @@ FLOWS
                   } catch (e) {
                   }
                   try {
-                    await this.writeFile(wsFilename, executedWarpScript);
+                    await this.writeFile(wsFilename, wswlm.originalWarpScriptContent);
                     if (err) {
                       window.showErrorMessage(err.message);
                       StatusbarUi.Execute();

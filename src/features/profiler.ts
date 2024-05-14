@@ -1,7 +1,6 @@
 import { StatusbarUi } from './../statusbarUi';
 import request from 'request';
-import WSDocumentLinksProvider from '../providers/wsDocumentLinksProvider';
-import { ExtensionContext, OutputChannel, Progress, ProgressLocation, TextDocument, Uri, ViewColumn, window, workspace } from 'vscode';
+import { ExtensionContext, OutputChannel, Progress, ProgressLocation, TextDocument, TextEditor, Uri, ViewColumn, window, workspace } from 'vscode';
 import { specialCommentCommands } from '../warpScriptParser';
 import WarpScriptParser from '../warpScriptParser';
 import { Warp10 } from '@senx/warp10';
@@ -18,6 +17,8 @@ import ExecCommand from './execCommand';
 import { ProfilerWebview } from '../webviews/profilerWebview';
 import { TracePluginInfo } from '../webviews/tracePluginInfo';
 import { Requester } from './requester';
+import MacroIncluder from '../features/macroIncluder';
+import { lineInFile } from '../features/macroIncluder';
 
 let lookupAsync: any;
 if (!!dns.lookup) {
@@ -46,12 +47,7 @@ export default class ProfilerCommand {
 
     return (selectiontext: string) => {
       // Check current active document is a warpcript
-      if (typeof window.activeTextEditor === 'undefined'
-        || (
-          window.activeTextEditor.document.languageId !== 'warpscript'
-          && window.activeTextEditor.document.languageId !== 'flows'
-        )
-      ) {
+      if (typeof window.activeTextEditor === 'undefined' || window.activeTextEditor.document.languageId !== 'warpscript') {
         // Not a warpscript, exit early.
         return;
       }
@@ -59,7 +55,6 @@ export default class ProfilerCommand {
 
       let Warp10URL: string = workspace.getConfiguration().get('warpscript.Warp10URL') as string;
       let PreviewTimeUnit: string = workspace.getConfiguration().get('warpscript.DefaultTimeUnit') as string;
-      const jsonMaxSizeForAutoUnescape: number = workspace.getConfiguration().get('warpscript.maxFileSizeForAutomaticUnicodeEscape') as number;
       const jsonMaxSizeBeforeWarning: number = workspace.getConfiguration().get('warpscript.maxFileSizeBeforeJsonWarning') as number;
       const useGZIP: boolean = !!workspace.getConfiguration().get('warpscript.useGZIP');
       const timeout: number = workspace.getConfiguration().get('warpscript.http.timeout') as number;
@@ -89,7 +84,6 @@ export default class ProfilerCommand {
           const commentsCommands: specialCommentCommands = WarpScriptParser.extractSpecialComments(executedWarpScript);
           Warp10URL = commentsCommands.endpoint || Warp10URL;
           commentsCommands.endpoint = Warp10URL; // commentsCommand should be up to date in shared memory later on.
-          let substitutionWithLocalMacros = !(commentsCommands.localmacrosubstitution === false);
           PreviewTimeUnit = commentsCommands.timeunit || PreviewTimeUnit;
           commentsCommands.timeunit = PreviewTimeUnit;
           displayPreviewOpt = commentsCommands.displayPreviewOpt || displayPreviewOpt;
@@ -122,95 +116,24 @@ export default class ProfilerCommand {
 
             progress.report({ message: 'Executing ' + baseFilename + ' on ' + Warp10URL });
 
-            let lines: number[] = [document.lineCount]
-            let uris: string[] = [document.uri.toString()]
-            if (substitutionWithLocalMacros) {
-              // first, prepend macros of the special comments "// @include macro: "
-              for (let macroName of commentsCommands.listOfMacroInclusion ?? []) {
-                if (macroName.startsWith('@')) {
-                  macroName = macroName.substring(1);
-                }
-                console.debug('-' + macroName + '-');
-                await WSDocumentLinksProvider.getMacroURI(macroName).then(
-                  async (uri) => {
-                    if (uris.indexOf(uri.toString()) === -1) {
-                      // outputWin.show();
-                      // outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
-                      let tdoc: TextDocument = await workspace.openTextDocument(uri);
-                      let macroCode: string = tdoc.getText()
-                      // Prepend the macro, store it and then append the rest of the script.
-                      let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
-                      executedWarpScript = prepend + executedWarpScript;
-                      //          linesOfMacrosPrepended += prepend.split('\n').length - 1;
-                      console.debug(prepend.split('\n'))
-                      // Update lines and uris references
-                      lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
-                      uris.unshift(uri.toString());
-                    }
-                  }
-                ).catch(
-                  () => {
-                    outputWin.show();
-                    outputWin.append('[' + execDate + '] ');
-                    outputWin.appendLine("warning '" + macroName + "' is explicitly included with // @include macro:, but was not found in the VSCode project. Warp 10 will try its internal resolvers.")
-                  }
-                );
-              }
 
-              let allMacroPrepended = false;
+            // build warpscript with local macro. (wswlm)
+            let wswlm: MacroIncluder = new MacroIncluder(outputWin);
+            await wswlm.loadWarpScript(document.getText(), document.uri.toString());
+            executedWarpScript = wswlm.getFinalWS();
 
-              while (!allMacroPrepended) {
-                let listOfMacros = WarpScriptParser.getListOfMacroCalls(executedWarpScript);
 
-                if (listOfMacros.length > 0) {
-                  allMacroPrepended = true;
-                  for (const m of listOfMacros) {
-                    const macroName = m.substring(1);
-                    console.debug('-' + macroName + '-');
-                    await WSDocumentLinksProvider.getMacroURI(macroName).then(
-                      async (uri) => {
-                        if (uris.indexOf(uri.toString()) === -1) {
-                          // outputWin.show();
-                          // outputWin.appendLine('Appending ' + uri + ' as ' + macroName);
-                          let tdoc: TextDocument = await workspace.openTextDocument(uri);
-                          let macroCode: string = tdoc.getText()
-                          // Prepend the macro, store it and then append the rest of the script.
-                          let prepend: string = macroCode + '\n\'' + macroName + '\' STORE\n\n';
-                          executedWarpScript = prepend + executedWarpScript;
-                          //          linesOfMacrosPrepended += prepend.split('\n').length - 1;
-                          console.debug(prepend.split('\n'))
-                          // Update lines and uris references
-                          lines.unshift(tdoc.lineCount + 2); // 3 '\n' added to define macro so it makes two new lines
-                          uris.unshift(uri.toString());
-                          allMacroPrepended = false;
-                        }
-                      }
-                    ).catch(
-                      () => { /* Ignore missing macros */ }
-                    );
-                  }
-                } else {
-                  allMacroPrepended = true;
-                }
-              }
-
-            } else {
-              if (commentsCommands.listOfMacroInclusion && commentsCommands.listOfMacroInclusion.length > 0) {
-                outputWin.show();
-                outputWin.append('[' + execDate + '] ');
-                outputWin.appendLine("warning '// @localmacrosubstitution false' also disables all the '// @include macro:' instructions")
-              }
-            }
 
             // log the beginning of the warpscript
             console.debug("about to send this WarpScript:", executedWarpScript.slice(0, 10000), 'on', Warp10URL);
 
+            // wrap with capability on PROFILEMODE
             let wrappedWarpScript = executedWarpScript;
-            const traceToken = (workspace.getConfiguration().get<any>("warpscript.TraceTokensPerWarp10URL")?? {})[Warp10URL];
+            const traceToken = (workspace.getConfiguration().get<any>("warpscript.TraceTokensPerWarp10URL") ?? {})[Warp10URL];
             if (traceToken) {
-              wrappedWarpScript = `'${traceToken}' CAPADD true STMTPOS PROFILEMODE
-${wrappedWarpScript}
-NULL PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile' $profile 'stack' $stack }`;
+              wswlm.prependLinesToAll(`'${traceToken}' CAPADD true STMTPOS PROFILEMODE`);
+              wswlm.appendLinesToAll(`NULL PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile' $profile 'stack' $stack }`);
+              wrappedWarpScript = wswlm.getFinalWS();
             }
             // Gzip the script before sending it.
             gzip(Buffer.from(wrappedWarpScript, 'utf8'), async (err, gzipWarpScript) => {
@@ -314,26 +237,18 @@ NULL PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile
                       line = parseInt(lineonMatch[1]);
                     }
 
-                    let fileInError;
-                    let lineInError = line;
-                    for (var i = 0; i < lines.length; i++) {
-                      if (lineInError <= lines[i]) {
-                        fileInError = uris[i];
-                        break;
-                      } else {
-                        lineInError -= lines[i];
-                      }
-                    }
-                    errorParam = 'Error in file ' + fileInError + ' at line ' + lineInError + ' : ' + response.headers['x-warp10-error-message'];
+                    let pos: lineInFile = wswlm.getUriAndLineFromRealLine(line);
+
+                    errorParam = 'Error in file ' + pos.file + ' at line ' + pos.line + ' : ' + response.headers['x-warp10-error-message'];
                     StatusbarUi.Execute();
 
                     let errorMessage: string = response.headers['x-warp10-error-message'];
                     // We must substract the number of lines added by prepended macros in the error message.
-                    errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, _group1) => '[Line #' + lineInError.toString() + ']');
+                    errorMessage = errorMessage.replace(/\[Line #(\d+)\]/g, (_match, _group1) => '[Line #' + pos.line.toString() + ']');
                     outputWin.show();
                     outputWin.append('[' + execDate + '] ');
-                    outputWin.append('ERROR file://');
-                    outputWin.append(Uri.parse(uris[i]).fsPath + ':' + lineInError);
+                    outputWin.append('ERROR ');
+                    outputWin.append(pos.file + '#' + pos.line);
                     outputWin.appendLine(' ' + errorMessage);
                     if (/Unknown function 'PROFILE'/.test(errorMessage)) {
                       window
@@ -360,7 +275,7 @@ NULL PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile
                     } catch (e) {
                     }
                     try {
-                      await this.writeFile(wsFilename, executedWarpScript);
+                      await this.writeFile(wsFilename, executedWarpScript); // the full warpscript !
                       if (err) {
                         window.showErrorMessage(err.message);
                         StatusbarUi.Execute();
@@ -369,23 +284,39 @@ NULL PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile
                       window.showErrorMessage(e.message || e);
                       StatusbarUi.Execute();
                     }
+
+                    // the full warpscript, with all macros, will be displayed on the first column, and it will be used by the profiler.
+                    let warpscriptEditorForProfiler: TextEditor;
+
+                    await workspace.openTextDocument(Uri.parse(wsFilename))
+                      .then((doc: TextDocument) => {
+                        window.showTextDocument(doc, { viewColumn: ViewColumn.One, preview: true, preserveFocus: false })
+                          .then((editor) => {
+                            warpscriptEditorForProfiler = editor;
+                            progress.report({ message: 'Done' });
+                            StatusbarUi.Init();
+                          },
+                            (err: any) => {
+                              console.error(err)
+                              window.showErrorMessage(err.message);
+                              errorParam = err;
+                              StatusbarUi.Init();
+                            });
+                      });
+
                     // Save resulting JSON
                     try {
                       await this.deleteFile(jsonFilename); // Remove overwritten file. If file unexistent, fail silently.
                     } catch (e) { }
-
+                    console.log(body)
                     const profileResult = JSON.parse(body)[0];
                     if (window.activeTextEditor) {
-                      ProfilerWebview.render(context, profileResult.profile ?? [], window.activeTextEditor,);
+                      ProfilerWebview.render(context, profileResult.profile ?? [], warpscriptEditorForProfiler, wswlm.getListOfSourceFiles(),Uri.parse(wsFilename).toString());
                     }
                     body = profileResult.stack ?? '[]';
 
-                    // if file is small enough (1M), unescape the utf16 encoding that is returned by Warp 10
                     let sizeMB: number = Math.round(body.length / 1024 / 1024);
-                    if (jsonMaxSizeForAutoUnescape > 0 && sizeMB < jsonMaxSizeForAutoUnescape) {
-                      // Do not unescape \\u nor control characters.
-                      body = unescape(body.replace(/(?<!\\)\\u(?!000)(?!001)([0-9A-Fa-f]{4})/g, "%u\$1"))
-                    }
+
                     let noDisplay: boolean = jsonMaxSizeBeforeWarning > 0 && sizeMB > jsonMaxSizeBeforeWarning;
                     // file must be saved whatever its size... but not displayed if too big.
                     this.writeFile(jsonFilename, body).then(() => {
