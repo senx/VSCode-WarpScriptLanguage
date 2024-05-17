@@ -115,13 +115,13 @@ VSCode WarpScript Extension
 > +  2023/05/12  | new logo  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/03665a313c6f28b3344461f93fd177520e8a2227)*)
 > +  2023/05/12  | new logo  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c7f23497d77af4d11f25374e1b0077c02e8bb2ee)*)
 
-## v2.2.2
+## v2.1.34
 
 
 ## v2.2.1
 
 
-## v2.1.34
+## v2.2.2
 
 > +  2023/05/12  | version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/bf1d1874cd0b3e3aa57e5781a1f519dfbaad6c11)*)
 > +  2023/05/12  | new logos  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/1710c1e0ec1dd66de6c75ab3b1df04e531b9e797)*)
