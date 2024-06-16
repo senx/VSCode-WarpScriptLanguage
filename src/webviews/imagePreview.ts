@@ -23,14 +23,14 @@ export default class ImagePreviewWebview {
     console.log("detect images in data with method" + doNotCheckBase64 ? "flat and start" : "regexp")
     let imageList: String[] = [];
     if (doNotCheckBase64) {
-      //fast method. parse the json, look for strings starting with data:image/png;base64,
+      //fast method. parse the json, look for strings starting with data:image/png;base64 or data:image/jpeg;base64,
       let objlist = JSON.parse(data);
       imageList = objlist.filter((v: any) => {
-        return ((typeof (v) === 'string') && (String(v).startsWith("data:image/png;base64,")));
+        return ((typeof (v) === 'string') && ((String(v).startsWith("data:image/png;base64,") || String(v).startsWith("data:image/jpeg;base64,"))));
       })
     } else {
       //slow method. carefully look for images with a regexp
-      let imgb64Pattern: string = '"(data:image\/png;base64,(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)"';
+      let imgb64Pattern: string = '"(data:image\/(png|jpeg);base64,(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)"';
       let re = RegExp(imgb64Pattern, 'g');
       let match: RegExpMatchArray | null;
       imageList = [];
@@ -68,7 +68,11 @@ export default class ImagePreviewWebview {
     imageList.forEach((image: String) => {
       htmlContent += `<h2>Image ${imgcounter} </h2>`
       htmlContent += `<img src="${image}" /><br/>`
-      htmlContent += `<input type="button" class="imgsavebutton" value="Save Image ${imgcounter}..." onClick="saveimg('${image}')"/>`
+      if (image.startsWith("data:image/png;base64,")) {
+        htmlContent += `<input type="button" class="imgsavebutton" value="Save Image ${imgcounter}..." onClick="saveimgpng('${image}')"/>`
+      } else if (image.startsWith("data:image/jpeg;base64,")) {
+        htmlContent += `<input type="button" class="imgsavebutton" value="Save Image ${imgcounter}..." onClick="saveimgjpg('${image}')"/>`
+      }
       //link test 1
       imgcounter++;
     })
@@ -95,12 +99,16 @@ export default class ImagePreviewWebview {
         return blob;
       }
 
-      function saveimg(base64image) {
+      function saveimgpng(base64image) {
         b=dataURItoBlob(base64image);
         d=new Date();
         saveAs(b,"Warp 10-Processing Image-" + d.toISOString() + ".png")
       }
-    
+      function saveimgjpg(base64image) {
+        b=dataURItoBlob(base64image);
+        d=new Date();
+        saveAs(b,"Warp 10-Processing Image-" + d.toISOString() + ".jpg")
+      }
     </script>
     
     </br>stack bottom</body>`
