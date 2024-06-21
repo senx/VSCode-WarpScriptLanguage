@@ -22,6 +22,8 @@ import { workspace, Uri } from "vscode";
 import { Requester } from "../features/requester";
 import MacroIncluder from '../features/macroIncluder';
 import { lineInFile } from '../features/macroIncluder';
+import WSDiagnostics from "../providers/wsDiagnostics";
+import { EndPointProp } from "../globals";
 
 export interface FileAccessor {
   isWindows: boolean;
@@ -221,18 +223,22 @@ export class Warp10DebugRuntime extends EventEmitter {
       this.webSocket.close();
       this.webSocket = undefined;
     }
-    const traceToken = (workspace.getConfiguration().get<any>("warpscript.TraceTokensPerWarp10URL") ?? {})[this.endpoint];
-    if (!traceToken) {
-      this.sendEvent('openTracePluginInfo', 'You must set a token with the "trace" capability', 'openSettings');
-      return "";
+    let prop: EndPointProp = WSDiagnostics.getEndpointProperties(this.endpoint ?? '');
+    if (prop.traceCapAvailableForAll) {
+      // add instructions for trace plugin
+      this.wswlm.prependLinesToAll(`true STMTPOS '${this.sid}' TRACEMODE`);
+    } else {
+      const traceToken = (workspace.getConfiguration().get<any>("warpscript.TraceTokensPerWarp10URL") ?? {})[this.endpoint];
+      if (!traceToken) {
+        this.sendEvent('openTracePluginInfo', 'You must set a token with the "trace" capability', 'openSettings');
+        return "";
+      }
+      this.wswlm.prependLinesToAll(`true STMTPOS '${traceToken}' CAPADD '${this.sid}' TRACEMODE`);
     }
 
-    // add instructions for trace plugin
-    this.wswlm.prependLinesToAll(`true STMTPOS '${traceToken}' CAPADD '${this.sid}' TRACEMODE`);
-    // add breakpoints
 
-    //     const wrapped = `true STMTPOS '${traceToken}' CAPADD '${this.sid}' TRACEMODE
-    // ${this.addBreakPoints(this.ws ?? "")}`;
+
+    // add breakpoints
     this.sourceLines = this.wswlm.finalWarpScript;
     const traceURL: string = (checkWS?.extensions ?? {}).traceWSEndpoint;
     if (!traceURL) {

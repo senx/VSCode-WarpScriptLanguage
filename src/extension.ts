@@ -42,7 +42,6 @@ import WSDiagnostics from './providers/wsDiagnostics';
 import { FileAccessor } from './debug/warp10DebugRuntime';
 import { Warp10DebugSession } from './debug/warp10Debug';
 import ProfilerCommand from './features/profiler';
-import WarpScriptParser from './warpScriptParser';
 
 export class SharedMem {
   private static registry: any = {};
@@ -151,15 +150,8 @@ export function activate(context: ExtensionContext) {
     wsDiagnostics.initializeDiagnostics();
 
     // each time focus change, we look at the file type and file name. Json + special name => stack preview.
-    window.onDidChangeActiveTextEditor((textEditor: TextEditor | undefined) => {
-      let load = false;
-      if(textEditor?.document?.languageId === 'warpscript') {
-        const ws = textEditor.document.getText()
-        const commentsCommands = WarpScriptParser.extractSpecialComments(ws ?? "");
-        const endpoint = commentsCommands.endpoint ?? workspace.getConfiguration().get("warpscript.Warp10URL");
-        load = !!(workspace.getConfiguration().get<any>("warpscript.TraceTokensPerWarp10URL")?? {})[endpoint];
-      }
-      commands.executeCommand('setContext', 'warpscript.showProfile', load);
+    window.onDidChangeActiveTextEditor((textEditor: TextEditor | undefined) => {      
+      commands.executeCommand('setContext', 'warpscript.showProfile', true);
       StatusbarUi.Init();
       if (!WarpScriptExtGlobals.weAreClosingFilesFlag &&
         typeof textEditor !== 'undefined' &&

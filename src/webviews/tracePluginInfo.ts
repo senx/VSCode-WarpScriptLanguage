@@ -141,7 +141,12 @@ export class TracePluginInfo {
           <vscode-divider></vscode-divider>
           <h3>Configuration keys</h3>
           <ul style="margin-bottom: 1.2em;">
-            <li><b>TraceTokensPerWarp10URL</b>: a valid token with the "trace" capability</li>
+            <li><b>TraceTokensPerWarp10URL</b>: a valid token with the "trace" capability</li>            
+            <p>You can skip this individual VSCode configuration process and offer the feature by default to all the users of your platform by
+            adding the following line to your Warp 10 configuration:<br/>
+            <b>warp.capabilities.default = { 'trace' '' }</b><br/>
+            VSCode will detect that the trace capability is already present within the next 10 minutes (or VSCode reload).</p>
+
           </ul>
           <div style="margin-bottom: 1.2em;">
             <vscode-button appearance="secondary" id="settings">

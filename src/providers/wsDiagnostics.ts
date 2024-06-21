@@ -227,7 +227,7 @@ export default class WSDiagnostics {
       return WarpScriptExtGlobals.endpointsProperties[url];
     }
 
-    let ws: string = "IDENT DUP ISNULL <% DROP '' %> IFT  REV <% 'WSAUDITMODE' EVAL true %> <% false %> <% %> TRY ";
+    let ws: string = "'trace' CAPCHECK IDENT DUP ISNULL <% DROP '' %> IFT  REV <% 'WSAUDITMODE' EVAL true %> <% false %> <% %> TRY ";
 
     var request_options: request.Options = {
       headers: {
@@ -252,7 +252,8 @@ export default class WSDiagnostics {
             auditAvailable: answer[0],
             revision: answer[1],
             ident: answer[2],
-            lastRefresh: Date.now()
+            lastRefresh: Date.now(),
+            traceCapAvailableForAll: answer[3]
           };
           WarpScriptExtGlobals.endpointsProperties[url] = props;
           console.log(props)

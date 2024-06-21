@@ -12,6 +12,7 @@ export interface EndPointProp {
   revision: string;
   auditAvailable: boolean;
   ident: string;
+  traceCapAvailableForAll:boolean,
   lastRefresh: number; // timestamp of last successful enpoint props query
 }
 export class WarpScriptExtGlobals {

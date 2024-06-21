@@ -1,6 +1,6 @@
 import { StatusbarUi } from './../statusbarUi';
 import request from 'request';
-import { ExtensionContext, OutputChannel, Progress, ProgressLocation, TextDocument, TextEditor, Uri, ViewColumn, window, workspace, WebviewPanel } from 'vscode';
+import { ExtensionContext, OutputChannel, Progress, ProgressLocation, TextDocument, TextEditor, Uri, ViewColumn, window, workspace, WebviewPanel, commands } from 'vscode';
 import { specialCommentCommands } from '../warpScriptParser';
 import WarpScriptParser from '../warpScriptParser';
 import { Warp10 } from '@senx/warp10';
@@ -10,7 +10,7 @@ import pac from 'pac-resolver';
 import dns from 'dns';
 import { promisify } from 'util';
 import { gzip } from 'zlib';
-import { WarpScriptExtGlobals } from '../globals';
+import { EndPointProp, WarpScriptExtGlobals } from '../globals';
 import WarpScriptExtConstants from '../constants';
 import { SharedMem } from '../extension';
 import ExecCommand from './execCommand';
@@ -19,6 +19,7 @@ import { TracePluginInfo } from '../webviews/tracePluginInfo';
 import { Requester } from './requester';
 import MacroIncluder from '../features/macroIncluder';
 import { lineInFile } from '../features/macroIncluder';
+import WSDiagnostics from '../providers/wsDiagnostics';
 
 let lookupAsync: any;
 if (!!dns.lookup) {
@@ -128,13 +129,26 @@ export default class ProfilerCommand {
             console.debug("about to send this WarpScript:", executedWarpScript.slice(0, 10000), 'on', Warp10URL);
 
             // wrap with capability on PROFILEMODE
-            let wrappedWarpScript = executedWarpScript;
-            const traceToken = (workspace.getConfiguration().get<any>("warpscript.TraceTokensPerWarp10URL") ?? {})[Warp10URL];
-            if (traceToken) {
+            let prop: EndPointProp = WSDiagnostics.getEndpointProperties(Warp10URL ?? '');
+            if (prop.traceCapAvailableForAll) {
+              // add instructions for trace plugin
+              wswlm.prependLinesToAll(`true STMTPOS PROFILEMODE`);
+            } else {
+              const traceToken = (workspace.getConfiguration().get<any>("warpscript.TraceTokensPerWarp10URL") ?? {})[Warp10URL];
+              if (!traceToken) {
+                window.showWarningMessage('You must set a token with the "trace" capability', ...['Open Settings', 'Cancel']).then(resp => {
+                  if ('Open Settings' === resp) {
+                    commands.executeCommand('workbench.action.openSettings', 'Warpscript: Trace Tokens Per Warp10 URL');
+                  }
+                })
+                TracePluginInfo.render(context);
+                return c(true);
+              }
               wswlm.prependLinesToAll(`'${traceToken}' CAPADD true STMTPOS PROFILEMODE`);
-              wswlm.appendLinesToAll(`NULL PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile' $profile 'stack' $stack }`);
-              wrappedWarpScript = wswlm.getFinalWS();
             }
+            let wrappedWarpScript = executedWarpScript;
+            wswlm.appendLinesToAll(`NULL PROFILE.RESULTS 'profile' STORE STACKTOLIST ->JSON 'stack' STORE { 'profile' $profile 'stack' $stack }`);
+            wrappedWarpScript = wswlm.getFinalWS();
             // Gzip the script before sending it.
             gzip(Buffer.from(wrappedWarpScript, 'utf8'), async (err, gzipWarpScript) => {
               if (err) {
