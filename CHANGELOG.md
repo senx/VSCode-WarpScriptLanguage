@@ -1,6 +1,50 @@
 VSCode WarpScript Extension
 ---
 
+## github
+
+> +  2024/06/24  | Changelog Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/248219c55f7e1d219c1e36f7d1d3f10d1c907afd)*)
+
+## v2.4.5
+
+> +  2024/06/24  | doc update, fix issue [#49](https://github.com/senx/VSCode-WarpScriptLanguage/issues/49),version bump.  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/6fce6974a916cbca550ec3a2ce44f7e2b120ef91)*)
+> +  2024/06/24  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/49204f2cf78db443f1915f2de702e27ec6d9516c)*)
+
+## v2.4.4
+
+> +  2024/06/21  | add auto detection of built-in trace capability  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/015106b40a3fd77ca8412f5d54c10f18b5f82ec6)*)
+> +  2024/06/16  | version bump  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ccc19d5e3585266739e3f2d90f07d3a9eb11e734)*)
+
+## v2.4.3
+
+
+## v2.4.2
+
+> +  2024/06/16  | support jpeg output in image tab  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ba7764b0f28876f87f541eaf91ae9dbc983fd1e5)*)
+> +  2024/05/17  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/719ef8b00ccb4bfcd7fb08166e48d8234a118a60)*)
+> +  2024/05/17  | discovery version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/33a2effe773f0fab28dec59a20369d307081f0e7)*)
+> +  2024/05/17  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2da0ee2dce935fe07264a380e64a713b9d769fcb)*)
+
+## v2.4.1
+
+> +  2024/05/14  | enhance profiler styling for dark theme, add inline help on profiler page  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/4e6039e79effc9dafb222429a8eeb799500d837f)*)
+> +  2024/05/14  | add clearer separator between included macros  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/fcf2574ec35f8c383d8a95a22bf5a86a184603d0)*)
+> +  2024/05/14  | fix windows related bugs, bump version  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/aae9aed81cafcbf84598dc594ffc1856d117d290)*)
+> +  2024/05/14  | add local macro debug support. fix bugs  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/6076f89e8d3abaee1bd2eb567653b44361b27957)*)
+> +  2024/05/07  | Changelog Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/0cb75fd8a9682abd7a067e5469a988e05c21273a)*)
+> +  2024/05/06  | refactoring macro includer, wip  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/1827ba911759cb1a047369b433aa314627ead8ef)*)
+> +  2024/05/06  | refactoring macro includer, wip  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/4aace32cea7015d5650f22c722d8d0e03458e85d)*)
+> +  2024/05/06  | bump discovery widgets  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/3f9d911660c799609b8ff7f0d8b1ca9e8436252f)*)
+> +  2024/05/06  | workaround buggy slider  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/99dbc4d5d96f8bc38bdddcd983bad1b5300f32fc)*)
+> +  2024/04/23  | fix breakpoints bug in windows  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/283e341a639e457f312601f845b9cfe80a8d524c)*)
+> +  2024/04/23  | fix breakpoints bug in windows  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/9361d1df43e7d94f221e2a7d3a6f4a3f6dd2afb1)*)
+> +  2024/04/02  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/dcf0076568dbb5c1fec386b87412a5dc47faf4b1)*)
+
+## v2.3.2
+
+> +  2024/04/02  | version bump  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/d15f23fefe6ae4da94f76232f5632ee20097f50f)*)
+> +  2024/04/02  | fix high frequency CONTINUE STEP keypress  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/88b95dd28f75f863b07a33a31d7ee24ee264e996)*)
+
 ## v2.3.1
 
 > +  2024/04/02  | Version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/90627d1ec176d76b7f3137b30ff4b94fe5cfc3fb)*)
@@ -76,71 +120,5 @@ VSCode WarpScript Extension
 > +  2023/11/28  | BD* documentation added  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/d0089e820c6d2fb1990aeb683dbbc1ae716c696a)*)
 > +  2023/11/28  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/8aaf2eeed3c7e9fa3cd51e58ce82e9402b2a2298)*)
 > +  2023/11/24  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/bb2105e4bc0efdd9ba83f40c8bae3953dd62c06f)*)
-> +  2023/11/15  | minor fix  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/d148aaec3941ff0aa78d134a09d0988728fd8cd0)*)
-> +  2023/11/15  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/d3ae0f6958d483af8e4d6af7f12455256283ae83)*)
-> +  2023/11/15  | vscode types rollback  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/1a62f5da3c376f034c270266fbe680407cec8676)*)
-> +  2023/11/15  | version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/48a045fcfb7b2aa1a4ce68619ed5dfd98f50bd1a)*)
-> +  2023/11/15  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/0c0ca009f1417d7bed447373395f44297b4663a9)*)
-
-## v2.2.6
-
-> +  2023/10/11  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2b5d65aef13af456e5846048a1dc239350296e56)*)
-> +  2023/10/06  | fix map snippet  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/646f45bdb11871c6184c7ebe89b3c8f5ac17ae17)*)
-> +  2023/09/08  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/563d634759ea737aea271ee12bc307b454c3182c)*)
-> +  2023/09/08  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/a88d34ad4744f598da09dc3f743c33fdb43d7b58)*)
-
-## v2.2.4
-
-> +  2023/08/25  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/7bcb1a066d8ac9ebdce95c3edecfafce60ace274)*)
-> +  2023/08/25  | Versions bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f9cd9476dafdedceb26adef69d427e7d59be9897)*)
-
-## v2.2.3
-
-> +  2023/08/25  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f244999776772186d710e48367e08534c2c9a576)*)
-> +  2023/08/25  | version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/579e6bc223326d4366cd3297f9ab5453643303b3)*)
-> +  2023/08/25  | discovery version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/af80320938baf1222aa727b49e703e54a1b032f4)*)
-> +  2023/07/05  | version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/7b5f58246e4a8607ba3e45e695b9810e17420614)*)
-> +  2023/05/30  | code cleanup  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/95970c9891738c2804ff07925d2ff07ab7c7163e)*)
-> +  2023/05/30  | Version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/a1c09ad9c51bbe87ebe881c684311a2941908e03)*)
-> +  2023/05/30  | simplified audit for warp10 3.0 beta2  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/3c0ab1cce27c9bec5890150bce5d515d1e83a395)*)
-> +  2023/05/27  | change autoclosing pairs in comment  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/568a4d9d59a61965b303401970ef02a999c430fc)*)
-> +  2023/05/27  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c6986e147119de89c08e9ef9f747abe41befb593)*)
-> +  2023/05/22  | fix a bug when parsing unbalanced multiline  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/0e697f66f4876738da26393ddd85947db617dc76)*)
-> +  2023/05/15  | add ws exception support to diagnostics  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/d77f7eb448292c8573041bff3774270ed22cd775)*)
-> +  2023/05/15  | rev 2.2.0  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/468348ecabc1870f40cab55ef135422fe7ecd4b1)*)
-> +  2023/05/15  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/df7a8ca41115221c1697e868b632fe60944d00f7)*)
-> +  2023/05/15  | add a 1s minimum debounce time  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/cc2baee0e46081e74890e8fee3051a250f23b853)*)
-> +  2023/05/15  | static get server info  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c71e85856ea4b5b6b64b35fcdd54d54256cfb537)*)
-> +  2023/05/15  | implement parsing audit  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/b7780603ab7b146946c435866db243a4896f3e5f)*)
-> +  2023/05/12  | new logo  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/03665a313c6f28b3344461f93fd177520e8a2227)*)
-> +  2023/05/12  | new logo  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c7f23497d77af4d11f25374e1b0077c02e8bb2ee)*)
-
-## v2.2.2
-
-
-## v2.2.1
-
-
-## v2.1.34
-
-> +  2023/05/12  | version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/bf1d1874cd0b3e3aa57e5781a1f519dfbaad6c11)*)
-> +  2023/05/12  | new logos  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/1710c1e0ec1dd66de6c75ab3b1df04e531b9e797)*)
-> +  2023/05/11  | added capadd to tokengen snippet  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/b4bf75171fe7f67b299b2b7917a6d53f5a4c221e)*)
-> +  2023/05/11  | show legend in snippet  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c858cee722dc38124f6f5f4d2476884b986393f0)*)
-
-## v2.1.33
-
-> +  2023/05/05  | Version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/6fcd9ca47ad962e4fd5fc633ab9bc5c8d8eade55)*)
-> +  2023/05/05  | version bumb  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/9edf420f6baf8c3e507954d337d005f8784365ca)*)
-> +  2023/05/05  | doc update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/0c9114a7c9a0d64d96d5ab68e9ec5f6c8aa027c4)*)
-> +  2023/05/05  | parseWarpScriptStatements now considers multi lines strings as statements  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/09160cad7cb85a5b9608dffb514df4b5d2d0ef9f)*)
-> +  2023/05/05  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/632e3d0745ec215ebf4c2647f46ecf86e731a96c)*)
-> +  2023/05/05  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/56a8cbfa0bdccdd7ccf3f29c0a139424cfffc561)*)
-> +  2023/04/12  | version bumb  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/d7d14820c1dccf7b7d3d911c2c00c2426b80b8da)*)
-> +  2023/04/12  | doc update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/efa39eae740757c7d83d71bb60477c750397c7d2)*)
-> +  2023/04/11  | Fix tokengen snippet  (*[Steven GUEGUEN](steven.gueguen@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/d4e50560da5edafc98dc21997f6ea8116b1e5722)*)
-> +  2023/03/03  | parseWarpScriptStatements now considers multi lines strings as statements  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/81b35d4a662cf8b805c794514000b1f776d26a0b)*)
-> +  2023/02/09  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/6deb883f7f4ba1a91b7d55e312b762861a856548)*)
-> +  2023/02/09  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/39254fdeb3e5ecc169c9f70cfc4c8554005a003d)*)
 
 
