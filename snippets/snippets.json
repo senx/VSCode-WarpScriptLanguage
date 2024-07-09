@@ -812,8 +812,11 @@
       "{",
       "  'type' 'tabular' 'w' 4 'h' 2",
       "  'title' 'Table'",
-      "  'options' { 'eventHandler' 'type=variable,tag=input'  // suscribe to events",
-      "    'tabular' { 'fixedWidth' true }",
+      "  'options' {",
+      "    'eventHandler' 'type=variable,tag=input'  // suscribe to events",
+      "    'tabular' { 'fixedWidth' true 'sortable' true 'filterable' true }",
+      "    'showControls' true  // the csv export button",
+      "    // 'elemsCount' 30 // page size, default is 15 ",
       "  }",
       "  'macro' <%",
       "    ${1:{",
@@ -1114,7 +1117,7 @@
     "description": "Discovery within WarpScript",
     "body": [
       "// this event will force some variables to be updated in all the tiles that suscribe to it",
-      "{ 'tags' [ 'input' ] 'type' 'variable' 'value' { '{1:a}' \\${1:a} } } // make sure '{1:a}' is declared in the 'vars' of your dashboard",
+      "{ 'tags' [ 'input' ] 'type' 'variable' 'value' { '${1:myvar}' ${2:value} } } // make sure '${1:myvar}' is declared in the 'vars' of your dashboard",
       ""
     ]
   }
