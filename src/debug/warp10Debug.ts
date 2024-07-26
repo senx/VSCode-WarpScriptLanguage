@@ -163,7 +163,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
       workspace.openTextDocument(Uri.parse(info.path))
         .then((doc: TextDocument) => {
           window.showTextDocument(doc).then(editor => {
-            console.log("yeepee, show decoration in the right file", info)
             if (this.inlineDecoration) {
               this.inlineDecoration.dispose();
             }
@@ -258,7 +257,6 @@ export class Warp10DebugSession extends LoggingDebugSession {
    * to interrogate the features the debug adapter provides.
    */
   protected initializeRequest(response: DebugProtocol.InitializeResponse, args: DebugProtocol.InitializeRequestArguments): void {
-    console.warn ("gro, args",args)
     if (args.supportsInvalidatedEvent) {
       this._useInvalidatedEvent = true;
     }
@@ -760,23 +758,30 @@ export class Warp10DebugSession extends LoggingDebugSession {
     this.sendResponse(response);
   }
 
-  protected stepInTargetsRequest(response: DebugProtocol.StepInTargetsResponse, args: DebugProtocol.StepInTargetsArguments) {
-    const targets = this._runtime.getStepInTargets(args.frameId);
-    response.body = {
-      targets: targets.map((t) => {
-        return { id: t.id, label: t.label };
-      }),
-    };
+  protected stepInTargetsRequest(response: DebugProtocol.StepInTargetsResponse, _args: DebugProtocol.StepInTargetsArguments) {
+    //const targets = this._runtime.getStepInTargets(args.frameId);
+    // response.body = {
+    //   targets: targets.map((t) => {
+    //     return { id: t.id, label: t.label };
+    //   }),
+    // };
+
+    response.success = false;
+    response.message="Step In not Supported";
     this.sendResponse(response);
   }
 
   protected stepInRequest(response: DebugProtocol.StepInResponse, _args: DebugProtocol.StepInArguments): void {
-    this._runtime.stepIn();
+    // this._runtime.stepIn();
+    response.success = false;
+    response.message="Step Out not Supported";
     this.sendResponse(response);
   }
 
   protected stepOutRequest(response: DebugProtocol.StepOutResponse, _args: DebugProtocol.StepOutArguments): void {
-    this._runtime.stepOut();
+    // this._runtime.stepOut();
+    response.success = false;
+    response.message="Step Out not Supported";
     this.sendResponse(response);
   }
 
