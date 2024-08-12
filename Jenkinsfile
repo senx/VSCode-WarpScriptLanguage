@@ -54,7 +54,7 @@ pipeline {
       }
       steps {
         nvm('version': 'v20.9.0') {
-          sh 'vsce publish -p $VSCODE_PAT'
+          sh 'npm run vsce publish -p $VSCODE_PAT'
           sh 'npx -y ovsx publish -p $OPENVSX_PAT'
         }
       }
