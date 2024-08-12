@@ -37,7 +37,7 @@ pipeline {
 
     stage("Build") {
       steps {
-        nvm('version': 'v17.1.0') {
+        nvm('version': 'v20.9.0') {
           sh 'rm -fr package-lock.json assets node_modules yarn.lock'
           sh 'npm install --force'
           sh 'npm run vsce package'
@@ -53,7 +53,7 @@ pipeline {
         message 'Deploy to Microsoft Marketplace and Open VSX Registry?'
       }
       steps {
-        nvm('version': 'v17.1.0') {
+        nvm('version': 'v20.9.0') {
           sh 'vsce publish -p $VSCODE_PAT'
           sh 'npx -y ovsx publish -p $OPENVSX_PAT'
         }
