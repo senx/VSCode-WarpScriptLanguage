@@ -940,6 +940,7 @@
       "        // 'globalParams' { ",
       "        //   'timeMode' 'custom' // custom, date, duration",
       "        //   'unit' '°C' 'bgColor' '#f57f17' 'fontColor' '#fc0000'",
+      "        //   'responsive' false  'customStyles' {  '*' '--warp-view-font-size: 75px;'  } ",
       "        // }",
       "      }",
       "  %>",
