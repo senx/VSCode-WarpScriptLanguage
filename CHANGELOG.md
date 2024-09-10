@@ -1,6 +1,11 @@
 VSCode WarpScript Extension
 ---
 
+## v2.5.2
+
+> +  2024/09/10  | vsce version update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f3a37f6206f8b5f6fc647f72431b44021c466f99)*)
+> +  2024/09/10  | Changelog Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/0678401c6ece02e239fde31a5e84101a567f12a1)*)
+
 ## v2.5.1
 
 > +  2024/09/10  | discovery version bump  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/0e3d1351ca8933295566c7c6e00442b9065cdecc)*)
@@ -48,10 +53,5 @@ VSCode WarpScript Extension
 
 > +  2024/06/24  | doc update, fix issue [#49](https://github.com/senx/VSCode-WarpScriptLanguage/issues/49),version bump.  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/6fce6974a916cbca550ec3a2ce44f7e2b120ef91)*)
 > +  2024/06/24  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/49204f2cf78db443f1915f2de702e27ec6d9516c)*)
-
-## v2.4.4
-
-> +  2024/06/21  | add auto detection of built-in trace capability  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/015106b40a3fd77ca8412f5d54c10f18b5f82ec6)*)
-> +  2024/06/16  | version bump  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ccc19d5e3585266739e3f2d90f07d3a9eb11e734)*)
 
 
