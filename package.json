@@ -12,7 +12,7 @@
   "author": "SenX <contact@senx.io>",
   "icon": "images/w.png",
   "license": "Apache-2.0",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "publisher": "senx",
   "engines": {
     "vscode": "^1.87.0"
@@ -410,7 +410,7 @@
     "showdown": "2.1.0",
     "spectre.css": "0.5.9",
     "typescript": "^4.8.4",
-    "vsce": "2.15.0",
+    "@vscode/vsce": "3.1.0",
     "vscode-textmate": "9.0.0"
   },
   "dependencies": {
