@@ -373,7 +373,7 @@
     }
   },
   "scripts": {
-    "vsce": "./node_modules/vsce/vsce",
+    "vsce": "./node_modules/@vscode/vsce/vsce",
     "vscode:prepublish": "npm run changelog && npm run compile",
     "compile": "node scripts/build.js && tsc -p ./",
     "watch": "node scripts/build.js && tsc -watch -p ./",
