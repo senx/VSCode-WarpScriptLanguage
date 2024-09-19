@@ -1,6 +1,15 @@
 VSCode WarpScript Extension
 ---
 
+## v2.5.3
+
+> +  2024/09/19  | Changelog Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/71a0e018b39a07578219dd349c41081fa4343408)*)
+> +  2024/09/19  | support SenX SaaS endpoints with oauth  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/b80635e0b0410423f8c6ba6204fb7ee80bcb996e)*)
+> +  2024/09/10  | update jenkins to new ovsx pat way too  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/72a441cbacd3bec3043798c885fa03a0d84f3afa)*)
+> +  2024/09/10  | update jenkins to new vsce pat way  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/fb2b352fcc3a4da8a16039267a49add4ccdd5bbb)*)
+> +  2024/09/10  | Changelog Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/8b6bfe78032dbf97aefe4f0007aea3fc09416d83)*)
+> +  2024/09/10  | fix build path vsce  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/3a2c2a09fa17114dd4f4e56c09e9a93fe757b48a)*)
+
 ## v2.5.2
 
 > +  2024/09/10  | vsce version update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f3a37f6206f8b5f6fc647f72431b44021c466f99)*)
@@ -48,10 +57,5 @@ VSCode WarpScript Extension
 ## github
 
 > +  2024/06/24  | Changelog Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/248219c55f7e1d219c1e36f7d1d3f10d1c907afd)*)
-
-## v2.4.5
-
-> +  2024/06/24  | doc update, fix issue [#49](https://github.com/senx/VSCode-WarpScriptLanguage/issues/49),version bump.  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/6fce6974a916cbca550ec3a2ce44f7e2b120ef91)*)
-> +  2024/06/24  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/49204f2cf78db443f1915f2de702e27ec6d9516c)*)
 
 
