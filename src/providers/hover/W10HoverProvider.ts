@@ -63,8 +63,28 @@ export abstract class W10HoverProvider  implements HoverProvider {
           "@include": {
               "sig": "@include macro:macroPath",
               "help": "When the argument starts with _macro:_ Force inclusion of the specified local macro in the script before execution. Allow to execute dynamic calls such as \`'macro' 'Path' + RUN\`.  Macros called with \`@macroPath\` are automatically substituted when found in the current project scope. A link is added to the path to check easily what will be included."
-          }      
-            }`);
+          },
+          "@oauth": {
+              "sig": "@oauth https://auth.senx.io/",
+              "help": "When using SenX SaaS api/saas/warp endpoint, set the authentication server."
+          },
+          "@realm": {
+            "sig": "@realm senx",
+            "help": "When using SenX SaaS api/saas/warp endpoint, set the realm for authentication."
+          },
+          "@user": {
+            "sig": "@user john@senx.io",
+            "help": "When using SenX SaaS api/saas/warp endpoint, set the user for authentication."
+          },
+          "@totp": {
+            "sig": "@totp true",
+            "help": "When using SenX SaaS api/saas/warp endpoint, if the user configured 2FA, set totp option to true."
+          },
+          "@clientid": {
+            "sig": "@clientid saas-m2m-xxx",
+            "help": "When using SenX SaaS api/saas/warp endpoint, provides an m2m authentication with client id and client secret."
+          }
+        }`);
     
         let help = otherKeywordsDoc[name];
         if (help) {

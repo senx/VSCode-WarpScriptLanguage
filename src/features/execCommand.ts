@@ -15,6 +15,7 @@ import WarpScriptExtConstants from '../constants';
 import { SharedMem } from '../extension';
 import MacroIncluder from '../features/macroIncluder';
 import { lineInFile } from '../features/macroIncluder';
+import { integer } from 'vscode-languageclient';
 
 let lookupAsync: any;
 if (!!dns.lookup) {
@@ -63,7 +64,7 @@ export default class ExecCommand {
       let PreviewTimeUnit: string = workspace.getConfiguration().get('warpscript.DefaultTimeUnit') as string;
       const jsonMaxSizeForAutoUnescape: number = workspace.getConfiguration().get('warpscript.maxFileSizeForAutomaticUnicodeEscape') as number;
       const jsonMaxSizeBeforeWarning: number = workspace.getConfiguration().get('warpscript.maxFileSizeBeforeJsonWarning') as number;
-      const useGZIP: boolean = !!workspace.getConfiguration().get('warpscript.useGZIP');
+      let useGZIP: boolean = !!workspace.getConfiguration().get('warpscript.useGZIP');
       const timeout: number = workspace.getConfiguration().get('warpscript.http.timeout') as number;
       const proxy_pac: string = workspace.getConfiguration().get('warpscript.ProxyPac') as string;
       const proxy_directUrl: string = workspace.getConfiguration().get('warpscript.ProxyURL') as string;
@@ -126,9 +127,9 @@ ${DiscoveryPreviewWebview.getTemplate(context, discoveryTheme)}
 
 
           // build warpscript with local macro. (wswlm)
-          let wswlm:MacroIncluder= new MacroIncluder(outputWin); 
-          await wswlm.loadWarpScript(document.getText(),document.uri.toString());
-          executedWarpScript=wswlm.getFinalWS();
+          let wswlm: MacroIncluder = new MacroIncluder(outputWin);
+          await wswlm.loadWarpScript(document.getText(), document.uri.toString());
+          executedWarpScript = wswlm.getFinalWS();
 
           if (window?.activeTextEditor?.document.languageId === 'flows') {
             executedWarpScript = `<'
@@ -137,6 +138,83 @@ ${executedWarpScript}
 FLOWS
 `;
           }
+
+          let authenticationExtraHeaders: { [key: string]: string } = {}
+          // manage oauth authentication to the endpoint, if any
+          if (commentsCommands.clientId) {
+            if (WarpScriptExtGlobals.endpointsAuthorizations[Warp10URL] && WarpScriptExtGlobals.endpointsAuthorizations[Warp10URL].clientId) {
+              authenticationExtraHeaders["X-SenX-client-id"] = WarpScriptExtGlobals.endpointsAuthorizations[Warp10URL].clientId;
+              authenticationExtraHeaders["X-SenX-client-secret"] = WarpScriptExtGlobals.endpointsAuthorizations[Warp10URL].clientSecret;
+              authenticationExtraHeaders["X-SenX-Realm"] = WarpScriptExtGlobals.endpointsAuthorizations[Warp10URL].realm;
+            } else {
+              const realm = commentsCommands.realm;
+              const clientSecret = await window.showInputBox({ title: "Authenticate", prompt: "Enter client Secret for clientId " + commentsCommands.clientId, password: true, ignoreFocusOut: true });
+              authenticationExtraHeaders["X-SenX-client-id"] = commentsCommands.clientId;
+              authenticationExtraHeaders["X-SenX-client-secret"] = clientSecret;
+              authenticationExtraHeaders["X-SenX-Realm"] = realm;
+              WarpScriptExtGlobals.endpointsAuthorizations[Warp10URL] = { nextRefresh: integer.MAX_VALUE, clientId: commentsCommands.clientId, clientSecret: clientSecret, realm: realm };
+            }
+            useGZIP = false; // TODO: endpoints do not support GZIP
+          }
+          if (commentsCommands.oauth) {
+            // look for still valid credentials
+            if (WarpScriptExtGlobals.endpointsAuthorizations[Warp10URL] && WarpScriptExtGlobals.endpointsAuthorizations[Warp10URL].nextRefresh > Date.now()) {
+              authenticationExtraHeaders["X-SenX-Realm"] = WarpScriptExtGlobals.endpointsAuthorizations[Warp10URL].realm;
+              authenticationExtraHeaders["Authorization"] = `Bearer ${WarpScriptExtGlobals.endpointsAuthorizations[Warp10URL].bearer}`;
+            } else {
+              const realm = commentsCommands.realm;
+              let authUrl = commentsCommands.oauth;
+              let authUser = "";
+              if (commentsCommands.user && commentsCommands.user != "") {
+                authUser = commentsCommands.user;
+              } else {
+                authUser = await window.showInputBox({ title: "Authenticate", prompt: "Enter user name", placeHolder: commentsCommands.user, ignoreFocusOut: true })
+              }
+              const authPassword = await window.showInputBox({ title: "Authenticate", prompt: "Enter password for " + authUser, password: true, ignoreFocusOut: true })
+              let authTotp = undefined;
+
+              authUrl = authUrl + `/realms/${realm}/protocol/openid-connect/token`;
+              let p = `username=${encodeURIComponent(authUser)}&password=${encodeURIComponent(authPassword)}&grant_type=password&client_id=saas`;
+              if (commentsCommands.totp) {
+                authTotp = await window.showInputBox({ title: "Authenticate", prompt: "Enter one time password", ignoreFocusOut: true })
+                p = p + `&totp=${encodeURIComponent(authTotp)}`;
+              }
+              // try to retrieve a bearer
+              console.log('url', authUrl)
+              function doRequest(authUrl: string, parameters: string) { // need to wait for answer
+                return new Promise(function (resolve, reject) {
+                  request.post({ method: "POST", url: authUrl, timeout: 10000, body: parameters, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }, function (error, res, body) {
+                    if (!error) {
+                      if (res.statusCode == 200) {
+                        resolve(body);
+                      } else {
+                        reject({ response: res, body: body })
+                      }
+                    } else {
+                      reject(error);
+                    }
+                  });
+                });
+              }
+
+              try {
+                let response = JSON.parse(await doRequest(authUrl, p) as string);
+                console.log(response);
+                window.showInformationMessage(`Authentication success, renew in ${response.expires_in}s.`);
+                authenticationExtraHeaders["X-SenX-Realm"] = realm;
+                authenticationExtraHeaders["Authorization"] = `Bearer ${response.access_token}`;
+                console.log(authenticationExtraHeaders);
+                WarpScriptExtGlobals.endpointsAuthorizations[Warp10URL] = { nextRefresh: Date.now() + (response.expires_in * 1000) - 60000, bearer: response.access_token, realm: realm };
+              } catch (error) {
+                window.showErrorMessage("Authentication failed, " + JSON.stringify(error));
+              }
+            }
+            console.log("oauth authentication done", authenticationExtraHeaders);
+            useGZIP = false; // TODO: endpoints do not support GZIP
+          }
+
+
+
           // log the beginning of the warpscript
           console.log("about to send this WarpScript:", executedWarpScript.slice(0, 10000), 'on', Warp10URL);
 
@@ -148,6 +226,7 @@ FLOWS
 
             var request_options: request.Options = {
               headers: {
+                ...authenticationExtraHeaders,
                 'Content-Type': useGZIP ? 'application/gzip' : 'text/plain; charset=UTF-8',
                 'Accept': 'application/json',
                 'X-Warp10-WarpScriptSession': WarpScriptExtGlobals.sessionName,
@@ -218,9 +297,14 @@ FLOWS
                 console.error(response.body);
                 StatusbarUi.Execute();
                 return e(true)
+              } else if (response.statusCode == 403) {
+                window.showErrorMessage("This enpoint needs an authentication. Consider using // @oauth special instruction");
+                delete WarpScriptExtGlobals.endpointsAuthorizations[Warp10URL];
+                StatusbarUi.Execute();
+                return e(true);
               } else if (response.statusCode != 200 && response.statusCode != 500) { // manage non 200 answers here
                 window.showErrorMessage("Error, server answered code " + response.statusCode + " :" + (String)(response.body).slice(0, 1000));
-                console.error(response.body);
+                console.error("Warp 10 server returns status " + response.statusCode, response.headers, response.body);
                 StatusbarUi.Execute();
                 return e(true)
               } else if (response.statusCode == 500 && !response.headers['x-warp10-error-message']) {
@@ -243,7 +327,7 @@ FLOWS
                     line = parseInt(lineonMatch[1]);
                   }
 
-                  let pos:lineInFile= wswlm.getUriAndLineFromRealLine(line);
+                  let pos: lineInFile = wswlm.getUriAndLineFromRealLine(line);
 
                   errorParam = 'Error in file ' + pos.file + ' at line ' + pos.line + ' : ' + response.headers['x-warp10-error-message'];
                   StatusbarUi.Execute();
@@ -255,7 +339,7 @@ FLOWS
                   outputWin.append('[' + execDate + '] ');
                   outputWin.append('ERROR ');
                   outputWin.append(pos.file + '#' + pos.line);
-                  outputWin.appendLine(' ' + errorMessage);                  
+                  outputWin.appendLine(' ' + errorMessage);
                 }
                 // If no content-type is specified, response is the JSON representation of the stack
                 if (response.body.startsWith('[')) {

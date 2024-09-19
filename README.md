@@ -44,6 +44,8 @@ Supports the [TracePlugin](https://studio.senx.io/#/ad/trace-plugin-info) for de
 - `// @preview none` at the beginning of the script disable the preview. `gts` or `image` force the focus to the GTS or image preview after execution. `json` focus on the json and format it. `discovery` open a discovery dashboard render view.
 - `// @timeunit ns` uses nanoseconds instead of microseconds
 - `// @include macro:subdirectory/macroname` forces to include this macro at runtime.
+- `// @oauth`, `// @realm`, `// @user`, `// @totp` are used to get an authentication bearer from the endpoint using oauth.
+- `// @clientid`, `// @realm` are used to get an authentication bearer from the endpoint using m2m id and secret.
 - You can set the VSCode default language to WarpScript (Ctrl+, search for default language settings). Every new file (Ctrl+N) will be a WarpScript.
 
 ## Graph interactions

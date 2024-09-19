@@ -66,6 +66,31 @@ export default class WSCompletionMacrosProvider
           item.detail = "VSCode warpscript instruction";
           result.push(item);
 
+          item = new CompletionItem("oauth", CompletionItemKind.Method)
+          item.documentation = new MarkdownString().appendMarkdown("When using SenX SaaS api/saas/warp endpoint, set the authentication server.\n\nEx:").appendCodeblock("// @oauth https://auth.senx.io/");
+          item.detail = "VSCode warpscript instruction";
+          result.push(item);
+
+          item = new CompletionItem("realm", CompletionItemKind.Method)
+          item.documentation = new MarkdownString().appendMarkdown("When using SenX SaaS api/saas/warp endpoint, set the realm for authentication.\n\nEx:").appendCodeblock("// @realm senx");
+          item.detail = "VSCode warpscript instruction";
+          result.push(item);
+
+          item = new CompletionItem("user", CompletionItemKind.Method)
+          item.documentation = new MarkdownString().appendMarkdown("When using SenX SaaS api/saas/warp endpoint, set the user for authentication.\n\nEx:").appendCodeblock("// @user john@senx.io");
+          item.detail = "VSCode warpscript instruction";
+          result.push(item);
+
+          item = new CompletionItem("totp", CompletionItemKind.Method)
+          item.documentation = new MarkdownString().appendMarkdown("When using SenX SaaS api/saas/warp endpoint, if the user configured 2FA, set totp option to true.\n\nEx:").appendCodeblock("// @totp true");
+          item.detail = "VSCode warpscript instruction";
+          result.push(item);
+
+          item = new CompletionItem("clientid", CompletionItemKind.Method)
+          item.documentation = new MarkdownString().appendMarkdown("When using SenX SaaS api/saas/warp endpoint, provides an m2m authentication with client id and client secret.\n\nEx:").appendCodeblock("// @totp true");
+          item.detail = "VSCode warpscript instruction";
+          result.push(item);
+
           return resolve(result);
         }
         return resolve([]);

@@ -12,6 +12,11 @@ export interface specialCommentCommands {
   listOfMacroInclusion?: string[];
   listOfMacroInclusionRange?: Range[];
   theme?: string;
+  oauth?: string;
+  user?: string;
+  totp?: boolean;
+  realm?: string;
+  clientId?: string;
 }
 
 /**
@@ -204,11 +209,11 @@ export default class WarpScriptParser {
         let lines: string[] = ws.substring(i, ws.length).split('\n');
         let lc = 0;
         while (lc < lines.length && lines[lc].trim() != "'>") { i += lines[lc].length + 1; lc++; }
-        if (lc < lines.length) {i += lines[lc].length;}
-        let rawMultiLine = ws.substring(start+2, i-2);
+        if (lc < lines.length) { i += lines[lc].length; }
+        let rawMultiLine = ws.substring(start + 2, i - 2);
         // console.log(rawMultiLine);      // may include some \r\n
         rawMultiLine = rawMultiLine.replace('\r', ''); // thank you m$...
-        result.push("'" + rawMultiLine.substring(1, rawMultiLine.length-1) + "'");  // multilines are stored as a single statement between simple quotes, with \n inside.
+        result.push("'" + rawMultiLine.substring(1, rawMultiLine.length - 1) + "'");  // multilines are stored as a single statement between simple quotes, with \n inside.
         // console.log(i, 'end of multiline');
       }
       if (ws.charAt(i) == '/' && ws.charAt(i + 1) == '*') { //start one multiline comment, seek for end of comment
@@ -406,6 +411,21 @@ export default class WarpScriptParser {
               break;
             case "theme":
               result.theme = parametervalue.trim().toLowerCase();
+              break;
+            case "oauth":
+              result.oauth = parametervalue.trim();
+              break;
+            case "user":
+              result.user = parametervalue.trim();
+              break;
+            case "realm":
+              result.realm = parametervalue.trim();
+              break;
+            case "totp":
+              result.totp = ("true" === parametervalue.trim().toLowerCase());
+              break;
+            case "clientid":
+              result.clientId = parametervalue.trim();
               break;
             default:
               break;
