@@ -17,6 +17,7 @@ export interface specialCommentCommands {
   totp?: boolean;
   realm?: string;
   clientId?: string;
+  authHeaders?: { [key: string]: string };
 }
 
 /**

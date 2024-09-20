@@ -82,6 +82,17 @@ export default class DiscoveryPreviewWebview {
         senxLogo = "light";
     }
 
+    // forward authentication to the dashboard
+    let extraDashboardOptions = {};
+    if (opts.authHeaders) {
+      extraDashboardOptions = {
+        httpHeaders: {
+          ...opts.authHeaders,
+          Accept: 'application/json; charset: UTF-8'
+        }
+      };
+    }
+
     return `<html>
   <head>
     <title>Test</title>
@@ -108,7 +119,7 @@ export default class DiscoveryPreviewWebview {
         <div class="heading">
           <a href="https://senx.io" target="_blank"><img src="${senxLogo == "dark" ? whiteLogo : darkLogo}" alt="SenX" ></a>
         </div>
-        <discovery-dashboard url="${opts.endpoint}" data="${this.escapeHTML(JSON.stringify(discoveryJSON))}"></discovery-dashboard>
+        <discovery-dashboard url="${opts.endpoint}" data="${this.escapeHTML(JSON.stringify(discoveryJSON))}" options="${this.escapeHTML(JSON.stringify(extraDashboardOptions))}"></discovery-dashboard>
       </div>
     </div>
     <script nomodule src="${discoveryPathNoModule}"></script>

@@ -213,6 +213,7 @@ FLOWS
             useGZIP = false; // TODO: endpoints do not support GZIP
           }
 
+          commentsCommands.authHeaders = authenticationExtraHeaders; // save credentials locally to reuse in the discovery preview
 
 
           // log the beginning of the warpscript
