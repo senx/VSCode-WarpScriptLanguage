@@ -8,6 +8,7 @@ import ProxyAgent from 'proxy-agent';
 import pac from 'pac-resolver';
 import dns from 'dns';
 import { promisify } from 'util';
+import { WarpScriptExtGlobals } from '../../globals';
 
 let lookupAsync: any;
 if(!!dns.lookup) {
@@ -125,13 +126,34 @@ export abstract class W10HoverProvider  implements HoverProvider {
           repos.forEach((r) => ws += '"' + r + '" WF.ADDREPO\n')
           ws += name;
           // console.log("warpscript to send:", ws);
-    
+
+          let authenticationExtraHeaders: { [key: string]: string } = {}
+          // manage oauth authentication to the endpoint, if any. only look into the credentials cache, do not ask.
+          if (commentsCommands.clientId) {
+            if (WarpScriptExtGlobals.endpointsAuthorizations[endpointURL] && WarpScriptExtGlobals.endpointsAuthorizations[endpointURL].clientId) {
+              authenticationExtraHeaders["X-SenX-client-id"] = WarpScriptExtGlobals.endpointsAuthorizations[endpointURL].clientId;
+              authenticationExtraHeaders["X-SenX-client-secret"] = WarpScriptExtGlobals.endpointsAuthorizations[endpointURL].clientSecret;
+              authenticationExtraHeaders["X-SenX-Realm"] = WarpScriptExtGlobals.endpointsAuthorizations[endpointURL].realm;
+            } 
+          }
+          if (commentsCommands.oauth) {
+            // look for still valid credentials
+            if (WarpScriptExtGlobals.endpointsAuthorizations[endpointURL] && WarpScriptExtGlobals.endpointsAuthorizations[endpointURL].nextRefresh > Date.now()) {
+              authenticationExtraHeaders["X-SenX-Realm"] = WarpScriptExtGlobals.endpointsAuthorizations[endpointURL].realm;
+              authenticationExtraHeaders["Authorization"] = `Bearer ${WarpScriptExtGlobals.endpointsAuthorizations[endpointURL].bearer}`;
+            }             
+            console.log("oauth authentication done", authenticationExtraHeaders);
+          }
+          
+
           // do the request and return a promise of hover
           return new Promise(async (resolve) => {
     
             var request_options: request.Options = {
               headers: {
-                'Content-Type': 'text/plain; charset=UTF-8'
+                ...authenticationExtraHeaders,
+                'Content-Type': 'text/plain; charset=UTF-8',
+                'Accept': 'application/json'
               },
               method: "POST",
               url: endpointURL,
