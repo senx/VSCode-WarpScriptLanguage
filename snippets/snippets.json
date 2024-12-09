@@ -1008,7 +1008,7 @@
       "    // another way to inject data in a svg is to use a hidden tile as a controller.",
       "    ",
       "    {",
-      "      'type' 'input:text' 'w' 2 'h' 1 ",
+      "      'type' 'input:text' 'w' 2 'h' 1  // for multiline input, you use 'input:textarea' ",
       "      'title' 'Enter temperature'",
       "      'options' { 'input' { 'showButton' false 'delayRequest' 500 } }",
       "      'macro' <% {",
@@ -1121,7 +1121,7 @@
       "  'options' { 'eventHandler' 'type=variable,tag=input' } // suscribe to events",
       "  'macro' <%",
       "      {",
-      "        'data' ${1:42.0} // any number or string, or html string",
+      "        'data' ${1:42.0} // any number or string, or html string. To display multiline, you can use '%0A' '<br/>' REPLACEALL",
       "        // 'globalParams' { ",
       "        //   'timeMode' 'custom' // custom, date, duration",
       "        //   'unit' '°C' 'bgColor' '#f57f17' 'fontColor' '#fc0000'",
@@ -1365,18 +1365,20 @@
     ]
   },
   "dtile12": {
-    "prefix": "discovery-tile 12 input:text",
+    "prefix": "discovery-tile 12 input:text / multiline / number",
     "description": "Discovery within WarpScript",
     "body": [
       "{",
-      "  'type' 'input:text' 'w' 2 'h' 1  // or 'input:secret' for sensitive information",
+      "  'type' 'input:text' 'w' 2 'h' 1  // use 'input:secret' for sensitive information.",
+      "    // use input:textarea for multiline input. ",
+      "    // use input:number for numbers only.",
       "  'title' 'Enter text'",
       "  'options' { 'input' { 'showButton' true } }",
       "  'macro' <% {",
-      "    // If showButton is false, the event is sent at each letter you type in the input field",
+      "    // If showButton is false, then the event is sent at each letter you type in the input field",
       "    //  This can lead to lots of events per second. To throttle this, you can use { 'showButton' false 'delayRequest' 1000 }:",
       "    //  It will delay the event to delayRequest milliseconds after last keystroke.",
-      "    // If showButton is true, the event is sent when the user click the OK button",
+      "    // If showButton is true, then the event is sent when the user click the OK button",
       "    'events' [ { 'tags' 'input' 'type' 'variable' 'selector' 'inputText01' } ]",
       "    'data' '${1:Default Value}'  // you must define  'inputText01' '${1:Default Value}'  into dashboard 'vars' too.",
       "    'globalParams' { 'button' { 'label' 'search' } } ",
@@ -1507,6 +1509,22 @@
       "    'globalParams' { 'input' { 'value' [ '${2:none}' ] } } // default value",
       "    'data' [ 'none' 'carl jr' 'brawndo' 'electrolytes' ] // list of choice",
       "  } ",
+      "}"
+    ]
+  },
+  "dtile19": {
+    "prefix": "discovery-tile 19 input:file",
+    "description": "Discovery within WarpScript",
+    "body": [
+      "{",
+      "  'type' 'input:file' 'w' 2 'h' 1  // or 'input:secret' for sensitive information",
+      "  'title' 'Select a file'",
+      "  'options' { 'input' { 'showButton' false  'accept' '.txt,.jpg,.png' } } // the accept filter can also be a mix of extensions and mime types: '.doc,.docx,.xml,application/msword'",
+      "  'data' {",
+      "    'events' [ { 'tags' 'input' 'type' 'variable' 'selector' 'inputFileContent' } ] // inputFileContent will be a STRING ",
+      "    // starting with the Mime type followed by the file content in base64, ie data:text/csv;base64,c2VyaWFsO2NsaWV(...)",
+      "    // see https://developer.mozilla.org/en-US/docs/Web/URI/Schemes/data",
+      "  }",
       "}"
     ]
   },
