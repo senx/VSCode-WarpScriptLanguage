@@ -1528,6 +1528,28 @@
       "}"
     ]
   },
+  "dtile20": {
+    "prefix": "discovery-tile 20 hidden tile",
+    "description": "Discovery within WarpScript",
+    "body": [
+      "{",
+      "  'type' 'hidden' // hidden tiles are used to process events and fire new events (popup, xpath, style, variable, audio, zoom, focus, margin, bounds, selected, link, poi...)",
+      "  'options' { 'eventHandler' 'type=variable,tag=input' } // subscribe to events",
+      "  'macro' <%",
+      "      SYMBOLS 'firstRun' CONTAINS <% // you may not want to send event at dashboard load. Using a tile local variable, you can discard the first execution.",
+      "        // process data here",
+      "        {",
+      "          'events' [",
+      "            ${1:// insert events to send to other tiles here (try discovery event snippets)}",
+      "          ]",
+      "          'localvars' { 'firstRun' true }",
+      "          'data' '' // still needed for a hidden tile",
+      "        }",
+      "      %> <% { 'localvars' { 'firstRun' true } } 'data' '' %> IFTE ",
+      "  %>",
+      "}"
+    ]
+  },
   "devent01": {
     "prefix": "discovery-event 01 popup",
     "description": "Discovery within WarpScript",
@@ -1547,6 +1569,23 @@
     "body": [
       "// this event will force some variables to be updated in all the tiles that subscribe to it",
       "{ 'tags' [ 'input' ] 'type' 'variable' 'value' { '${1:myvar}' ${2:value} } } // make sure '${1:myvar}' is declared in the 'vars' of your dashboard",
+      ""
+    ]
+  },
+  "devent03": {
+    "prefix": "discovery-event 03 zoom sync",
+    "description": "Discovery within WarpScript",
+    "body": [
+      "{ 'tags' [ 'chartzoom' ] 'type' 'zoom' } // tiles with 'options' { 'eventHandler' 'type=zoom,tag=chartzoom' } will listen to this event",
+      ""
+    ]
+  },
+  "devent04": {
+    "prefix": "discovery-event 03 click selection",
+    "description": "Discovery within WarpScript",
+    "body": [
+      "// tabular tile and some graphics tiles can emit an event when selecting a line or a gts click:",
+      "{ 'tags' [ 'tableClick' ] 'type' 'selected' 'selector' 'lineSelected'  } // tiles with 'options' { 'eventHandler' 'type=selected,tag=tableClick' } will listen to it.",
       ""
     ]
   }
