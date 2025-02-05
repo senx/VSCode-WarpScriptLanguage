@@ -269,7 +269,9 @@ export function activate(context: ExtensionContext) {
     });
     console.debug('Preview loaded');
     try {
-      outputWin.appendLine(`Discovery version ${WarpScriptExtConstants.getPackageVersion(context, join('assets', '@senx', 'discovery-widgets', 'package.json'))}`);
+      const discoveryVersion=WarpScriptExtConstants.getPackageVersion(context, join('assets', '@senx', 'discovery-widgets', 'package.json'));
+      const discoveryPluginFormVersion=WarpScriptExtConstants.getPackageVersion(context, join('assets', '@senx', 'discovery-plugin-form', 'package.json'));
+      outputWin.appendLine(`Discovery version ${discoveryVersion}, form plugin version ${discoveryPluginFormVersion}`);
     } catch (error) { }
 
     // define a session name as user name + uuid.

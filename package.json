@@ -384,7 +384,8 @@
   },
   "devDependencies": {
     "@senx/discovery-themes": "0.0.2",
-		"@senx/discovery-widgets": "1.2.16",
+		"@senx/discovery-widgets": "1.2.17",
+		"@senx/discovery-plugin-form": "0.0.2",
     "@senx/warpview": "2.0.90",
     "@types/fs-extra": "^11.0.4",
     "@types/glob": "^8.0.0",

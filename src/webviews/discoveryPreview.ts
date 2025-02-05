@@ -63,6 +63,8 @@ export default class DiscoveryPreviewWebview {
     }
     const discoveryPathNoModule: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'discovery-widgets', 'dist', 'discovery', 'discovery.js'), webviewPanel);
     const discoveryPathModule: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'discovery-widgets', 'dist', 'discovery', 'discovery.esm.js'), webviewPanel);
+    const discoveryPluginFormPathNoModule: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'discovery-plugin-form', 'dist', 'discovery-plugin-form', 'discovery-plugin-form.js'), webviewPanel);
+    const discoveryPluginFormPathModule: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'discovery-plugin-form', 'dist', 'discovery-plugin-form', 'discovery-plugin-form.esm.js'), webviewPanel);
     const discoveryTheme: string = WarpScriptExtConstants.getRessource(this.context, join('assets', 'themes.css'), webviewPanel);
     let theme = opts.theme || ideTheme;
     if (ideTheme === 'light' && !opts.theme) {
@@ -124,6 +126,8 @@ export default class DiscoveryPreviewWebview {
     </div>
     <script nomodule src="${discoveryPathNoModule}"></script>
     <script type="module" src="${discoveryPathModule}"></script>
+    <script nomodule src="${discoveryPluginFormPathNoModule}"></script>
+    <script type="module" src="${discoveryPluginFormPathModule}"></script>
   </body>
 </html>`;
   }
