@@ -61,9 +61,7 @@ export default class DiscoveryPreviewWebview {
     if (GTSPreviewWebview.LightThemesList.indexOf(vscodetheme) > -1) {
       ideTheme = 'light';
     }
-    const discoveryPathNoModule: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'discovery-widgets', 'dist', 'discovery', 'discovery.js'), webviewPanel);
     const discoveryPathModule: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'discovery-widgets', 'dist', 'discovery', 'discovery.esm.js'), webviewPanel);
-    const discoveryPluginFormPathNoModule: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'discovery-plugin-form', 'dist', 'discovery-plugin-form', 'discovery-plugin-form.js'), webviewPanel);
     const discoveryPluginFormPathModule: string = WarpScriptExtConstants.getRessource(this.context, join('assets', '@senx', 'discovery-plugin-form', 'dist', 'discovery-plugin-form', 'discovery-plugin-form.esm.js'), webviewPanel);
     const discoveryTheme: string = WarpScriptExtConstants.getRessource(this.context, join('assets', 'themes.css'), webviewPanel);
     let theme = opts.theme || ideTheme;
@@ -95,6 +93,13 @@ export default class DiscoveryPreviewWebview {
       };
     }
 
+    // extra plugins 
+    let extraScripts = "";
+    let discoveryPluginUrlsList: string[] = workspace.getConfiguration().get('warpscript.DiscoveryPluginsUrls');
+    discoveryPluginUrlsList.forEach(s => {
+      extraScripts += `<script type="module" src="${s}"></script>\n`
+    });
+
     return `<html>
   <head>
     <title>Test</title>
@@ -124,10 +129,9 @@ export default class DiscoveryPreviewWebview {
         <discovery-dashboard url="${opts.endpoint}" data="${this.escapeHTML(JSON.stringify(discoveryJSON))}" options="${this.escapeHTML(JSON.stringify(extraDashboardOptions))}"></discovery-dashboard>
       </div>
     </div>
-    <script nomodule src="${discoveryPathNoModule}"></script>
     <script type="module" src="${discoveryPathModule}"></script>
-    <script nomodule src="${discoveryPluginFormPathNoModule}"></script>
     <script type="module" src="${discoveryPluginFormPathModule}"></script>
+    ${extraScripts}
   </body>
 </html>`;
   }

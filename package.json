@@ -12,7 +12,7 @@
   "author": "SenX <contact@senx.io>",
   "icon": "images/w.png",
   "license": "Apache-2.0",
-  "version": "2.6.6",
+  "version": "2.7.0",
   "publisher": "senx",
   "engines": {
     "vscode": "^1.87.0"
@@ -368,6 +368,25 @@
           
 					"default": {},
           "markdownDescription": "Warp 10 trace plugin tokens per endpoint.\n(ie: item: `https://sandbox.senx.io/api/v0/exec`, value: `valid token`)"
+        },
+        "warpscript.DiscoveryPluginsUrls": {
+					"scope": "resource",
+					"type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,         
+          "additionalItems": {
+            "type": "string"
+          },
+          "additionalProperties": false,
+          "patternProperties":{
+            "^http.*$": {
+              "type": "string"
+            }
+					},
+					"default": [],
+          "markdownDescription": "Warp 10 list of extra discovery plugin module url.\n(ie: `https://unpkg.com/@myorg/discovery-plugin-xyz/dist/discovery-plugin-xyz.esm.js`)"
         }
       }
     }
