@@ -1555,7 +1555,7 @@
     "description": "Discovery within WarpScript",
     "body": [
       "{",
-      "  'type' 'form' 'w' 4 'h' 5",
+      "  'type' 'form' 'w' 4 'h' 5   // the form plugin documentation is available here https://www.npmjs.com/package/@senx/discovery-plugin-form ",
       "  'title' 'Fill our satisfaction form'",
       "  'options' { ",
       "    // 'eventHandler' 'type=variable,tag=input' // you can refresh the form up to an event",
@@ -1579,7 +1579,8 @@
       "            'type' 'text'",
       "            'default' 'regent street' ",
       "            'options' {",
-      "              'min' 3         // Optional minimal string length                     ",
+      "              'min' 3         // Optional minimal string length",
+      "              'max' 20        // Optional maximal string length",
       "            }",
       "          }",
       "          {",
