@@ -12,7 +12,7 @@
   "author": "SenX <contact@senx.io>",
   "icon": "images/w.png",
   "license": "Apache-2.0",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "publisher": "senx",
   "engines": {
     "vscode": "^1.87.0"
@@ -403,8 +403,8 @@
   },
   "devDependencies": {
     "@senx/discovery-themes": "0.0.2",
-		"@senx/discovery-widgets": "1.2.17",
-		"@senx/discovery-plugin-form": "0.0.2",
+		"@senx/discovery-widgets": "1.2.18",
+		"@senx/discovery-plugin-form": "0.0.4",
     "@senx/warpview": "2.0.90",
     "@types/fs-extra": "^11.0.4",
     "@types/glob": "^8.0.0",
