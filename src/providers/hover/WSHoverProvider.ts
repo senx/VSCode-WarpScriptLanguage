@@ -52,85 +52,95 @@ export class WSHoverProvider extends W10HoverProvider {
 
   private populateInput(sigItem: any) {
     let sigArea = "";
-    sigItem.forEach((s: any, i: any) => {
-      if (typeof s === "string" && s.indexOf("|") > 0) {
-        var p = "(";
-        s.split("|").forEach(function (i) {
-          p += i.split(":")[0] + "|";
-        });
-        p = p.substring(0, p.length - 1) + ")";
-        sigArea = this.prepend(sigArea, p + " (" + i.split(":")[1] + ") ");
-      } else {
-        if (_.isPlainObject(s)) {
-          sigArea = this.prepend(sigArea, " }");
-          _.forIn(s, (key: any) => {
-            sigArea = this.prepend(
-              sigArea,
-              key.split(":")[0] + "<" + key.split(":")[1] + "> "
-            );
+    try {
+      sigItem.forEach((s: any, i: any) => {
+        if (typeof s === "string" && s.indexOf("|") > 0) {
+          var p = "(";
+          s.split("|").forEach(function (i) {
+            p += i.split(":")[0] + "|";
           });
-          sigArea = this.prepend(sigArea, "{ ");
+          p = p.substring(0, p.length - 1) + ")";
+          sigArea = this.prepend(sigArea, p + " (" + i.split(":")[1] + ") ");
         } else {
-          if (_.isArray(s)) {
-            sigArea = this.prepend(sigArea, "] ");
-            s.forEach((value: any) => {
+          if (_.isPlainObject(s)) {
+            sigArea = this.prepend(sigArea, " }");
+            _.forIn(s, (key: any) => {
               sigArea = this.prepend(
                 sigArea,
-                value.split(":")[0] + "<" + value.split(":")[1] + "> "
+                key.split(":")[0] + "<" + key.split(":")[1] + "> "
               );
             });
-            sigArea = this.prepend(sigArea, "[ ");
+            sigArea = this.prepend(sigArea, "{ ");
           } else {
-            sigArea = this.prepend(
-              sigArea,
-              s.split(":")[0] + "<" + s.split(":")[1] + "> "
-            );
+            if (_.isArray(s)) {
+              sigArea = this.prepend(sigArea, "] ");
+              s.forEach((value: any) => {
+                sigArea = this.prepend(
+                  sigArea,
+                  value.split(":")[0] + "<" + value.split(":")[1] + "> "
+                );
+              });
+              sigArea = this.prepend(sigArea, "[ ");
+            } else {
+              sigArea = this.prepend(
+                sigArea,
+                s.split(":")[0] + "<" + s.split(":")[1] + "> "
+              );
+            }
           }
         }
-      }
-    });
+      });
+    } catch (error) {
+      
+    }
+    
     return sigArea;
   }
 
 
   private populateOutput(sigItem: any) {
     let sigArea = "";
-    sigItem.reverse().forEach((s: any, i: any) => {
-      if (typeof s === "string" && s.indexOf("|") > 0) {
-        var p = "(";
-        s.split("|").forEach(i => {
-          p += i.split(":")[0] + "|";
-        });
-        p = p.substring(0, p.length - 1) + ")";
-        sigArea += p + "<" + i.split(":")[1] + "> ";
-      } else {
-        if (_.isPlainObject(s)) {
-          sigArea += " {";
-          s.forEach((key: any, value: any) => {
-            sigArea +=
-              " " +
-              key +
-              "' " +
-              value.split(":")[0] +
-              "<" +
-              value.split(":")[1] +
-              "> \n\n";
+    try {
+      sigItem.reverse().forEach((s: any, i: any) => {
+        if (typeof s === "string" && s.indexOf("|") > 0) {
+          var p = "(";
+          s.split("|").forEach(i => {
+            p += i.split(":")[0] + "|";
           });
-          sigArea += " }\n\n";
+          p = p.substring(0, p.length - 1) + ")";
+          sigArea += p + "<" + i.split(":")[1] + "> ";
         } else {
-          if (_.isArray(s)) {
-            sigArea += " [ ";
-            s.forEach((value: any) => {
+          if (_.isPlainObject(s)) {
+            sigArea += " {";
+            s.forEach((key: any, value: any) => {
               sigArea +=
-                " " + value.split(":")[0] + "<" + value.split(":")[1] + "> ";
+                " " +
+                key +
+                "' " +
+                value.split(":")[0] +
+                "<" +
+                value.split(":")[1] +
+                "> \n\n";
             });
-            sigArea += " ]";
+            sigArea += " }\n\n";
           } else {
-            sigArea += " " + s.split(":")[0] + "<" + s.split(":")[1] + ">";
+            if (_.isArray(s)) {
+              sigArea += " [ ";
+              s.forEach((value: any) => {
+                sigArea +=
+                  " " + value.split(":")[0] + "<" + value.split(":")[1] + "> ";
+              });
+              sigArea += " ]";
+            } else {
+              sigArea += " " + s.split(":")[0] + "<" + s.split(":")[1] + ">";
+            }
           }
         }
-      }
-    });
+      });  
+    } catch (error) {
+      
+    }
+    
     return sigArea;
   }
 }
