@@ -1644,6 +1644,34 @@
       "} // form tile end"
     ]
   },
+  "dtile22": {
+    "prefix": "discovery-tile 22 profile (timeline)",
+    "description": "Discovery within WarpScript",
+    "body": [
+      "{",
+      "  'type' 'profile'  'w' 4 'h' 2",
+      "  'options' { 'eventHandler' 'type=variable,tag=input' 'showLoader' true 'expandAnnotation' true } // subscribe to events",
+      "  'title' 'System uptime'",
+      "  'macro' <%     ",
+      "    [ // fetch and process data here",
+      "      NEWGTS 'OnTime' RENAME",
+      "      [ NOW  1 h -  10 m ] ADDVALUE // system was on 10 minutes one hour ago",
+      "      [ NOW  15 m -  5 m ] ADDVALUE // system was on 5 minutes 15 minutes ago",
+      "      NEWGTS 'FailureTime' RENAME",
+      "      [ NOW  30 m -  15 m ] ADDVALUE // system was on 5 minutes 15 minutes ago",
+      "    ]",
+      "    'gtsList' STORE",
+      "    {",
+      "      'data' \\$gtsList",
+      "      'params' [ // optional",
+      "        { 'key' 'On Time'      'datasetColor' 'green' }  // one configuration per output gts",
+      "        { 'key' 'Failure Time' 'datasetColor' 'red' }  // one configuration per output gts",
+      "      ]",
+      "    }",
+      "  %>",
+      "}"
+    ]
+  },
   "devent01": {
     "prefix": "discovery-event 01 popup",
     "description": "Discovery within WarpScript",
