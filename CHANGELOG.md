@@ -1,6 +1,22 @@
 VSCode WarpScript Extension
 ---
 
+## v2.7.2
+
+> +  2025/03/14  | discovery update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c426560b0c5454789faa9f5dbe8a560a826eaaf3)*)
+> +  2025/03/14  | profile snippet  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2f6d6afb2ed34f173576e3b2e5ba9225f749d546)*)
+> +  2025/03/14  | prevent auto closing pairs in strings  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f4eac8f4e27529f0f6918dac581abbfaac1414ae)*)
+> +  2025/03/14  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2c54e2136205845981f436609bedd5bf5a4d1341)*)
+> +  2025/02/11  | tolerant to wrong macro doc signatures  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/e5da8525456bc3c3ccd87ce45cb0ded44950b33a)*)
+
+## v2.7.1
+
+> +  2025/02/07  | link to form npm doc  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/8163f7f3e904837eb3b4f105daaa20ed9fbba3c1)*)
+> +  2025/02/07  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ace65839ad248dfbd60418b88fc6a91129711023)*)
+> +  2025/02/07  | version bumlp  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/efca27f5350ec3cd42447fd104225b040c895ef7)*)
+> +  2025/02/07  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ad07198b4f01f2a7505a1753cc717e473eab6023)*)
+> +  2025/02/05  | form snippet  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/fdca577a684291caa8bb6fdcb9e3d2d159ab7da9)*)
+
 ## v2.7.0
 
 > +  2025/02/05  | add a way to load any discovery plugin  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/19bd3e290739685e9da225f7a0d863b773fed1f6)*)
@@ -38,14 +54,5 @@ VSCode WarpScript Extension
 > +  2024/11/04  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c8111574367a8a5f232afd164af9ce66770868b9)*)
 > +  2024/10/31  | discovery version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/a2e80c18c9378fdf739b7bb4530a361692dd792b)*)
 > +  2024/10/31  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c0430549a193be27e9f783b981f7dd8ea2d41ea6)*)
-
-## v2.5.8
-
-> +  2024/10/28  | discovery version bump  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/5a29e48f3cba3e6600dae4f71cc7167928dc889d)*)
-
-## v2.5.7
-
-> +  2024/10/17  | discovery bugfix  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/5d964a9fae58c7cfffd4ca299e6fe1bedb5b5e83)*)
-> +  2024/10/17  | version 2.5.6  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/27e9f4bf59fb2a56c2e36a30f42f1daa57a1413c)*)
 
 
