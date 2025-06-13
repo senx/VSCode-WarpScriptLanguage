@@ -1584,7 +1584,7 @@
       "          'localvars' { 'firstRun' true }",
       "          'data' '' // still needed for a hidden tile",
       "        }",
-      "      %> <% { 'localvars' { 'firstRun' true } } 'data' '' %> IFTE ",
+      "      %> <% { 'localvars' { 'firstRun' true } 'data' '' }  %> IFTE ",
       "  %>",
       "}"
     ]
