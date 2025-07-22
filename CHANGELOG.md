@@ -1,6 +1,13 @@
 VSCode WarpScript Extension
 ---
 
+## v2.8.0
+
+> +  2025/07/22  | Changelog Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/39f9e295d943d0b16fffa77f0e257807f7920ad8)*)
+> +  2025/07/22  | svg inkscape label support  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/8eab18537ab6b2dfa9f4f7a60e8e49d57948c832)*)
+> +  2025/07/07  | add fill one liner snippet  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/b8f15961f1cfd786b1ab4e72fdca65b3a76a672d)*)
+> +  2025/06/13  | fix hidden snippet  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/870c102f98a2b9135e0c99ed7b12443624ceb456)*)
+
 ## v2.7.9
 
 > +  2025/05/02  | update discovery form plugin, bug fix  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/eb493499d78456b724efa6f996b6c5b4c3921910)*)
@@ -42,10 +49,5 @@ VSCode WarpScript Extension
 > +  2025/02/07  | version bumlp  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/efca27f5350ec3cd42447fd104225b040c895ef7)*)
 > +  2025/02/07  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ad07198b4f01f2a7505a1753cc717e473eab6023)*)
 > +  2025/02/05  | form snippet  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/fdca577a684291caa8bb6fdcb9e3d2d159ab7da9)*)
-
-## v2.7.0
-
-> +  2025/02/05  | add a way to load any discovery plugin  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/19bd3e290739685e9da225f7a0d863b773fed1f6)*)
-> +  2025/02/05  | discovery plugin form integration by default  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/930ed43e4616129f8afb299b24a1851574416477)*)
 
 
