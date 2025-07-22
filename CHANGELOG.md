@@ -1,6 +1,32 @@
 VSCode WarpScript Extension
 ---
 
+## v2.7.9
+
+> +  2025/05/02  | update discovery form plugin, bug fix  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/eb493499d78456b724efa6f996b6c5b4c3921910)*)
+
+## v2.7.8
+
+> +  2025/04/29  | update discovery and forms  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/340669839fda4dda6eff6cf4915b806bb50ba171)*)
+
+## v2.7.7
+
+> +  2025/04/29  | rollback discovery  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c9acf6aec5eba00fd4414109a4ea0206d2da370b)*)
+
+## v2.7.6
+
+> +  2025/04/29  | update discovery  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/4e4d5336fa8444c5c244bfde4f7cec40cbb34cbf)*)
+
+## v2.7.5
+
+> +  2025/04/17  | update discovery  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/38c307cdaae2eeb4964a77438a0114bbcccee96e)*)
+> +  2025/03/28  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ef1832506cc7f9c831645c80f6e9e59dab30d26c)*)
+
+## v2.7.3
+
+> +  2025/03/28  | update discovery  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/4e8a9cbc9520bc8ea0d072d3a88f15f6586a9203)*)
+> +  2025/03/28  | add date range with custom ranges in snippets  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/440200b19890098b4f4da5d7899e9564bb96412f)*)
+
 ## v2.7.2
 
 > +  2025/03/14  | discovery update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c426560b0c5454789faa9f5dbe8a560a826eaaf3)*)
@@ -21,38 +47,5 @@ VSCode WarpScript Extension
 
 > +  2025/02/05  | add a way to load any discovery plugin  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/19bd3e290739685e9da225f7a0d863b773fed1f6)*)
 > +  2025/02/05  | discovery plugin form integration by default  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/930ed43e4616129f8afb299b24a1851574416477)*)
-
-## v2.6.6
-
-> +  2025/01/27  | new discovery version  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/bb5f907a7b97186b03f5cd93168c6d3483b35db1)*)
-
-## v2.6.5
-
-> +  2025/01/23  | new discovery version and snippets  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2becf5e404e2f8a779485d5b702594d34a9e2628)*)
-
-## v2.6.4
-
-> +  2024/12/19  | discovery update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/1665306865c3cfb7ac0d67b7d5a4dee030c50205)*)
-> +  2024/12/18  | fix typo in snippet  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/b408be5c097c18ec8dade0e0556e49bcc8d95edc)*)
-
-## v2.6.3
-
-> +  2024/12/16  | discovery 1.2.7 fix  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/59894406c55d08284d503fa6c12ff51b071ddf3a)*)
-> +  2024/12/09  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c2e267dde4f39b83a1fbd6e6d53c8ec1910ec2b6)*)
-> +  2024/12/09  | snippet update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/3aa5394b05efc35a307f90a3b16cb1103966ad76)*)
-> +  2024/11/25  | discovery version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ade63f71966457455061b4b0395400c254e06eb0)*)
-> +  2024/11/25  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/0d88925f6d3267fec5f2d984aa660eb368ffa570)*)
-
-## v2.6.1
-
-> +  2024/11/21  | new snippets and discovery update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f80d68029a8cf19d6b3c677a84802004f0710d5c)*)
-
-## v2.6.0
-
-> +  2024/11/08  | discovery version update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/cd239636c4c110c5d93c59b336a0990fdf05bbc9)*)
-> +  2024/11/08  | support macro documentation display with oauth endpoints  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/af162bf08d11512b32680b48df98087198aa015d)*)
-> +  2024/11/04  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c8111574367a8a5f232afd164af9ce66770868b9)*)
-> +  2024/10/31  | discovery version bump  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/a2e80c18c9378fdf739b7bb4530a361692dd792b)*)
-> +  2024/10/31  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c0430549a193be27e9f783b981f7dd8ea2d41ea6)*)
 
 
