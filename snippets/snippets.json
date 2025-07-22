@@ -142,7 +142,7 @@
   "fill (one liner)": {
     "prefix": "fill",
     "body": [
-      "DUP { 'ticks' ROT TICKS 'filler' filler.previous } FILL // fill all gts, add COMMONTICKS if needed."
+      "DUP { 'ticks' ROT TICKS 'filler' filler.previous } FILL COMMONTICKS // fill a list of gts, then drop the first non common ticks that cannot be filled by fill.previous"
     ]
   },
   "map full": {
@@ -906,8 +906,8 @@
       "      // this may not be the ideal tool, but it allows you to customize object id with its xml editor (crtl+maj+x)",
       "      'title' ''",
       "      'data' {",
-      "        'data' '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'",
-      "        B64-> UNGZIP 'utf-8' BYTES-> // gzip and b64 encoding to save space. the output is an svg string. The most efficient way is to move the image in a macro on your server.",
+      "        'data' '6sg7.........CKNqsvYG00xbuwkrdSSBQQvsjgaFQ1f_MV0.NhsvhXSl7nh2irD8BCMwFpw5SLyhWC6LXsHZ5VJiueuiyfJhLUplPJefLRiaoAJPlivmAOsbNaweESfywTE6tnNhWf4udmKciOfilQq4ti6pLTDNvqIb1aTLyS16PmjuuRaNoSijIscSJkxvrkyioKES7MRTqwglxZwE9mPtzq2OR5eM0rLSZ0SW8Bke1dQJkywq0zJqVsYpkw7FPHbElUwz8Lsf5pZ7LhNNspHbRlZ0Ls8GQuqsQHsTy_pHFolsWAfxGPlq7z2kBTE4al463kRWCyoXlc.sVWzPHuma_KVjy9CRa6I_VrNpJouvAmqvtai_nO6_j655yY5yi5FRUp.R0hlZWbUkGQRfQbmrbxwEn7StDNeCvPt_A2rI7RnQJz6HO8sAMTHMd7Y114jQWewUP9Zn6SrnoQ3.pW0ka_TPgJiIhqwBdOaqQVmom4KEECBK8LcakuwaM.y1GxEgak_wgnY8PxsfGcEUDzO5t0UtMnMu6KS6DVrN_hTmlfSeWqIuxXP0ATguOlYLJTq0op97SUqeprvuG_Q7MBi0pQNUaNg.Rsip3iMJErTFzndMJRyLiNr0tPAwxcapwlUWPX.vBQMY.lm7s_Rv8BsX5uNLWDRi0W4qAxaFaXUC6QDeHsJ03PURTQmZtGPc5Fj6.liUr.jp0n3THwpR2hLYgXCHtiP6Opx9QPgj1ClAackpTbA.Jv72H1xl4.PB9AW6G4S6yuk..3HrD4Kv48JlPwRY0YBqWJ9m68Up7sHGmWIhzHHvxFXFrOuAb1qFXbhjlh4C7earlT27Yjkv7bAfL2Ho6Im7qyTWd2BgUsDsKtllM9aq0IZ.mKcJkK372bIvxxzuCvVERjHbsGwu_zWckMNKdn.B6gnZ_St_Z8tedYP40Lce7j1tt1c9qxXn7IKmt4EarQQHhvKiRM3nfDeo7iw6pGG__zfFrenY3oAKU98iE8uvMjQEBDs_ITNrfvhfn.gqOO2cAtYtHwbQhp.j8UXS9l3njgZg1S3OoaW89gQQIvo1zpNFdxwvJ2QXd3UWg5YskSi610BknTY.rXa0eBPxKA13MqGHE4Q97W9H7UjSj1Fph17rys.YQHjHiqABsZrHccbbftXjjvqfpq5dK1FVdWHHi902cq0VrJdq4Qb8j4bJSGn9fX1ml8mGPMYhYa2c8LHjMGu5KHlqnKRdLXVYFfPVu3PD5psY9DGpWR16vh8X1ZDGgPFzo6cocI5sQF3oYt7M2.edaFZFg76q9KGFW3SXG83eGj5p.zdd7OwBP_279qDI0qiMC9XQhXOjZAhOsslRZbcPtI8wM9CwjPZp.r7APvrNS78Pq33fXCG62z5DbVX9DKLOYZNVXe83FsTZTKFv.NoXW5Sjl.MolV6cNLaGsARq7xVr6_3AeX9cwVVJIUmVTA2.ieHV973Lku0pWfV81PEg25RvoRa2ONZNFFuuIDV1R3I1KozXLW3V372t8E3cb.yGcYHZIHA0NpsY.rPq743MMRt.ArcaPaIt4DGCBPo5b8IKkhcNpbICCbZnAptIdj6qWDX6cjOA.Dva..vzN.H7p9u14eXVrV3NqbX8o4VZ1zS97jYm7wBwW2ABJGSH7935fky.F.xmCFcHVnLa1wZRRk_bpkkleT4PW3ZybgSmF48R0W5sQxNANn9zjSxGCmFG7I3Cnt1gGzuwIzecvzX7HYdLO7_UuPZYovu2pIoqpuegL2pjiGUgTldrltiT_IlXte2dm_FDuzw4fhFYrl1fjk5Bmrl9Kt7Wdq.XQKx0YCV31bUhdGb8VhLelbhr6duGV72iRcDRleBX1Z3HW.37GGq2LVz_38M8J3bh5CKJQuZrtq9v9a0PzCQOk23uINtwenN4G_RRoGhX8KRVHRRUJi3erT9s7.nM1KaW1t.ycun611alyQCm.Hi9hEqDVcK4sNjAdytjKZd7CMaQ2N2JhgTi93EbuadrIrWfgziTerrjSNWbXLhJSq_oEdcrDrChxxsrrvsgEAP4GjsWPVOtfpxzq25pdACpwrxzlJlqYe6_RLyIYDsbR3.wHZlp9qegsDFB6QZTRbzcQ.1jwNk2JFJ5koRcX2ohQCWbdWpTeo5I5PrbQuj5WxtSTHmQUFUAycqDdSXsfeBY2jVTS5sKUDDcaCZr39x.DBmE0iUzEvQiwJsbNwZB2_BgoWvaQdGNrO1v1QNIl9UyASx9M92879iGGUPqG8jm7VjSPmdvrLZuUzonI0hzs5J6XIUkFpk2bJ0sxalWCkuX27UQoJxqX4l3HL8vwzGIa9NXf.TxgNGfRjQxaT_At9QWnw.e7YqitsJ...'",
+      "               OPB64-> UNGZIP 'utf-8' BYTES-> // gzip and b64 encoding to save space. the output is an svg string. The most efficient way is to move the image in a macro on your server.",
       "      }",
       "      'options' { ",
       "        'eventHandler' 'type=xpath,tag=input' // the svg tile will listen to xpath events",
@@ -939,7 +939,7 @@
       "          'greenStyle' STORE",
       "          ",
       "          \\$onOff ! 'onOff' STORE // toggle the value",
-      "",
+      "          ",
       "          {",
       "            'data' 'Turned ' \\$onOff <% 'ON' %> <% 'OFF' %> IFTE +  // the tile text",
       "            'globalParams' { ",
@@ -1012,18 +1012,14 @@
       "",
       "",
       "    // another way to inject data in a svg is to use a hidden tile as a controller.",
-      "    ",
       "    {",
-      "      'type' 'input:text' 'w' 2 'h' 1  // for multiline input, you use 'input:textarea' ",
-      "      'title' 'Enter temperature'",
-      "      'options' { 'input' { 'showButton' false 'delayRequest' 500 } }",
+      "      'type' 'input:slider' 'w' 2 'h' 1   // try input:autocomplete if the choice list is too big",
+      "      'title' ''",
+      "      'options' { 'input' { 'showButton' false 'delayRequest' 500 } 'button' { 'label' 'Apply' } } // when false, event is sent when click is released",
       "      'macro' <% {",
-      "        // If showButton is false, the event is sent at each letter you type in the input field",
-      "        //  This can lead to lots of events per second. To throttle this, you can use { 'showButton' false 'delayRequest' 1000 }:",
-      "        //  It will delay the event to delayRequest milliseconds after last keystroke.",
-      "        // If showButton is true, the event is sent when the user click the OK button",
+      "        'data' 38  // default value",
+      "        'globalParams' { 'input' { 'min' 5 'max' 60 'step' 0.5 } }",
       "        'events' [ { 'tags' 'inputText' 'type' 'variable' 'selector' 'temperature' } ]",
-      "        'data' '38.1'  // you must define  'temperature' '42'  into dashboard 'vars' too.",
       "      } %>",
       "    }",
       "    ",
@@ -1032,6 +1028,9 @@
       "      'type' 'hidden' 'w' 0 'h' 0 ",
       "      'options' { 'eventHandler' 'type=variable,tag=inputText' } // subscribe to events",
       "      'macro' <%",
+      "          'font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;line-height:1.25;font-family:Quicksand;-inkscape-font-specification:Quicksand;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill-opacity:1;stroke:none;stroke-width:0.264583'",
+      "          'defaultStyle' STORE ",
+      "",
       "          '#0010FF' 'fillColor' STORE",
       "          <%",
       "            \\$temperature TODOUBLE 40 >",
@@ -1041,10 +1040,10 @@
       "            'events' [                 ",
       "                { ",
       "                  'tags' 'input' 'type' 'xpath' 'selector'                 ",
-      "                  '//*[@id=\"temperature1\"]' ",
-      "                  'value' { // in the same event, we will change two properties of the #temperature1 text",
-      "                    'innerHTML' \\$temperature // innerHTML is a specific attribute that target the text inside the span",
-      "                    'fill' \\$fillColor  // fill is an attribute. You can look at the DOM change with the developper tool console.",
+      "                  '//*[@inkscape:label=\"TemperatureTxt\"]' // Using inkscape labels makes the editing job far easier",
+      "                  'value' { // in the same event, we will change two properties of the #TemperatureTxt text",
+      "                    'innerHTML' \\$temperature TOSTRING '°C' + // innerHTML is a specific attribute that target the text inside the span",
+      "                    'style' \\$defaultStyle ';fill:' + \\$fillColor +  // style is an attribute. You can look at the DOM change with the developper tool console.",
       "                  } ",
       "                }",
       "              ]",
@@ -1052,8 +1051,7 @@
       "      %>",
       "    }",
       "  ]",
-      "}",
-      ""
+      "}"
     ]
   },
   "discovery (empty)": {
