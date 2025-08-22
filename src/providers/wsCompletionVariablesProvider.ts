@@ -4,10 +4,13 @@ import {
   TextDocument,
   Position,
   CancellationToken,
-  CompletionItem
+  CompletionItem,
+  TextEdit,
+  Range
 } from "vscode";
 import { CompletionItemKind } from "vscode";
 import WarpScriptParser from '../warpScriptParser';
+import { Command } from "vscode-languageclient";
 
 
 /**
@@ -47,6 +50,13 @@ export default class WSCompletionVariablesProvider
           //console.log("found varname:" + v);
           result.push(new CompletionItem(firstLetter == '$' ? '$' + v : v, CompletionItemKind.Variable))
         })
+        // manage specific variables here
+        // in a discovery dashboard:
+        if (WarpScriptParser.extractSpecialComments(document.getText()).displayPreviewOpt == "D" && firstLetter == '$') {
+          let c = new CompletionItem("$discoveryExecutionTrigger", CompletionItemKind.Variable);
+          c.detail = "Special variable in every tiles macros. It contains the event that triggered the macro execution.";
+          result.push(c);
+        }
       }
       return resolve(result);
     });
