@@ -4,13 +4,10 @@ import {
   TextDocument,
   Position,
   CancellationToken,
-  CompletionItem,
-  TextEdit,
-  Range
+  CompletionItem
 } from "vscode";
 import { CompletionItemKind } from "vscode";
 import WarpScriptParser from '../warpScriptParser';
-import { Command } from "vscode-languageclient";
 
 
 /**
