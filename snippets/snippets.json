@@ -1693,7 +1693,7 @@
       "    // 'eventHandler' 'type=variable,tag=input' // you can refresh the form up to an event",
       "    'button' { 'label' 'Send' }",
       "    'input' { 'validation' true } // force validation of mandatory inputs",
-      "    'extra' { 'form' { 'stickyButton' true 'addFormUUID' true  } } // floating 'Send' button and add a formUUID in the output",
+      "    'extra' { 'form' { 'stickyButton' true 'addFormUUID' true 'diff' false } } // floating 'Send' button and add a formUUID in the output. diff mode only send form changes in the event.",
       "  } // subscribe to events",
       "  'macro' <%",
       "      {",
