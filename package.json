@@ -403,7 +403,7 @@
   },
   "devDependencies": {
     "@senx/discovery-themes": "0.0.2",
-		"@senx/discovery-widgets": "1.2.43",
+		"@senx/discovery-widgets": "1.2.45",
 		"@senx/discovery-plugin-form": "0.1.0",
     "@senx/warpview": "2.0.90",
     "@types/fs-extra": "^11.0.4",
