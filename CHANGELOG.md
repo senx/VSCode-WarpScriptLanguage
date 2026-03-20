@@ -1,6 +1,21 @@
 VSCode WarpScript Extension
 ---
 
+## v2.8.3
+
+> +  2025/12/16  | discovery update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/7b501e0d1010bc6d9d1959d7bd44f2a24abcab23)*)
+
+## v2.8.2
+
+> +  2025/08/28  | new discovery form plugin  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/07bd068616a3363601b14d2e4a92c0e100e1d036)*)
+> +  2025/08/22  | fix imports  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/9a8392d053dbff1b8d3e7066aeb7c6746d1fe521)*)
+
+## v2.8.1
+
+> +  2025/08/22  | new discovery, add completion for specific discovery variables  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/e6194e8f51b36a1242fe3bb6d824220a73609e88)*)
+> +  2025/08/20  | new snippet to explain muted vars  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/61a9f3dc59f85bd6117d6702e280eff9ba78bf18)*)
+> +  2025/07/22  | Changelog Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ce371bdc2f13fd86f90bf637f1b7af0bce2439e6)*)
+
 ## v2.8.0
 
 > +  2025/07/22  | Changelog Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/39f9e295d943d0b16fffa77f0e257807f7920ad8)*)
@@ -28,26 +43,5 @@ VSCode WarpScript Extension
 
 > +  2025/04/17  | update discovery  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/38c307cdaae2eeb4964a77438a0114bbcccee96e)*)
 > +  2025/03/28  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ef1832506cc7f9c831645c80f6e9e59dab30d26c)*)
-
-## v2.7.3
-
-> +  2025/03/28  | update discovery  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/4e8a9cbc9520bc8ea0d072d3a88f15f6586a9203)*)
-> +  2025/03/28  | add date range with custom ranges in snippets  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/440200b19890098b4f4da5d7899e9564bb96412f)*)
-
-## v2.7.2
-
-> +  2025/03/14  | discovery update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/c426560b0c5454789faa9f5dbe8a560a826eaaf3)*)
-> +  2025/03/14  | profile snippet  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2f6d6afb2ed34f173576e3b2e5ba9225f749d546)*)
-> +  2025/03/14  | prevent auto closing pairs in strings  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/f4eac8f4e27529f0f6918dac581abbfaac1414ae)*)
-> +  2025/03/14  | doc Update  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/2c54e2136205845981f436609bedd5bf5a4d1341)*)
-> +  2025/02/11  | tolerant to wrong macro doc signatures  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/e5da8525456bc3c3ccd87ce45cb0ded44950b33a)*)
-
-## v2.7.1
-
-> +  2025/02/07  | link to form npm doc  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/8163f7f3e904837eb3b4f105daaa20ed9fbba3c1)*)
-> +  2025/02/07  | Changelog Update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ace65839ad248dfbd60418b88fc6a91129711023)*)
-> +  2025/02/07  | version bumlp  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/efca27f5350ec3cd42447fd104225b040c895ef7)*)
-> +  2025/02/07  | deps update  (*[Xavier Marin](xavier.marin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/ad07198b4f01f2a7505a1753cc717e473eab6023)*)
-> +  2025/02/05  | form snippet  (*[pi-r-p](pierre.papin@senx.io) | [view commit](https://github.com/senx/VSCode-WarpScriptLanguage/commit/fdca577a684291caa8bb6fdcb9e3d2d159ab7da9)*)
 
 
